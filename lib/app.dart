@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       // Import the Global MultiBlocProvider
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        routerConfig: appRouter, // Use the router instance
+        routerConfig: AppRouter.router, // Use the router instance
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
