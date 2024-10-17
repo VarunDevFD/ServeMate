@@ -21,10 +21,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -44,38 +41,50 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCkayjDnGm4GVD1Fq2XDYUSwmNSsNbkqyw',
-    appId: '1:269014125948:web:3214142671c6341e83e8f9',
-    messagingSenderId: '269014125948',
-    projectId: 'servemate-d4cef',
-    authDomain: 'servemate-d4cef.firebaseapp.com',
-    storageBucket: 'servemate-d4cef.appspot.com',
+    apiKey: 'AIzaSyBkionTEdMEkpjW0JZsBY1MCLku2S3gCHU',
+    appId: '1:54251147633:web:325b04eb3d1c618f2026d0',
+    messagingSenderId: '54251147633',
+    projectId: 'wedding-rental-595ab',
+    authDomain: 'wedding-rental-595ab.firebaseapp.com',
+    storageBucket: 'wedding-rental-595ab.appspot.com',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyByBRstciOpAcbysqU8dspV48LJUlYl_6E',
+    appId: '1:54251147633:android:23acf4ec4e500f2c2026d0',
+    messagingSenderId: '54251147633',
+    projectId: 'wedding-rental-595ab',
+    storageBucket: 'wedding-rental-595ab.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBsFXOhw7YflwsCWvA8emP5sFKb4E8N7E4',
-    appId: '1:269014125948:ios:440cdebccc5536b083e8f9',
-    messagingSenderId: '269014125948',
-    projectId: 'servemate-d4cef',
-    storageBucket: 'servemate-d4cef.appspot.com',
+    apiKey: 'AIzaSyBQLZkgMkITZnC0sm4FiyCZFxuz0Ifz_Pw',
+    appId: '1:54251147633:ios:6ae2fc958ad64cf52026d0',
+    messagingSenderId: '54251147633',
+    projectId: 'wedding-rental-595ab',
+    storageBucket: 'wedding-rental-595ab.appspot.com',
+    androidClientId: '54251147633-2riv42ti51vllkt5d62rjn87v9sb0qij.apps.googleusercontent.com',
+    iosClientId: '54251147633-p4crssuse3fhqnrgu5q3htvblidge46m.apps.googleusercontent.com',
     iosBundleId: 'com.example.serveMate',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBsFXOhw7YflwsCWvA8emP5sFKb4E8N7E4',
-    appId: '1:269014125948:ios:440cdebccc5536b083e8f9',
-    messagingSenderId: '269014125948',
-    projectId: 'servemate-d4cef',
-    storageBucket: 'servemate-d4cef.appspot.com',
+    apiKey: 'AIzaSyBQLZkgMkITZnC0sm4FiyCZFxuz0Ifz_Pw',
+    appId: '1:54251147633:ios:6ae2fc958ad64cf52026d0',
+    messagingSenderId: '54251147633',
+    projectId: 'wedding-rental-595ab',
+    storageBucket: 'wedding-rental-595ab.appspot.com',
+    androidClientId: '54251147633-2riv42ti51vllkt5d62rjn87v9sb0qij.apps.googleusercontent.com',
+    iosClientId: '54251147633-p4crssuse3fhqnrgu5q3htvblidge46m.apps.googleusercontent.com',
     iosBundleId: 'com.example.serveMate',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCkayjDnGm4GVD1Fq2XDYUSwmNSsNbkqyw',
-    appId: '1:269014125948:web:2cee938efcf88b8b83e8f9',
-    messagingSenderId: '269014125948',
-    projectId: 'servemate-d4cef',
-    authDomain: 'servemate-d4cef.firebaseapp.com',
-    storageBucket: 'servemate-d4cef.appspot.com',
+    apiKey: 'AIzaSyBkionTEdMEkpjW0JZsBY1MCLku2S3gCHU',
+    appId: '1:54251147633:web:09b25560aa177f232026d0',
+    messagingSenderId: '54251147633',
+    projectId: 'wedding-rental-595ab',
+    authDomain: 'wedding-rental-595ab.firebaseapp.com',
+    storageBucket: 'wedding-rental-595ab.appspot.com',
   );
 }
