@@ -4,9 +4,6 @@ import 'app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // ); // Initialize Firebase
   await init(); // Initialize Dependency Injection
   runApp(const MyApp()); // Run the MyApp widget
 }

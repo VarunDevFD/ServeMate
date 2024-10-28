@@ -1,26 +1,29 @@
-// Defining the states
-import 'package:serve_mate/features/on_boarding/domain/entities/en_onboarding.dart';
+import 'package:serve_mate/features/on_boarding/domain/entities/on_boarding_entity.dart';
 
-abstract class OnboardingState {
-  const OnboardingState();
-}
+class OnboardingState {
+  final int currentPage;
+  final List<OnboardingPageEntity> pages;
+  final bool isLoading;
+  final String? error;
 
-// Initial state
-class OnboardingInitial extends OnboardingState {}
+  const OnboardingState({
+    required this.currentPage,
+    required this.pages,
+    this.isLoading = false,
+    this.error,
+  });
 
-// Loading state
-class OnboardingLoading extends OnboardingState {}
-
-// Loaded state with the onboarding pages
-class OnboardingLoaded extends OnboardingState {
-  final List<OnboardingPage> pages;
-
-  const OnboardingLoaded(this.pages);
-}
-
-// Error state
-class OnboardingError extends OnboardingState {
-  final String message;
-
-  const OnboardingError(this.message);
+  OnboardingState copyWith({
+    int? currentPage,
+    List<OnboardingPageEntity>? pages,
+    bool? isLoading,
+    String? error,
+  }) {
+    return OnboardingState(
+      currentPage: currentPage ?? this.currentPage,
+      pages: pages ?? this.pages,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
 }

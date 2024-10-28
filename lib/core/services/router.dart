@@ -1,6 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/features/auth/presentation/pages/sign_in_screen.dart';
-import 'package:serve_mate/features/auth/presentation/pages/sign_up_screen.dart';
+import 'package:serve_mate/features/authentication/presentation/pages/forgot_screen.dart';
+import 'package:serve_mate/features/authentication/presentation/pages/sign_in_screen.dart';
+import 'package:serve_mate/features/authentication/presentation/pages/sign_up_screen.dart';
+import 'package:serve_mate/features/home/presentation/pages/home_page.dart';
+import 'package:serve_mate/features/home/presentation/pages/product_selection_screen.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';
 import 'package:serve_mate/features/welcome/presentation/page/s_welcome.dart';
@@ -14,7 +17,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/onboarding',
-        builder: (context, state) => const OnboardingScreen(),
+        builder: (context, state) => OnBoardingScreen(),
       ),
       GoRoute(
         path: '/welcome',
@@ -28,18 +31,18 @@ class AppRouter {
         path: '/sign-up',
         builder: (context, state) => SignUpScreen(),
       ),
-      // GoRoute(
-      //   path: '/home',
-      //   builder: (context, state) => const HomeScreen(),
-      // ),
-      // GoRoute(
-      //   path: '/forgotPassword',
-      //   builder: (context, state) => ForgotPasswordScreen(),
-      // ),
-      // GoRoute(
-      //   path: '/home',
-      //   builder: (context, state) => const HomeScreen(),
-      // ),
+      GoRoute(
+        path: '/forgotPassword',
+        builder: (context, state) => ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/selectCategory',
+        builder: (context, state) => const CategoryScreen(),
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const HomePage(),
+      ),
     ],
   );
 }

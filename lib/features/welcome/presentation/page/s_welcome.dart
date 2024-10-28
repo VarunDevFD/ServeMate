@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/utils/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/theme/app_text_style.dart';
-import 'package:serve_mate/core/utils/widgets/custom_button.dart';
+import 'package:serve_mate/core/widgets/custom_elevated_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
