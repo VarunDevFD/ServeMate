@@ -31,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'Welcome to VR Wedding Rental',
+              'Welcome to Serve Mate',
               style: AppTextStyles.titleStyle.copyWith(
                 fontSize: 22,
               ),
@@ -45,9 +45,9 @@ class WelcomeScreen extends StatelessWidget {
                   Expanded(
                     child: CustomElevatedButton(
                       text: 'Sign In',
-                      onPressed: () {
-                        context.go('/sign-in');
-                      },
+                      onPressed: () => context.go('/sign-in'),
+                      //----------Temp--------
+                      onLongPress: () => context.go('/selectCategory'),
                     ),
                   ),
                   const SizedBox(width: 20),

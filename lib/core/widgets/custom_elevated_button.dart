@@ -9,11 +9,13 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? textColor;
   final double? borderRadius;
   final TextStyle? textStyle;
+  final VoidCallback? onLongPress;
 
   const CustomElevatedButton({
     super.key,
     required this.text,
     required this.onPressed,
+    this.onLongPress,
     this.backgroundColor,
     this.textColor,
     this.borderRadius,
@@ -24,6 +26,7 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      onLongPress: onLongPress, //-------Temp use------------
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? AppColors.primary,
         shape: RoundedRectangleBorder(

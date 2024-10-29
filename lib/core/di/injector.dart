@@ -13,6 +13,10 @@ import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_
 import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_up_with_email_password.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:serve_mate/features/category/data/repositories/category_repository_impl.dart';
+import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
+import 'package:serve_mate/features/category/domain/usecases/get_categories.dart';
+import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 
 import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_repository_impl.dart';
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
@@ -85,4 +89,19 @@ Future<void> init() async {
       .registerLazySingleton(() => SignOut(serviceLocator<AuthRepository>()));
 
   serviceLocator.registerLazySingleton(() => AuthBloc());
+
+  // Register CategoryRepository (data source) in service locator
+  serviceLocator.registerLazySingleton<CategoryRepository>(
+    () => CategoryRepositoryImpl(),
+  );
+
+// Register GetCategories use case
+  serviceLocator.registerLazySingleton<GetCategories>(
+    () => GetCategories(serviceLocator<CategoryRepository>()),
+  );
+
+  // Register the CategoryBloc with the repository
+  serviceLocator.registerFactory<CategoryBloc>(
+    () => CategoryBloc(),
+  );
 }
