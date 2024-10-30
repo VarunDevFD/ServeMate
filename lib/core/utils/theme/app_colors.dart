@@ -16,6 +16,8 @@ class AppColors {
   static Color balck1 = Colors.black.withOpacity(0.6);
   static Color balck2 = Colors.black.withOpacity(0.4);
   static Color balck3 = Colors.black.withOpacity(0.2);
+  static Color balck4 = Colors.black.withOpacity(0.5);
+
   // White
   static Color white1 = Colors.white.withOpacity(0.2);
 
