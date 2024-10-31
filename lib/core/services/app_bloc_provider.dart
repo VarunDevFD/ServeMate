@@ -4,6 +4,7 @@ import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/a
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/toggle_bloc/toggle_bloc_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
+import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/splash_bloc.dart';
 
@@ -22,6 +23,7 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => AuthBloc()),
         BlocProvider(create: (_) => ForgetPasswordBloc()),
         BlocProvider(create: (_) => CategoryBloc()),
+        BlocProvider(create: (_) => NavigationBloc()),
       ],
       child: child,
     );

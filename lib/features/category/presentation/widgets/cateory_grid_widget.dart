@@ -29,7 +29,7 @@ class CategoryGrid extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             context.read<CategoryBloc>().add(SelectCategory(category.name));
-            context.go('/home');
+            context.go('/bottomNavBar');
           },
           child: CategoryItem(category: category),
         );
