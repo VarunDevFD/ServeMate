@@ -33,9 +33,9 @@ class BottomNavBar extends StatelessWidget {
           animationCurve: Curves.easeInOut,
           items: const <Widget>[
             Icon(Icons.home, size: 33, color: AppColors.white),
-            Icon(Icons.search, size: 33, color: AppColors.white),
+            Icon(Icons.event_note_outlined, size: 33, color: AppColors.white),
             Icon(Icons.add, size: 33, color: AppColors.white),
-            Icon(Icons.notifications, size: 33, color: AppColors.white),
+            Icon(Icons.chat_outlined, size: 33, color: AppColors.white),
             Icon(Icons.person, size: 33, color: AppColors.white),
           ],
           onTap: (index) {

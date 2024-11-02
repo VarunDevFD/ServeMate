@@ -1,8 +1,9 @@
+
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/forgot_screen.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_in_screen.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_up_screen.dart';
-import 'package:serve_mate/features/bottom_navigation_bar/presentation/pages/bottom_nav6.dart';
+import 'package:serve_mate/features/bottom_navigation_bar/presentation/pages/bottom_nav_bar_screen.dart';
 import 'package:serve_mate/features/category/presentation/pages/category_select_screen.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';
@@ -41,7 +42,11 @@ class AppRouter {
       ),
       GoRoute(
         path: '/bottomNavBar',
-        builder: (context, state) => BottomNavigationBar(),
+        builder: (context, state) {
+          // final category = state.path;
+          // log("${category.toString()}-----------------------");
+          return BottomNavigationBar();
+        },
       ),
     ],
   );

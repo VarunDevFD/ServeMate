@@ -50,6 +50,10 @@ dependencies:
   carousel_slider: ^5.0.0
   flutter_screenutil: ^5.9.3
   curved_navigation_bar: ^1.0.3
+  image_picker: ^1.1.2
+  animated_widgets_flutter: ^1.1.1+2
+  flutter_animate: ^4.5.0
+  flutter_colorpicker: ^1.1.0
   
 
 

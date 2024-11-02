@@ -8,8 +8,9 @@ class CategoryLoading extends CategoryState {}
 
 class CategoryLoaded extends CategoryState {
   final List<Category> categories;
+  final Category? selectedCategory;
 
-  CategoryLoaded(this.categories);
+  CategoryLoaded(this.categories, [this.selectedCategory]);
 }
 
 class CategoryError extends CategoryState {
