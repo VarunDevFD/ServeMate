@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:serve_mate/core/utils/theme/input_decoration.dart';
 
 class SoundDJForm extends StatelessWidget {
   const SoundDJForm({super.key});
@@ -21,7 +22,8 @@ class SoundDJForm extends StatelessWidget {
         _buildFormHeader('Available From - Till'),
         _buildTextField('Enter availability dates'),
         _buildFormHeader('Setup and Dismantling Services Included (Yes/No)'),
-        _buildTextField('Enter whether setup and dismantling services are included'),
+        _buildTextField(
+            'Enter whether setup and dismantling services are included'),
         _buildFormHeader('Images'),
         // Placeholder for image upload functionality
         _buildFormHeader('Pickup/Delivery Option'),
@@ -46,10 +48,7 @@ class SoundDJForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: TextField(
-        decoration: InputDecoration(
-          hintText: hint,
-          border: const OutlineInputBorder(),
-        ),
+        decoration: InputDecorations.defaultDecoration(),
       ),
     );
   }

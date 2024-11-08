@@ -10,7 +10,8 @@ class CustomTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final FocusNode? focusNode;
   final bool obscureText; // To control the password visibility
-  final VoidCallback? onToggleVisibility; // Callback to handle visibility toggle
+  final VoidCallback?
+      onToggleVisibility; // Callback to handle visibility toggle
   final FormFieldValidator<String>? validator;
   final Widget? suffixIcon;
 
@@ -44,15 +45,15 @@ class CustomTextField extends StatelessWidget {
         suffixIcon: suffixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
+          borderSide: BorderSide(color: AppColors.grey, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: AppColors.blue, width: 2.0),
+          borderSide: BorderSide(color: AppColors.blue, width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
+          borderSide: BorderSide(color: AppColors.grey, width: 1.0),
         ),
       ),
     );

@@ -8,6 +8,7 @@ import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bott
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/splash_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/image_bloc/image_bloc.dart';
 
 class AppBlocProvider extends StatelessWidget {
   final Widget child;
@@ -25,8 +26,9 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => ForgetPasswordBloc()),
         BlocProvider(create: (_) => CategoryBloc()),
         BlocProvider(create: (_) => NavigationBloc()),
-        BlocProvider(create: (_) => DressFormBloc())
-      ],
+        BlocProvider(create: (_) => DressFormBloc()),
+        BlocProvider(create: (_) => ImageBloc()),
+      ],  
       child: child,
     );
   }

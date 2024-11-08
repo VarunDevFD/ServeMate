@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,10 +17,10 @@ class CategoryGrid extends StatelessWidget {
       physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.all(10.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Number of columns in the grid
-        crossAxisSpacing: 12.0, // Horizontal space between grid items
-        mainAxisSpacing: 12.0, // Vertical space between grid items
-        childAspectRatio: 3 / 2, // Aspect ratio for grid items
+        crossAxisCount: 2,
+        crossAxisSpacing: 12.0,
+        mainAxisSpacing: 12.0,
+        childAspectRatio: 3 / 2,
       ),
       itemCount: categories.length,
       itemBuilder: (BuildContext context, int index) {

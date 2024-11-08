@@ -1,0 +1,15 @@
+const Map<String, String> colorNameToHex = {
+  'Red': '#FF0000',
+  'Green': '#00FF00',
+  'Blue': '#0000FF',
+  'Yellow': '#FFFF00',
+  'Black': '#000000',
+  'White': '#FFFFFF',
+  'Orange': '#FFA500',
+  'Purple': '#800080',
+  'Pink': '#FFC0CB',
+  'Cyan': '#00FFFF',
+  'Light Gray': '#D3D3D3',
+  'Dark Gray': '#A9A9A9',
+  'Custom Color': '#888888', 
+};

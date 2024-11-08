@@ -13,7 +13,7 @@ class SignUpNavigation extends StatelessWidget {
         const Text('Don\'t have an account?'),
         GestureDetector(
           onTap: () => context.go('/sign-up'),
-          child: const Text(
+          child: Text(
             ' Sign Up',
             style: TextStyle(color: AppColors.blue),
           ),

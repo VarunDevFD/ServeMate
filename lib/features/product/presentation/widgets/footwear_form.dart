@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:serve_mate/core/utils/theme/input_decoration.dart';
 
 class FootwearForm extends StatelessWidget {
   const FootwearForm({super.key});
@@ -46,10 +47,7 @@ class FootwearForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: TextField(
-        decoration: InputDecoration(
-          hintText: hint,
-          border: const OutlineInputBorder(),
-        ),
+       decoration: InputDecorations.defaultDecoration(),
       ),
     );
   }

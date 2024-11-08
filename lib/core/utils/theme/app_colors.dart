@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color white = Colors.white;
-  static const Color black = Colors.black;
-  static const Color orange = Colors.orange;
-  static const Color grey = Colors.grey;
-  static const Color red = Colors.red;
-  static const Color blue = Colors.blue;
-  static const Color transparent = Colors.transparent;
-  static const Color primary = Color(0xFFD59C71);
-  static const Color backgroundColor = Color(0xFFEDF4F5);
-  static const Color dimBlack = Color.fromARGB(255, 213, 212, 212);
+  static Color black = Colors.black;
+  static Color yellow = Colors.yellow;
+  static Color green = Colors.green;
+  static Color purple = Colors.purple;
+  static Color pink = Colors.pink;
+  static Color cyan = Colors.cyan;
+  static Color orange = Colors.orange;
+  static Color grey = Colors.grey;
+  static Color red = Colors.red;
+  static Color blue = Colors.blue;
+  static Color transparent = Colors.transparent;
+  static Color primary = const Color(0xFFD59C71);
+  static Color backgroundColor = const Color(0xFFEDF4F5);
+  static Color dimBlack = const Color.fromARGB(255, 213, 212, 212);
 
   //------------------Shade-----------------------------------------------------
   // Black
@@ -24,6 +29,12 @@ class AppColors {
 
   // Orange
   static Color orange1 = const Color.fromARGB(255, 239, 145, 74);
+
+  // Red
+  static Color redAccent = Colors.redAccent;
+
+  // Blue
+  static Color blueAccent = Colors.blueAccent;
 
   //-----------------Black-Opacity----------------------------------------------
   static const Color black54 = Colors.black54;
