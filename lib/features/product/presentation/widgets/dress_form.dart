@@ -10,7 +10,10 @@ import 'package:serve_mate/core/widgets/custom_text.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_state.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/image_bloc/image_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 import 'package:serve_mate/features/product/presentation/widgets/color_picker_widget.dart';
 
 class DressForm extends StatelessWidget {
@@ -337,24 +340,27 @@ class DressForm extends StatelessWidget {
   Widget _buildLocationTextField(BuildContext context, String hint) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: BlocBuilder<DressFormBloc, DressFormState>(
+      child: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
           return TextField(
             cursorColor: AppColors.balck1,
             decoration: InputDecoration(
-              hintText: state.currentLocation ?? hint,
+              // Display place name if available, otherwise show the default hint
+              hintText: state.placeName!.isNotEmpty
+                  ? state.placeName
+                  : (state.currentLocation ?? hint),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.location_on),
                 onPressed: () {
-                  // Inside your widget or anywhere you want to dispatch the event
-                  BlocProvider.of<DressFormBloc>(context)
-                      .add(CurrentLocation());
+                  // Trigger the CurrentLocation event to fetch the current location
+                  BlocProvider.of<LocationBloc>(context)
+                      .add(FetchCurrentLocation());
                 },
               ),
               errorText: state.locationError,
             ),
-            keyboardType: TextInputType.text,
-            readOnly: true,
+            readOnly:
+                true, // The text field is read-only since it's just displaying the location
           );
         },
       ),

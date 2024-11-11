@@ -41,7 +41,7 @@ dependencies:
   bloc: ^8.1.4
   get_it: ^8.0.0
   go_router: ^14.3.0
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.3.3
   smooth_page_indicator: ^1.2.0+3
   google_fonts: ^6.2.1
   google_sign_in: ^6.2.1
@@ -54,6 +54,8 @@ dependencies:
   animated_widgets_flutter: ^1.1.1+2
   flutter_animate: ^4.5.0
   flutter_colorpicker: ^1.1.0
+  geolocator: ^13.0.1
+  geocoding: ^3.0.0
   
 
 
@@ -67,7 +69,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

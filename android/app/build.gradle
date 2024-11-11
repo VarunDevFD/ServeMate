@@ -32,8 +32,11 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
     }
 
     defaultConfig {
@@ -54,6 +57,18 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    dependencies {
+    // Added Geolocation dependency
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+  // Replace with the latest version when available
+  maven { url 'https://plugins.gradle.org/m2/' } 
 }
 
 flutter {

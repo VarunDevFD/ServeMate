@@ -1,4 +1,3 @@
-// events.dart
 import 'package:flutter/material.dart';
 
 abstract class DressFormEvent {}
@@ -32,6 +31,3 @@ class DressConditionChanged extends DressFormEvent {
 
   DressConditionChanged(this.condition);
 }
-
-
-class CurrentLocation extends DressFormEvent {}
