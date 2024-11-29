@@ -57,15 +57,19 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         log("Fetched Location: $location");
 
         // Get the place name
-        String placeName = await getPlaceName(position.latitude, position.longitude);
+        String placeName =
+            await getPlaceName(position.latitude, position.longitude);
         log("Place Name: $placeName");
 
         // Update the state with fetched location and place name
         emit(state.copyWith(
-            currentLocation: location, placeName: placeName, isFetchingLocation: false));
+            currentLocation: location,
+            placeName: placeName,
+            isFetchingLocation: false));
       } catch (error) {
-        log("Error Fetching Location: $error");
-        emit(state.copyWith(locationError: error.toString(), isFetchingLocation: false));
+        log("Error Fetching Location: $error----------");
+        emit(state.copyWith(
+            locationError: error.toString(), isFetchingLocation: false));
       }
     });
   }

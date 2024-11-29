@@ -6,9 +6,12 @@ class InputDecorations {
     String? labelText,
     String? hintText,
     Widget? suffixIcon,
+    Widget? prefixIcon,
+    String? errorText,
   }) {
     return InputDecoration(
       labelText: labelText,
+      errorText: errorText,
       hintText: hintText,
       border: const OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(

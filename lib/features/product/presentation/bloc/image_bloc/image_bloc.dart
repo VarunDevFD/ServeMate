@@ -14,26 +14,30 @@ class RemoveImage extends ImageEvent {
   RemoveImage(this.index);
 }
 
-// Define BLoC State
+//BLoC State
 class ImageState {
   final List<File> images;
 
-  ImageState(this.images);
+  ImageState({required this.images});
+
+  ImageState copyWith({List<File>? images}) {
+    return ImageState(images: images ?? this.images);
+  }
 }
 
-// Define ImageBloc using on<Event>
+// ImageBloc using on<Event>
 class ImageBloc extends Bloc<ImageEvent, ImageState> {
-  ImageBloc() : super(ImageState([])) {
+  ImageBloc() : super(ImageState(images: [])) {
     // Handle AddImage event
     on<AddImage>((event, emit) {
-      final updatedImages = List<File>.from(state.images)..add(event.image);
-      emit(ImageState(updatedImages));
+      emit(state.copyWith(images: List.from(state.images)..add(event.image)));
     });
 
     // Handle RemoveImage event
     on<RemoveImage>((event, emit) {
-      final updatedImages = List<File>.from(state.images)..removeAt(event.index);
-      emit(ImageState(updatedImages));
+      final updatedImages = List<File>.from(state.images)
+        ..removeAt(event.index);
+      emit(state.copyWith(images: updatedImages));
     });
   }
 }

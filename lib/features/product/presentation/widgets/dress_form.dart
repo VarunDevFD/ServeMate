@@ -1,239 +1,313 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:serve_mate/core/utils/color_utils.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/theme/input_decoration.dart';
-import 'package:serve_mate/core/widgets/custom_text.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_state.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
-import 'package:serve_mate/features/product/presentation/widgets/color_picker_widget.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
+import 'package:serve_mate/features/product/presentation/widgets/child_widget_calender.dart';
+import 'package:serve_mate/features/product/presentation/widgets/custom_gender_widget.dart';
+import 'package:serve_mate/features/product/presentation/widgets/custom_textfield_validator.dart';
+import 'package:serve_mate/features/product/presentation/widgets/dress_type_model.dart';
+import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:serve_mate/features/product/presentation/widgets/location_text_field.dart';
+import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
+import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
+import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
 
 class DressForm extends StatelessWidget {
-  const DressForm({super.key});
+  final GlobalKey<FormState> formKey;
+  final TextEditingController materialController;
+  final TextEditingController brandController;
+  final TextEditingController priceController;
+  final TextEditingController securityController;
+  final TextEditingController damageController;
+  final TextEditingController descriptionController;
+
+  final Function(String?) onGenderSelected;
+  final Function(String?) onTypeSelected;
+  final Function(String?) onModelSelected;
+  final Function(String?) onSizeSelected;
+  final Function(String?) onColorSelected;
+  final Function(String?) onDurationSelected;
+  final Function(String?) onConditionSelected;
+  final Function(String?) dateController;
+  final Function(String?) locationController;
+  final Function(List<String>) onImageSelected;
+
+  const DressForm({
+    super.key,
+    required this.formKey,
+    required this.materialController,
+    required this.brandController,
+    required this.priceController,
+    required this.securityController,
+    required this.damageController,
+    required this.descriptionController,
+    required this.onGenderSelected,
+    required this.onColorSelected,
+    required this.onTypeSelected,
+    required this.onModelSelected,
+    required this.onSizeSelected,
+    required this.onDurationSelected,
+    required this.onConditionSelected,
+    required this.dateController,
+    required this.onImageSelected,
+    required this.locationController,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _buildGenderSelection(),
-        _buildFormHeader('Dress Type'),
-        BlocBuilder<DressFormBloc, DressFormState>(
-          builder: (context, state) {
-            return _buildDressTypeField(context, state.selectedGender);
-          },
-        ),
-        _buildFormHeader('Size'),
-        BlocBuilder<DressFormBloc, DressFormState>(
-          builder: (context, state) {
-            return _buildSizeDropdown(context, state.selectedSize);
-          },
-        ),
-        _buildFormHeader('Color'),
-        _buildTextFieldWithColorPicker('Enter color'),
-        _buildFormHeader('Material'),
-        _buildTextField('Enter material'),
-        _buildFormHeader('Brand/Designer'),
-        _buildTextField('Enter brand/designer'),
-        _buildFormHeader('Rental Price'),
-        _buildTextField(
-          'Enter rental price',
-          keyboardType: TextInputType.number,
-        ),
-        _buildFormHeader('Security Deposit'),
-        _buildTextField(
-          'Enter security deposit',
-          keyboardType: TextInputType.number,
-        ),
-        _buildFormHeader('Condition'),
-        BlocBuilder<DressFormBloc, DressFormState>(
-          builder: (context, state) {
-            return _buildConditionDropdown(context, state.selectedCondition);
-          },
-        ),
-        _buildFormHeader('Available From - Till'),
-        _buildTextField('Enter availability wre      dates'),
-        _buildFormHeader('Special Requests'),
-        _buildTextField('Enter any special requests'),
-        _buildFormHeader('Images'),
-        // BlocBuilder for ImageState
-        BlocBuilder<ImageBloc, ImageState>(
-          builder: (context, state) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image Grid
-                _buildImageGrid(context, state.images),
-                // Add Image Button
-                _buildAddImageButton(context),
-              ],
-            );
-          },
-        ),
-        _buildFormHeader('Pickup/Delivery Option'),
-        _buildLocationTextField(context, 'Enter pickup or delivery option'),
-        _buildFormHeader('Notes or Additional Information'),
-        _buildTextField('Enter any additional notes'),
-        const SizedBox(height: 60)
-      ],
-    );
-  }
+    final dressCondition = DropdownBloc();
+    final dressDuration = DropdownBloc();
+    final dressSize = DropdownBloc<String>();
 
-  Widget _buildGenderSelection() {
-    return BlocBuilder<DressFormBloc, DressFormState>(
-      builder: (context, state) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text('Men'),
-                value: 'Men',
-                groupValue: state.selectedGender,
-                activeColor: AppColors.primary,
-                onChanged: (value) {
-                  context.read<DressFormBloc>().add(GenderSelected(value!));
-                },
-                secondary: Icon(Icons.man_2_rounded,
-                    color: state.selectedGender == 'Men'
-                        ? AppColors.primary
-                        : AppColors.grey),
-              ),
-            ),
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text('Girls'),
-                value: 'Girls',
-                groupValue: state.selectedGender,
-                activeColor: AppColors.primary,
-                onChanged: (value) {
-                  context.read<DressFormBloc>().add(GenderSelected(value!));
-                },
-                secondary: Icon(Icons.girl_rounded,
-                    color: state.selectedGender == 'Girls'
-                        ? AppColors.primary
-                        : AppColors.grey),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildDressTypeField(BuildContext context, String selectedGender) {
-    // Define dress types based on the selected gender
-    List<String> dressTypes = (selectedGender == 'Men')
-        ? ['Shirt', 'Tuxedo', 'Suit']
-        : ['Dress', 'Gown', 'Sari'];
-
-    // Ensure the default value is part of the list
-    return BlocBuilder<DressFormBloc, DressFormState>(
-      builder: (context, state) {
-        return DropdownButtonFormField<String>(
-          value: (state.selectedDressType.isNotEmpty &&
-                  dressTypes.contains(state.selectedDressType))
-              ? state.selectedDressType
-              : dressTypes.first, // default to the first item
-          onChanged: (value) {
-            context.read<DressFormBloc>().add(DressTypeChanged(value!));
-          },
-          items: dressTypes
-              .map((dressType) => DropdownMenuItem<String>(
-                    value: dressType,
-                    child: Text(dressType),
-                  ))
-              .toList(),
-          decoration: InputDecorations.defaultDecoration(),
-        );
-      },
-    );
-  }
-
-  Widget _buildSizeDropdown(BuildContext context, String selectedSize) {
-    // Predefined sizes
-    List<String> sizes = ['Small', 'Medium', 'Large'];
-
-    // Ensure the default value is part of the list
-    return DropdownButtonFormField<String>(
-      value: (selectedSize.isNotEmpty && sizes.contains(selectedSize))
-          ? selectedSize
-          : sizes.first, // default to the first item
-      onChanged: (value) {
-        context.read<DressFormBloc>().add(SizeChanged(value!));
-      },
-      items: sizes
-          .map((size) => DropdownMenuItem<String>(
-                value: size,
-                child: Text(size),
-              ))
-          .toList(),
-      decoration: InputDecorations.defaultDecoration(),
-    );
-  }
-
-  Widget _buildFormHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: CustomText(
-        text: title,
-        styleType: TextStyleType.blackBody,
-      ),
-    );
-  }
-
-  Widget _buildTextField(String hint,
-      {TextInputType keyboardType = TextInputType.text}) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: TextField(
-        cursorColor: AppColors.balck1,
-        decoration: InputDecorations.defaultDecoration(),
-        keyboardType: keyboardType,
-      ),
-    );
-  }
-
-  Widget _buildTextFieldWithColorPicker(String hint) {
-    return BlocBuilder<DressFormBloc, DressFormState>(
-      builder: (context, state) {
-        final TextEditingController controller = TextEditingController(
-          text: state.colorName, // Show the color name in the text field
-        );
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: TextField(
-            cursorColor: AppColors.balck1,
-            controller: controller,
-            onChanged: (text) {
-              final color =
-                  getColorByName(text); // Function to convert text to color
-              if (color != null) {
-                // If color is found from name, update both color and colorName
-                context.read<DressFormBloc>().add(ColorChanged(color, text));
-              }
-            },
-            decoration: InputDecorations.defaultDecoration(
-              suffixIcon: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ColorPickerWidget(), // Color picker as the suffix icon
-              ),
+    return Form(
+      key: formKey,
+      child: ListView(
+        padding: EdgeInsets.all(16.r),
+        children: [
+          // Gender Field
+          CustomGenderWidget(
+            onGenderSelected: onGenderSelected,
+          ),
+          // Type & Model Side Head
+          const CustomSideHeadText(title: 'Dress Type & Model'),
+          // Type & Model Field
+          DressTypeAndModel(
+            onTypeSelected: onTypeSelected,
+            onModelSelected: onModelSelected,
+          ),
+          // Size Side Head
+          const CustomSideHeadText(title: 'Size'),
+          // Size Field
+          Padding(
+            padding: EdgeInsets.only(top: 8.0.h),
+            child: ReusableDropdown(
+              onDataSelected: onSizeSelected,
+              bloc: dressSize,
+              items: const ['Small', 'Medium', 'Large'],
+              hint: "Select Dress Size",
             ),
           ),
-        );
-      },
+          // Color Side Head
+          const CustomSideHeadText(title: 'Color'),
+          // Color Field
+          TextFieldWithColorPicker(
+              hint: 'Enter color', onColorSelected: onColorSelected),
+          // Meterial Side Head
+          const CustomSideHeadText(title: 'Material'),
+          // Material Field
+          CustomTextField(
+            hint: 'Enter material',
+            numberLimit: 20,
+            controller: materialController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter the material';
+              }
+              return null;
+            },
+          ),
+          // Brand/Designer Side Head
+          const CustomSideHeadText(title: 'Brand/Designer'),
+          // Brand/Designer Field
+          CustomTextField(
+            hint: 'Enter brand/designer',
+            numberLimit: 20,
+            controller: brandController,
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter the Brand/Designer';
+              }
+              return null;
+            },
+          ),
+          // Duration Side Head
+          const CustomSideHeadText(title: 'Rental Duration'),
+          // Duration Field
+          Padding(
+            padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
+            child: ReusableDropdown(
+              onDataSelected: onDurationSelected,
+              bloc: dressDuration,
+              items: const ['1 Day', '1 Week', '1 Month'],
+              hint: "Duration",
+            ),
+          ),
+          // Rental Price Side Head
+          const CustomSideHeadText(title: 'Rental Price'),
+          // Rental Price Field
+          CustomTextField(
+            hint: 'Enter rental price',
+            keyboardType: TextInputType.number,
+            maxLines: 1,
+            numberLimit: 8,
+            showSuffixIcon: true,
+            controller: priceController,
+            popupMessage:
+                'This is field depend on the Rental Duration field if You choose the one item form there that, that duration based price showcase here!',
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter the price';
+              }
+              if (double.tryParse(value) == null) {
+                return 'Please enter a valid number';
+              }
+              return null;
+            },
+          ),
+          // Security Deposit Side Head
+          const CustomSideHeadText(title: 'Security Deposit'),
+          // Security Deposit Field
+          CustomTextField(
+            hint: 'Enter security deposit',
+            numberLimit: 10,
+            keyboardType: TextInputType.number,
+            controller: securityController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter the security deposit';
+              }
+              if (double.tryParse(value) == null) {
+                return 'Please enter a valid deposit';
+              }
+              return null;
+            },
+          ),
+          // Condition Side Head
+          const CustomSideHeadText(title: 'Dress Condition'),
+          // Condition Field
+          Padding(
+            padding: EdgeInsets.only(top: 8.0.h),
+            child: ReusableDropdown(
+                onDataSelected: onConditionSelected,
+                bloc: dressCondition,
+                items: const ['New', 'Like New', 'Good'],
+                hint: "Condition"),
+          ),
+          // Available Date Side Head
+          const CustomSideHeadText(title: 'Available Date'),
+          // Available Date Field
+          buildCalender(context, dateController)
+              ,
+          // Location Side Head
+          const CustomSideHeadText(title: 'Location'),
+          // Location Field
+          buildLocationTextField(context, 'Enter Location')
+              ,
+          // Image Side Head
+          const CustomSideHeadText(title: 'Images'),
+          // Image Field
+          ImagePickerFormField(
+            context: context,
+            onSaved: onImageSelected,
+            validator: (images) {
+              if (images == null || images.isEmpty) {
+                return 'Please select at least one image.';
+              }
+              return null; // Indicates no validation errors.
+            },
+          ),
+          // Damage Policy Side Head
+          const CustomSideHeadText(title: 'Damage Policy'),
+          // Damge Policy Field
+          CustomTextField(
+            hint: 'Damage Policy (optional)',
+            keyboardType: TextInputType.text,
+            controller: damageController,
+            maxLines: 5,
+          ),
+          // Description Side Head
+          const CustomSideHeadText(title: 'Description'),
+          // Description Field
+          CustomTextField(
+            hint: 'Enter any Description',
+            keyboardType: TextInputType.text,
+            controller: descriptionController,
+            maxLines: 5,
+          ),
+          SizedBox(height: 50.h)
+        ],
+      ),
+    );
+  }
+}
+ 
+/*
+Widget _buildTypeAndModel() {
+    final dressType = DropdownBloc();
+    final dressModel = DropdownBloc();
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        children: [
+          // Gender Dropdown
+          Expanded(
+            child: ReusableDropdown(
+              bloc: dressType,
+              items: const [
+                'Formal',
+                'Casual',
+                'Traditional',
+                'Bridal',
+                "Groom's",
+                'Bridesmaid',
+                'Groomsmen',
+                'Wedding Party'
+              ],
+              hint: "Select Dress Type",
+            ),
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          Expanded(
+            child: ReusableDropdown(
+              bloc: dressModel,
+              items: const ['Suit', 'Tuxedo', 'Jacket'],
+              hint: "Select Dress Model",
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildImageGrid(BuildContext context, List<File> images) {
+
+ Widget _buildLocationTextField(BuildContext context, String hint) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: BlocBuilder<LocationBloc, LocationState>(
+        builder: (context, state) {
+          return TextField(
+            cursorColor: AppColors.balck1,
+            decoration: InputDecoration(
+              // Display place name if available, otherwise show the default hint
+              hintText: state.placeName!.isNotEmpty
+                  ? state.placeName
+                  : (state.currentLocation ?? hint),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.location_on),
+                onPressed: () {
+                  // Trigger the CurrentLocation event to fetch the current location
+                  BlocProvider.of<LocationBloc>(context)
+                      .add(FetchCurrentLocation());
+                },
+              ),
+              errorText: state.locationError,
+            ),
+
+            readOnly:
+                true, // The text field is read-only since it's just displaying the location
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+
+ Widget _buildImageGrid(BuildContext context, List<File> images) {
     if (images.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -309,13 +383,156 @@ class DressForm extends StatelessWidget {
                 .add(AddImage(File(pickedFile.path)));
           }
         },
+        onLongPress: () {
+          context.push('/next-page');
+        },
         icon: Icon(Icons.image, color: AppColors.orange),
         label: Text('Add Image', style: TextStyle(color: AppColors.orange)),
       ),
     );
   }
 
-  _buildConditionDropdown(BuildContext context, String selectedCondition) {
+Widget _buildTextFieldWithColorPicker(String hint) {
+    return BlocBuilder<DressFormBloc, DressFormState>(
+      builder: (context, state) {
+        final TextEditingController controller = TextEditingController(
+          text: state.colorName, // Show the color name in the text field
+        );
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: TextField(
+            cursorColor: AppColors.balck1,
+            controller: controller,
+            onChanged: (text) {
+              final color =
+                  getColorByName(text); // Function to convert text to color
+              if (color != null) {
+                // If color is found from name, update both color and colorName
+                context.read<DressFormBloc>().add(ColorChanged(color, text));
+              }
+            },
+            decoration: InputDecorations.defaultDecoration(
+              suffixIcon: Padding(
+                padding: EdgeInsets.all(8.0.r),
+                child:
+                    const ColorPickerWidget(), // Color picker as the suffix icon
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+TableCalendar(
+          calendarStyle: CalendarStyle(
+            todayDecoration: BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.circle,
+            ),
+            selectedDecoration: BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+          ),
+          firstDay: DateTime.utc(2020, 10, 16),
+          lastDay: DateTime.utc(2030, 3, 14),
+          focusedDay: DateTime.now(),
+          onDaySelected: (selectedDay, focusedDay) {
+            // Handle selected date
+            print('Selected date: $selectedDay');
+          },
+        ),
+
+        
+  Widget _buildDressTypeField(BuildContext context, String selectedGender) {
+    // Define dress types based on the selected gender
+    List<String> dressTypes = (selectedGender == 'Men')
+        ? ['Formal', 'Casual', 'Traditional']
+        : ['Bridal', "Groom's", 'Bridesmaid', 'Groomsmen', 'Wedding Party'];
+
+    // Ensure the default value is part of the list
+    return BlocBuilder<DressFormBloc, DressFormState>(
+      builder: (context, state) {
+        return DropdownButtonFormField<String>(
+          value: (state.selectedDressType.isNotEmpty &&
+                  dressTypes.contains(state.selectedDressType))
+              ? state.selectedDressType
+              : dressTypes.first, // default to the first item
+          onChanged: (value) {
+            context.read<DressFormBloc>().add(DressTypeChanged(value!));
+          },
+          items: dressTypes
+              .map((dressType) => DropdownMenuItem<String>(
+                    value: dressType,
+                    child: Text(dressType),
+                  ))
+              .toList(),
+          decoration: InputDecorations.defaultDecoration(),
+        );
+      },
+    );
+  }
+
+  final dressModels = {
+  'Men': {
+    'Formal': ['Suit', 'Tuxedo', 'Jacket'],
+    'Casual': [
+      'T-shirt',
+      'Polo Shirt',
+      'Sweatshirt',
+      'Hoodie',
+      'Jeans',
+      'Chinos',
+      'Shorts',
+      'Coat',
+      'Hat',
+    ],
+    'Traditional': ['Kurta Pajama', 'Sherwani', 'Dhoti'],
+  },
+  'Women': {
+    'Bridal': [
+      'Ball Gown',
+      'Mermaid',
+      'A-Line',
+      'Sheath',
+      'Tea-Length',
+    ],
+    "Groom's": [
+      'Tuxedo',
+      'Suit',
+      'Sherwani',
+      'Kurta Pajama',
+      'Dhoti Kurta'
+    ],
+    // ... Add entries for other dress types
+  },
+};
+
+  Widget _buildSizeDropdown(BuildContext context, String selectedSize) {
+    // Predefined sizes
+    List<String> sizes = ['Small', 'Medium', 'Large'];
+
+    // Ensure the default value is part of the list
+    return DropdownButtonFormField<String>(
+      value: (selectedSize.isNotEmpty && sizes.contains(selectedSize))
+          ? selectedSize
+          : sizes.first, // default to the first item
+      onChanged: (value) {
+        context.read<DressFormBloc>().add(SizeChanged(value!));
+      },
+      items: sizes
+          .map((size) => DropdownMenuItem<String>(
+                value: size,
+                child: Text(size),
+              ))
+          .toList(),
+      decoration: InputDecorations.defaultDecoration(),
+    );
+  }
+
+
+ _buildConditionDropdown(BuildContext context, String selectedCondition) {
     List<String> conditions = ['New', 'Like New', 'Good'];
 
     return DropdownButtonFormField<String>(
@@ -336,34 +553,4 @@ class DressForm extends StatelessWidget {
       },
     );
   }
-
-  Widget _buildLocationTextField(BuildContext context, String hint) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
-          return TextField(
-            cursorColor: AppColors.balck1,
-            decoration: InputDecoration(
-              // Display place name if available, otherwise show the default hint
-              hintText: state.placeName!.isNotEmpty
-                  ? state.placeName
-                  : (state.currentLocation ?? hint),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.location_on),
-                onPressed: () {
-                  // Trigger the CurrentLocation event to fetch the current location
-                  BlocProvider.of<LocationBloc>(context)
-                      .add(FetchCurrentLocation());
-                },
-              ),
-              errorText: state.locationError,
-            ),
-            readOnly:
-                true, // The text field is read-only since it's just displaying the location
-          );
-        },
-      ),
-    );
-  }
-}
+  */

@@ -14,6 +14,12 @@ class DressTypeChanged extends DressFormEvent {
   DressTypeChanged(this.dressType);
 }
 
+class DressModelChanged extends DressFormEvent {
+  final String dressModel;
+
+  DressModelChanged(this.dressModel);
+}
+
 class SizeChanged extends DressFormEvent {
   final String size;
 
@@ -30,4 +36,25 @@ class DressConditionChanged extends DressFormEvent {
   final String condition;
 
   DressConditionChanged(this.condition);
+}
+
+
+class RentalDurationChanged extends DressFormEvent {
+  final String duration;
+  RentalDurationChanged(this.duration);
+}
+
+class SecurityDepositChanged extends DressFormEvent {
+  final double deposit;
+  SecurityDepositChanged(this.deposit);
+}
+
+class DamagePolicyChanged extends DressFormEvent {
+  final String policy;
+  DamagePolicyChanged(this.policy);
+}
+
+class DateRangeSelected extends DressFormEvent {
+  final DateTimeRange dateRange;
+  DateRangeSelected(this.dateRange);
 }

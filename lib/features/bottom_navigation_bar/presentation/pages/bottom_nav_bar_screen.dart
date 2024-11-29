@@ -18,12 +18,12 @@ class BottomNavigationBar extends StatelessWidget {
         return Scaffold(
           body: PageView(
             controller: _pageController,
-            children: const [
-              HomePage(),
-              ListPage(),
+            children: [
+              const HomePage(),
+              const ListPage(),
               AddPage(),
-              NotificationsPage(),
-              ProfilePage(),
+              const NotificationsPage(),
+              const ProfilePage(),
             ],
             onPageChanged: (index) {
               context.read<NavigationBloc>().add(PageChangedEvent(index));

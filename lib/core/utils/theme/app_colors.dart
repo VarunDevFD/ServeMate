@@ -29,6 +29,7 @@ class AppColors {
 
   // Orange
   static Color orange1 = const Color.fromARGB(255, 239, 145, 74);
+  static Color orange2 = const Color(0xFFFCD9A3);
 
   // Red
   static Color redAccent = Colors.redAccent;

@@ -21,4 +21,16 @@ class PreferencesRepository {
   Future<void> setHasSeenHome(bool value) async {
     return _preferencesDataSource.setBool('hasSeenHome', value);
   }
+
+
+/*
+  //-----------Animation-Repeatation-avoid--------------------------------------
+  Future<bool> hasShownAnimation() async {
+    return _preferencesDataSource.getBool('hasShownAnimation');
+  }
+
+  Future<void> setHasShownAnimation(bool value) async {
+    return _preferencesDataSource.setBool('hasShownAnimation', value);
+  }
+  */
 }

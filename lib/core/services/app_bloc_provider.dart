@@ -7,7 +7,9 @@ import 'package:serve_mate/features/category/presentation/bloc/category_bloc/cat
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/splash_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 
@@ -30,6 +32,8 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => DressFormBloc()),
         BlocProvider(create: (_) => ImageBloc()),
         BlocProvider(create: (_) => LocationBloc()),
+        BlocProvider(create: (_) => DropdownBloc()),
+        BlocProvider(create: (_) => DateBloc()),
       ],
       child: child,
     );
