@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
+import 'package:serve_mate/features/product/data/models/venues_model.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/catering_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/dress_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/footwear_form.dart';
+import 'package:serve_mate/features/product/presentation/widgets/form_submission_handler.dart';
 import 'package:serve_mate/features/product/presentation/widgets/jewelry_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/sound_dj_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/vehicle_form.dart';
@@ -36,6 +38,12 @@ class AddPage extends StatelessWidget {
   List<String> imageController = [];
   final damageController = TextEditingController();
   final descriptionController = TextEditingController();
+
+  // venues
+  final nameController = TextEditingController();
+  final capacityController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
 
   AddPage({super.key});
 
@@ -119,40 +127,32 @@ class AddPage extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
-                    // Trigger form validation before proceeding
-                    final isValid = formKey.currentState?.validate() ?? false;
-                    if (isValid) {
-                      formKey.currentState?.save();
-
-                      // Collect all the data and create a DressModel
-                      final dress = DressModel(
-                        gender: genderController,
-                        type: typeController,
-                        model: modelController,
-                        size: sizeController,
-                        color: colorController,
-                        material: materialController.text,
-                        brand: brandController.text,
-                        duration: durationController,
-                        price: double.tryParse(priceController.text),
-                        security: double.tryParse(securityController.text),
-                        condition: conditionController,
-                        date: dateController,
-                        location: locationController,
-                        images: imageController,
-                        damage: damageController.text,
-                        description: descriptionController.text,
-                      );
-                      _showSuccessDialog(context);
-                      // Form is valid, proceed to next screen or action
-                    } else {
-                      // Optionally show an error message or do nothing if invalid
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                                Text('Please complete the form correctly.')),
-                      );
-                    }
+                    handleFormSubmission(
+                      categoryName: state.selectedCategory!.name,
+                      formKey: formKey,
+                      context: context,
+                      // Pass all the required controllers
+                      nameController: nameController,
+                      brandController: brandController,
+                      materialController: materialController,
+                      descriptionController: descriptionController,
+                      imageController: imageController,
+                      capacityController: capacityController,
+                      durationController: durationController,
+                      genderController: genderController,
+                      typeController: typeController,
+                      sizeController: sizeController,
+                      colorController: colorController,
+                      modelController: modelController,
+                      priceController: double.tryParse(priceController.text),
+                      securityController:
+                          double.tryParse(securityController.text),
+                      conditionController: conditionController,
+                      dateController: dateController,
+                      locationController: locationController,
+                      phoneController: phoneController,
+                      emailController: emailController.text,
+                    );
                   },
                 ),
               ],
@@ -222,7 +222,23 @@ class AddPage extends StatelessWidget {
       case 'Jewelry':
         return const JewelryForm();
       case 'Venue':
-        return const VenueForm();
+        return VenueForm(
+          formKey: formKey,
+          nameController: nameController,
+          capacityController: capacityController,
+          priceController: priceController,
+          securityController: securityController,
+          onTypeSelected: onTypeSelected,
+          descriptionController: descriptionController,
+          phoneController: phoneController,
+          emailController: emailController,
+          locationController: onLocationSelected,
+          onDurationSelected: onDurationSelected,
+          dateController: onDateSelected,
+          onImageSelected: onImageSelected,
+          facilities: const [],
+          selectedFacilities: const [],
+        );
       case 'Catering':
         return const CateringForm();
       case 'Footwear':
@@ -236,3 +252,59 @@ class AddPage extends StatelessWidget {
     }
   }
 }
+
+
+/*
+                    // // Trigger form validation before proceeding
+                    // final isValid = formKey.currentState?.validate() ?? false;
+                    // if (isValid) {
+                    //   formKey.currentState?.save();
+
+                    //   // Collect all the data and create a DressModel
+                    //   final dress = DressModel(
+                    //     gender: genderController,
+                    //     type: typeController,
+                    //     model: modelController,
+                    //     size: sizeController,
+                    //     color: colorController,
+                    //     material: materialController.text,
+                    //     brand: brandController.text,
+                    //     duration: durationController,
+                    //     price: double.tryParse(priceController.text),
+                    //     security: double.tryParse(securityController.text),
+                    //     condition: conditionController,
+                    //     date: dateController,
+                    //     location: locationController,
+                    //     images: imageController,
+                    //     damage: damageController.text,
+                    //     description: descriptionController.text,
+                    //   );
+                    //   final venue = VenueModel(
+                    //     name: nameController.text,
+                    //     capacity: capacityController,
+                    //     rentalPrice: double.tryParse(priceController.text),
+                    //     securityDeposit: double.tryParse(securityController.text),
+                    //     venueType: typeController,
+                    //     phone: phoneController,
+                    //     email: emailController,
+                    //     location: locationController,
+                    //     duration: durationController,
+                    //     date: dateController,
+                    //     images: imageController,
+                    //     facilities: const [],
+                    //     selectedFacilities: const [],
+                    //     description: descriptionController.text,
+                    //   );
+
+                    //   _showSuccessDialog(context);
+                    //   // Form is valid, proceed to next screen or action
+                    // } else {
+                    //   // Optionally show an error message or do nothing if invalid
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //         content:
+                    //             Text('Please complete the form correctly.')),
+                    //   );
+                    // }
+                    */
+                    

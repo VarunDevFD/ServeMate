@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
 import 'package:serve_mate/features/product/presentation/widgets/child_widget_calender.dart';
@@ -187,13 +186,11 @@ class DressForm extends StatelessWidget {
           // Available Date Side Head
           const CustomSideHeadText(title: 'Available Date'),
           // Available Date Field
-          buildCalender(context, dateController)
-              ,
+          buildCalender(context, dateController),
           // Location Side Head
           const CustomSideHeadText(title: 'Location'),
           // Location Field
-          buildLocationTextField(context, 'Enter Location')
-              ,
+          buildLocationTextField(context, 'Enter Location'),
           // Image Side Head
           const CustomSideHeadText(title: 'Images'),
           // Image Field
