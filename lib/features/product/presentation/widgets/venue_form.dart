@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
 import 'package:serve_mate/features/product/presentation/widgets/child_widget_calender.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_textfield_validator.dart';
@@ -26,9 +27,10 @@ class VenueForm extends StatelessWidget {
   final Function(String?) onTypeSelected;
   final Function(String?) dateController;
   final Function(List<String>) onImageSelected;
+  final void Function(String) selectedFacilities;
 
-  final List<String> facilities;
-  final List<String> selectedFacilities;
+  
+ 
 
   const VenueForm({
     super.key,
@@ -45,13 +47,13 @@ class VenueForm extends StatelessWidget {
     required this.onTypeSelected,
     required this.dateController,
     required this.onImageSelected,
-    required this.facilities,
     required this.selectedFacilities,
   });
 
   @override
   Widget build(BuildContext context) {
     final dropdownBloc = DropdownBloc();
+    final List<String> venueList = [...facilitiesVenue];
 
     return ListView(
       padding: EdgeInsets.all(16.r),
@@ -154,7 +156,7 @@ class VenueForm extends StatelessWidget {
         ),
         _buildSection(
           title: 'Facilities Available',
-          child: VenueFacilitiesWidget(facilities: facilities),
+          child: VenueFacilitiesWidget(facilities: venueList,selectedFacilities:selectedFacilities),
         ),
         _buildSection(
           title: 'Contact Number',

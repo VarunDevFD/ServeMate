@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 
@@ -16,6 +17,7 @@ void handleFormSubmission({
   TextEditingController? phoneController,
   TextEditingController? damageController,
   List<String>? imageController,
+  List<String>? facilitiesVenue,
   String? durationController,
   String? genderController,
   String? typeController,
@@ -70,8 +72,7 @@ void handleFormSubmission({
           duration: durationController,
           date: dateController,
           images: imageController,
-          facilities: const [],
-          selectedFacilities: const [],
+          facilities: facilitiesVenue,
           description: descriptionController?.text,
         );
         _submitVenueForm(venue, context);

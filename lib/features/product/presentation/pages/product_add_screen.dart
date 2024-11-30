@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
-import 'package:serve_mate/features/product/data/models/dress_model.dart';
-import 'package:serve_mate/features/product/data/models/venues_model.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/catering_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
@@ -44,6 +42,7 @@ class AddPage extends StatelessWidget {
   final capacityController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
+  List<String> facilities = [];
 
   AddPage({super.key});
 
@@ -102,6 +101,13 @@ class AddPage extends StatelessWidget {
     log("Images: ${imageController.toString()}");
   }
 
+  void onFacilitySelected(String? facility) {
+    if (facility != null) {
+      facilities.add(facility);
+      log("Selected Facility: ${facility.toString()}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
@@ -137,6 +143,7 @@ class AddPage extends StatelessWidget {
                       materialController: materialController,
                       descriptionController: descriptionController,
                       imageController: imageController,
+                      facilitiesVenue: facilities,
                       capacityController: capacityController,
                       durationController: durationController,
                       genderController: genderController,
@@ -236,15 +243,28 @@ class AddPage extends StatelessWidget {
           onDurationSelected: onDurationSelected,
           dateController: onDateSelected,
           onImageSelected: onImageSelected,
-          facilities: const [],
-          selectedFacilities: const [],
+          selectedFacilities: onFacilitySelected,
         );
       case 'Catering':
         return const CateringForm();
       case 'Footwear':
         return const FootwearForm();
       case 'Cameras':
-        return const CameraVideographyForm();
+        return CameraVideographyForm(
+          formKey: formKey, // Pass a unique GlobalKey for the form
+          nameController: TextEditingController(),
+          onTypeSelected: onTypeSelected,
+          onBrandSelected: onModelSelected,
+          rentalPriceController: TextEditingController(),
+          securityDepositController: TextEditingController(),
+          onConditionSelected: onConditionSelected,
+          dateController: onDateSelected,
+          accessoriesController: TextEditingController(),
+          pickupOptionController: TextEditingController(),
+          insuranceController: TextEditingController(),
+          notesController: TextEditingController(),
+          onImageSelected: onImageSelected,
+        );
       case 'Sound & DJ Systems':
         return const SoundDJForm();
       default:

@@ -183,9 +183,8 @@ class DressForm extends StatelessWidget {
                 items: const ['New', 'Like New', 'Good'],
                 hint: "Condition"),
           ),
-          // Available Date Side Head
+          // Available Date 
           const CustomSideHeadText(title: 'Available Date'),
-          // Available Date Field
           buildCalender(context, dateController),
           // Location Side Head
           const CustomSideHeadText(title: 'Location'),

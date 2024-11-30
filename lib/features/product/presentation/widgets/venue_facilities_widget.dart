@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,11 +9,13 @@ import 'package:serve_mate/features/product/presentation/bloc/venues_bloc/venues
 import 'package:serve_mate/features/product/presentation/bloc/venues_bloc/venues_state.dart';
 
 class VenueFacilitiesWidget extends StatelessWidget {
+  final ValueChanged<String> selectedFacilities;
   final List<String> facilities;
 
   const VenueFacilitiesWidget({
     Key? key,
     required this.facilities,
+    required this.selectedFacilities,
   }) : super(key: key);
 
   @override
@@ -33,6 +37,8 @@ class VenueFacilitiesWidget extends StatelessWidget {
                   label: Text(facility),
                   selected: state.selectedFacilities.contains(facility),
                   onSelected: (selected) {
+                    log('Facility: $facility, Selected: $selected');
+                    selectedFacilities(facility);
                     bloc.add(ToggleFacility(facility));
                   },
                 );

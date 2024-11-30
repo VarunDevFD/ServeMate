@@ -19,7 +19,7 @@ class DressModel {
   DressModel({
     this.gender,
     this.type,
-    this.model,   
+    this.model,
     this.size,
     this.color,
     this.material,
@@ -47,7 +47,8 @@ class DressModel {
       brand: map['brand'] as String?,
       duration: map['duration'] as String?,
       price: map['price'] != null ? (map['price'] as num).toDouble() : null,
-      security: map['security'] != null ? (map['security'] as num).toDouble() : null,
+      security:
+          map['security'] != null ? (map['security'] as num).toDouble() : null,
       condition: map['condition'] as String?,
       date: map['date'] as String?,
       location: map['location'] as String?,
