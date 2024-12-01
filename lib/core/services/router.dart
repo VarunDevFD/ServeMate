@@ -4,7 +4,6 @@ import 'package:serve_mate/features/authentication/presentation/pages/sign_in_sc
 import 'package:serve_mate/features/authentication/presentation/pages/sign_up_screen.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/pages/bottom_nav_bar_screen.dart';
 import 'package:serve_mate/features/category/presentation/pages/category_select_screen.dart';
-import 'package:serve_mate/features/category/presentation/pages/temp_page.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';
 import 'package:serve_mate/features/welcome/presentation/page/s_welcome.dart';
@@ -43,10 +42,6 @@ class AppRouter {
       GoRoute(
         path: '/bottomNavBar',
         builder: (context, state) => BottomNavigationBar(),
-      ),
-      GoRoute(
-        path: '/temp_next',
-        builder: (context, state) => const TempPage(),
       ),
     ],
   );

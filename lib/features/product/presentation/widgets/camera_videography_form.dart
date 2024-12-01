@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
 import 'package:serve_mate/features/product/presentation/widgets/child_widget_calender.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_textfield_validator.dart';
+import 'package:serve_mate/features/product/presentation/widgets/location_text_field.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
@@ -174,19 +175,14 @@ class CameraVideographyForm extends StatelessWidget {
           ),
         ),
         _buildSection(
-          title: 'Pickup/Delivery Option',
-          child: CustomTextField(
-            hint: 'Enter Pickup or Delivery Option',
-            numberLimit: 50,
-            controller: pickupOptionController,
-            keyboardType: TextInputType.text,
-          ),
+          title: 'Pickup/Location Option',
+          child: buildLocationTextField(context, 'Enter Location'),
         ),
         _buildSection(
-          title: 'Insurance Included (Yes/No)',
+          title: 'Damage policy',
           child: CustomTextField(
-            hint: 'Is Insurance Included?',
-            numberLimit: 5,
+            hint: 'Enter the damage policy',
+            maxLines: 5,
             controller: insuranceController,
             keyboardType: TextInputType.text,
           ),
