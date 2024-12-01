@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 
@@ -77,6 +80,23 @@ void handleFormSubmission({
         _submitVenueForm(venue, context);
         break;
 
+      case 'Cameras':
+        final camera = CameraModel(
+          cameraName: nameController?.text,
+          equipmentType: typeController,
+          brandModel: brandController?.text,
+          rentalPrice: priceController,
+          securityDeposit: securityController,
+          condition: conditionController,
+          date: dateController,
+          accessories: facilitiesVenue,
+          location: locationController,
+          damage: damageController?.text,
+          notes: descriptionController?.text,
+        );
+        _submitCameraForm(camera, context);
+        break;
+
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid category selected.')),
@@ -94,13 +114,19 @@ void handleFormSubmission({
 // Helper methods for submission
 void _submitDressForm(DressModel dress, BuildContext context) {
   // Add logic to save the dress model to the database or backend
-  print('DressModel submitted: $dress');
+  log('DressModel submitted: $dress');
   _showSuccessDialog(context);
 }
 
 void _submitVenueForm(VenueModel venue, BuildContext context) {
   // Add logic to save the venue model to the database or backend
-  print('VenueModel submitted: $venue');
+  log('VenueModel submitted: $venue');
+  _showSuccessDialog(context);
+}
+
+void _submitCameraForm(CameraModel camera, BuildContext context) {
+  // Add logic to save the venue model to the database or backend
+  log('VenueModel submitted: $camera');
   _showSuccessDialog(context);
 }
 
