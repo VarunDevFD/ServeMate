@@ -51,6 +51,10 @@ class AddPage extends StatelessWidget {
   final seatCapacityController = TextEditingController();
   final regNumberController = TextEditingController();
 
+  // Decoration
+
+  List<String> facilitiesSecond = [];
+
   AddPage({super.key});
 
   // Callback to handle gender selection
@@ -112,6 +116,13 @@ class AddPage extends StatelessWidget {
     if (facility != null) {
       facilities.add(facility);
       log("Selected Facility: ${facility.toString()}");
+    }
+  }
+
+  void onFacilitySelected2(String? facility2) {
+    if (facility2 != null) {
+      facilitiesSecond.add(facility2);
+      log("Selected Facility: ${facility2.toString()}");
     }
   }
 
@@ -274,9 +285,20 @@ class AddPage extends StatelessWidget {
           descriptionController: descriptionController,
         );
       case 'Decoration':
-        return const DecorationForm();
+        return DecorationForm(
+          formKey: formKey,
+          nameController: nameController,
+          selectedFacilitiesFIrst: onFacilitySelected,
+          rentalPriceController: priceController,
+          securityDepositController: securityController,
+          onImageSelected: onImageSelected,
+          selectedFacilitiesSecond: onFacilitySelected2,
+          dateController: onDateSelected,
+          locationController: onLocationSelected,
+          descriptionController: descriptionController,
+        );
       case 'Jewelry':
-        return const JewelryForm();
+        return  JewelryForm();
       case 'Venue':
         return VenueForm(
           formKey: formKey,

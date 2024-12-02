@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
+import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
@@ -23,6 +24,8 @@ void handleFormSubmission({
   TextEditingController? regNumberController,
   List<String>? imageController,
   List<String>? facilitiesVenue,
+  List<String>? facilities1,
+  List<String>? facilities2,
   String? durationController,
   String? genderController,
   String? typeController,
@@ -126,6 +129,22 @@ void handleFormSubmission({
         _submitVehicleForm(vehicle, context);
         break;
 
+      case 'Decoration':
+        final decorationItem = DecorationItem(
+          name: nameController?.text,
+          selectedFacilitiesFirst: facilities1,
+          rentalPrice: priceController,
+          securityDeposit: securityController,
+          imageUrls: imageController,
+          selectedFacilitiesSecond: facilities2,
+          date: dateController,
+          location: locationController,
+          description: descriptionController?.text,
+        );
+
+        _submitDecorationForm(decorationItem, context);
+        break;
+
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid category selected.')),
@@ -162,6 +181,12 @@ void _submitCameraForm(CameraModel camera, BuildContext context) {
 void _submitVehicleForm(VehicleModel vehicle, BuildContext context) {
   // Add logic to save the venue model to the database or backend
   log('VehicleModel submitted: $vehicle');
+  _showSuccessDialog(context);
+}
+
+void _submitDecorationForm(DecorationItem decoration, BuildContext context) {
+  // Add logic to save the venue model to the database or backend
+  log('DecorationModel submitted: $decoration');
   _showSuccessDialog(context);
 }
 

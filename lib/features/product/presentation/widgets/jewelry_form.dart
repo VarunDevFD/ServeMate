@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/theme/input_decoration.dart';
+import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 
 class JewelryForm extends StatelessWidget {
   const JewelryForm({super.key});
@@ -9,6 +11,24 @@ class JewelryForm extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        // Name
+        // Category
+        // Price
+        // Available Quantity
+        // Material
+        // Condition
+        // Brand
+        // Size/ Dimension
+        // Color
+        // Images
+        // Location
+        // Rental Duration
+        // Price
+        // Security
+        // Availability Status
+        // Add Note
+        
+
         _buildFormHeader('Jewelry Type'),
         _buildTextField('Enter jewelry type'),
         _buildFormHeader('Material'),
@@ -52,6 +72,18 @@ class JewelryForm extends StatelessWidget {
       child: TextField(
         decoration: InputDecorations.defaultDecoration(),
       ),
+    );
+  }
+
+  Widget _buildSection({required String title, required Widget child}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomSideHeadText(title: title),
+        child,
+        SizedBox(height: 10.h),
+      ],
     );
   }
 }
