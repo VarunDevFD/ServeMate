@@ -47,6 +47,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   flutter_colorpicker: ^1.1.0
   flutter_screenutil: ^5.9.3
+  flutter_toggle_tab: ^1.4.1
   geocoding: ^3.0.0
   geolocator: ^13.0.1
   get_it: ^8.0.0

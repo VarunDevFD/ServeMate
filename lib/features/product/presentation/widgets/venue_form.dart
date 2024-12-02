@@ -29,9 +29,6 @@ class VenueForm extends StatelessWidget {
   final Function(List<String>) onImageSelected;
   final void Function(String) selectedFacilities;
 
-  
- 
-
   const VenueForm({
     super.key,
     required this.formKey,
@@ -55,154 +52,159 @@ class VenueForm extends StatelessWidget {
     final dropdownBloc = DropdownBloc();
     final List<String> venueList = [...facilitiesVenue];
 
-    return ListView(
-      padding: EdgeInsets.all(16.r),
-      children: [
-        _buildSection(
-          title: 'Venue Name',
-          child: CustomTextField(
-            hint: 'Enter Venue Name',
-            numberLimit: 20,
-            controller: nameController,
-            keyboardType: TextInputType.text,
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter the Venue Name'
-                : null,
-          ),
-        ),
-        _buildSection(
-          title: 'Location',
-          child: buildLocationTextField(context, 'Enter Location'),
-        ),
-        _buildSection(
-          title: 'Venue Capacity',
-          child: CustomTextField(
-            hint: 'Enter Venue Capacity',
-            numberLimit: 6,
-            controller: capacityController,
-            keyboardType: TextInputType.number,
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter the Venue Capacity'
-                : null,
-          ),
-        ),
-        _buildSection(
-          title: 'Rental Duration',
-          child: Padding(
-            padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
-            child: ReusableDropdown(
-              onDataSelected: onDurationSelected,
-              bloc: dropdownBloc,
-              items: DropdownItems.rentalDurationItems,
-              hint: "Duration",
+    return Form(
+      key: formKey,
+      child: ListView(
+        padding: EdgeInsets.all(16.r),
+        children: [
+          _buildSection(
+            title: 'Venue Name',
+            child: CustomTextField(
+              hint: 'Enter Venue Name',
+              numberLimit: 20,
+              controller: nameController,
+              keyboardType: TextInputType.text,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the Venue Name'
+                  : null,
             ),
           ),
-        ),
-        _buildSection(
-          title: 'Rental Price',
-          child: CustomTextField(
-            hint: 'Enter rental price',
-            keyboardType: TextInputType.number,
-            maxLines: 1,
-            numberLimit: 8,
-            showSuffixIcon: true,
-            controller: priceController,
-            popupMessage:
-                'This field depends on the Rental Duration. Based on your selection, duration-based price will showcase here!',
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the price';
-              }
-              if (double.tryParse(value) == null) {
-                return 'Please enter a valid number';
-              }
-              return null;
-            },
+          _buildSection(
+            title: 'Location',
+            child: buildLocationTextField(
+                context, 'Enter Location', locationController),
           ),
-        ),
-        _buildSection(
-          title: 'Security Deposit',
-          child: CustomTextField(
-            hint: 'Enter security deposit',
-            numberLimit: 10,
-            keyboardType: TextInputType.number,
-            controller: securityController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the security deposit';
-              }
-              if (double.tryParse(value) == null) {
-                return 'Please enter a valid deposit';
-              }
-              return null;
-            },
-          ),
-        ),
-        _buildSection(
-          title: 'Venue Type',
-          child: Padding(
-            padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
-            child: ReusableDropdown(
-              onDataSelected: onTypeSelected,
-              bloc: dropdownBloc,
-              items: DropdownItems.venueTypeItems,
-              hint: "Venue Type",
+          _buildSection(
+            title: 'Venue Capacity',
+            child: CustomTextField(
+              hint: 'Enter Venue Capacity',
+              numberLimit: 6,
+              controller: capacityController,
+              keyboardType: TextInputType.number,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the Venue Capacity'
+                  : null,
             ),
           ),
-        ),
-        _buildSection(
-          title: 'Available Date',
-          child: buildCalender(context, dateController),
-        ),
-        _buildSection(
-          title: 'Facilities Available',
-          child: VenueFacilitiesWidget(facilities: venueList,selectedFacilities:selectedFacilities),
-        ),
-        _buildSection(
-          title: 'Contact Number',
-          child: CustomTextField(
-            hint: 'Enter Phone Number',
-            numberLimit: 10,
-            controller: phoneController,
-            keyboardType: TextInputType.phone,
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter the Phone Number'
-                : null,
+          _buildSection(
+            title: 'Rental Duration',
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
+              child: ReusableDropdown(
+                onDataSelected: onDurationSelected,
+                bloc: dropdownBloc,
+                items: DropdownItems.rentalDurationItems,
+                hint: "Duration",
+              ),
+            ),
           ),
-        ),
-        _buildSection(
-          title: 'Email',
-          child: CustomTextField(
-            hint: 'Enter Email',
-            numberLimit: 50,
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter the Email'
-                : null,
+          _buildSection(
+            title: 'Rental Price',
+            child: CustomTextField(
+              hint: 'Enter rental price',
+              keyboardType: TextInputType.number,
+              maxLines: 1,
+              numberLimit: 8,
+              showSuffixIcon: true,
+              controller: priceController,
+              popupMessage:
+                  'This field depends on the Rental Duration. Based on your selection, duration-based price will showcase here!',
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the price';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+            ),
           ),
-        ),
-        _buildSection(
-          title: 'Images',
-          child: ImagePickerFormField(
-            context: context,
-            onSaved: onImageSelected,
-            validator: (images) => images == null || images.isEmpty
-                ? 'Please select at least one image.'
-                : null,
+          _buildSection(
+            title: 'Security Deposit',
+            child: CustomTextField(
+              hint: 'Enter security deposit',
+              numberLimit: 10,
+              keyboardType: TextInputType.number,
+              controller: securityController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the security deposit';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid deposit';
+                }
+                return null;
+              },
+            ),
           ),
-        ),
-        _buildSection(
-          title: 'Description',
-          child: CustomTextField(
-            hint: 'Enter any Description',
-            keyboardType: TextInputType.text,
-            controller: descriptionController,
-            maxLines: 5,
+          _buildSection(
+            title: 'Venue Type',
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
+              child: ReusableDropdown(
+                onDataSelected: onTypeSelected,
+                bloc: dropdownBloc,
+                items: DropdownItems.venueTypeItems,
+                hint: "Venue Type",
+              ),
+            ),
           ),
-        ),
-        SizedBox(height: 50.h),
-      ],
+          _buildSection(
+            title: 'Available Date',
+            child: buildCalender(context, dateController),
+          ),
+          _buildSection(
+            title: 'Facilities Available',
+            child: VenueFacilitiesWidget(
+                facilities: venueList, selectedFacilities: selectedFacilities),
+          ),
+          _buildSection(
+            title: 'Contact Number',
+            child: CustomTextField(
+              hint: 'Enter Phone Number',
+              numberLimit: 10,
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the Phone Number'
+                  : null,
+            ),
+          ),
+          _buildSection(
+            title: 'Email',
+            child: CustomTextField(
+              hint: 'Enter Email',
+              numberLimit: 50,
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the Email'
+                  : null,
+            ),
+          ),
+          _buildSection(
+            title: 'Images',
+            child: ImagePickerFormField(
+              context: context,
+              onSaved: onImageSelected,
+              validator: (images) => images == null || images.isEmpty
+                  ? 'Please select at least one image.'
+                  : null,
+            ),
+          ),
+          _buildSection(
+            title: 'Description',
+            child: CustomTextField(
+              hint: 'Enter any Description',
+              keyboardType: TextInputType.text,
+              controller: descriptionController,
+              maxLines: 5,
+            ),
+          ),
+          SizedBox(height: 50.h),
+        ],
+      ),
     );
   }
 

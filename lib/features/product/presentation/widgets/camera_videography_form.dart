@@ -24,6 +24,7 @@ class CameraVideographyForm extends StatelessWidget {
   final Function(List<String>) onImageSelected;
   final Function(String?) onTypeSelected;
   final Function(String?) onBrandSelected;
+  final Function(String?) locationController;
 
   const CameraVideographyForm({
     super.key,
@@ -40,6 +41,7 @@ class CameraVideographyForm extends StatelessWidget {
     required this.insuranceController,
     required this.notesController,
     required this.onImageSelected,
+    required this.locationController,
   });
 
   @override
@@ -176,7 +178,7 @@ class CameraVideographyForm extends StatelessWidget {
         ),
         _buildSection(
           title: 'Pickup/Location Option',
-          child: buildLocationTextField(context, 'Enter Location'),
+          child: buildLocationTextField(context, 'Enter Location', locationController),
         ),
         _buildSection(
           title: 'Damage policy',

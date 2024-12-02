@@ -24,6 +24,9 @@ class AddPage extends StatelessWidget {
   String? modelController;
   String? sizeController;
   String? colorController;
+  String? fuelController;
+  String? transmissionController;
+  String? toggleController;
 
   final materialController = TextEditingController();
   final brandController = TextEditingController();
@@ -43,6 +46,10 @@ class AddPage extends StatelessWidget {
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   List<String> facilities = [];
+
+  // Vehicle
+  final seatCapacityController = TextEditingController();
+  final regNumberController = TextEditingController();
 
   AddPage({super.key});
 
@@ -108,6 +115,21 @@ class AddPage extends StatelessWidget {
     }
   }
 
+  void onFuelSelected(String? fuel) {
+    fuelController = fuel;
+    log("Fuel: ${fuelController.toString()}");
+  }
+
+  void onTransmissionSelected(String? transmission) {
+    transmissionController = transmission;
+    log("Transmission: ${transmissionController.toString()}");
+  }
+
+  void onToggleSelected(String? toggle) {
+    toggleController = toggle;
+    log("Toggle: ${toggleController.toString()}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
@@ -159,6 +181,11 @@ class AddPage extends StatelessWidget {
                       locationController: locationController,
                       phoneController: phoneController,
                       emailController: emailController.text,
+                      fuelController: fuelController,
+                      seatCapacityController: seatCapacityController,
+                      regNumberController: regNumberController,
+                      transmission: transmissionController,
+                      toggleController: toggleController,
                     );
                   },
                 ),
@@ -182,23 +209,26 @@ class AddPage extends StatelessWidget {
     );
   }
 
-  void _showSuccessDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmation'),
-        content: const Text('Form completed successfully!'),
-        actions: [
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  /*
+
+  // void showSuccessDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: const Text('Confirmation'),
+  //       content: const Text('Form completed successfully!'),
+  //       actions: [
+  //         TextButton(
+  //           child: const Text('OK'),
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+  */
 
   Widget _getFormForCategory(String? category) {
     switch (category) {
@@ -223,7 +253,26 @@ class AddPage extends StatelessWidget {
           descriptionController: descriptionController,
         );
       case 'Vehicles':
-        return const VehicleForm();
+        return VehicleForm(
+          formKey: formKey,
+          nameController: nameController,
+          brandController: brandController,
+          seatCapacityController: seatCapacityController,
+          regNumberController: regNumberController,
+          priceController: priceController,
+          securityController: securityController,
+          onColorSelected: onColorSelected,
+          dateController: onDateSelected,
+          onTypeSelected: onTypeSelected,
+          onModelSelected: onModelSelected,
+          onFuelSelected: onFuelSelected,
+          onTransmissionSelected: onTransmissionSelected,
+          selectedFacilities: onFacilitySelected,
+          onImageSelected: onImageSelected,
+          locationController: onLocationSelected,
+          onToggleSelected: onToggleSelected,
+          descriptionController: descriptionController,
+        );
       case 'Decoration':
         return const DecorationForm();
       case 'Jewelry':
@@ -264,6 +313,7 @@ class AddPage extends StatelessWidget {
           insuranceController: TextEditingController(),
           notesController: TextEditingController(),
           onImageSelected: onImageSelected,
+          locationController: onLocationSelected,
         );
       case 'Sound & DJ Systems':
         return const SoundDJForm();

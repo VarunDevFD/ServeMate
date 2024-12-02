@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
+import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 
 void handleFormSubmission({
@@ -18,6 +19,8 @@ void handleFormSubmission({
   TextEditingController? capacityController,
   TextEditingController? phoneController,
   TextEditingController? damageController,
+  TextEditingController? seatCapacityController,
+  TextEditingController? regNumberController,
   List<String>? imageController,
   List<String>? facilitiesVenue,
   String? durationController,
@@ -32,6 +35,9 @@ void handleFormSubmission({
   String? dateController,
   String? locationController,
   String? emailController,
+  String? fuelController,
+  String? transmission,
+  String? toggleController,
 }) {
   // Validate the form
   if (formKey.currentState?.validate() ?? false) {
@@ -97,6 +103,29 @@ void handleFormSubmission({
         _submitCameraForm(camera, context);
         break;
 
+      case 'vehicle':
+        final vehicle = VehicleModel(
+          name: nameController?.text,
+          brand: brandController?.text,
+          color: colorController,
+          seatCapacity: int.tryParse(seatCapacityController?.text ?? ''),
+          registrationNumber: regNumberController?.text,
+          rentalPrice: priceController,
+          securityDeposit: securityController,
+          vehicleType: typeController, // This will be a selected type
+          model: brandController?.text, // Selected model
+          fuelType: fuelController, // Selected fuel type
+          transmission: transmission, // Selected transmission type
+          facilities: facilitiesVenue, // Selected facilities
+          images: imageController, // Assuming images are passed here
+          date: dateController,
+          location: locationController, // Location controller function
+          toggleOption: toggleController, // Toggle-specific option
+          description: descriptionController?.text,
+        );
+        _submitVehicleForm(vehicle, context);
+        break;
+
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid category selected.')),
@@ -127,6 +156,12 @@ void _submitVenueForm(VenueModel venue, BuildContext context) {
 void _submitCameraForm(CameraModel camera, BuildContext context) {
   // Add logic to save the venue model to the database or backend
   log('VenueModel submitted: $camera');
+  _showSuccessDialog(context);
+}
+
+void _submitVehicleForm(VehicleModel vehicle, BuildContext context) {
+  // Add logic to save the venue model to the database or backend
+  log('VehicleModel submitted: $vehicle');
   _showSuccessDialog(context);
 }
 

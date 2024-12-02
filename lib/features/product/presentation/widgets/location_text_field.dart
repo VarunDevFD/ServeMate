@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Add this for Bloc
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/theme/input_decoration.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 
-Widget buildLocationTextField(BuildContext context, String hint) {
+Widget buildLocationTextField(
+    BuildContext context, String hint, locationController) {
   return Padding(
-    padding: const EdgeInsets.only(top: 8.0),
+    padding: EdgeInsets.only(top: 8.h),
     child: BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
         return TextField(
@@ -21,6 +23,7 @@ Widget buildLocationTextField(BuildContext context, String hint) {
             suffixIcon: IconButton(
               icon: const Icon(Icons.location_on),
               onPressed: () {
+                locationController(state.placeName);
                 // Trigger the CurrentLocation event to fetch the current location
                 BlocProvider.of<LocationBloc>(context)
                     .add(FetchCurrentLocation());

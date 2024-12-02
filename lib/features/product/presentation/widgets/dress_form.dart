@@ -183,13 +183,13 @@ class DressForm extends StatelessWidget {
                 items: const ['New', 'Like New', 'Good'],
                 hint: "Condition"),
           ),
-          // Available Date 
+          // Available Date
           const CustomSideHeadText(title: 'Available Date'),
           buildCalender(context, dateController),
           // Location Side Head
           const CustomSideHeadText(title: 'Location'),
           // Location Field
-          buildLocationTextField(context, 'Enter Location'),
+          buildLocationTextField(context, 'Enter Location', locationController),
           // Image Side Head
           const CustomSideHeadText(title: 'Images'),
           // Image Field
@@ -219,6 +219,7 @@ class DressForm extends StatelessWidget {
             hint: 'Enter any Description',
             keyboardType: TextInputType.text,
             controller: descriptionController,
+            numberLimit: 100,
             maxLines: 5,
           ),
           SizedBox(height: 50.h)
@@ -227,7 +228,7 @@ class DressForm extends StatelessWidget {
     );
   }
 }
- 
+
 /*
 Widget _buildTypeAndModel() {
     final dressType = DropdownBloc();
