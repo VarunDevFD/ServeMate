@@ -66,7 +66,7 @@ class VehicleForm extends StatelessWidget {
     return Form(
       key: formKey,
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         children: [
           // Name
           _buildSection(

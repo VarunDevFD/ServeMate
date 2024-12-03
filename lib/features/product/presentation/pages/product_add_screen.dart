@@ -21,6 +21,7 @@ class AddPage extends StatelessWidget {
 
   String? genderController;
   String? typeController;
+  String? materials;
   String? modelController;
   String? sizeController;
   String? colorController;
@@ -52,8 +53,11 @@ class AddPage extends StatelessWidget {
   final regNumberController = TextEditingController();
 
   // Decoration
-
   List<String> facilitiesSecond = [];
+
+  // Jwelery
+  final quantityController = TextEditingController();
+  final sizejweleryController = TextEditingController();
 
   AddPage({super.key});
 
@@ -66,6 +70,11 @@ class AddPage extends StatelessWidget {
   void onTypeSelected(String? type) {
     typeController = type;
     log("Type: ${typeController.toString()}");
+  }
+
+  void onMaterialSelected(String? material) {
+    materials = material;
+    log("Type: ${materials.toString()}");
   }
 
   void onModelSelected(String? model) {
@@ -170,7 +179,6 @@ class AddPage extends StatelessWidget {
                       categoryName: state.selectedCategory!.name,
                       formKey: formKey,
                       context: context,
-                      // Pass all the required controllers
                       nameController: nameController,
                       brandController: brandController,
                       materialController: materialController,
@@ -219,27 +227,6 @@ class AddPage extends StatelessWidget {
       },
     );
   }
-
-  /*
-
-  // void showSuccessDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: const Text('Confirmation'),
-  //       content: const Text('Form completed successfully!'),
-  //       actions: [
-  //         TextButton(
-  //           child: const Text('OK'),
-  //           onPressed: () {
-  //             Navigator.of(context).pop();
-  //           },
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-  */
 
   Widget _getFormForCategory(String? category) {
     switch (category) {
@@ -298,7 +285,24 @@ class AddPage extends StatelessWidget {
           descriptionController: descriptionController,
         );
       case 'Jewelry':
-        return  JewelryForm();
+        return JewelryForm(
+          formKey: formKey,
+          nameController: nameController,
+          onTypeSelected: onTypeSelected,
+          onMaterialSelected: onMaterialSelected,
+          priceController: priceController,
+          quantityController: quantityController,
+          onConditionSelected: onConditionSelected,
+          brandController: brandController,
+          sizeController: sizejweleryController,
+          onColorSelected: onColorSelected,
+          securityDepositController: securityController,
+          onToggleSelected: onToggleSelected,
+          descriptionController: descriptionController,
+          dateController: onDateSelected,
+          locationController: onLocationSelected,
+          onImageSelected: onImageSelected,
+        );
       case 'Venue':
         return VenueForm(
           formKey: formKey,
@@ -319,7 +323,7 @@ class AddPage extends StatelessWidget {
       case 'Catering':
         return const CateringForm();
       case 'Footwear':
-        return const FootwearForm();
+        return  FootwearForm();
       case 'Cameras':
         return CameraVideographyForm(
           formKey: formKey, // Pass a unique GlobalKey for the form

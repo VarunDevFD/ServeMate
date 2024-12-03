@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
+import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 
@@ -12,7 +13,6 @@ void handleFormSubmission({
   required String categoryName,
   required GlobalKey<FormState> formKey,
   required BuildContext context,
-  // Add all your controllers here
   TextEditingController? nameController,
   TextEditingController? brandController,
   TextEditingController? materialController,
@@ -22,6 +22,8 @@ void handleFormSubmission({
   TextEditingController? damageController,
   TextEditingController? seatCapacityController,
   TextEditingController? regNumberController,
+  TextEditingController? quantityController,
+  TextEditingController? sizejweleryController,
   List<String>? imageController,
   List<String>? facilitiesVenue,
   List<String>? facilities1,
@@ -145,6 +147,29 @@ void handleFormSubmission({
         _submitDecorationForm(decorationItem, context);
         break;
 
+      case 'Jewelry':
+        final jewelryItem = JewelryModel(
+          name: nameController?.text,
+          type: typeController,
+          material: materialController?.text,
+          price: priceController,
+          quantity: quantityController?.text,
+          condition: conditionController,
+          brand: brandController?.text,
+          size: sizejweleryController?.text,
+          color: colorController,
+          securityDeposit: securityController,
+          isAvailable: toggleController,
+          description: descriptionController?.text,
+          dateAdded: dateController,
+          location: locationController,
+          images:
+              imageController, // Assuming this is a list of URLs or file paths
+        );
+
+        _submitJewelryForm(jewelryItem, context);
+        break;
+
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid category selected.')),
@@ -188,6 +213,27 @@ void _submitDecorationForm(DecorationItem decoration, BuildContext context) {
   // Add logic to save the venue model to the database or backend
   log('DecorationModel submitted: $decoration');
   _showSuccessDialog(context);
+}
+
+void _submitJewelryForm(JewelryModel jewelryItem, BuildContext context) {
+  // Validate the data if necessary
+  if (jewelryItem.name == null || jewelryItem.name!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('Please enter a name for the jewelry item.')),
+    );
+    return;
+  }
+
+  // Perform the form submission logic
+  print('Jewelry Item Submitted: ${jewelryItem.toJson()}');
+
+  // Example: Sending the data to a server or saving to a database
+  // apiService.submitJewelryItem(jewelryItem);
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Jewelry item submitted successfully!')),
+  );
 }
 
 void _showSuccessDialog(BuildContext context) {
