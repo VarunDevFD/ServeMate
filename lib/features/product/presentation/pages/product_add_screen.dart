@@ -28,6 +28,7 @@ class AddPage extends StatelessWidget {
   String? fuelController;
   String? transmissionController;
   String? toggleController;
+  String? categorySelected;
 
   final materialController = TextEditingController();
   final brandController = TextEditingController();
@@ -70,6 +71,12 @@ class AddPage extends StatelessWidget {
   void onTypeSelected(String? type) {
     typeController = type;
     log("Type: ${typeController.toString()}");
+  }
+
+  // FootWear
+  void onCategorySelected(String? category) {
+    categorySelected = category;
+    log("Type: ${categorySelected.toString()}");
   }
 
   void onMaterialSelected(String? material) {
@@ -205,6 +212,7 @@ class AddPage extends StatelessWidget {
                       regNumberController: regNumberController,
                       transmission: transmissionController,
                       toggleController: toggleController,
+                      categoryController: categorySelected,
                     );
                   },
                 ),
@@ -323,7 +331,22 @@ class AddPage extends StatelessWidget {
       case 'Catering':
         return const CateringForm();
       case 'Footwear':
-        return  FootwearForm();
+        return  FootwearForm(
+          formKey: formKey,
+          nameController: nameController,
+          priceController: priceController,
+          brandController: brandController,
+          securityController: securityController,
+          descriptionController: descriptionController,
+          onConditionSelected:onConditionSelected,
+          onSizeSelected: onSizeSelected,
+          onColorSelected: onColorSelected,
+          onCategorySelected: onCategorySelected,
+          onToggleSelected: onToggleSelected,
+          onImageSelected: onImageSelected,
+          locationController: onLocationSelected,
+          dateController: onDateSelected,
+        );
       case 'Cameras':
         return CameraVideographyForm(
           formKey: formKey, // Pass a unique GlobalKey for the form

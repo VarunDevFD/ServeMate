@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
+import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
@@ -43,6 +44,7 @@ void handleFormSubmission({
   String? fuelController,
   String? transmission,
   String? toggleController,
+  String? categoryController,
 }) {
   // Validate the form
   if (formKey.currentState?.validate() ?? false) {
@@ -169,6 +171,25 @@ void handleFormSubmission({
 
         _submitJewelryForm(jewelryItem, context);
         break;
+      case 'Footwear':
+        final footwearItem = FootwearModel(
+          name: nameController?.text,
+          price: priceController,
+          brand: brandController?.text,
+          securityDeposit: securityController,
+          description: descriptionController?.text,
+          condition: conditionController,
+          size: sizejweleryController?.text,
+          color: colorController,
+          category: categoryController,
+          isAvailable: toggleController,
+          location: locationController,
+          images: imageController,
+          date: dateController,
+        );
+
+        _submitFootWearForm(footwearItem, context);
+        break;
 
       default:
         ScaffoldMessenger.of(context).showSnackBar(
@@ -226,13 +247,31 @@ void _submitJewelryForm(JewelryModel jewelryItem, BuildContext context) {
   }
 
   // Perform the form submission logic
-  print('Jewelry Item Submitted: ${jewelryItem.toJson()}');
+  log('Jewelry Item Submitted: ${jewelryItem.toJson()}');
 
   // Example: Sending the data to a server or saving to a database
   // apiService.submitJewelryItem(jewelryItem);
 
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(content: Text('Jewelry item submitted successfully!')),
+  );
+}
+
+void _submitFootWearForm(FootwearModel footwearItem, BuildContext context) {
+  // Validate the data if necessary
+  if (footwearItem.name == null || footwearItem.name!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('Please enter a name for the footwear item.')),
+    );
+    return;
+  }
+
+  // Perform the form submission logic
+  log('Jewelry Item Submitted: ${footwearItem.toJson()}');
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('footwear item submitted successfully!')),
   );
 }
 

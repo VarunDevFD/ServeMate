@@ -4,6 +4,7 @@ class DropdownItems {
     '1 Week',
     '1 Month'
   ];
+  static const List<String> conditionItems = ['New', 'Like New', 'Good'];
   static const List<String> venueTypeItems = ['Outdoor', 'Indoor', 'Both'];
   static const List<String> vehicleTypeItems = [
     'Sedan',
@@ -22,6 +23,16 @@ class DropdownItems {
   ];
   static const List<String> vehicleTransmissionItems = ['Manual', 'Automatic'];
   static const List<String> vehicleToggleList = ['ON', 'OFF'];
+  static const List<String> sizeList = ['S', 'M', 'L', '8', '9', '10'];
+  static const List<String> footwearCategories = [
+    "Formal",
+    "Casual",
+    "Bridal",
+    "Sportswear",
+    "Traditional",
+    "Party Wear",
+    "Outdoor",
+  ];
   static const List<String> decorationCategories = [
     "Stage Decoration",
     "Floral Arrangements",

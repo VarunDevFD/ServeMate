@@ -1,24 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:serve_mate/core/utils/theme/input_decoration.dart';
+import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
+import 'package:serve_mate/features/product/presentation/widgets/child_field_toggle_btn.dart';
+import 'package:serve_mate/features/product/presentation/widgets/child_widget_calender.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_textfield_validator.dart';
+import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:serve_mate/features/product/presentation/widgets/location_text_field.dart';
+import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
 
 class FootwearForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
-  final nameController = TextEditingController();
+  final TextEditingController nameController;
+  final TextEditingController priceController;
+  final TextEditingController brandController;
+  final TextEditingController securityController;
+  final TextEditingController descriptionController;
+  final Function(String?) onConditionSelected;
+  final Function(String?) onSizeSelected;
   final Function(String?) onColorSelected;
+  final Function(String?) onCategorySelected;
+  final Function(String?) onToggleSelected;
+  final Function(List<String>) onImageSelected;
+  final Function(String?) locationController;
+  final Function(String?) dateController;
 
+  const FootwearForm({
+    super.key,
+    required this.formKey,
+    required this.nameController,
+    required this.priceController,
+    required this.brandController,
+    required this.securityController,
+    required this.descriptionController,
+    required this.onConditionSelected,
+    required this.onSizeSelected,
+    required this.onColorSelected,
+    required this.onCategorySelected,
+    required this.onToggleSelected,
+    required this.onImageSelected,
+    required this.locationController,
+    required this.dateController,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final sizeBloc = DropdownBloc();
+    final categoryBloc = DropdownBloc();
+    final conditionBloc = DropdownBloc();
+
     return Form(
       key: formKey,
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // Name
           _buildSection(
             title: 'Vehicle Name',
             child: CustomTextField(
@@ -31,6 +70,19 @@ class FootwearForm extends StatelessWidget {
                   : null,
             ),
           ),
+          // Size
+          _buildSection(
+            title: 'Size',
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
+              child: ReusableDropdown(
+                onDataSelected: onSizeSelected,
+                bloc: sizeBloc,
+                items: DropdownItems.sizeList,
+                hint: "Size",
+              ),
+            ),
+          ),
           // Color
           _buildSection(
             title: "Color",
@@ -39,46 +91,129 @@ class FootwearForm extends StatelessWidget {
               onColorSelected: onColorSelected,
             ),
           ),
-          _buildFormHeader('Footwear Type'),
-          _buildTextField('Enter footwear type'),
-          _buildFormHeader('Size'),
-          _buildTextField('Enter size (UK, US, EU)'),
-          _buildFormHeader('Color'),
-          _buildTextField('Enter color'),
-          _buildFormHeader('Brand/Designer'),
-          _buildTextField('Enter brand/designer'),
-          _buildFormHeader('Rental Price'),
-          _buildTextField('Enter rental price'),
-          _buildFormHeader('Security Deposit'),
-          _buildTextField('Enter security deposit'),
-          _buildFormHeader('Condition'),
-          _buildTextField('Enter condition (New, Like New, Good)'),
-          _buildFormHeader('Available From - Till'),
-          _buildTextField('Enter availability dates'),
-          _buildFormHeader('Images'),
-          // Additional image upload field can be added here
-          _buildFormHeader('Pickup/Delivery Option'),
-          _buildTextField('Enter pickup or delivery option'),
+          // Price
+          _buildSection(
+            title: 'Rental Price (Per Day)',
+            child: CustomTextField(
+              hint: 'Enter Rental Price Per Day',
+              numberLimit: 6,
+              controller: priceController,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the Rental Price';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+            ),
+          ),
+          // Security Deposit
+          _buildSection(
+            title: 'Security Deposit',
+            child: CustomTextField(
+              hint: 'Enter security deposit',
+              numberLimit: 10,
+              keyboardType: TextInputType.number,
+              controller: securityController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the security deposit';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid deposit';
+                }
+                return null;
+              },
+            ),
+          ),
+          // Brand
+          _buildSection(
+            title: 'Brand Name',
+            child: CustomTextField(
+              hint: 'Enter Brands',
+              numberLimit: 20,
+              controller: brandController,
+              keyboardType: TextInputType.text,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the Brand name'
+                  : null,
+            ),
+          ),
+          // Category
+          _buildSection(
+            title: 'Category',
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
+              child: ReusableDropdown(
+                onDataSelected: onCategorySelected,
+                bloc: categoryBloc,
+                items: DropdownItems.footwearCategories,
+                hint: "Category",
+              ),
+            ),
+          ),
+          // Location
+          _buildSection(
+            title: 'Location',
+            child: buildLocationTextField(
+                context, 'Enter Location', locationController),
+          ),
+          // Date
+          _buildSection(
+            title: 'Date',
+            child: buildCalender(context, dateController),
+          ),
+
+          // Images
+          _buildSection(
+            title: 'Images',
+            child: ImagePickerFormField(
+              context: context,
+              onSaved: onImageSelected,
+              validator: (images) => images == null || images.isEmpty
+                  ? 'Please select at least one image.'
+                  : null,
+            ),
+          ),
+          // Condition
+          _buildSection(
+            title: 'Condition',
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
+              child: ReusableDropdown(
+                onDataSelected: onConditionSelected,
+                bloc: conditionBloc,
+                items: DropdownItems.conditionItems,
+                hint: "Condition",
+              ),
+            ),
+          ),
+          // Available
+          _buildSection(
+              title: 'Availability Status',
+              child: buildToggleContainerTextField(
+                context,
+                'Availability ON / OFF',
+                onToggleSelected,
+              )),
+          // Description
+          _buildSection(
+            title: 'Vehicle Description',
+            child: CustomTextField(
+              hint: 'Enter description',
+              numberLimit: 100,
+              maxLines: 5,
+              keyboardType: TextInputType.text,
+              controller: descriptionController,
+            ),
+          ),
+          SizedBox(
+            height: 50.h,
+          )
         ],
-      ),
-    );
-  }
-
-  Widget _buildFormHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _buildTextField(String hint) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: TextField(
-        decoration: InputDecorations.defaultDecoration(),
       ),
     );
   }

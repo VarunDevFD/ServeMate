@@ -63,20 +63,20 @@ class JewelryForm extends StatelessWidget {
         children: [
           // Name
           _buildSection(
-            title: 'Vehicle Name',
+            title: 'Jewelry Name',
             child: CustomTextField(
-              hint: 'Enter Vehicle Name',
+              hint: 'Enter Jewelry Name',
               numberLimit: 20,
               controller: nameController,
               keyboardType: TextInputType.text,
               validator: (value) => value == null || value.isEmpty
-                  ? 'Please enter the Vehicle Name'
+                  ? 'Please enter the Jewelry Name'
                   : null,
             ),
           ),
           // Category & Material
           _buildSection(
-            title: 'Vehicle Type & Material',
+            title: 'Jewelry Type & Material',
             child: DressTypeAndModel(
               onTypeSelected: onTypeSelected,
               onModelSelected: onMaterialSelected,
