@@ -27,7 +27,7 @@ import 'package:serve_mate/firebase_options.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
-  //--------------------Connect-with-firebase_options.dart----------------------
+  //--------------------Initialize Firebase-------------------------------------
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -54,11 +54,6 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton(
     () => CompleteOnboardingUseCase(serviceLocator<OnboardingRepository>()),
   );
-
-  // // Cubit
-  // serviceLocator.registerFactory(
-  //   () => OnboardingCubit(),
-  // );
 
   //--------------------Firebase---------------------------------------
   serviceLocator

@@ -4,6 +4,7 @@ import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bott
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_event.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_state.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/widgets/bottom_nav_bar_widget.dart';
+import 'package:serve_mate/features/product/presentation/pages/home_page_screen.dart';
 import 'package:serve_mate/features/product/presentation/pages/product_add_screen.dart';
 
 class BottomNavigationBar extends StatelessWidget {
@@ -40,15 +41,6 @@ class BottomNavigationBar extends StatelessWidget {
 }
 
 // Individual pages
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Home Page'));
-  }
-}
-
 class ListPage extends StatelessWidget {
   const ListPage({super.key});
 

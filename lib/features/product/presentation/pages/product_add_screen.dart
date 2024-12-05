@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
-import 'package:serve_mate/features/product/presentation/widgets/catering_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/dress_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/footwear_form.dart';
@@ -178,7 +177,7 @@ class AddPage extends StatelessWidget {
             appBar: AppBar(
               title: Text('${state.selectedCategory!.name} Rental Form'),
               actions: [
-                // Icon button on the right side for form confirmation
+                // Icon button on the form confirmation
                 IconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
@@ -328,17 +327,16 @@ class AddPage extends StatelessWidget {
           onImageSelected: onImageSelected,
           selectedFacilities: onFacilitySelected,
         );
-      case 'Catering':
-        return const CateringForm();
+
       case 'Footwear':
-        return  FootwearForm(
+        return FootwearForm(
           formKey: formKey,
           nameController: nameController,
           priceController: priceController,
           brandController: brandController,
           securityController: securityController,
           descriptionController: descriptionController,
-          onConditionSelected:onConditionSelected,
+          onConditionSelected: onConditionSelected,
           onSizeSelected: onSizeSelected,
           onColorSelected: onColorSelected,
           onCategorySelected: onCategorySelected,
@@ -350,7 +348,7 @@ class AddPage extends StatelessWidget {
       case 'Cameras':
         return CameraVideographyForm(
           formKey: formKey, // Pass a unique GlobalKey for the form
-          nameController: TextEditingController(),
+          nameController: nameController,
           onTypeSelected: onTypeSelected,
           onBrandSelected: onModelSelected,
           rentalPriceController: TextEditingController(),
