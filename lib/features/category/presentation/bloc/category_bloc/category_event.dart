@@ -1,9 +1,11 @@
+import 'package:serve_mate/features/category/domain/entities/category.dart';
+
 abstract class CategoryEvent {}
 
 class LoadCategoriesEvent extends CategoryEvent {}
 
-class SelectCategory extends CategoryEvent {
-  final String categoryName;
+class SelectCategoryEvent extends CategoryEvent {
+  final Category category;
 
-  SelectCategory(this.categoryName);
+  SelectCategoryEvent(this.category);
 }

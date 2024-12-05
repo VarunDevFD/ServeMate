@@ -28,12 +28,15 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.example.serve_mate"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
     }
 
     defaultConfig {
@@ -42,9 +45,9 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 23
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
     }
 
     buildTypes {
@@ -54,6 +57,18 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    dependencies {
+    // Added Geolocation dependency
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+  // Replace with the latest version when available
+  maven { url 'https://plugins.gradle.org/m2/' } 
 }
 
 flutter {

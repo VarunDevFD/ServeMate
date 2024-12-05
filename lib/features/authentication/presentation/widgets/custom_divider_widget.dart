@@ -6,7 +6,7 @@ class OrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         Expanded(
             child: Divider(
@@ -14,7 +14,7 @@ class OrDivider extends StatelessWidget {
           thickness: 1.2,
           endIndent: 20,
         )),
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0),
           child: Text('OR',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),

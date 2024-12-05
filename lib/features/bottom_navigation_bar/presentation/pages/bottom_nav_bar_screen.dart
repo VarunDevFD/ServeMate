@@ -4,10 +4,13 @@ import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bott
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_event.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_state.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/widgets/bottom_nav_bar_widget.dart';
+import 'package:serve_mate/features/product/presentation/pages/home_page_screen.dart';
+import 'package:serve_mate/features/product/presentation/pages/product_add_screen.dart';
 
 class BottomNavigationBar extends StatelessWidget {
-  BottomNavigationBar({super.key});
   final PageController _pageController = PageController(initialPage: 0);
+
+  BottomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +19,12 @@ class BottomNavigationBar extends StatelessWidget {
         return Scaffold(
           body: PageView(
             controller: _pageController,
-            children: const [
-              HomePage(),
-              SearchPage(),
+            children: [
+              const HomePage(),
+              const ListPage(),
               AddPage(),
-              NotificationsPage(),
-              ProfilePage(),
+              const NotificationsPage(),
+              const ProfilePage(),
             ],
             onPageChanged: (index) {
               context.read<NavigationBloc>().add(PageChangedEvent(index));
@@ -38,30 +41,12 @@ class BottomNavigationBar extends StatelessWidget {
 }
 
 // Individual pages
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Home Page'));
-  }
-}
-
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class ListPage extends StatelessWidget {
+  const ListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text('Search Page'));
-  }
-}
-
-class AddPage extends StatelessWidget {
-  const AddPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Add Page'));
   }
 }
 

@@ -9,6 +9,7 @@ enum TextStyleType {
   title,
   subtitle,
   body,
+  blackBody,
   caption,
   label,
   custom,
@@ -89,6 +90,13 @@ class CustomText extends StatelessWidget {
           fontSize: 18.sp,
           color: AppColors.white,
           fontWeight: FontWeight.w600,
+        );
+
+      case TextStyleType.blackBody:
+        return GoogleFonts.abel(
+          fontSize: 18.sp,
+          color: AppColors.black,
+          fontWeight: FontWeight.bold,
         );
 
       case TextStyleType.caption:

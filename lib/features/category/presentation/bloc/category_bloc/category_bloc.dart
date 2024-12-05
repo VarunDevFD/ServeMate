@@ -9,7 +9,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       serviceLocator<CategoryRepository>(); // Initialize directly
   CategoryBloc() : super(CategoryInitial()) {
     on<LoadCategoriesEvent>(_onLoadCategories);
-    on<SelectCategory>(_onSelectCategory);
+    on<SelectCategoryEvent>(_onCategorySelected);
   }
 
   Future<void> _onLoadCategories(
@@ -24,8 +24,16 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  void _onSelectCategory(SelectCategory event, Emitter<CategoryState> emit) {
-    // Handle category selection
-    // You might want to emit a state or perform additional actions here
+  void _onCategorySelected(
+      SelectCategoryEvent event, Emitter<CategoryState> emit) {
+    try {
+      emit(CategoryLoading());
+
+      final selectedCategory = event.category;
+
+      emit(CategoryLoaded([], selectedCategory));
+    } catch (e) {
+      emit(CategoryError('Failed to load category'));
+    }
   }
 }

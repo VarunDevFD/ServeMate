@@ -17,10 +17,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            routerConfig: AppRouter.router, // Use the router instance
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
+            routerConfig: AppRouter.router,
           );
         },
       ),

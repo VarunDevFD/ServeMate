@@ -54,15 +54,15 @@ class AuthRemoteDataSource {
     try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        throw Exception('Google sign in aborted');
+        throw Exception('Google sign in failed');
       }
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-       UserCredential userCredential = await firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await firebaseAuth.signInWithCredential(credential);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase exceptions

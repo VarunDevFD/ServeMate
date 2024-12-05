@@ -14,21 +14,20 @@ class CategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      physics:
-          const ClampingScrollPhysics(), // Change to your desired scrolling behavior
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.all(10.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Number of columns in the grid
-        crossAxisSpacing: 12.0, // Horizontal space between grid items
-        mainAxisSpacing: 12.0, // Vertical space between grid items
-        childAspectRatio: 3 / 2, // Aspect ratio for grid items
+        crossAxisCount: 2,
+        crossAxisSpacing: 12.0,
+        mainAxisSpacing: 12.0,
+        childAspectRatio: 3 / 2,
       ),
       itemCount: categories.length,
       itemBuilder: (BuildContext context, int index) {
         final category = categories[index];
         return GestureDetector(
           onTap: () {
-            context.read<CategoryBloc>().add(SelectCategory(category.name));
+            context.read<CategoryBloc>().add(SelectCategoryEvent(category));
             context.go('/bottomNavBar');
           },
           child: CategoryItem(category: category),

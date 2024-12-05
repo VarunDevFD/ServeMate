@@ -1,7 +1,3 @@
-// import 'dart:developer';
-
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
@@ -21,7 +17,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       CheckOnboardingStatus event, Emitter<SplashState> emit) async {
     await Future.delayed(const Duration(seconds: 5));
     bool hasSeenHome = await preferencesRepository.hasSeenHome();
-    log("$hasSeenHome");
     bool hasSeenOnboarding = await preferencesRepository.hasSeenOnboarding();
 
     if (hasSeenHome) {
