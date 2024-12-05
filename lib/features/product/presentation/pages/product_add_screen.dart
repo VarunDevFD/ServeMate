@@ -17,7 +17,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 class AddPage extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  List<String> imageController = [];
+  String? transmissionController;
   String? genderController;
   String? typeController;
   String? materials;
@@ -25,22 +26,20 @@ class AddPage extends StatelessWidget {
   String? sizeController;
   String? colorController;
   String? fuelController;
-  String? transmissionController;
   String? toggleController;
   String? categorySelected;
+  String? conditionController;
+  String? durationController;
+  String? locationController;
+  String? dateController;
 
   final materialController = TextEditingController();
   final brandController = TextEditingController();
-  String? durationController;
   final priceController = TextEditingController();
   final securityController = TextEditingController();
-  String? conditionController;
-  String? dateController;
-  String? locationController;
-  List<String> imageController = [];
   final damageController = TextEditingController();
   final descriptionController = TextEditingController();
-
+  
   // venues
   final nameController = TextEditingController();
   final capacityController = TextEditingController();
