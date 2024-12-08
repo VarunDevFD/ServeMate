@@ -70,15 +70,15 @@ Future<void> init() async {
 
   //--------------------Auth Repositories---------------------------------------
   serviceLocator.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(serviceLocator<AuthRemoteDataSource>()));
+      () => AuthRepositoryImpl());
 
   //--------------------Auth Use Cases------------------------------------------
   serviceLocator.registerLazySingleton<SignUpWithEmailPassword>(
       () => SignUpWithEmailPassword());
   serviceLocator.registerLazySingleton<SignInWithEmailPassword>(
-      () => SignInWithEmailPassword(serviceLocator<AuthRepository>()));
+      () => SignInWithEmailPassword());
   serviceLocator.registerLazySingleton<SignInWithGoogle>(
-      () => SignInWithGoogle(serviceLocator<AuthRepository>()));
+      () => SignInWithGoogle());
   serviceLocator.registerLazySingleton<GetCurrentUser>(
       () => GetCurrentUser(repository: serviceLocator<AuthRepository>()));
 

@@ -15,12 +15,10 @@ class AuthRepositoryImpl implements AuthRepository {
   final remoteDataSource = serviceLocator<AuthRemoteDataSource>();
   final firestore = serviceLocator<FirebaseFirestore>();
 
-  AuthRepositoryImpl(Object object);
-
   //-------Sign-Up--------------------------------------------------------------
   @override
   Future<void> signUpWithEmailPassword(
-      String email, String password, BuildContext context) {
+      String email, String password) {
     log("Data: signUp repository");
 
     return remoteDataSource.signUpWithEmailPassword(email, password,);
@@ -28,18 +26,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
   //-------Sign-In--------------------------------------------------------------
   @override
-  Future<AuthUser?> signInWithEmailPassword(
-      String email, String password, String role, BuildContext contex) async {
-    final user =
-        await remoteDataSource.signInWithEmailPassword(email, password, role);
-    if (user != null) {
-      return AuthUser(
-        id: user.id,
-        email: user.email, 
-        role: role, 
-      );
+  Future<AuthUser?> signInWithEmailPassword(String email, String password,) async {
+    try {
+      // Delegate the sign-in process to the remote data source
+      return await remoteDataSource.signInWithEmailPassword(email, password);
+    } catch (e) {
+      // Handle or transform exceptions if needed
+      throw Exception('AuthRepositoryImpl - Sign-in failed: $e');
     }
-    return null;
   }
 
   //-------Sign-In-Google-------------------------------------------------------

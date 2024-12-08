@@ -21,14 +21,11 @@ class SignInEvent extends AuthEvent {
 class SignUpEvent extends AuthEvent {
   final String email;
   final String password;
-  // final String role;
-  final BuildContext context;
 
-  SignUpEvent(
-      {required this.email,
-      required this.password,
-      // required this.role,
-      required this.context});
+  SignUpEvent({
+    required this.email,
+    required this.password,
+  });
 }
 
 class GoogleSignInEvent extends AuthEvent {}

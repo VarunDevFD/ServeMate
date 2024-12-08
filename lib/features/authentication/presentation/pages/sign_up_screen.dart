@@ -34,8 +34,6 @@ class SignUpScreen extends StatelessWidget {
         SignUpEvent(
           email: emailController.text,
           password: newPasswordController.text,
-          // role: "ServiceProvider",
-          context: context,
         ),
       );
     }

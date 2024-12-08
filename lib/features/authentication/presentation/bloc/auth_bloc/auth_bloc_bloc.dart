@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
       try {
         // Perform sign-in
-        await signIn(event.email, event.password, event.role, event.context);
+        await signIn(event.email, event.password);
 
         // Fetch the currently signed-in user
         final currentUser = getCurrentUser();
@@ -42,13 +42,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
     //------------------------------SignUpEvent---------------------------------
     on<SignUpEvent>((event, emit) async {
-      log("Bloc: signUp event");
       emit(AuthInitial());
       final signUp = serviceLocator<SignUpWithEmailPassword>();
 
       try {
         // Call the sign-up use case
-        await signUp(event.email, event.password,event.context);
+        await signUp(event.email, event.password,);
 
         // If successful, emit authenticated state (fetch user from repository or service)
         final currentUser = serviceLocator<AuthRepository>()

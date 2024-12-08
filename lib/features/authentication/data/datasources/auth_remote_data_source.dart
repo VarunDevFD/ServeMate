@@ -76,7 +76,9 @@ class AuthRemoteDataSource {
   //--------------------------------Sign-In-------------------------------------
 
   Future<AuthUser?> signInWithEmailPassword(
-      String email, String password, String role) async {
+      String email, String password) async {
+    const String role = "ServiceProvider";
+
     try {
       // Authenticate using Firebase Authentication
       UserCredential userCredential =
