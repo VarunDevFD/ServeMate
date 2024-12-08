@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
@@ -17,49 +19,55 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
   AuthBloc() : super(AuthInitial()) {
     //------------------------------SignInEvent---------------------------------
     on<SignInEvent>((event, emit) async {
-      emit(AuthLoading());
+      emit(AuthInitial());
       final signIn = serviceLocator<SignInWithEmailPassword>();
       final getCurrentUser = serviceLocator<GetCurrentUser>();
 
       try {
-        await signIn(event.email, event.password);
-        final User? user = getCurrentUser(); // Ensure this is awaited
+        // Perform sign-in
+        await signIn(event.email, event.password, event.role, event.context);
 
-        if (user != null) {
-          await _setHasSeenHome(false); // Save flag in SharedPreferences
-          emit(Authenticated(user));
+        // Fetch the currently signed-in user
+        final currentUser = getCurrentUser();
+        if (currentUser != null) {
+          emit(Authenticated(currentUser));
         } else {
-          emit(const AuthError('Sign in failed. Please try again.'));
+          emit(const AuthError(
+              "Login succeeded, but failed to fetch user data."));
         }
-      } catch (e) {
-        emit(AuthError(e.toString())); // Emit error state
+      } on Exception catch (e) {
+        emit(AuthError(e.toString())); // Display the role validation error
       }
     });
 
     //------------------------------SignUpEvent---------------------------------
     on<SignUpEvent>((event, emit) async {
-      emit(AuthLoading());
+      log("Bloc: signUp event");
+      emit(AuthInitial());
       final signUp = serviceLocator<SignUpWithEmailPassword>();
-      final getCurrentUser = serviceLocator<GetCurrentUser>();
 
       try {
-        await signUp(event.email, event.password);
-        final User? user = getCurrentUser(); // Ensure this is awaited
+        // Call the sign-up use case
+        await signUp(event.email, event.password,event.context);
 
-        if (user != null) {
-          await _setHasSeenHome(false); // Save flag in SharedPreferences
-          emit(Authenticated(user));
+        // If successful, emit authenticated state (fetch user from repository or service)
+        final currentUser = serviceLocator<AuthRepository>()
+            .getCurrentUser(); // Assume this fetches the logged-in user
+        if (currentUser != null) {
+          emit(Authenticated(
+              currentUser)); // Pass the user to Authenticated state
         } else {
-          emit(const AuthError('Sign up failed. Please try again.'));
+          emit(const AuthError(
+              "Sign-up succeeded, but failed to fetch user data."));
         }
-      } catch (e) {
-        emit(AuthError(e.toString())); // Emit error state
+      } on Exception catch (e) {
+        emit(AuthError(e.toString())); // Display the role validation error
       }
     });
 
     //----------------------GoogleSignInEvent-----------------------------------
     on<GoogleSignInEvent>((event, emit) async {
-      emit(AuthLoading());
+      emit(AuthInitial());
       final signInWithGoogle = serviceLocator<SignInWithGoogle>();
 
       try {
@@ -77,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
     //----------------------Sign-Out--------------------------------------------
     on<SignOutEvent>((event, emit) async {
-      emit(AuthLoading());
+      emit(AuthInitial());
       try {
         final repo = serviceLocator<AuthRepository>();
         await repo.signOut(); // Call sign out method from use case

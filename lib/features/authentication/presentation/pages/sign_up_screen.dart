@@ -34,6 +34,8 @@ class SignUpScreen extends StatelessWidget {
         SignUpEvent(
           email: emailController.text,
           password: newPasswordController.text,
+          // role: "ServiceProvider",
+          context: context,
         ),
       );
     }
@@ -51,11 +53,19 @@ class SignUpScreen extends StatelessWidget {
                 context.go('/selectCategory'); // Navigate after success
               } else if (state is AuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: AppColors.red,
+                  ),
                 );
               }
             },
             builder: (context, state) {
+              if (state is AuthLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               return Form(
                 key: formKey,
                 child: SingleChildScrollView(

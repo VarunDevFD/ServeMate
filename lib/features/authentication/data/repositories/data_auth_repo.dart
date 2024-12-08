@@ -1,31 +1,43 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/error/failure.dart';
-import 'package:serve_mate/features/authentication/data/datasources/data_auth_datasourse.dart';
+import 'package:serve_mate/features/authentication/data/datasources/auth_remote_data_source.dart';
 import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final remoteDataSource = serviceLocator<AuthRemoteDataSource>();
+  final firestore = serviceLocator<FirebaseFirestore>();
 
   AuthRepositoryImpl(Object object);
 
   //-------Sign-Up--------------------------------------------------------------
   @override
-  Future<void> signUpWithEmailPassword(String email, String password) {
-    return remoteDataSource.signUpWithEmailPassword(email, password);
+  Future<void> signUpWithEmailPassword(
+      String email, String password, BuildContext context) {
+    log("Data: signUp repository");
+
+    return remoteDataSource.signUpWithEmailPassword(email, password,);
   }
 
   //-------Sign-In--------------------------------------------------------------
   @override
   Future<AuthUser?> signInWithEmailPassword(
-      String email, String password) async {
+      String email, String password, String role, BuildContext contex) async {
     final user =
-        await remoteDataSource.signInWithEmailPassword(email, password);
+        await remoteDataSource.signInWithEmailPassword(email, password, role);
     if (user != null) {
-      return AuthUser(id: user.id, email: user.email);
+      return AuthUser(
+        id: user.id,
+        email: user.email, 
+        role: role, 
+      );
     }
     return null;
   }
@@ -80,5 +92,37 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> clearAuthUser() {
     throw UnimplementedError();
+  }
+
+  //---------------------------Firestore Operations-----------------------------
+  @override
+  Future<void> addUserToFirestore(AuthUser user) async {
+    try {
+      await firestore.collection('users').doc(user.id).set({
+        'uid': user.id,
+        'email': user.email,
+        'role': user.role,
+      });
+    } catch (e) {
+      throw Exception("Error adding user to Firestore: $e");
+    }
+  }
+
+  @override
+  Future<AuthUser?> fetchUserFromFirestore(String id) async {
+    try {
+      final doc = await firestore.collection('users').doc(id).get();
+      if (doc.exists) {
+        final data = doc.data();
+        return AuthUser(
+          id: data!['uid'],
+          email: data['email'],
+          role: data['role'],
+        );
+      }
+      return null;
+    } catch (e) {
+      throw Exception("Error fetching user from Firestore: $e");
+    }
   }
 }

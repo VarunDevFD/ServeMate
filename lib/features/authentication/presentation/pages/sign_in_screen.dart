@@ -39,7 +39,12 @@ class SignInScreen extends StatelessWidget {
 
     // Dispatch login event to AuthBloc
     BlocProvider.of<AuthBloc>(context).add(
-      SignInEvent(email: email, password: password),
+      SignInEvent(
+        email: email,
+        password: password,
+        role: "ServiceProvider",
+        context: context
+      ),
     );
   }
 

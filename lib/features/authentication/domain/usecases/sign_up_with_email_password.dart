@@ -1,11 +1,17 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 
 class SignUpWithEmailPassword {
-  final AuthRepository repository;
+  final repository = serviceLocator<AuthRepository>();
 
-  SignUpWithEmailPassword(this.repository);
+  Future<void> call(
+      String email, String password, BuildContext context) async {
+    log("Domain: signUp uecase");
 
-  Future<void> call(String email, String password) async {
-    return await repository.signUpWithEmailPassword(email, password);
+    return await repository.signUpWithEmailPassword(
+        email, password, context);
   }
 }

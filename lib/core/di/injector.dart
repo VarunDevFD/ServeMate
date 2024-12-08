@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/data/local/preferences_data_source.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/features/authentication/data/datasources/data_auth_datasourse.dart';
+import 'package:serve_mate/features/authentication/data/datasources/auth_remote_data_source.dart';
 import 'package:serve_mate/features/authentication/data/repositories/data_auth_repo.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/auth_user.dart';
@@ -59,6 +60,8 @@ Future<void> init() async {
   serviceLocator
       .registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   serviceLocator.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
+  serviceLocator.registerLazySingleton<FirebaseFirestore>(
+      () => FirebaseFirestore.instance);
 
   //--------------------Auth Data Sources---------------------------------------
   serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
@@ -71,7 +74,7 @@ Future<void> init() async {
 
   //--------------------Auth Use Cases------------------------------------------
   serviceLocator.registerLazySingleton<SignUpWithEmailPassword>(
-      () => SignUpWithEmailPassword(serviceLocator<AuthRepository>()));
+      () => SignUpWithEmailPassword());
   serviceLocator.registerLazySingleton<SignInWithEmailPassword>(
       () => SignInWithEmailPassword(serviceLocator<AuthRepository>()));
   serviceLocator.registerLazySingleton<SignInWithGoogle>(
