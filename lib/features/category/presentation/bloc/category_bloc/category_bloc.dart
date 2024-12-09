@@ -5,8 +5,7 @@ import 'category_event.dart';
 import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
-  final CategoryRepository categoryRepository =
-      serviceLocator<CategoryRepository>(); // Initialize directly
+  final categoryRepository = serviceLocator<CategoryRepository>();
   CategoryBloc() : super(CategoryInitial()) {
     on<LoadCategoriesEvent>(_onLoadCategories);
     on<SelectCategoryEvent>(_onCategorySelected);
