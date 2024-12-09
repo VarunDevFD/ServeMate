@@ -42,8 +42,6 @@ class SignInScreen extends StatelessWidget {
       SignInEvent(
         email: email,
         password: password,
-        role: "ServiceProvider",
-        context: context
       ),
     );
   }

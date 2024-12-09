@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 

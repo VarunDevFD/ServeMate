@@ -18,9 +18,12 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     await Future.delayed(const Duration(seconds: 5));
     bool hasSeenHome = await preferencesRepository.hasSeenHome();
     bool hasSeenOnboarding = await preferencesRepository.hasSeenOnboarding();
+    bool hasSeenCategory = await preferencesRepository.hasSeenCategory();
 
     if (hasSeenHome) {
       emit(GoToHome());
+    } else if (hasSeenCategory) {
+      emit(GoToCategory());
     } else if (hasSeenOnboarding) {
       emit(GoToWelcome());
     } else {

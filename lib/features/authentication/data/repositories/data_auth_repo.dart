@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/error/failure.dart';
@@ -88,35 +87,5 @@ class AuthRepositoryImpl implements AuthRepository {
     throw UnimplementedError();
   }
 
-  //---------------------------Firestore Operations-----------------------------
-  @override
-  Future<void> addUserToFirestore(AuthUser user) async {
-    try {
-      await firestore.collection('users').doc(user.id).set({
-        'uid': user.id,
-        'email': user.email,
-        'role': user.role,
-      });
-    } catch (e) {
-      throw Exception("Error adding user to Firestore: $e");
-    }
-  }
-
-  @override
-  Future<AuthUser?> fetchUserFromFirestore(String id) async {
-    try {
-      final doc = await firestore.collection('users').doc(id).get();
-      if (doc.exists) {
-        final data = doc.data();
-        return AuthUser(
-          id: data!['uid'],
-          email: data['email'],
-          role: data['role'],
-        );
-      }
-      return null;
-    } catch (e) {
-      throw Exception("Error fetching user from Firestore: $e");
-    }
-  }
+  
 }

@@ -13,7 +13,7 @@ class PreferencesRepository {
     return _preferencesDataSource.setBool('hasSeenOnboarding', value);
   }
 
-  //-----------Authentication---------------------------------------------------
+  //-----------Home-Screen------------------------------------------------------
   Future<bool> hasSeenHome() async {
     return _preferencesDataSource.getBool('hasSeenHome');
   }
@@ -22,15 +22,13 @@ class PreferencesRepository {
     return _preferencesDataSource.setBool('hasSeenHome', value);
   }
 
-
-/*
-  //-----------Animation-Repeatation-avoid--------------------------------------
-  Future<bool> hasShownAnimation() async {
-    return _preferencesDataSource.getBool('hasShownAnimation');
+  //-----------After-Auth-Category-Selection------------------------------------
+  Future<bool> hasSeenCategory() async {
+    return _preferencesDataSource.getBool('hasSeenCategory');
   }
 
-  Future<void> setHasShownAnimation(bool value) async {
-    return _preferencesDataSource.setBool('hasShownAnimation', value);
+  Future<void> setHasSeenCategory(bool value) async {
+    return _preferencesDataSource.setBool('hasSeenCategory', value);
   }
-  */
+
 }

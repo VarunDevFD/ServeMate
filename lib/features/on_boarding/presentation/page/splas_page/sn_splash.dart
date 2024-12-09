@@ -19,6 +19,8 @@ class SplashScreen extends StatelessWidget {
         listener: (context, state) {
           // Handle navigation based on state
           if (state is GoToHome) {
+            context.go('/home');
+          } else if (state is GoToCategory) {
             context.go('/selectCategory');
           } else if (state is GoToWelcome) {
             context.go('/welcome');

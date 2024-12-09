@@ -1,6 +1,6 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_state.dart';
@@ -47,7 +47,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
       try {
         // Call the sign-up use case
-        await signUp(event.email, event.password,);
+        await signUp(
+          event.email,
+          event.password,
+        );
 
         // If successful, emit authenticated state (fetch user from repository or service)
         final currentUser = serviceLocator<AuthRepository>()
@@ -74,6 +77,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
         if (user != null) {
           emit(Authenticated(user));
+         
         } else {
           emit(const AuthError('Google sign-in failed'));
         }
@@ -98,8 +102,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
   }
 
   // Helper function to set hasSeenHome flag in SharedPreferences
-  Future<void> _setHasSeenHome(bool value) async {
-    await pref.setHasSeenHome(value);
+  Future<void> _setHasSeenCategoryPage(bool value, BuildContext context) async {
+    await pref.setHasSeenOnboarding(value).then((_) {
+      context.go('/selectCategory'); // Use context after async call completes
+    });
   }
 
   // Helper function to clear the hasSeenHome flag

@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:serve_mate/core/error/failure.dart';
-import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
 
 abstract class AuthRepository {
   //---------------------------Sign-Up------------------------------------------

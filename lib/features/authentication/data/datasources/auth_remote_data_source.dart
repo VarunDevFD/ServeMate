@@ -4,12 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
 
 class AuthRemoteDataSource {
   final firebaseAuth = serviceLocator<FirebaseAuth>();
   final googleSignIn = serviceLocator<GoogleSignIn>();
   final firestore = serviceLocator<FirebaseFirestore>();
+  final pref = serviceLocator<PreferencesRepository>();
 
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
@@ -70,6 +72,8 @@ class AuthRemoteDataSource {
       'role': role,
     });
 
+    await pref.setHasSeenCategory(true);
+
     log("User added to Firestore: $email with role $role");
   }
 
@@ -98,6 +102,8 @@ class AuthRemoteDataSource {
         throw Exception(
             'Sign-in failed: No user found with the provided email and role.');
       }
+
+      await pref.setHasSeenCategory(true);
 
       // Return authenticated user if all checks pass
       return userCredential.user != null
