@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:serve_mate/core/utils/theme/input_decoration.dart';
+import 'package:serve_mate/core/theme/input_decoration.dart';
 
 class SoundDJForm extends StatelessWidget {
   const SoundDJForm({super.key});

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 
 // Image Grid Widget

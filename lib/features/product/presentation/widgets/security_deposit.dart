@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/core/utils/theme/input_decoration.dart';
+import 'package:serve_mate/core/theme/input_decoration.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_event.dart';
 

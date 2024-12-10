@@ -77,7 +77,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
         if (user != null) {
           emit(Authenticated(user));
-         
         } else {
           emit(const AuthError('Google sign-in failed'));
         }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/utils/theme/app_text_style.dart';
+import 'package:serve_mate/core/theme/app_text_style.dart';
 
 class ForgotPasswordBn extends StatelessWidget {
   const ForgotPasswordBn({super.key});

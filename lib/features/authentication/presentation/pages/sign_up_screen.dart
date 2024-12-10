@@ -3,10 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/di/injector.dart';
-import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/theme/app_text_style.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/theme/app_text_style.dart';
 import 'package:serve_mate/core/utils/validation_helper.dart';
 import 'package:serve_mate/core/widgets/custom_elevated_button.dart';
 import 'package:serve_mate/core/widgets/custom_text_form_field.dart';

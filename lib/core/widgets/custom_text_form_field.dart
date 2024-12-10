@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;

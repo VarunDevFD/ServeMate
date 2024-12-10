@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/core/utils/theme/input_decoration.dart';
+import 'package:serve_mate/core/theme/input_decoration.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_state.dart';

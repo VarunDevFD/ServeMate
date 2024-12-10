@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serve_mate/core/utils/color_contants.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 
 int hexToColor(String colorNameOrHex) {
   if (colorNameToHex.containsKey(colorNameOrHex)) {

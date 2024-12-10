@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/utils/color_utils.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_state.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/utils/theme/app_colors.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_state.dart';
 import 'package:table_calendar/table_calendar.dart';
