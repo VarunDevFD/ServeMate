@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/features/authentication/presentation/pages/forgot_screen.dart';
-import 'package:serve_mate/features/authentication/presentation/pages/sign_in_screen.dart';
-import 'package:serve_mate/features/authentication/presentation/pages/sign_up_screen.dart';
+import 'package:serve_mate/features/authentication/presentation/pages/forgot_page.dart';
+import 'package:serve_mate/features/authentication/presentation/pages/sign_in_page.dart';
+import 'package:serve_mate/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/pages/bottom_nav_bar_screen.dart';
 import 'package:serve_mate/features/category/presentation/pages/category_select_screen.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
@@ -25,15 +25,15 @@ class AppRouter {
       ),
       GoRoute(
         path: '/sign-in',
-        builder: (context, state) => SignInScreen(),
+        builder: (context, state) => SignInPage(),
       ),
       GoRoute(
         path: '/sign-up',
-        builder: (context, state) => SignUpScreen(),
+        builder: (context, state) => SignUpPage(),
       ),
       GoRoute(
         path: '/forgotPassword',
-        builder: (context, state) => ForgotPasswordScreen(),
+        builder: (context, state) => ForgotPasswordpage(),
       ),
       GoRoute(
         path: '/selectCategory',

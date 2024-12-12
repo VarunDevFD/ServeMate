@@ -9,13 +9,17 @@ class AppColors {
   static Color pink = Colors.pink;
   static Color cyan = Colors.cyan;
   static Color orange = Colors.orange;
-  static Color grey = Colors.grey;
+  static const Color grey = Colors.grey;
   static Color red = Colors.red;
   static Color blue = Colors.blue;
   static Color transparent = Colors.transparent;
   static Color primary = const Color(0xFFD59C71);
   static Color backgroundColor = const Color(0xFFEDF4F5);
   static Color dimBlack = const Color.fromARGB(255, 213, 212, 212);
+
+  // Error
+  static const Color error = Color.fromARGB(255, 240, 13, 13);
+
 
   //------------------Shade-----------------------------------------------------
   // Black
@@ -30,6 +34,7 @@ class AppColors {
   // Orange
   static Color orange1 = const Color.fromARGB(255, 239, 145, 74);
   static Color orange2 = const Color(0xFFFCD9A3);
+  static Color orange3 = const Color.fromARGB(255, 255, 111, 0);
 
   // Red
   static Color redAccent = Colors.redAccent;
@@ -37,6 +42,15 @@ class AppColors {
   // Blue
   static Color blueAccent = Colors.blueAccent;
 
+  // Blue
+  static Color greenLight = Colors.greenAccent;
+
   //-----------------Black-Opacity----------------------------------------------
   static const Color black54 = Colors.black54;
+
+  //-----------------Gradiant---------------------------------------------------
+
+  static const Color gradient1 = Color.fromRGBO(246, 159, 39, 1);
+  static const Color gradient2 = Color.fromRGBO(228, 131, 70, 1);
+  static const Color gradient3 = Color.fromRGBO(255, 153, 116, 1);
 }

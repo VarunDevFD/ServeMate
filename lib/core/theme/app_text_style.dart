@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart'; 
+import 'app_colors.dart';
 
 class AppTextStyles {
   static TextStyle titleStyle = GoogleFonts.sora(
@@ -36,7 +36,7 @@ class AppTextStyles {
 
   static TextStyle buttonTextStyleForgotBn = GoogleFonts.sora(
     color: AppColors.primary,
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: FontWeight.bold,
   );
 
@@ -48,7 +48,7 @@ class AppTextStyles {
   );
 
   static TextStyle titleSignIn = const TextStyle(
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: FontWeight.bold,
   );
 }

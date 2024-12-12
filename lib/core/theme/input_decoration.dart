@@ -14,7 +14,7 @@ class InputDecorations {
       errorText: errorText,
       hintText: hintText,
       border: const OutlineInputBorder(),
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.grey),
       ),
       focusedBorder: OutlineInputBorder(
