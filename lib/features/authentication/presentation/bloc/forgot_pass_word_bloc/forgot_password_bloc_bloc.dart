@@ -12,9 +12,7 @@ class ForgetPasswordBloc
   }
 
   void _onForgetPassword(
-    ForgetPasswordEvent event,
-    Emitter<ForgetPasswordState> emit,
-  ) async {
+      ForgetPasswordEvent event, Emitter<ForgetPasswordState> emit) async {
     // Emit loading state when the process starts
     emit(ForgetPasswordLoadingState());
 
@@ -41,6 +39,4 @@ class ForgetPasswordBloc
       emit(ForgetPasswordFailState(error: failure));
     }
   }
-
-  
 }

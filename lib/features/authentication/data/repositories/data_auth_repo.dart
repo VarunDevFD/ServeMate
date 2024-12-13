@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,16 +14,19 @@ class AuthRepositoryImpl implements AuthRepository {
 
   //-------Sign-Up--------------------------------------------------------------
   @override
-  Future<void> signUpWithEmailPassword(
-      String email, String password) {
-    log("Data: signUp repository");
-
-    return remoteDataSource.signUpWithEmailPassword(email, password,);
+  Future<void> signUpWithEmailPassword(String email, String password) {
+    return remoteDataSource.signUpWithEmailPassword(
+      email,
+      password,
+    );
   }
 
   //-------Sign-In--------------------------------------------------------------
   @override
-  Future<AuthUser?> signInWithEmailPassword(String email, String password,) async {
+  Future<AuthUser?> signInWithEmailPassword(
+    String email,
+    String password,
+  ) async {
     try {
       // Delegate the sign-in process to the remote data source
       return await remoteDataSource.signInWithEmailPassword(email, password);
@@ -86,6 +87,4 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> clearAuthUser() {
     throw UnimplementedError();
   }
-
-  
 }

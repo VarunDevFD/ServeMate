@@ -15,7 +15,7 @@ class AuthRemoteDataSource {
 
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
-  Future<User?> signUpWithEmailPassword(String email, String password) async {
+  Future<User?> signUpWithEmailPassword(String email, String password,) async {
     const String role = "ServiceProvider";
     try {
       // Check if the email exists in Firestore
