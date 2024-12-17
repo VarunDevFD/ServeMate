@@ -20,7 +20,6 @@ class AppColors {
   // Error
   static const Color error = Color.fromARGB(255, 240, 13, 13);
 
-
   //------------------Shade-----------------------------------------------------
   // Black
   static Color balck1 = Colors.black.withOpacity(0.6);
@@ -35,6 +34,7 @@ class AppColors {
   static Color orange1 = const Color.fromARGB(255, 239, 145, 74);
   static Color orange2 = const Color(0xFFFCD9A3);
   static Color orange3 = const Color.fromARGB(255, 255, 111, 0);
+  static Color orange4 = const Color.fromARGB(199, 224, 105, 19);
 
   // Red
   static Color redAccent = Colors.redAccent;

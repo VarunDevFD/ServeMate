@@ -3,7 +3,7 @@ import 'package:serve_mate/features/authentication/presentation/pages/forgot_pag
 import 'package:serve_mate/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/pages/bottom_nav_bar_screen.dart';
-import 'package:serve_mate/features/category/presentation/pages/category_select_screen.dart';
+import 'package:serve_mate/features/category/presentation/pages/category_select_page.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';
 import 'package:serve_mate/features/welcome/presentation/page/s_welcome.dart';
@@ -37,7 +37,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/selectCategory',
-        builder: (context, state) => const CategorySelectionScreen(),
+        builder: (context, state) => const CategorySelectionPage(),
       ),
       GoRoute(
         path: '/bottomNavBar',

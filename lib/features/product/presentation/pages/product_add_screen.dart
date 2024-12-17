@@ -39,7 +39,7 @@ class AddPage extends StatelessWidget {
   final securityController = TextEditingController();
   final damageController = TextEditingController();
   final descriptionController = TextEditingController();
-  
+
   // venues
   final nameController = TextEditingController();
   final capacityController = TextEditingController();
@@ -159,7 +159,7 @@ class AddPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, state) {
-        if (state is CategoryLoading) {
+        if (state is CategoryInitial) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Loading...'),
@@ -171,17 +171,17 @@ class AddPage extends StatelessWidget {
             appBar: AppBar(title: const Text('Error')),
             body: Center(child: Text(state.message)),
           );
-        } else if (state is CategoryLoaded && state.selectedCategory != null) {
+        } else if (state is CategoryLoaded) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('${state.selectedCategory!.name} Rental Form'),
+              title: Text('${state.categories[1].name} Rental Form'),
               actions: [
                 // Icon button on the form confirmation
                 IconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
                     handleFormSubmission(
-                      categoryName: state.selectedCategory!.name,
+                      categoryName: state.categories[1].name,
                       formKey: formKey,
                       context: context,
                       nameController: nameController,
@@ -218,7 +218,7 @@ class AddPage extends StatelessWidget {
             ),
             body: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              child: _getFormForCategory(state.selectedCategory!.name),
+              child: _getFormForCategory(state.categories[1].name),
             ).animate().fadeIn(duration: 500.ms).slideY(),
           );
         }

@@ -7,15 +7,15 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
     // In a real app, this might come from a local storage or API
     return [
       const OnboardingPageEntity(
-        imagePath: 'assets/images/on_boarding1.jpg',
+        imagePath: 'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/on_boarding1.jpg',
         text: 'Welcome to Our Service',
       ),
       const OnboardingPageEntity(
-        imagePath: 'assets/images/on_boarding2.jpg',
+        imagePath: 'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/on_boarding2.jpg',
         text: 'Find the best options for you',
       ),
       const OnboardingPageEntity(
-        imagePath: 'assets/images/on_boarding3.jpg',
+        imagePath: 'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/on_boarding3.jpg',
         text: 'Get started and explore',
       ),
     ];

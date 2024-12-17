@@ -14,11 +14,11 @@ import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_
 import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_up_with_email_password.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
-import 'package:serve_mate/features/category/data/repositories/category_repository_impl.dart';
+import 'package:serve_mate/features/category/data/datasource/category_remote_datasource_data.dart';
+import 'package:serve_mate/features/category/data/repositories/category_repository_impl_data.dart';
 import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
 import 'package:serve_mate/features/category/domain/usecases/get_categories.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
-
 import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_repository_impl.dart';
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
@@ -69,16 +69,16 @@ Future<void> init() async {
   );
 
   //--------------------Auth Repositories---------------------------------------
-  serviceLocator.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl());
+  serviceLocator
+      .registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
 
   //--------------------Auth Use Cases------------------------------------------
   serviceLocator.registerLazySingleton<SignUpWithEmailPassword>(
       () => SignUpWithEmailPassword());
   serviceLocator.registerLazySingleton<SignInWithEmailPassword>(
       () => SignInWithEmailPassword());
-  serviceLocator.registerLazySingleton<SignInWithGoogle>(
-      () => SignInWithGoogle());
+  serviceLocator
+      .registerLazySingleton<SignInWithGoogle>(() => SignInWithGoogle());
   serviceLocator.registerLazySingleton<GetCurrentUser>(
       () => GetCurrentUser(repository: serviceLocator<AuthRepository>()));
 
@@ -88,14 +88,17 @@ Future<void> init() async {
 
   serviceLocator.registerLazySingleton(() => AuthBloc());
 
-  // Register CategoryRepository (data source) in service locator
+  //--------------------Category------------------------------------------------
   serviceLocator.registerLazySingleton<CategoryRepository>(
     () => CategoryRepositoryImpl(),
   );
 
-// Register GetCategories use case
+  serviceLocator.registerLazySingleton<CategoryRemoteDataSource>(
+    () => CategoryRemoteDataSourceImpl(),
+  );
+
   serviceLocator.registerLazySingleton<GetCategories>(
-    () => GetCategories(serviceLocator<CategoryRepository>()),
+    () => GetCategories(),
   );
 
   // Register the CategoryBloc with the repository

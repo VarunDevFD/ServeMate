@@ -1,17 +1,16 @@
-import 'package:serve_mate/features/category/domain/entities/category.dart';
+import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 abstract class CategoryState {}
 
 class CategoryInitial extends CategoryState {}
 
-class CategoryLoading extends CategoryState {}
-
 class CategoryLoaded extends CategoryState {
   final List<Category> categories;
-  final Category? selectedCategory;
 
-  CategoryLoaded(this.categories, [this.selectedCategory]);
+  CategoryLoaded(this.categories);
 }
+
+class CategorySaved extends CategoryState {}
 
 class CategoryError extends CategoryState {
   final String message;

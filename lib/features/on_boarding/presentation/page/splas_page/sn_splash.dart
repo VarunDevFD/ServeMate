@@ -17,7 +17,6 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFEAE4DD),
       body: BlocListener<SplashBloc, SplashState>(
         listener: (context, state) {
-          // Handle navigation based on state
           if (state is GoToHome) {
             context.go('/bottomNavBar');
           } else if (state is GoToCategory) {
@@ -25,7 +24,6 @@ class SplashScreen extends StatelessWidget {
           } else if (state is GoToWelcome) {
             context.go('/welcome');
           } else if (state is GoToOnboarding) {
-            // log("Navigating to Onboarding");
             context.go('/onboarding');
           }
         },

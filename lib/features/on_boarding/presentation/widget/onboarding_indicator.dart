@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:serve_mate/core/widgets/custom_text.dart';
 import 'package:serve_mate/features/on_boarding/domain/entities/on_boarding_entity.dart';
@@ -15,7 +16,7 @@ class OnboardingPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(pageData.imagePath),
+          image: CachedNetworkImageProvider(pageData.imagePath),
           fit: BoxFit.cover,
         ),
       ),

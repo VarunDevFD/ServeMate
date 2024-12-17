@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/snackbar_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
@@ -37,19 +36,13 @@ class SignInPage extends StatelessWidget {
     }
 
     if (password.isEmpty) {
-      SnackBarUtils.showSnackBar(
-        context,
-        'Password cannot be empty.',
-      );
+      SnackBarUtils.showSnackBar(context, 'Password cannot be empty.');
       return;
     }
 
     // Dispatch login event to AuthBloc
     BlocProvider.of<AuthBloc>(context).add(
-      SignInEvent(
-        email: email,
-        password: password,
-      ),
+      SignInEvent(email: email, password: password),
     );
   }
 
@@ -62,14 +55,11 @@ class SignInPage extends StatelessWidget {
             LoadingDialog.show(context);
           } else if (state is Authenticated) {
             LoadingDialog.hide(context);
-            Navigator.of(context)
-                .maybePop(); // Safer approach to remove the dialog
-
+            Navigator.of(context).maybePop(); // Remove the dialog
             context.go('/selectCategory'); // Navigate to home on success
           } else if (state is AuthError) {
             LoadingDialog.hide(context);
-            Navigator.of(context)
-                .maybePop(); // Remove loading indicator if open
+            Navigator.of(context).maybePop(); // Remove loading indicator
             Future.delayed(
               const Duration(milliseconds: 200),
               () => SnackBarUtils.showSnackBar(context, state.message),

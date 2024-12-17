@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/widgets/custom_text.dart';
-import 'package:serve_mate/features/category/domain/entities/category.dart';
+import 'package:serve_mate/features/authentication/presentation/widgets/loading_animation_widget.dart';
+import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 class CategoryItem extends StatelessWidget {
   final Category category;
@@ -12,30 +16,79 @@ class CategoryItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image:
-              AssetImage(category.imageUrl), // Set the image from the category
+          // image: AssetImage(category.imageUrl), // Image from the category
+          image: CachedNetworkImageProvider(category.imageUrl),
           fit: BoxFit.cover,
         ),
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15.r),
       ),
-      child: Container(
-        padding: const EdgeInsets.all(10.0),
+      child: Stack(
+        children: [
+          // CachedNetworkImage with placeholder and error widget
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15.r),
+            child: CachedNetworkImage(
+              imageUrl: category.imageUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              placeholder: ((context, url) => Center(
+                    child: LoadingAnimationWidget.discreteCircle(
+                      color: AppColors.orange,
+                      size: 50.r,
+                      secondRingColor: AppColors.grey,
+                      thirdRingColor: AppColors.white,
+                    ),
+                  )),
+              errorWidget: (context, url, error) => Center(
+                child: Icon(
+                  Icons.broken_image,
+                  color: AppColors.grey,
+                  size: 50.r,
+                ),
+              ),
+            ),
+          ),
+          // Text overlay at the bottom
+          Container(
+            padding: EdgeInsets.all(5.r),
+            decoration: BoxDecoration(
+              color: AppColors.balck4.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(15.r),
+            ),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 6.w, bottom: 6.h),
+                child: CustomText(
+                  text: category.name.toUpperCase(),
+                  styleType: TextStyleType.body,
+                  customStyle: const TextStyle(color: AppColors.white),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      /*
+       Container(
+        padding: EdgeInsets.all(5.r),
         decoration: BoxDecoration(
-          color: AppColors.balck4, // Dark overlay for better text visibility
-          borderRadius: BorderRadius.circular(15),
+          color: AppColors.balck4,
+          borderRadius: BorderRadius.circular(15.r),
         ),
         child: Align(
           alignment: Alignment.bottomLeft, // Align text to bottom left
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: 8.0, bottom: 8.0), // Add padding for spacing
+            padding: EdgeInsets.only(left: 6.w, bottom: 6.h),
             child: CustomText(
-              text: category.name.toUpperCase(), // Display the category name
+              text: category.name.toUpperCase(),
               styleType: TextStyleType.body,
             ),
           ),
         ),
       ),
+      */
     );
   }
 }
