@@ -15,7 +15,11 @@ class AuthRemoteDataSource {
 
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
-  Future<User?> signUpWithEmailPassword(String email, String password,) async {
+  Future<String?> signUpWithEmailPassword(
+    String name,
+    String email,
+    String password,
+  ) async {
     const String role = "ServiceProvider";
     try {
       // Check if the email exists in Firestore
@@ -32,32 +36,52 @@ class AuthRemoteDataSource {
         if (roles.contains(role)) {
           // Email exists with the same role
           throw Exception(
-              'Sign-up failed: The email is already registered with the same role.');
+            'Sign-up failed: The email is already registered with the same role.',
+          );
         } else {
           // Add new role entry for the same email
-          await _addUserToFirestore(email, role, null);
+          await _addUserToFirestore(name, email, password, role, null);
           log("Added new role for existing email: $email with role: $role");
           return null;
         }
       }
 
-      // Email does not exist; create new Firebase account
+      // Email does not exist create new Firebase account
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
 
       // Add user to Firestore with email and role
-      await _addUserToFirestore(email, role, userCredential.user?.uid);
+      await _addUserToFirestore(
+        name,
+        email,
+        password,
+        role,
+        userCredential.user?.uid,
+      );
       log("New user created with email: $email and role: $role");
+      return null;
     } on FirebaseAuthException catch (e) {
-      throw Exception('Sign-up failed: ${e.message}');
+      if (e.code == 'weak-password') {
+        return "Password should be at least 6 characters.";
+      } else if (e.code == 'email-already-in-use') {
+        return "The email address is already in use.";
+      } else if (e.code == 'invalid-email') {
+        return "The email address is not valid.";
+      } else {
+        return "Sign-up failed: ${e.message}";
+      }
     } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
+      return "An unexpected error occurred: $e";
     }
-    return null;
   }
 
   Future<void> _addUserToFirestore(
-      String email, String role, String? uid) async {
+    String name,
+    String email,
+    String password,
+    String role,
+    String? uid,
+  ) async {
     final userId = uid ?? firebaseAuth.currentUser?.uid;
 
     if (userId == null) {
@@ -66,13 +90,16 @@ class AuthRemoteDataSource {
     }
 
     // Add a new Firestore document with a unique ID for each role
-    await firestore.collection('users').doc().set({
+    await firestore.collection('users').doc('serivceProvider\$$userId').set({
       'uid': userId,
+      'name': name,
       'email': email,
+      'password': password,
       'role': role,
     });
 
-    await pref.setHasSeenCategory(true);
+    await pref.setHasSeenCategory(true); //
+    await pref.setHasSeenUserId([userId]);
 
     log("User added to Firestore: $email with role $role");
   }

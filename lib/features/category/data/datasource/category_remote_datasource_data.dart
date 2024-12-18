@@ -18,7 +18,6 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
       return [
         const Category(
             name: 'Cameras',
-            // imageUrl: 'assets/images/category/cameras.jpg',
             imageUrl:
                 'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/cameras.jpg',
             userId: null),

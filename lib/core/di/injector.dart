@@ -23,6 +23,7 @@ import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_re
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/get_on_boarding_data.dart';
+import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
 import 'package:serve_mate/firebase_options.dart';
 
 final serviceLocator = GetIt.instance;
@@ -105,4 +106,9 @@ Future<void> init() async {
   serviceLocator.registerFactory<CategoryBloc>(
     () => CategoryBloc(),
   );
+
+  //--------------------Product-------------------------------------------------
+  // ProductRemoteDatasource
+  serviceLocator.registerLazySingleton<ProductRemoteDatasource>(
+      () => ProductRemoteDataSourceImpl(serviceLocator<FirebaseFirestore>()));
 }

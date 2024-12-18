@@ -46,24 +46,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
       final signUp = serviceLocator<SignUpWithEmailPassword>();
 
       try {
-        // Call the sign-up use case
-        await signUp(
-          event.email,
-          event.password,
-        );
+        // Perform the sign-up operation
+        await signUp(event.name, event.email, event.password);
 
-        // If successful, emit authenticated state (fetch user from repository or service)
-        final currentUser = serviceLocator<AuthRepository>()
-            .getCurrentUser(); // Assume this fetches the logged-in user
+        // Get the current user after sign-up
+        final currentUser = serviceLocator<AuthRepository>().getCurrentUser();
+
+        // Ensure the currentUser is not null before emitting
         if (currentUser != null) {
           emit(Authenticated(
-              currentUser)); // Pass the user to Authenticated state
+              currentUser)); // Pass the user to the Authenticated state
         } else {
           emit(const AuthError(
               "Sign-up succeeded, but failed to fetch user data."));
         }
-      } on Exception catch (e) {
-        emit(AuthError(e.toString())); // Display the role validation error
+      } on FirebaseAuthException catch (e) {
+        // Handle Firebase-specific errors
+        String errorMessage;
+        switch (e.code) {
+          case 'weak-password':
+            errorMessage =
+                "The password is too weak. Please use at least 6 characters.";
+            break;
+          case 'email-already-in-use':
+            errorMessage =
+                "This email is already registered. Please try logging in.";
+            break;
+          case 'invalid-email':
+            errorMessage =
+                "The email address is not valid. Please provide a valid email.";
+            break;
+          default:
+            errorMessage = "An unexpected error occurred: ${e.message}";
+        }
+        emit(AuthError(errorMessage));
+      } catch (e) {
+        // Handle general errors
+        emit(AuthError("An unexpected error occurred: $e"));
       }
     });
 

@@ -44,5 +44,8 @@ class AppRouter {
         builder: (context, state) => BottomNavigationBar(),
       ),
     ],
+    errorBuilder: (context, state) {
+      return const WelcomeScreen(); // Redirect to a default screen (e.g., WelcomeScreen)
+    },
   );
 }

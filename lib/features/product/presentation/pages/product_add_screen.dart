@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
@@ -159,76 +162,75 @@ class AddPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, state) {
+        Widget body; // Common body content
+        String title; // AppBar title
+        List<Widget>? actions; // Optional actions for the AppBar
+
         if (state is CategoryInitial) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Loading...'),
+          title = 'Loading...';
+          body = Center(
+            child: LoadingAnimationWidget.discreteCircle(
+              color: AppColors.orange,
+              size: 50.r,
+              secondRingColor: AppColors.grey,
+              thirdRingColor: AppColors.white,
             ),
-            body: const Center(child: CircularProgressIndicator()),
           );
         } else if (state is CategoryError) {
-          return Scaffold(
-            appBar: AppBar(title: const Text('Error')),
-            body: Center(child: Text(state.message)),
-          );
+          title = 'Error';
+          body = Center(child: Text(state.message));
         } else if (state is CategoryLoaded) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('${state.categories[1].name} Rental Form'),
-              actions: [
-                // Icon button on the form confirmation
-                IconButton(
-                  icon: const Icon(Icons.check),
-                  onPressed: () {
-                    handleFormSubmission(
-                      categoryName: state.categories[1].name,
-                      formKey: formKey,
-                      context: context,
-                      nameController: nameController,
-                      brandController: brandController,
-                      materialController: materialController,
-                      descriptionController: descriptionController,
-                      imageController: imageController,
-                      facilitiesVenue: facilities,
-                      capacityController: capacityController,
-                      durationController: durationController,
-                      genderController: genderController,
-                      typeController: typeController,
-                      sizeController: sizeController,
-                      colorController: colorController,
-                      modelController: modelController,
-                      priceController: double.tryParse(priceController.text),
-                      securityController:
-                          double.tryParse(securityController.text),
-                      conditionController: conditionController,
-                      dateController: dateController,
-                      locationController: locationController,
-                      phoneController: phoneController,
-                      emailController: emailController.text,
-                      fuelController: fuelController,
-                      seatCapacityController: seatCapacityController,
-                      regNumberController: regNumberController,
-                      transmission: transmissionController,
-                      toggleController: toggleController,
-                      categoryController: categorySelected,
-                    );
-                  },
-                ),
-              ],
+          title = '${state.categories[1].name} Rental Form';
+          actions = [
+            IconButton(
+              icon: const Icon(Icons.check),
+              onPressed: () {
+                handleFormSubmission(
+                  categoryName: state.categories[1].name,
+                  formKey: formKey,
+                  context: context,
+                  nameController: nameController,
+                  brandController: brandController,
+                  materialController: materialController,
+                  descriptionController: descriptionController,
+                  imageController: imageController,
+                  facilitiesVenue: facilities,
+                  capacityController: capacityController,
+                  durationController: durationController,
+                  genderController: genderController,
+                  typeController: typeController,
+                  sizeController: sizeController,
+                  colorController: colorController,
+                  modelController: modelController,
+                  priceController: double.tryParse(priceController.text),
+                  securityController: double.tryParse(securityController.text),
+                  conditionController: conditionController,
+                  dateController: dateController,
+                  locationController: locationController,
+                  phoneController: phoneController,
+                  emailController: emailController.text,
+                  fuelController: fuelController,
+                  seatCapacityController: seatCapacityController,
+                  regNumberController: regNumberController,
+                  transmission: transmissionController,
+                  toggleController: toggleController,
+                  categoryController: categorySelected,
+                );
+              },
             ),
-            body: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _getFormForCategory(state.categories[1].name),
-            ).animate().fadeIn(duration: 500.ms).slideY(),
-          );
+          ];
+          body = AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: _getFormForCategory(state.categories[1].name),
+          ).animate().fadeIn(duration: 500.ms).slideY();
+        } else {
+          title = 'No category selected';
+          body = const Center(child: Text('No category selected'));
         }
 
-        // Return statement added here
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('No category selected'),
-          ),
-          body: const Center(child: Text('No category selected')),
+          appBar: AppBar(title: Text(title), actions: actions),
+          body: body,
         );
       },
     );

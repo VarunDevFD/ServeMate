@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/theme/app_text_style.dart';
+import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/core/utils/snackbar_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_event.dart';
@@ -27,12 +28,51 @@ class SignUpPage extends StatelessWidget {
 
   void submitCredentials(BuildContext context) {
     if (formKey.currentState?.validate() == true) {
-      BlocProvider.of<AuthBloc>(context).add(
-        SignUpEvent(
-          email: emailController.text,
-          password: newPasswordController.text,
-        ),
-      );
+      // Additional check for password length and match
+      final newPassword = newPasswordController.text;
+      final confirmPassword = confirmPasswordController.text;
+
+      if (newPassword.length < 6) {
+        FocusScope.of(context).unfocus();
+        // Show error if password is too short
+        DialogUtils.showErrorMessage(
+          context,
+          "Please ensure your password is at least 6 characters long. Thank you!",
+        );
+        return;
+      }
+
+      // Check if the password contains at least one letter and one number
+      final RegExp regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)');
+      if (!regex.hasMatch(newPassword)) {
+        FocusScope.of(context).unfocus();
+        // Show error if password doesn't contain both letters and numbers
+        DialogUtils.showErrorMessage(
+          context,
+          "Your password must contain at least one letter and one number.",
+        );
+        return;
+      }
+
+      if (newPassword != confirmPassword) {
+        FocusScope.of(context).unfocus();
+        // Show error if passwords do not match
+        DialogUtils.showErrorMessage(
+          context,
+          "Oops! Your passwords don't match. Please try again.",
+        );
+        return;
+      } else {
+        // If validation passes, proceed with sign-up event
+        BlocProvider.of<AuthBloc>(context).add(
+          SignUpEvent(
+            name: nameController.text,
+            email: emailController.text,
+            password: newPasswordController.text,
+          ),
+        );
+        context.go('/selectCategory'); // Navigate after success
+      }
     }
     FocusScope.of(context).unfocus();
   }
@@ -49,7 +89,6 @@ class SignUpPage extends StatelessWidget {
                 LoadingDialog.show(context);
               } else if (state is Authenticated) {
                 LoadingDialog.hide(context);
-                context.go('/selectCategory'); // Navigate after success
               } else if (state is AuthError) {
                 LoadingDialog.hide(context);
                 SnackBarUtils.showSnackBar(context, state.message);
@@ -98,7 +137,7 @@ class SignUpPage extends StatelessWidget {
                         const OrDivider(),
                         SizedBox(height: 20.h),
                         GestureDetector(
-                          onTap: () => context.go('/sign-in'),
+                          onTap: () => context.push('/sign-in'),
                           child: RichText(
                             text: TextSpan(
                               text: 'Don\'t have an account?',

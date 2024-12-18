@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/widgets/custom_text.dart';
-import 'package:serve_mate/features/authentication/presentation/widgets/loading_animation_widget.dart';
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 class CategoryItem extends StatelessWidget {
@@ -16,7 +15,6 @@ class CategoryItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          // image: AssetImage(category.imageUrl), // Image from the category
           image: CachedNetworkImageProvider(category.imageUrl),
           fit: BoxFit.cover,
         ),
@@ -70,25 +68,6 @@ class CategoryItem extends StatelessWidget {
           ),
         ],
       ),
-      /*
-       Container(
-        padding: EdgeInsets.all(5.r),
-        decoration: BoxDecoration(
-          color: AppColors.balck4,
-          borderRadius: BorderRadius.circular(15.r),
-        ),
-        child: Align(
-          alignment: Alignment.bottomLeft, // Align text to bottom left
-          child: Padding(
-            padding: EdgeInsets.only(left: 6.w, bottom: 6.h),
-            child: CustomText(
-              text: category.name.toUpperCase(),
-              styleType: TextStyleType.body,
-            ),
-          ),
-        ),
-      ),
-      */
     );
   }
 }

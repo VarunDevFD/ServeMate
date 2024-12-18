@@ -4,7 +4,8 @@ import 'package:serve_mate/core/error/failure.dart';
 
 abstract class AuthRepository {
   //---------------------------Sign-Up------------------------------------------
-  Future<void> signUpWithEmailPassword(String email, String password);
+  Future<void> signUpWithEmailPassword(
+      String name, String email, String password);
 
   //---------------------------Sign-In------------------------------------------
   Future<void> signInWithEmailPassword(String email, String password);

@@ -9,4 +9,8 @@ class ProductProductUsecase {
   Future<DressModel> getDomainCategory() {
     return domainRepo.getCategory();
   }
+  
+  Future<void> selectCategoryName() {
+    return domainRepo.selectCategoryName();
+  }
 }

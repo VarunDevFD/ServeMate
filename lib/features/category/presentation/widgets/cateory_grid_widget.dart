@@ -84,6 +84,7 @@ class CategoryGrid extends StatelessWidget {
                   onPressed: () async {
                     context.pop(true); // Confirm
                     await pref.setHasSeenHome(true);
+                    await pref.setHasSeenUserId([category]);
                   },
                   child: const Text('OK'),
                 ),
