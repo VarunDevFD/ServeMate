@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+// import 'package:crypto/crypto.dart'; // For SHA-256 hashing (you can use other hashing methods like bcrypt)
+// import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
 
 class AuthRemoteDataSource {
   final firebaseAuth = serviceLocator<FirebaseAuth>();
@@ -15,7 +17,7 @@ class AuthRemoteDataSource {
 
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
-  Future<String?> signUpWithEmailPassword(
+  Future<void> signUpWithEmailPassword(
     String name,
     String email,
     String password,
@@ -42,7 +44,7 @@ class AuthRemoteDataSource {
           // Add new role entry for the same email
           await _addUserToFirestore(name, email, password, role, null);
           log("Added new role for existing email: $email with role: $role");
-          return null;
+          return;
         }
       }
 
@@ -59,19 +61,25 @@ class AuthRemoteDataSource {
         userCredential.user?.uid,
       );
       log("New user created with email: $email and role: $role");
-      return null;
     } on FirebaseAuthException catch (e) {
+      // Handle Firebase-specific exceptions
       if (e.code == 'weak-password') {
-        return "Password should be at least 6 characters.";
+        log("Sign-up failed: Weak password.");
+        throw Exception("Password should be at least 6 characters.");
       } else if (e.code == 'email-already-in-use') {
-        return "The email address is already in use.";
+        log("Sign-up failed: Email already in use.");
+        throw Exception("The email address is already in use.");
       } else if (e.code == 'invalid-email') {
-        return "The email address is not valid.";
+        log("Sign-up failed: Invalid email address.");
+        throw Exception("The email address is not valid.");
       } else {
-        return "Sign-up failed: ${e.message}";
+        log("Sign-up failed: ${e.message}");
+        throw Exception("Sign-up failed: ${e.message}");
       }
     } catch (e) {
-      return "An unexpected error occurred: $e";
+      // Handle any other exceptions
+      log("An unexpected error occurred: $e");
+      throw Exception("An unexpected error occurred: $e");
     }
   }
 
@@ -96,6 +104,7 @@ class AuthRemoteDataSource {
       'email': email,
       'password': password,
       'role': role,
+      'time': FieldValue.serverTimestamp(),
     });
 
     await pref.setHasSeenCategory(true); //
@@ -106,46 +115,48 @@ class AuthRemoteDataSource {
 
   //--------------------------------Sign-In-------------------------------------
 
-  Future<AuthUser?> signInWithEmailPassword(
-      String email, String password) async {
-    const String role = "ServiceProvider";
-
+  Future<bool> signInWithEmailPassword(
+    String email,
+    String password,
+    String role,
+  ) async {
     try {
-      // Authenticate using Firebase Authentication
-      UserCredential userCredential =
-          await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      // Get all documents
+      final allDocsSnapshot = await firestore.collection('users').get();
 
-      // Query Firestore to check if email and role exist
-      final querySnapshot = await firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .where('role', isEqualTo: role)
-          .get();
+      // Indicate the matching document is found
+      bool isUserFound = false;
 
-      if (querySnapshot.docs.isEmpty) {
-        throw Exception(
-            'Sign-in failed: No user found with the provided email and role.');
+      // Iterate over all documents to check for matching data
+      for (var doc in allDocsSnapshot.docs) {
+        final Map<String, dynamic> userData = doc.data(); // Convert doc -> Map
+
+        // Check if the document matches the criteria
+        if (userData['email'] == email &&
+            userData['password'] == password &&
+            userData['role'] == role) {
+          log("User Found: ${userData['name']}, Role: ${userData['role']}");
+          isUserFound = true;
+        }
       }
 
-      await pref.setHasSeenCategory(true);
+      // No user
+      if (!isUserFound) {
+        log("No user found with the provided credentials.");
+      }
 
-      // Return authenticated user if all checks pass
-      return userCredential.user != null
-          ? AuthUser(
-              id: userCredential.user!.uid,
-              email: userCredential.user!.email!,
-              role: role,
-            )
-          : null;
-    } on FirebaseAuthException catch (e) {
-      throw Exception('Sign-in failed: ${e.message}');
+      return isUserFound; // Return true if a match is found, otherwise false
     } catch (e) {
-      throw Exception('An unknown error occurred: $e');
+      throw Exception('Sign-in failed: $e');
     }
   }
+
+  // /// Helper function to hash passwords
+  // String _hashPassword(String password) {
+  //   final bytes = utf8.encode(password); // Convert to UTF-8
+  //   final digest = sha256.convert(bytes); // Hash using SHA-256
+  //   return digest.toString(); // Return the hashed password
+  // }
 
   //--------------------------SignUp --Get the User ----------------------------
 

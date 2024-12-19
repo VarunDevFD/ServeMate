@@ -20,7 +20,11 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     bool hasSeenOnboarding = await preferencesRepository.hasSeenOnboarding();
     bool hasSeenCategory = await preferencesRepository.hasSeenCategory();
 
-    if (hasSeenOnboarding) {
+    if (hasSeenHome) {
+      emit(GoToHome());
+    } else if (hasSeenCategory) {
+      emit(GoToCategory());
+    } else if (hasSeenOnboarding) {
       emit(GoToWelcome());
     } else {
       emit(GoToOnboarding());

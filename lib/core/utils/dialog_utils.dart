@@ -68,7 +68,7 @@ class DialogUtils {
           ],
         ),
         elevation: 6,
-        backgroundColor: AppColors.green,
+        backgroundColor: AppColors.greenLight,
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(12.h),

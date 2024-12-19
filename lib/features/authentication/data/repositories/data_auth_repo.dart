@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/error/failure.dart';
 import 'package:serve_mate/features/authentication/data/datasources/auth_remote_data_source.dart';
-import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -14,7 +13,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   //-------Sign-Up--------------------------------------------------------------
   @override
-  Future<void> signUpWithEmailPassword(String name,String email, String password) {
+  Future<void> signUpWithEmailPassword(
+      String name, String email, String password) {
     return remoteDataSource.signUpWithEmailPassword(
       name,
       email,
@@ -24,17 +24,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
   //-------Sign-In--------------------------------------------------------------
   @override
-  Future<AuthUser?> signInWithEmailPassword(
+  Future<bool> signInWithEmailPassword(
     String email,
     String password,
+    String role,
   ) async {
-    try {
-      // Delegate the sign-in process to the remote data source
-      return await remoteDataSource.signInWithEmailPassword(email, password);
-    } catch (e) {
-      // Handle or transform exceptions if needed
-      throw Exception('AuthRepositoryImpl - Sign-in failed: $e');
-    }
+    // Delegate the sign-in process to the remote data source
+    return await remoteDataSource.signInWithEmailPassword(
+        email, password, role);
   }
 
   //-------Sign-In-Google-------------------------------------------------------
@@ -64,10 +61,12 @@ class AuthRepositoryImpl implements AuthRepository {
     return null; // Return null if the sign-in failed or was canceled
   }
 
+/*
   @override
   User? getCurrentUser() {
     return remoteDataSource.getCurrentUser();
   }
+  */
 
   @override
   Future<Either<Failure, void>> signOut() async {

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/snackbar_utils.dart';
+import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_event.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_state.dart';
@@ -16,7 +15,7 @@ class ForgotPasswordpage extends StatelessWidget {
 
   submitBtn(BuildContext context) {
     if (_emailController.text.isEmpty) {
-      return SnackBarUtils.showSnackBar(
+      return DialogUtils.showInfoMessage(
         context,
         'Please enter your Email',
       );
@@ -24,7 +23,7 @@ class ForgotPasswordpage extends StatelessWidget {
       String pattern = r'^[^@]+@[^@]+\.[^@]+';
       RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(_emailController.text)) {
-        return SnackBarUtils.showSnackBar(
+        return DialogUtils.showInfoMessage(
           context,
           'Please enter a valid Email',
         );
@@ -68,20 +67,19 @@ class ForgotPasswordpage extends StatelessWidget {
               listener: (context, state) {
                 if (state is ForgetPasswordSuccessState) {
                   // Show success message and navigate to sign-in screen
-                  SnackBarUtils.showSnackBar(
+                  DialogUtils.showSuccessMessage(
                     context,
                     'Password reset email sent!',
-                    backgroundColor: AppColors.greenLight,
                   );
 
                   context.go('/sign-in');
                 } else if (state is ForgetPasswordFailState) {
                   // Show error message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.error.message),
-                    ),
+                   DialogUtils.showErrorMessage(
+                    context,
+                    state.error.message
                   );
+                  
                 }
               },
               builder: (context, state) {

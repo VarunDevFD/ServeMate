@@ -28,7 +28,6 @@ class SignUpPage extends StatelessWidget {
 
   void submitCredentials(BuildContext context) {
     if (formKey.currentState?.validate() == true) {
-      // Additional check for password length and match
       final newPassword = newPasswordController.text;
       final confirmPassword = confirmPasswordController.text;
 
@@ -91,7 +90,7 @@ class SignUpPage extends StatelessWidget {
                 LoadingDialog.hide(context);
               } else if (state is AuthError) {
                 LoadingDialog.hide(context);
-                SnackBarUtils.showSnackBar(context, state.message);
+                DialogUtils.showErrorMessage(context, state.message);
               }
             },
             builder: (context, state) {

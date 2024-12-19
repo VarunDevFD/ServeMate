@@ -8,7 +8,6 @@ import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/authentication/data/datasources/auth_remote_data_source.dart';
 import 'package:serve_mate/features/authentication/data/repositories/data_auth_repo.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
-import 'package:serve_mate/features/authentication/domain/usecases/auth_user.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_email_password.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_google.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';
@@ -76,12 +75,10 @@ Future<void> init() async {
   //--------------------Auth Use Cases------------------------------------------
   serviceLocator.registerLazySingleton<SignUpWithEmailPassword>(
       () => SignUpWithEmailPassword());
-  serviceLocator.registerLazySingleton<SignInWithEmailPassword>(
-      () => SignInWithEmailPassword());
+  serviceLocator.registerLazySingleton<SignInEmailPasswordUseCase>(
+      () => SignInEmailPasswordUseCase());
   serviceLocator
       .registerLazySingleton<SignInWithGoogle>(() => SignInWithGoogle());
-  serviceLocator.registerLazySingleton<GetCurrentUser>(
-      () => GetCurrentUser(repository: serviceLocator<AuthRepository>()));
 
   //--------------------Auth Bloc-----------------------------------------------
   serviceLocator

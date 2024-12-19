@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/snackbar_utils.dart';
+import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_event.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_state.dart';
@@ -15,6 +15,7 @@ import 'package:serve_mate/features/authentication/presentation/widgets/auth_for
 import 'package:serve_mate/features/authentication/presentation/widgets/loading_animation_widget.dart';
 
 class SignInPage extends StatelessWidget {
+  final loginKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final emailFocusNode = FocusNode();
@@ -23,27 +24,39 @@ class SignInPage extends StatelessWidget {
   SignInPage({super.key});
 
   void submitCredentials(BuildContext context) {
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
+    if (loginKey.currentState?.validate() == true) {
+      final password = passwordController.text;
 
-    // Validation checks
-    if (email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
-      SnackBarUtils.showSnackBar(
-        context,
-        'Please enter a valid email address.',
-      );
-      return;
+      if (password.length < 6) {
+        FocusScope.of(context).unfocus();
+        // Show error if password is too short
+        DialogUtils.showErrorMessage(
+          context,
+          "Please ensure your password is at least 6 characters long. Thank you!",
+        );
+        return;
+      }
+
+      // Check if the password contains at least one letter and one number
+      final RegExp regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)');
+      if (!regex.hasMatch(password)) {
+        FocusScope.of(context).unfocus();
+        DialogUtils.showErrorMessage(
+          context,
+          "Your password must contain at least one letter and one number.",
+        );
+        return;
+      } else {
+        // Dispatch login event to AuthBloc
+        BlocProvider.of<AuthBloc>(context).add(
+          SignInEvent(
+            email: emailController.text,
+            password: password,
+            role: "ServiceProvider",
+          ),
+        );
+      }
     }
-
-    if (password.isEmpty) {
-      SnackBarUtils.showSnackBar(context, 'Password cannot be empty.');
-      return;
-    }
-
-    // Dispatch login event to AuthBloc
-    BlocProvider.of<AuthBloc>(context).add(
-      SignInEvent(email: email, password: password),
-    );
   }
 
   @override
@@ -51,77 +64,79 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthBlocState>(
         listener: (context, state) {
-          if (state is AuthLoading) {
-            LoadingDialog.show(context);
-          } else if (state is Authenticated) {
-            LoadingDialog.hide(context);
-            Navigator.of(context).maybePop(); // Remove the dialog
-            context.go('/selectCategory'); // Navigate to home on success
-          } else if (state is AuthError) {
-            LoadingDialog.hide(context);
-            Navigator.of(context).maybePop(); // Remove loading indicator
+          if (state is Authenticated) {
             Future.delayed(
-              const Duration(milliseconds: 200),
-              () => SnackBarUtils.showSnackBar(context, state.message),
+              const Duration(milliseconds: 20),
+              () => LoadingDialog.show(context),
+            );
+            context.go('/selectCategory');
+          } else if (state is AuthError) {
+            Future.delayed(
+              const Duration(milliseconds: 100),
+              () => DialogUtils.showErrorMessage(context, state.message),
             );
           }
+          LoadingDialog.hide(context);
         },
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 50.w),
-              child: Column(
-                children: [
-                  SizedBox(height: 20.h),
-                  _buildWelcomeText(),
-                  SizedBox(height: 30.h),
-                  AuthField(
-                    hintText: "Email",
-                    controller: emailController,
-                  ),
-                  SizedBox(height: 16.h),
-                  AuthField(
-                    hintText: "Password",
-                    controller: passwordController,
-                    obscureText: true,
-                  ),
-                  const ForgotPasswordBn(),
-                  SizedBox(height: 5.h),
-                  AuthButton(
-                    buttonText: "Sign In",
-                    onPressed: () async {
-                      submitCredentials(context);
-                      FocusScope.of(context).unfocus();
-                    },
-                  ),
-                  SizedBox(height: 26.h),
-                  const OrDivider(),
-                  SizedBox(height: 20.h),
-                  const AuthGoogleButton(),
-                  SizedBox(height: 20.h),
-                  GestureDetector(
-                    onTap: () => context.go('/sign-up'),
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Don\'t have an account?',
-                        style: Theme.of(context).textTheme.titleMedium,
-                        children: [
-                          TextSpan(
-                            text: ' Sign Up',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: AppColors.orange,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ],
+          child: Form(
+            key: loginKey,
+            child: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 50.w),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20.h),
+                    _buildWelcomeText(),
+                    SizedBox(height: 30.h),
+                    AuthField(
+                      hintText: "Email",
+                      controller: emailController,
+                    ),
+                    SizedBox(height: 16.h),
+                    AuthField(
+                      hintText: "Password",
+                      controller: passwordController,
+                      obscureText: true,
+                    ),
+                    const ForgotPasswordBn(),
+                    SizedBox(height: 5.h),
+                    AuthButton(
+                      buttonText: "Sign In",
+                      onPressed: () async {
+                        submitCredentials(context);
+                        FocusScope.of(context).unfocus();
+                      },
+                    ),
+                    SizedBox(height: 26.h),
+                    const OrDivider(),
+                    SizedBox(height: 20.h),
+                    const AuthGoogleButton(),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () => context.go('/sign-up'),
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Don\'t have an account?',
+                          style: Theme.of(context).textTheme.titleMedium,
+                          children: [
+                            TextSpan(
+                              text: ' Sign Up',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    color: AppColors.orange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

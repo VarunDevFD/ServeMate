@@ -8,12 +8,12 @@ abstract class AuthRepository {
       String name, String email, String password);
 
   //---------------------------Sign-In------------------------------------------
-  Future<void> signInWithEmailPassword(String email, String password);
+  Future<bool> signInWithEmailPassword(
+      String email, String password, String role);
 
   //---------------------------Forget-Password----------------------------------
   Future<void> sendPasswordResetEmail(String email);
   //--------------------Get-Current-User----------------------------------------
-  User? getCurrentUser();
 
   //---------------------------Sign-In-Google-----------------------------------
 
