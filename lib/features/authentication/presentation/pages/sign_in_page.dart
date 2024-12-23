@@ -55,6 +55,7 @@ class SignInPage extends StatelessWidget {
             role: "ServiceProvider",
           ),
         );
+        context.go('/selectCategory');
       }
     }
   }
@@ -64,12 +65,11 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthBlocState>(
         listener: (context, state) {
-          if (state is Authenticated) {
+          if (state is AuthSuccess) {
             Future.delayed(
               const Duration(milliseconds: 20),
               () => LoadingDialog.show(context),
             );
-            context.go('/selectCategory');
           } else if (state is AuthError) {
             Future.delayed(
               const Duration(milliseconds: 100),

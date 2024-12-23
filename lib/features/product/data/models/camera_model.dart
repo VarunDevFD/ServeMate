@@ -1,3 +1,6 @@
+import 'package:serve_mate/features/product/data/models/rental_model.dart';
+
+/*
 class CameraModel {
   String? cameraName;
   String? equipmentType;
@@ -26,6 +29,7 @@ class CameraModel {
     this.notes,
     this.imageUrls,
   });
+
 
   /// Convert a Camera object into a map for Firestore or local storage.
   Map<String, dynamic> toMap() {
@@ -60,6 +64,66 @@ class CameraModel {
       damage: map['damage'] ?? false,
       notes: map['notes'] as String,
       imageUrls: List<String>.from(map['imageUrls'] ?? []),
+    );
+  }
+*/
+class CameraModel extends RentalItem {
+  final String? equipmentType;
+  final String? brandModel;
+  final String? condition;
+  final String? dateAdded;
+  final List<String>? accessories;
+  final String? damage;
+
+  CameraModel({
+    String? name,
+    double? price,
+    double? securityDeposit,
+    String? location,
+    List<String>? images,
+    String? notes,
+    this.equipmentType,
+    this.brandModel,
+    this.condition,
+    this.dateAdded,
+    this.accessories,
+    this.damage,
+  }) : super(
+          name: name,
+          price: price,
+          securityDeposit: securityDeposit,
+          location: location,
+          images: images,
+          description: notes,
+        );
+
+  @override
+  Map<String, dynamic> toMap() {
+    return super.toMap()
+      ..addAll({
+        'equipmentType': equipmentType,
+        'brandModel': brandModel,
+        'condition': condition,
+        'dateAdded': dateAdded,
+        'accessories': accessories,
+        'damage': damage,
+      });
+  }
+
+  factory CameraModel.fromMap(Map<String, dynamic> map) {
+    return CameraModel(
+      name: map['name'],
+      price: (map['price'] as num?)?.toDouble(),
+      securityDeposit: (map['securityDeposit'] as num?)?.toDouble(),
+      location: map['location'],
+      images: List<String>.from(map['images'] ?? []),
+      equipmentType: map['equipmentType'],
+      brandModel: map['brandModel'],
+      condition: map['condition'],
+      dateAdded: map['dateAdded'],
+      accessories: List<String>.from(map['accessories'] ?? []),
+      damage: map['damage'],
+      notes: map['notes'],
     );
   }
 }

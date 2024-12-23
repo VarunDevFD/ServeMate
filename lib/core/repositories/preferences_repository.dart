@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:serve_mate/core/data/local/preferences_data_source.dart';
 import 'package:serve_mate/core/di/injector.dart';
 
@@ -16,15 +14,6 @@ class PreferencesRepository {
     return _preferencesDataSource.setBool('hasSeenOnboarding', value);
   }
 
-  //-----------Home-Screen------------------------------------------------------
-  Future<bool> hasSeenHome() async {
-    return _preferencesDataSource.getBool('hasSeenHome');
-  }
-
-  Future<void> setHasSeenHome(bool value) async {
-    return _preferencesDataSource.setBool('hasSeenHome', value);
-  }
-
   //-----------After-Auth-Category-Selection------------------------------------
   Future<bool> hasSeenCategory() async {
     return _preferencesDataSource.getBool('hasSeenCategory');
@@ -34,8 +23,17 @@ class PreferencesRepository {
     return _preferencesDataSource.setBool('hasSeenCategory', value);
   }
 
+  //-----------Home-Screen------------------------------------------------------
+  Future<bool> hasSeenHome() async {
+    return _preferencesDataSource.getBool('hasSeenHome');
+  }
+
+  Future<void> setHasSeenHome(bool value) async {
+    return _preferencesDataSource.setBool('hasSeenHome', value);
+  }
+
   //-------------------------List-----------------------------------------------
-  Future<List<String>> hasSeenUserId() async {
+  Future<List<String>> saveSelectCategoryName() async {
     return _preferencesDataSource.getList('selectUser');
   }
 
@@ -50,12 +48,22 @@ class PreferencesRepository {
     log("End- shared");
     */
 
-    return _preferencesDataSource.setList('selectUser', []);
+    return _preferencesDataSource.saveList('selectUser', []);
+  }
+
+  //-------------------------String---------------------------------------------
+  Future<void> setDataFn(String value) async {
+    return _preferencesDataSource.saveData('categoryName', value);
+  }
+
+  Future<String?> getDataFn() async {
+    return _preferencesDataSource.getData('categoryName');
+  }
+
+  //-------------------------Remove---------------------------------------------
+  Future<void> clearPreferences() async {
+    await _preferencesDataSource.removeData();
   }
 }
 
 
-/*
-final updatedList = List<String>.from(seenUserIds)..add(newUserId);
-      await _userRepository.setHasSeenUserId(updatedList);
-*/

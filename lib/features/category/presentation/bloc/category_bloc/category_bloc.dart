@@ -1,6 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
+// import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 import 'package:serve_mate/features/category/domain/usecases/get_categories.dart';
 import 'category_event.dart';
 import 'category_state.dart';
@@ -8,42 +12,40 @@ import 'category_state.dart';
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final categoryRepository = serviceLocator<GetCategories>();
   CategoryBloc() : super(CategoryInitial()) {
-    // Event handlers
-    on<LoadCategoriesEvent>(_onLoadCategories);
-    on<SelectCategoryEvent>(_onSelectCategory);
-  }
+    // Add Category
+    on<SelectCategoryEvent>((event, emit) async {
+      final pref = serviceLocator<PreferencesRepository>();
 
-  Future<void> _onLoadCategories(
-      LoadCategoriesEvent event, Emitter<CategoryState> emit) async {
-    emit(CategoryInitial());
-    try {
-      final categories =
-          await categoryRepository.callCategory(); // Fetch Categories
-      emit(CategoryLoaded(categories));
-    } catch (e) {
-      emit(CategoryError("Failed to Fetch load categories"));
-    }
-  }
+      emit(CategoryInitial());
 
-  Future<void> _onSelectCategory(
-      SelectCategoryEvent event, Emitter<CategoryState> emit) async {
-    emit(CategoryInitial());
-    try {
-      final firestore = serviceLocator<FirebaseFirestore>();
+      try {
+        await pref.setDataFn(event.selectedCategory);
+    
+        String? response = await pref.getDataFn();
 
-      // Retrieve the `userId` from the existing collection
-      final userDoc =
-          await firestore.collection('users').doc('KDknbCv20BqtW73G6TPJ').get();
-      final userId = userDoc.data()?['uid'];
+        if (response != null) {
+          emit(CategoryLoaded(categoryName: response));
+          log('Category saved successfully: $response');
+        } else {
+          response = 'Invalid Category';
+          emit(CategoryLoaded(categoryName: response));
+        }
+      } catch (e) {
+        // Handle any errors and emit the error state.
+        emit(CategoryError("Failed to save category: ${e.toString()}"));
+        log('Error: ${e.toString()}');
+      }
+    });
 
-      // Save selected category to Firebase collection
-      firestore.collection('Categories').doc().set({
-        'name': event.selectedCategory,
-        'userId': userId,
-      });
-      emit(CategorySaved());
-    } catch (e) {
-      emit(CategoryError("Failed to save category: ${e.toString()}"));
-    }
+    // Read Category
+    on<LoadCategoriesEvent>((event, emit) async {
+      emit(CategoryInitial());
+      try {
+        final categories = await categoryRepository.callCategory();
+        emit(CategoryLoaded(categories: categories));
+      } catch (e) {
+        emit(CategoryError("Failed to Fetch load categories"));
+      }
+    });
   }
 }

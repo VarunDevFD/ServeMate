@@ -40,9 +40,11 @@ class AppRouter {
         builder: (context, state) => const CategorySelectionPage(),
       ),
       GoRoute(
-        path: '/bottomNavBar',
-        builder: (context, state) => BottomNavigationBar(),
-      ),
+          path: '/bottomNavBar',
+          builder: (context, state) {
+            final categoryName = state.extra as String?;
+            return BottomNavigationBar(categoryName: categoryName);
+          }),
     ],
     errorBuilder: (context, state) {
       return const WelcomeScreen(); // Redirect to a default screen (e.g., WelcomeScreen)

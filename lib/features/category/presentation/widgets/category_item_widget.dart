@@ -15,18 +15,17 @@ class CategoryItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: CachedNetworkImageProvider(category.imageUrl),
+          image: CachedNetworkImageProvider(category.imageUrl!),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(15.r),
       ),
       child: Stack(
         children: [
-          // CachedNetworkImage with placeholder and error widget
           ClipRRect(
             borderRadius: BorderRadius.circular(15.r),
             child: CachedNetworkImage(
-              imageUrl: category.imageUrl,
+              imageUrl: category.imageUrl!,
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,

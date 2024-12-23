@@ -1,9 +1,9 @@
-class JewelryModel {
-  final String? name;
+import 'package:serve_mate/features/product/data/models/rental_model.dart';
+
+class JewelryModel extends RentalItem {
   final String? type;
   final String? material;
-  final double? price;
-  final double? securityDeposit;
+
   final String? quantity;
   final String? condition;
   final String? brand;
@@ -11,47 +11,47 @@ class JewelryModel {
   final String? color;
   final String?
       isAvailable; // Represents the toggle (e.g., availability status)
-  final String? description;
+  
   final String? dateAdded;
-  final String? location;
-  final List<String>? images;
 
   JewelryModel({
-    this.name,
+    String? name,
+    double? price,
+    double? securityDeposit,
+    String? location,
+    List<String>? images,
+    String? description,
     this.type,
     this.material,
-    this.price,
-    this.securityDeposit,
     this.quantity,
     this.condition,
     this.brand,
     this.size,
     this.color,
     this.isAvailable,
-    this.description,
+   
     this.dateAdded,
-    this.location,
-    this.images,
-  });
+  }) : super(
+          name: name,
+          price: price,
+          securityDeposit: securityDeposit,
+          location: location,
+          images: images,
+          description: description,
+        );
 
   /// Converts the JewelryModel to a JSON map (useful for sending data to APIs or storing in a database)
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
       'type': type,
       'material': material,
-      'price': price,
-      'securityDeposit': securityDeposit,
       'quantity': quantity,
       'condition': condition,
       'brand': brand,
       'size': size,
       'color': color,
       'isAvailable': isAvailable,
-      'description': description,
       'dateAdded': dateAdded,
-      'location': location,
-      'images': images,
     };
   }
 

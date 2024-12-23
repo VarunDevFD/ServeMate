@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,13 +45,16 @@ class CategoryGrid extends StatelessWidget {
 
     if (shouldNavigate && context.mounted) {
       context.read<CategoryBloc>().add(SelectCategoryEvent(category));
-      context.go('/bottomNavBar');
+      context.go('/bottomNavBar', extra: category);
+      await pref.setHasSeenHome(true);
     }
   }
 
   /// Method to show a confirmation dialog
   Future<bool> _showConfirmationDialog(
-      BuildContext context, String category) async {
+    BuildContext context,
+    String category,
+  ) async {
     const TextStyle colorWhite = TextStyle(color: AppColors.white);
 
     return await showDialog<bool>(
@@ -71,7 +76,15 @@ class CategoryGrid extends StatelessWidget {
               actions: [
                 TextButton(
                   child: const Text('Cancel', style: colorWhite),
-                  onPressed: () => context.pop(false), // Cancel
+                  // onPressed: () => SystemNavigator.pop(),
+                  onPressed: () {
+                    if (GoRouter.of(context).canPop()) {
+                      context.pop();
+                    } else {
+                      log('Cannot pop the last page in the stack');
+                    }
+                  }, // Cancel
+                  // onPressed: () => context.pop(false), // Cancel
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -83,7 +96,7 @@ class CategoryGrid extends StatelessWidget {
                   ),
                   onPressed: () async {
                     context.pop(true); // Confirm
-                    await pref.setHasSeenHome(true);
+                    // await pref.setHasSeenHome(true);
                     await pref.setHasSeenUserId([category]);
                   },
                   child: const Text('OK'),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 
 abstract interface class ProductRemoteDatasource {
@@ -15,13 +16,26 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDatasource {
 
   @override
   Future<void> selectCategoryName() async {
+    final String? userDoc = await getUserUID();
+
     final documentSnapshot = await firestore
         .collection('Categories')
-        .doc('9TWBuWmhOwD9fKKeOyVC')
+        .doc('serivceProvider$userDoc')
         .get();
 
     final String userName = documentSnapshot.data()?['name'];
     log(userName);
+  }
+
+  Future<String?> getUserUID() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      return currentUser.uid; // Fetch UID
+    } else {
+      log("No user is logged in.");
+      return null;
+    }
   }
 
   @override

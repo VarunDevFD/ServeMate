@@ -1,41 +1,38 @@
-class DecorationItem {
-  String? name; // Name of the decoration item
-  List<String>?
-      selectedFacilitiesFirst; // Selected facilities in the first list
-  double? rentalPrice; // Rental price per day
-  double? securityDeposit; // Security deposit amount
-  List<String>? imageUrls; // List of image URLs or file paths
-  List<String>?
-      selectedFacilitiesSecond; // Selected facilities in the second list
+import 'package:serve_mate/features/product/data/models/rental_model.dart';
+
+class DecorationItem extends RentalItem {
+  List<String>? selectedFacilitiesFirst;
+  List<String>? selectedFacilitiesSecond;
   String? date;
-  String? location; // Pickup/Delivery location
-  String? description; // Description of the item
 
   // Constructor
   DecorationItem({
-    this.name,
+    String? name,
+    double? rentalPrice,
+    double? securityDeposit,
+    String? location,
+    List<String>? imageUrls,
+    String? description,
     this.selectedFacilitiesFirst,
-    this.rentalPrice,
-    this.securityDeposit,
-    this.imageUrls,
     this.selectedFacilitiesSecond,
     this.date,
-    this.location,
-    this.description,
-  });
+  }) : super(
+          name: name,
+          price: rentalPrice,
+          securityDeposit: securityDeposit,
+          location: location,
+          images: imageUrls,
+          description: description,
+        );
 
   // Method to convert the model into a Map for saving to a database
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
       'selectedFacilitiesFirst': selectedFacilitiesFirst,
-      'rentalPrice': rentalPrice,
       'securityDeposit': securityDeposit,
-      'imageUrls': imageUrls,
       'selectedFacilitiesSecond': selectedFacilitiesSecond,
       'date': date,
-      'location': location,
-      'description': description,
     };
   }
 

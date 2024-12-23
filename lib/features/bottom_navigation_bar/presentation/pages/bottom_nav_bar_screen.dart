@@ -8,9 +8,10 @@ import 'package:serve_mate/features/product/presentation/pages/home_page_screen.
 import 'package:serve_mate/features/product/presentation/pages/product_add_screen.dart';
 
 class BottomNavigationBar extends StatelessWidget {
+  final String? categoryName;
   final PageController _pageController = PageController(initialPage: 0);
 
-  BottomNavigationBar({super.key});
+  BottomNavigationBar({super.key, this.categoryName});
 
   @override
   Widget build(BuildContext context) {

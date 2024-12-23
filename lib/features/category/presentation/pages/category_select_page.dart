@@ -14,6 +14,7 @@ class CategorySelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<CategoryBloc>().add(LoadCategoriesEvent());
+
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -34,7 +35,12 @@ class CategorySelectionPage extends StatelessWidget {
                   },
                   builder: (context, state) {
                     if (state is CategoryLoaded) {
-                      return CategoryGrid(categories: state.categories);
+                      if (state.categories != null) {
+                        return CategoryGrid(categories: state.categories!);
+                      } else {
+                        return const Center(
+                            child: Text('No categories found.'));
+                      }
                     } else if (state is CategoryError) {
                       return Center(child: Text(state.message));
                     }

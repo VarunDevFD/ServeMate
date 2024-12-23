@@ -1,12 +1,18 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/features/category/data/models/category_model.dart';
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 abstract interface class CategoryRemoteDataSource {
   Future<List<Category>> fetchCategories();
   Future<void> saveCategory(
-      String categoryName, String imageUrl, String userId);
+    CategoryModel dataModel,
+    // String categoryName,
+    // String imageUrl,
+    // String userId,
+  );
 }
 
 class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
@@ -59,22 +65,44 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
       ];
     } catch (e) {
       log('Error fetching categories: $e');
-      throw Exception('Failed to fetch categories');
+      throw Exception('Failed to fetch categories $e');
     }
   }
 
   @override
-  Future<void> saveCategory(String name, String imageUrl, String userId) async {
-    final userDoc =
-        await firestore.collection('users').doc('KDknbCv20BqtW73G6TPJ').get();
+  Future<void> saveCategory(
+    CategoryModel dataModel,
+    // String name,
+    // String imageUrl,
+    // String userId,
+  ) async {
+    final String? userDoc = await getUserUID();
+    // await firestore
+    //     .collection('users')
+    //     .doc('serivceProviderFFPBly1VO1a1mUQfVnIWmcB2yoO2')
+    //     .get();
 
-    if (!userDoc.exists) throw Exception('User not found');
-    final userId = userDoc.data()?['uid'];
+    // if (!userDoc.exists) throw Exception('User not found');
+    // final userId = userDoc.data()?['uid'];
 
-    await firestore.collection('Categories').add({
-      'name': name,
-      'userId': userId,
-    });
+    await firestore
+        .collection('Categories')
+        .doc('serivceProvider$userDoc')
+        .set({'name': dataModel.name, 'userId': dataModel.userId});
+  }
+
+  Future<String?> getUserUID() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    log("Hellloooooooo");
+    log(currentUser.toString());
+    log("Baaaaaaai");
+
+    if (currentUser != null) {
+      return currentUser.uid; // Fetch UID
+    } else {
+      log("No user is logged in.");
+      return null;
+    }
   }
 }
 

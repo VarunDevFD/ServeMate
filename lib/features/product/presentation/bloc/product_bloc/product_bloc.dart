@@ -1,19 +1,38 @@
 import 'package:bloc/bloc.dart';
-import 'package:serve_mate/features/product/data/models/dress_model.dart';
-import 'package:serve_mate/features/product/doamin/usecase/domain_product_usecase.dart';
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  final ProductProductUsecase productProductUsecase;
-  ProductBloc({required this.productProductUsecase}) : super(ProductInitial()) {
-    on<ProductLoadedEvent>(productReg);
+  ProductBloc() : super(ProductInitial()) {
+    final pref = serviceLocator<PreferencesRepository>();
+
+    // Emit last saved category on initialization
+    _initializeCategory(pref);
+
+    // Handle CategoryNameEvent
+    on<CategoryNameEvent>((event, emit) async {
+      emit(ProductInitial());
+
+      try {
+        String? response = await pref.getDataFn();
+        emit(ProductLoaded(categoryName: response));
+      } catch (e) {
+        emit(ProductError("Find Error: $e"));
+      }
+    });
   }
-  Future<void> productReg(
-      ProductLoadedEvent event, Emitter<ProductState> emit) async {
-    emit(ProductLoading());
-    final dress = await productProductUsecase.getDomainCategory();
-    emit(ProductLoaded(dress));
+
+  Future<void> _initializeCategory(PreferencesRepository pref) async {
+    try {
+      final savedCategory = await pref.getDataFn();
+      if (savedCategory != null) {
+        add(CategoryNameEvent(savedCategory)); // Pass the saved category
+      }
+    } catch (e) {
+      emit(ProductError("Initialization Error: $e"));
+    }
   }
 }

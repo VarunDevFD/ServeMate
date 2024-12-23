@@ -3,10 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
+import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/dress_form.dart';
@@ -19,6 +23,7 @@ import 'package:serve_mate/features/product/presentation/widgets/venue_form.dart
 import 'package:flutter_animate/flutter_animate.dart';
 
 class AddPage extends StatelessWidget {
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   List<String> imageController = [];
   String? transmissionController;
@@ -42,24 +47,20 @@ class AddPage extends StatelessWidget {
   final securityController = TextEditingController();
   final damageController = TextEditingController();
   final descriptionController = TextEditingController();
-
   // venues
   final nameController = TextEditingController();
   final capacityController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   List<String> facilities = [];
-
   // Vehicle
   final seatCapacityController = TextEditingController();
   final regNumberController = TextEditingController();
-
-  // Decoration
-  List<String> facilitiesSecond = [];
-
   // Jwelery
   final quantityController = TextEditingController();
   final sizejweleryController = TextEditingController();
+  // Decoration
+  List<String> facilitiesSecond = [];
 
   AddPage({super.key});
 
@@ -158,82 +159,83 @@ class AddPage extends StatelessWidget {
     log("Toggle: ${toggleController.toString()}");
   }
 
+  Future<String?> _getCategoryFromPreferences() async {
+    final PreferencesRepository prefs = serviceLocator<PreferencesRepository>();
+
+    return prefs.getDataFn();
+    // return prefs.getString('selectedCategory');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CategoryBloc, CategoryState>(
-      builder: (context, state) {
-        Widget body; // Common body content
-        String title; // AppBar title
-        List<Widget>? actions; // Optional actions for the AppBar
+    return FutureBuilder<String?>(
+        future: _getCategoryFromPreferences(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
 
-        if (state is CategoryInitial) {
-          title = 'Loading...';
-          body = Center(
-            child: LoadingAnimationWidget.discreteCircle(
-              color: AppColors.orange,
-              size: 50.r,
-              secondRingColor: AppColors.grey,
-              thirdRingColor: AppColors.white,
+          final category = snapshot.data;
+
+          if (category == null) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('Error')),
+              body: const Center(child: Text('No category selected')),
+            );
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('$category  Rental Form'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.check),
+                  onPressed: () {
+                    // Use categoryName in form submission
+                    handleFormSubmission(
+                      categoryName: category,
+                      formKey: formKey,
+                      context: context,
+                      nameController: nameController,
+                      brandController: brandController,
+                      materialController: materialController,
+                      descriptionController: descriptionController,
+                      imageController: imageController,
+                      facilitiesVenue: facilities,
+                      capacityController: capacityController,
+                      durationController: durationController,
+                      genderController: genderController,
+                      typeController: typeController,
+                      sizeController: sizeController,
+                      colorController: colorController,
+                      modelController: modelController,
+                      priceController: double.tryParse(priceController.text),
+                      securityController:
+                          double.tryParse(securityController.text),
+                      conditionController: conditionController,
+                      dateController: dateController,
+                      locationController: locationController,
+                      phoneController: phoneController,
+                      emailController: emailController.text,
+                      fuelController: fuelController,
+                      seatCapacityController: seatCapacityController,
+                      regNumberController: regNumberController,
+                      transmission: transmissionController,
+                      toggleController: toggleController,
+                      categoryController: categorySelected,
+                    );
+                  },
+                ),
+              ],
             ),
+            body: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: _getFormForCategory(category), // Pass the category
+            ).animate().fadeIn(duration: 500.ms).slideY(),
           );
-        } else if (state is CategoryError) {
-          title = 'Error';
-          body = Center(child: Text(state.message));
-        } else if (state is CategoryLoaded) {
-          title = '${state.categories[1].name} Rental Form';
-          actions = [
-            IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: () {
-                handleFormSubmission(
-                  categoryName: state.categories[1].name,
-                  formKey: formKey,
-                  context: context,
-                  nameController: nameController,
-                  brandController: brandController,
-                  materialController: materialController,
-                  descriptionController: descriptionController,
-                  imageController: imageController,
-                  facilitiesVenue: facilities,
-                  capacityController: capacityController,
-                  durationController: durationController,
-                  genderController: genderController,
-                  typeController: typeController,
-                  sizeController: sizeController,
-                  colorController: colorController,
-                  modelController: modelController,
-                  priceController: double.tryParse(priceController.text),
-                  securityController: double.tryParse(securityController.text),
-                  conditionController: conditionController,
-                  dateController: dateController,
-                  locationController: locationController,
-                  phoneController: phoneController,
-                  emailController: emailController.text,
-                  fuelController: fuelController,
-                  seatCapacityController: seatCapacityController,
-                  regNumberController: regNumberController,
-                  transmission: transmissionController,
-                  toggleController: toggleController,
-                  categoryController: categorySelected,
-                );
-              },
-            ),
-          ];
-          body = AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _getFormForCategory(state.categories[1].name),
-          ).animate().fadeIn(duration: 500.ms).slideY();
-        } else {
-          title = 'No category selected';
-          body = const Center(child: Text('No category selected'));
-        }
-
-        return Scaffold(
-          appBar: AppBar(title: Text(title), actions: actions),
-          body: body,
-        );
-      },
-    );
+        });
   }
 
   Widget _getFormForCategory(String? category) {

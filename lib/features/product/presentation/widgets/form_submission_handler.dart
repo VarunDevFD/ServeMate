@@ -95,13 +95,13 @@ void handleFormSubmission({
 
       case 'Cameras':
         final camera = CameraModel(
-          cameraName: nameController?.text,
+          name: nameController?.text,
           equipmentType: typeController,
           brandModel: brandController?.text,
-          rentalPrice: priceController,
+          price: priceController,
           securityDeposit: securityController,
           condition: conditionController,
-          date: dateController,
+          dateAdded: dateController,
           accessories: facilitiesVenue,
           location: locationController,
           damage: damageController?.text,

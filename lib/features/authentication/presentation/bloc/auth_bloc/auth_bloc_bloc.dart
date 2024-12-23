@@ -78,6 +78,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
       }
     });
   }
+  
+  
 
   // Helper function to clear the hasSeenHome flag
   Future<void> _clearHasSeenHome() async {

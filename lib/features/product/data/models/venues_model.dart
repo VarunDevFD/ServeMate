@@ -1,36 +1,40 @@
-class VenueModel {
-  String? name;
-  String? location;
+import 'package:serve_mate/features/product/data/models/rental_model.dart';
+
+class VenueModel extends RentalItem {
   int? capacity;
   String? duration;
   double? rentalPrice;
-  double? securityDeposit;
   String? venueType;
   String? date;
   List<String>? facilities;
   List<String>? selectedFacilities;
   dynamic phone;
   String? email;
-  List<String>? images;
-  String? description;
 
   // Constructor
   VenueModel({
-    this.name,
-    this.location,
+    String? name,
+    double? rentalPrice,
+    double? securityDeposit,
+    String? location,
+    List<String>? images,
+    String? description,
     this.capacity,
     this.duration,
-    this.rentalPrice,
-    this.securityDeposit,
     this.venueType,
     this.date,
     this.facilities,
     this.selectedFacilities,
     this.phone,
     this.email,
-    this.images,
-    this.description,
-  });
+  }) : super(
+          name: name,
+          price: rentalPrice,
+          securityDeposit: securityDeposit,
+          location: location,
+          images: images,
+          description: description,
+        );
 
   // Method to convert Venue object to a map (useful for database or API)
   factory VenueModel.fromMap(Map<String, dynamic> map) {
@@ -55,21 +59,17 @@ class VenueModel {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'location': location,
       'capacity': capacity,
       'duration': duration,
-      'rentalPrice': rentalPrice,
-      'securityDeposit': securityDeposit,
       'venueType': venueType,
       'date': date,
       'facilities': facilities,
       'selectedFacilities': selectedFacilities,
       'phone': phone,
       'email': email,
-      'images': images,
       'description': description,
     };
   }

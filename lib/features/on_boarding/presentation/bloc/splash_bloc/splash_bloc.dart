@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
@@ -19,8 +21,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     bool hasSeenHome = await preferencesRepository.hasSeenHome();
     bool hasSeenOnboarding = await preferencesRepository.hasSeenOnboarding();
     bool hasSeenCategory = await preferencesRepository.hasSeenCategory();
+    String? response = await preferencesRepository.getDataFn();
 
-    if (hasSeenHome) {
+    if (hasSeenHome && response!.isNotEmpty) {
+      log(response);
       emit(GoToHome());
     } else if (hasSeenCategory) {
       emit(GoToCategory());

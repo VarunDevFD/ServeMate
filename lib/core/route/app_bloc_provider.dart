@@ -12,6 +12,7 @@ import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_b
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/venues_bloc/venues_bloc.dart';
 
@@ -38,6 +39,7 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => DateBloc()),
         BlocProvider(create: (_) => VenueFormBloc()),
         BlocProvider(create: (_) => TabTogglCubit()),
+        BlocProvider(create: (_) => ProductBloc()),
       ],
       child: child,
     );

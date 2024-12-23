@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/theme/app_text_style.dart';
 import 'package:serve_mate/core/utils/dialog_utils.dart';
-import 'package:serve_mate/core/utils/snackbar_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_event.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_state.dart';

@@ -23,11 +23,12 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final categoryModel = CategoryModel(
         name: category.name,
-        imageUrl: "Null",
         userId: category.userId,
       );
       await remoteDataSource.saveCategory(
-          categoryModel.name, categoryModel.imageUrl, categoryModel.userId!);
+        categoryModel,
+        // categoryModel.name, categoryModel.imageUrl, categoryModel.userId!,
+      );
       return const Right(null);
     } catch (e) {
       return const Left(Failure(message: 'Failed to save category'));

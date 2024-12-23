@@ -13,6 +13,7 @@ class Authenticated extends AuthBlocState {
   const Authenticated(this.user);
 }
 
+class AuthSuccess extends AuthBlocState {}
 
 class SignOutSuccessState extends AuthBlocState {}
 

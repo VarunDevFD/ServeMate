@@ -98,7 +98,7 @@ class AuthRemoteDataSource {
     }
 
     // Add a new Firestore document with a unique ID for each role
-    await firestore.collection('users').doc('serivceProvider\$$userId').set({
+    await firestore.collection('users').doc('serivceProvider$userId').set({
       'uid': userId,
       'name': name,
       'email': email,
