@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,7 @@ class CustomToggleButton extends StatelessWidget {
     return BlocBuilder<TabTogglCubit, int>(
         bloc: bloc,
         builder: (context, selectedIndex) {
-          log('Selected Index: $selectedIndex');
+          // log('Selected Index: $selectedIndex');
 
           return Center(
             child: FlutterToggleTab(

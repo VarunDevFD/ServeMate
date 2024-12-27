@@ -24,7 +24,7 @@ class FootwearForm extends StatelessWidget {
   final Function(String?) onColorSelected;
   final Function(String?) onCategorySelected;
   final Function(String?) onToggleSelected;
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
   final Function(String?) locationController;
   final Function(String?) dateController;
 
@@ -171,7 +171,6 @@ class FootwearForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              context: context,
               onSaved: onImageSelected,
               validator: (images) => images == null || images.isEmpty
                   ? 'Please select at least one image.'

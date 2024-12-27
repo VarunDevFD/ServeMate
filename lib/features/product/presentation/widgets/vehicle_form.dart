@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
@@ -28,7 +30,7 @@ class VehicleForm extends StatelessWidget {
   final Function(String?) onFuelSelected;
   final Function(String?) onTransmissionSelected;
   final void Function(String) selectedFacilities;
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
   final Function(String?) locationController;
   final Function(String?) onToggleSelected;
   final Function(String?) dateController;
@@ -236,13 +238,13 @@ class VehicleForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              context: context,
               onSaved: onImageSelected,
               validator: (images) => images == null || images.isEmpty
                   ? 'Please select at least one image.'
                   : null,
             ),
           ),
+
           // Location
           _buildSection(
             title: 'Location',

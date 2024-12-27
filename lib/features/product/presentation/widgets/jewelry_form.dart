@@ -30,7 +30,7 @@ class JewelryForm extends StatelessWidget {
   final Function(String?) dateController;
   final Function(String?) onToggleSelected;
   final Function(String?) locationController;
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
 
   const JewelryForm({
     super.key,
@@ -188,7 +188,6 @@ class JewelryForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              context: context,
               onSaved: onImageSelected,
               validator: (images) => images == null || images.isEmpty
                   ? 'Please select at least one image.'

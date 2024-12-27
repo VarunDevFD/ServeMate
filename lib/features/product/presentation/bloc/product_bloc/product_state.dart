@@ -1,18 +1,13 @@
-part of 'product_bloc.dart';
+abstract class ProductState {}
 
-sealed class ProductState {
-  const ProductState();
-}
+class ProductInitialState extends ProductState {}
 
-final class ProductInitial extends ProductState {}
+class ProductLoadingState extends ProductState {}
 
-final class ProductLoaded extends ProductState {
-  final String? categoryName;
+class ProductSuccessState extends ProductState {}
 
-  ProductLoaded({this.categoryName});
-}
-
-final class ProductError extends ProductState {
+class ProductErrorState extends ProductState {
   final String message;
-  ProductError(this.message);
+
+  ProductErrorState(this.message);
 }

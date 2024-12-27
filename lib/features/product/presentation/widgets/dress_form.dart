@@ -29,7 +29,7 @@ class DressForm extends StatelessWidget {
   final Function(String?) onConditionSelected;
   final Function(String?) dateController;
   final Function(String?) locationController;
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
 
   const DressForm({
     super.key,
@@ -194,7 +194,6 @@ class DressForm extends StatelessWidget {
           const CustomSideHeadText(title: 'Images'),
           // Image Field
           ImagePickerFormField(
-            context: context,
             onSaved: onImageSelected,
             validator: (images) {
               if (images == null || images.isEmpty) {

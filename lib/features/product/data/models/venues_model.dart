@@ -1,76 +1,67 @@
-import 'package:serve_mate/features/product/data/models/rental_model.dart';
+import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
 
-class VenueModel extends RentalItem {
-  int? capacity;
-  String? duration;
-  double? rentalPrice;
-  String? venueType;
-  String? date;
-  List<String>? facilities;
-  List<String>? selectedFacilities;
-  dynamic phone;
-  String? email;
-
-  // Constructor
+class VenueModel extends VenueEntity {
   VenueModel({
-    String? name,
-    double? rentalPrice,
-    double? securityDeposit,
-    String? location,
-    List<String>? images,
-    String? description,
-    this.capacity,
-    this.duration,
-    this.venueType,
-    this.date,
-    this.facilities,
-    this.selectedFacilities,
-    this.phone,
-    this.email,
+    required String name,
+    required double rentalPrice,
+    required double securityDeposit,
+    required String location,
+    required List<String> images,
+    required String description,
+    required int capacity,
+    required String duration,
+    required String venueType,
+    required String date,
+    required List<String> facilities,
+    required List<String> selectedFacilities,
   }) : super(
           name: name,
-          price: rentalPrice,
+          rentalPrice: rentalPrice,
           securityDeposit: securityDeposit,
           location: location,
           images: images,
           description: description,
+          capacity: capacity,
+          duration: duration,
+          venueType: venueType,
+          date: date,
+          facilities: facilities,
+          selectedFacilities: selectedFacilities,
         );
 
-  // Method to convert Venue object to a map (useful for database or API)
+  /// Factory constructor to create a `VenueModel` object from a map
   factory VenueModel.fromMap(Map<String, dynamic> map) {
     return VenueModel(
-      name: map['name'] as String?,
-      location: map['location'] as String?,
-      capacity: map['capacity'] as int?,
-      duration: map['duration'] as String?,
-      rentalPrice:
-          map['price'] != null ? (map['price'] as num).toDouble() : null,
-      securityDeposit:
-          map['security'] != null ? (map['security'] as num).toDouble() : null,
-      venueType: map['type'] as String?,
-      date: map['date'] as String?,
-      facilities: (map['facilities'] as List<String>?)?.cast<String>(),
-      selectedFacilities:
-          (map['selectedFacilities'] as List<String>?)?.cast<String>(),
-      phone: map['phone'] as dynamic,
-      email: map['email'] as String?,
-      images: (map['images'] as List<dynamic>?)?.cast<String>(),
-      description: map['description'] as String?,
+      name: map['name'] ?? '',
+      rentalPrice: (map['rentalPrice'] as num).toDouble(),
+      securityDeposit: (map['securityDeposit'] as num).toDouble(),
+      location: map['location'] ?? '',
+      images: List<String>.from(map['images'] ?? []),
+      description: map['description'] ?? '',
+      capacity: map['capacity'] ?? 0,
+      duration: map['duration'] ?? '',
+      venueType: map['venueType'] ?? '',
+      date: map['date'] ?? '',
+      facilities: List<String>.from(map['facilities'] ?? []),
+      selectedFacilities: List<String>.from(map['selectedFacilities'] ?? []),
     );
   }
 
-  @override
+  /// Converts the `VenueModel` object to a map (useful for API or database storage)
   Map<String, dynamic> toMap() {
     return {
+      'name': name,
+      'rentalPrice': rentalPrice,
+      'securityDeposit': securityDeposit,
+      'location': location,
+      'images': images,
+      'description': description,
       'capacity': capacity,
       'duration': duration,
       'venueType': venueType,
       'date': date,
       'facilities': facilities,
       'selectedFacilities': selectedFacilities,
-      'phone': phone,
-      'email': email,
-      'description': description,
     };
   }
 }

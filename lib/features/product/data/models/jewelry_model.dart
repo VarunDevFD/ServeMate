@@ -1,36 +1,22 @@
-import 'package:serve_mate/features/product/data/models/rental_model.dart';
+import 'package:serve_mate/features/product/doamin/entities/jewelry_entity.dart';
 
-class JewelryModel extends RentalItem {
-  final String? type;
-  final String? material;
-
-  final String? quantity;
-  final String? condition;
-  final String? brand;
-  final String? size;
-  final String? color;
-  final String?
-      isAvailable; // Represents the toggle (e.g., availability status)
-  
-  final String? dateAdded;
-
+class JewelryModel extends JewelryEntity {
   JewelryModel({
-    String? name,
-    double? price,
-    double? securityDeposit,
-    String? location,
-    List<String>? images,
-    String? description,
-    this.type,
-    this.material,
-    this.quantity,
-    this.condition,
-    this.brand,
-    this.size,
-    this.color,
-    this.isAvailable,
-   
-    this.dateAdded,
+    required String name,
+    required double price,
+    required double securityDeposit,
+    required String location,
+    required List<String> images,
+    required String description,
+    required String type,
+    required String material,
+    required String quantity,
+    required String condition,
+    required String brand,
+    required String size,
+    required String color,
+    required String isAvailable,
+    required String dateAdded,
   }) : super(
           name: name,
           price: price,
@@ -38,11 +24,26 @@ class JewelryModel extends RentalItem {
           location: location,
           images: images,
           description: description,
+          type: type,
+          material: material,
+          quantity: quantity,
+          condition: condition,
+          brand: brand,
+          size: size,
+          color: color,
+          isAvailable: isAvailable,
+          dateAdded: dateAdded,
         );
 
   /// Converts the JewelryModel to a JSON map (useful for sending data to APIs or storing in a database)
   Map<String, dynamic> toJson() {
     return {
+      'name': name,
+      'price': price,
+      'securityDeposit': securityDeposit,
+      'location': location,
+      'images': images,
+      'description': description,
       'type': type,
       'material': material,
       'quantity': quantity,
@@ -59,20 +60,20 @@ class JewelryModel extends RentalItem {
   factory JewelryModel.fromJson(Map<String, dynamic> json) {
     return JewelryModel(
       name: json['name'],
-      type: json['type'],
-      material: json['material'],
       price: json['price'].toDouble(),
       securityDeposit: json['securityDeposit'].toDouble(),
+      location: json['location'],
+      images: List<String>.from(json['images']), // Corrected to fetch 'images' from JSON
+      description: json['description'],
+      type: json['type'],
+      material: json['material'],
       quantity: json['quantity'],
       condition: json['condition'],
       brand: json['brand'],
       size: json['size'],
       color: json['color'],
       isAvailable: json['isAvailable'],
-      description: json['description'],
       dateAdded: json['dateAdded'],
-      location: json['location'],
-      images: List<String>.from(['imageUrls']),
     );
   }
 }

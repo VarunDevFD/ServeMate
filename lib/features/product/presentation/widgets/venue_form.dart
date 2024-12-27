@@ -26,7 +26,7 @@ class VenueForm extends StatelessWidget {
   final Function(String?) onDurationSelected;
   final Function(String?) onTypeSelected;
   final Function(String?) dateController;
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
   final void Function(String) selectedFacilities;
 
   const VenueForm({
@@ -186,7 +186,6 @@ class VenueForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              context: context,
               onSaved: onImageSelected,
               validator: (images) => images == null || images.isEmpty
                   ? 'Please select at least one image.'

@@ -23,6 +23,13 @@ import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboard
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/get_on_boarding_data.dart';
 import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
+import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
+import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
+import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
+
 import 'package:serve_mate/firebase_options.dart';
 
 final serviceLocator = GetIt.instance;
@@ -105,7 +112,29 @@ Future<void> init() async {
   );
 
   //--------------------Product-------------------------------------------------
-  // ProductRemoteDatasource
-  serviceLocator.registerLazySingleton<ProductRemoteDatasource>(
-      () => ProductRemoteDataSourceImpl(serviceLocator<FirebaseFirestore>()));
+  serviceLocator.registerLazySingleton<ProductRemoteDataSource>(
+    () => ProductRemoteDataSourceImpl(),
+  );
+
+  // Register use case
+  serviceLocator.registerLazySingleton<AddDressUseCase>(
+    () => AddDressUseCase(serviceLocator<ProductRepository>()),
+  );
+  // Register use case
+  serviceLocator.registerLazySingleton<AddJewelryUseCase>(
+    () => AddJewelryUseCase(serviceLocator<ProductRepository>()),
+  );
+  // Register use case
+  serviceLocator.registerLazySingleton<AddVehicleUseCase>(
+    () => AddVehicleUseCase(serviceLocator<ProductRepository>()),
+  );
+  // Register use case
+  serviceLocator.registerLazySingleton<AddVenueUseCase>(
+    () => AddVenueUseCase(serviceLocator<ProductRepository>()),
+  );
+
+  // Register BLoC
+  serviceLocator.registerFactory<ProductBloc>(
+    () => ProductBloc(),
+  );
 }

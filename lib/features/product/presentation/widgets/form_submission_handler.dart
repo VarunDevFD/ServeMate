@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
@@ -9,6 +10,8 @@ import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
+import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_event.dart';
 
 void handleFormSubmission({
   required String categoryName,
@@ -51,141 +54,142 @@ void handleFormSubmission({
     formKey.currentState?.save();
 
     // Switch case to handle different categories
-    switch (categoryName.toLowerCase()) {
-      case 'dress':
+    switch (categoryName) {
+      case 'Dresses':
         final dress = DressModel(
-          gender: genderController,
-          type: typeController,
-          model: modelController,
-          size: sizeController,
-          color: colorController,
-          material: materialController?.text,
-          brand: brandController?.text,
-          duration: durationController,
-          price: priceController,
-          security: securityController,
-          condition: conditionController,
-          date: dateController,
-          location: locationController,
-          images: imageController,
-          damage: damageController?.text, // Add damage controller if needed
-          description: descriptionController?.text,
+          gender: genderController ?? '',
+          type: typeController ?? '',
+          model: modelController ?? '',
+          size: sizeController ?? '',
+          color: colorController ?? '',
+          material: materialController?.text ?? '',
+          brand: brandController?.text ?? '',
+          duration: durationController ?? '',
+          price: priceController ?? 0.0,
+          security: securityController ?? 0.0,
+          condition: conditionController ?? '',
+          date: DateTime.tryParse(dateController ?? '') ?? DateTime.now(),
+          location: locationController ?? '',
+          images: imageController ?? [],
+          damage: damageController?.text ?? '',
+          description: descriptionController?.text ?? '',
         );
-        _submitDressForm(dress, context);
+        _submitDressForm(dress, context, categoryName);
         break;
 
-      case 'venue':
+      case 'Venue':
         final venue = VenueModel(
-          name: nameController?.text,
-          capacity: int.tryParse(capacityController?.text ?? ''),
-          rentalPrice: priceController,
-          securityDeposit: securityController,
-          venueType: typeController,
-          phone: phoneController,
-          email: emailController,
-          location: locationController,
-          duration: durationController,
-          date: dateController,
-          images: imageController,
-          facilities: facilitiesVenue,
-          description: descriptionController?.text,
+          name: nameController?.text ?? '',
+          capacity: int.tryParse(capacityController?.text ?? '0') ?? 0,
+          rentalPrice: priceController ?? 0.0,
+          securityDeposit: securityController ?? 0.0,
+          venueType: typeController ?? '',
+          location: locationController ?? '',
+          duration: durationController ?? '',
+          date: dateController ?? '',
+          images: imageController ?? [], // Ensure this is a List<String>
+          facilities: facilitiesVenue ?? [], // Ensure this is a List<String>
+          selectedFacilities:
+              facilitiesVenue ?? [], // Ensure this is a List<String>
+          description: descriptionController?.text ?? '',
         );
-        _submitVenueForm(venue, context);
+        _submitVenueForm(venue, context, categoryName);
         break;
 
       case 'Cameras':
         final camera = CameraModel(
-          name: nameController?.text,
-          equipmentType: typeController,
-          brandModel: brandController?.text,
-          price: priceController,
-          securityDeposit: securityController,
-          condition: conditionController,
-          dateAdded: dateController,
-          accessories: facilitiesVenue,
-          location: locationController,
-          damage: damageController?.text,
-          notes: descriptionController?.text,
+          name: nameController?.text ?? '',
+          price: priceController ?? 0.0,
+          securityDeposit: securityController ?? 0.0,
+          location: locationController ?? '',
+          images: imageController ?? [], // Ensure this is a List<String>
+          notes: descriptionController?.text ?? '',
+          equipmentType: typeController ?? '',
+          brandModel: brandController?.text ?? '',
+          condition: conditionController ?? '',
+          dateAdded: dateController ?? '',
+          accessories: facilitiesVenue ?? [], // Ensure this is a List<String>
+          damage: damageController?.text ?? '',
         );
-        _submitCameraForm(camera, context);
+
+        _submitCameraForm(camera, context, categoryName);
         break;
 
-      case 'vehicle':
+      case 'Vehicles':
         final vehicle = VehicleModel(
-          name: nameController?.text,
-          brand: brandController?.text,
-          color: colorController,
-          seatCapacity: int.tryParse(seatCapacityController?.text ?? ''),
-          registrationNumber: regNumberController?.text,
-          rentalPrice: priceController,
-          securityDeposit: securityController,
-          vehicleType: typeController, // This will be a selected type
-          model: brandController?.text, // Selected model
-          fuelType: fuelController, // Selected fuel type
-          transmission: transmission, // Selected transmission type
-          facilities: facilitiesVenue, // Selected facilities
-          images: imageController, // Assuming images are passed here
-          date: dateController,
-          location: locationController, // Location controller function
-          toggleOption: toggleController, // Toggle-specific option
-          description: descriptionController?.text,
+          name: nameController?.text ?? '',
+          brand: brandController?.text ?? '',
+          color: colorController ?? '',
+          seatCapacity: int.tryParse(seatCapacityController?.text ?? '0') ?? 0,
+          registrationNumber: regNumberController?.text ?? '',
+          rentalPrice: priceController ?? 0.0,
+          securityDeposit: securityController ?? 0.0,
+          vehicleType: typeController ?? '',
+          model: brandController?.text ?? '',
+          fuelType: fuelController ?? '',
+          transmission: transmission ?? '',
+          facilities: facilitiesVenue ?? [],
+          images: imageController ?? [],
+          date: dateController ?? '',
+          location: locationController ?? '',
+          toggleOption: toggleController ?? '',
+          description: descriptionController?.text ?? '',
         );
-        _submitVehicleForm(vehicle, context);
+        _submitVehicleForm(vehicle, context, categoryName);
         break;
 
       case 'Decoration':
         final decorationItem = DecorationItem(
-          name: nameController?.text,
-          selectedFacilitiesFirst: facilities1,
-          rentalPrice: priceController,
-          securityDeposit: securityController,
-          imageUrls: imageController,
-          selectedFacilitiesSecond: facilities2,
-          date: dateController,
-          location: locationController,
-          description: descriptionController?.text,
+          name: nameController?.text ?? '',
+          selectedFacilitiesFirst: facilities1 ?? [],
+          rentalPrice: priceController ?? 0.0,
+          securityDeposit: securityController ?? 0.0,
+          imageUrls: imageController ?? [],
+          selectedFacilitiesSecond: facilities2 ?? [],
+          date: dateController ?? '',
+          location: locationController ?? '',
+          description: descriptionController?.text ?? '',
         );
 
-        _submitDecorationForm(decorationItem, context);
+        _submitDecorationForm(decorationItem, context, categoryName);
         break;
 
       case 'Jewelry':
         final jewelryItem = JewelryModel(
-          name: nameController?.text,
-          type: typeController,
-          material: materialController?.text,
-          price: priceController,
-          quantity: quantityController?.text,
-          condition: conditionController,
-          brand: brandController?.text,
-          size: sizejweleryController?.text,
-          color: colorController,
-          securityDeposit: securityController,
-          isAvailable: toggleController,
-          description: descriptionController?.text,
-          dateAdded: dateController,
-          location: locationController,
-          images:
-              imageController, // Assuming this is a list of URLs or file paths
+          name: nameController?.text ?? '',
+          type: typeController ?? '',
+          material: materialController?.text ?? '',
+          price: priceController ?? 0.0,
+          quantity: quantityController?.text ?? '',
+          condition: conditionController ?? '',
+          brand: brandController?.text ?? '',
+          size: sizejweleryController?.text ?? '',
+          color: colorController ?? '',
+          securityDeposit: securityController ?? 0.0,
+          isAvailable: toggleController ?? '',
+          description: descriptionController?.text ?? '',
+          dateAdded: dateController ?? '',
+          location: locationController ?? '',
+          images: imageController ?? [],
         );
 
         _submitJewelryForm(jewelryItem, context);
         break;
       case 'Footwear':
         final footwearItem = FootwearModel(
-          name: nameController?.text,
+          name: nameController?.text ?? '',
           price: priceController,
-          brand: brandController?.text,
+          brand: brandController?.text ?? '',
           securityDeposit: securityController,
           description: descriptionController?.text,
-          condition: conditionController,
-          size: sizejweleryController?.text,
-          color: colorController,
-          category: categoryController,
-          isAvailable: toggleController,
+          condition: conditionController ?? '',
+          size: sizejweleryController?.text ?? '',
+          color: colorController ?? '',
+          category: categoryController ?? '',
+          isAvailable: toggleController ?? '',
           location: locationController,
-          images: imageController,
-          date: dateController,
+          images: imageController ?? [],
+          date: dateController ?? '',
         );
 
         _submitFootWearForm(footwearItem, context);
@@ -198,92 +202,73 @@ void handleFormSubmission({
         break;
     }
   } else {
-    // Show error message if the form is invalid
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Please complete the form correctly.')),
     );
   }
 }
 
-// Helper methods for submission
-void _submitDressForm(DressModel dress, BuildContext context) {
-  // Add logic to save the dress model to the database or backend
-  log('DressModel submitted: $dress');
+void _submitDressForm(
+    DressModel dress, BuildContext context, String categoryName) {
+  context.read<ProductBloc>().add(SubmitDressEvent(dress));
+  log(dress.toString());
   _showSuccessDialog(context);
 }
 
-void _submitVenueForm(VenueModel venue, BuildContext context) {
-  // Add logic to save the venue model to the database or backend
-  log('VenueModel submitted: $venue');
+void _submitVenueForm(
+    VenueModel venue, BuildContext context, String categoryName) {
+  context.read<ProductBloc>().add(SubmitVenueEvent(venue));
+  log(venue.toString());
   _showSuccessDialog(context);
 }
 
-void _submitCameraForm(CameraModel camera, BuildContext context) {
-  // Add logic to save the venue model to the database or backend
-  log('VenueModel submitted: $camera');
+void _submitCameraForm(
+    CameraModel camera, BuildContext context, String categoryName) {
+  context.read<ProductBloc>().add(SubmitCameraEvent(camera));
+  log(camera.toString());
   _showSuccessDialog(context);
 }
 
-void _submitVehicleForm(VehicleModel vehicle, BuildContext context) {
-  // Add logic to save the venue model to the database or backend
-  log('VehicleModel submitted: $vehicle');
+void _submitVehicleForm(
+    VehicleModel vehicle, BuildContext context, String categoryName) {
+  context.read<ProductBloc>().add(SubmitVehicleEvent(vehicle));
+  log("------------------------------");
+  log(vehicle.toString());
+  log("------------------------------");
+
   _showSuccessDialog(context);
 }
 
-void _submitDecorationForm(DecorationItem decoration, BuildContext context) {
-  // Add logic to save the venue model to the database or backend
-  log('DecorationModel submitted: $decoration');
+void _submitDecorationForm(
+    DecorationItem decoration, BuildContext context, String categoryName) {
+  context.read<ProductBloc>().add(SubmitDecorationEvent(decoration));
+  log(decoration.toString());
   _showSuccessDialog(context);
 }
 
-void _submitJewelryForm(JewelryModel jewelryItem, BuildContext context) {
-  // Validate the data if necessary
-  if (jewelryItem.name == null || jewelryItem.name!.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('Please enter a name for the jewelry item.')),
-    );
-    return;
-  }
-
-  // Perform the form submission logic
-  log('Jewelry Item Submitted: ${jewelryItem.toJson()}');
-
-  // Example: Sending the data to a server or saving to a database
-  // apiService.submitJewelryItem(jewelryItem);
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Jewelry item submitted successfully!')),
-  );
+void _submitJewelryForm(JewelryModel jewelry, BuildContext context) {
+  context.read<ProductBloc>().add(SubmitJewelryEvent(jewelry));
+  log(jewelry.toString());
+  _showSuccessDialog(context);
 }
 
-void _submitFootWearForm(FootwearModel footwearItem, BuildContext context) {
-  // Validate the data if necessary
-  if (footwearItem.name == null || footwearItem.name!.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('Please enter a name for the footwear item.')),
-    );
-    return;
-  }
-
-  // Perform the form submission logic
-  log('Jewelry Item Submitted: ${footwearItem.toJson()}');
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('footwear item submitted successfully!')),
-  );
+void _submitFootWearForm(FootwearModel footwear, BuildContext context) {
+  log(footwear.toString());
+  _showSuccessDialog(context);
+  context.read<ProductBloc>().add(SubmitFootwearEvent(footwear));
 }
 
 void _showSuccessDialog(BuildContext context) {
   showDialog(
     context: context,
-    builder: (ctx) => AlertDialog(
+    builder: (context) => AlertDialog(
       title: const Text('Success'),
       content: const Text('Form submitted successfully!'),
       actions: [
         TextButton(
-          onPressed: () => context.pop(),
+          onPressed: () {
+            context.pop();
+          },
           child: const Text('OK'),
         ),
       ],

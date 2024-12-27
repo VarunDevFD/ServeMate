@@ -1,72 +1,65 @@
-import 'package:serve_mate/features/product/data/models/rental_model.dart';
+import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 
-class DressModel extends RentalItem {
-  final String? gender;
-  final String? type;
-  final String? model;
-  final String? size;
-  final String? color;
-  final String? material;
-  final String? brand;
-  final String? duration;
-  // final double? price;
-  // final double? security;
-  final String? condition;
-  final String? date;
-  // final String? location;
-  // final List<String>? images;
-  final String? damage;
-
+class DressModel extends DressEntity {
   DressModel({
-    double? price,
-    double? security,
-    String? location,
-    List<String>? images,
-    String? description,
-    this.gender,
-    this.type,
-    this.model,
-    this.size,
-    this.color,
-    this.material,
-    this.brand,
-    this.duration,
-    this.condition,
-    this.date,
-    this.damage,
+    required String gender,
+    required String type,
+    required String model,
+    required String size,
+    required String color,
+    required String material,
+    required String brand,
+    required String duration,
+    required double price,
+    required double security,
+    required String condition,
+    required DateTime date,
+    required String location,
+    required List<String> images,
+    required String damage,
+    required String description,
   }) : super(
+          gender: gender,
+          type: type,
+          model: model,
+          size: size,
+          color: color,
+          material: material,
+          brand: brand,
+          duration: duration,
           price: price,
-          securityDeposit: security,
+          security: security,
+          condition: condition,
+          date: date,
           location: location,
           images: images,
+          damage: damage,
           description: description,
         );
 
-  // Factory method to create a DressModel from a Map (useful for Firestore/JSON)
+// Convert a Map to DressModel
   factory DressModel.fromMap(Map<String, dynamic> map) {
     return DressModel(
-      gender: map['gender'] as String?,
-      type: map['type'] as String?,
-      model: map['model'] as String?,
-      size: map['size'] as String?,
-      color: map['color'] as String?,
-      material: map['material'] as String?,
-      brand: map['brand'] as String?,
-      duration: map['duration'] as String?,
-      price: map['price'] != null ? (map['price'] as num).toDouble() : null,
-      security:
-          map['security'] != null ? (map['security'] as num).toDouble() : null,
-      condition: map['condition'] as String?,
-      date: map['date'] as String?,
-      location: map['location'] as String?,
-      images: (map['images'] as List<dynamic>?)?.cast<String>(),
-      damage: map['damage'] as String?,
-      description: map['description'] as String?,
+      gender: map['gender'] ?? '',
+      type: map['type'] ?? '',
+      model: map['model'] ?? '',
+      size: map['size'] ?? '',
+      color: map['color'] ?? '',
+      material: map['material'] ?? '',
+      brand: map['brand'] ?? '',
+      duration: map['duration'] ?? '',
+      price: map['price'],
+      security: map['security'] ?? '',
+      condition: map['condition'] ?? '',
+      date: map['date'] ?? '',
+      location: map['location'] ?? '',
+      images: List<String>.from(map['images'] ?? []),
+      damage: map['damage'] ?? '',
+      description: map['description'] ?? '',
     );
   }
 
-  // Method to convert DressModel to a Map (useful for Firestore/JSON)
-  @override
+  // Convert DressModel to Map
   Map<String, dynamic> toMap() {
     return {
       'gender': gender,
@@ -77,9 +70,24 @@ class DressModel extends RentalItem {
       'material': material,
       'brand': brand,
       'duration': duration,
+      'price': price,
+      'security': security,
       'condition': condition,
       'date': date,
+      'location': location,
+      'images': images,
       'damage': damage,
+      'description': description,
     };
+  }
+
+  // Convert a JSON to DressModel
+  factory DressModel.fromJson(Map<String, dynamic> json) {
+    return DressModel.fromMap(json);
+  }
+
+  // Convert DressModel to JSON
+  Map<String, dynamic> toJson() {
+    return toMap();
   }
 }

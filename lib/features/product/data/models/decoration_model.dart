@@ -1,36 +1,38 @@
-import 'package:serve_mate/features/product/data/models/rental_model.dart';
+import 'package:serve_mate/features/product/doamin/entities/decoration_entity.dart';
 
-class DecorationItem extends RentalItem {
-  List<String>? selectedFacilitiesFirst;
-  List<String>? selectedFacilitiesSecond;
-  String? date;
-
-  // Constructor
+class DecorationItem extends DecorationEntity {
   DecorationItem({
-    String? name,
-    double? rentalPrice,
-    double? securityDeposit,
-    String? location,
-    List<String>? imageUrls,
-    String? description,
-    this.selectedFacilitiesFirst,
-    this.selectedFacilitiesSecond,
-    this.date,
+    required String name,
+    required double rentalPrice,
+    required double securityDeposit,
+    required String location,
+    required List<String> imageUrls,
+    required String description,
+    required List<String> selectedFacilitiesFirst,
+    required List<String> selectedFacilitiesSecond,
+    required String date,
   }) : super(
           name: name,
-          price: rentalPrice,
+          rentalPrice: rentalPrice,
           securityDeposit: securityDeposit,
           location: location,
-          images: imageUrls,
+          imageUrls: imageUrls,
           description: description,
+          selectedFacilitiesFirst: selectedFacilitiesFirst,
+          selectedFacilitiesSecond: selectedFacilitiesSecond,
+          date: date,
         );
 
   // Method to convert the model into a Map for saving to a database
-  @override
   Map<String, dynamic> toMap() {
     return {
-      'selectedFacilitiesFirst': selectedFacilitiesFirst,
+      'name': name,
+      'rentalPrice': rentalPrice,
       'securityDeposit': securityDeposit,
+      'location': location,
+      'imageUrls': imageUrls,
+      'description': description,
+      'selectedFacilitiesFirst': selectedFacilitiesFirst,
       'selectedFacilitiesSecond': selectedFacilitiesSecond,
       'date': date,
     };
@@ -40,16 +42,16 @@ class DecorationItem extends RentalItem {
   factory DecorationItem.fromMap(Map<String, dynamic> map) {
     return DecorationItem(
       name: map['name'],
-      selectedFacilitiesFirst:
-          List<String>.from(map['selectedFacilitiesFirst'] ?? []),
       rentalPrice: map['rentalPrice'],
       securityDeposit: map['securityDeposit'],
+      location: map['location'],
       imageUrls: List<String>.from(map['imageUrls'] ?? []),
+      description: map['description'],
+      selectedFacilitiesFirst:
+          List<String>.from(map['selectedFacilitiesFirst'] ?? []),
       selectedFacilitiesSecond:
           List<String>.from(map['selectedFacilitiesSecond'] ?? []),
-      date: map['availableFrom'],
-      location: map['location'],
-      description: map['description'],
+      date: map['date'],
     );
   }
 }

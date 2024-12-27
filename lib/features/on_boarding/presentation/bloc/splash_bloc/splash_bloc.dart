@@ -24,7 +24,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     String? response = await preferencesRepository.getDataFn();
 
     if (hasSeenHome && response!.isNotEmpty) {
-      log(response);
+      // log(response);
       emit(GoToHome());
     } else if (hasSeenCategory) {
       emit(GoToCategory());

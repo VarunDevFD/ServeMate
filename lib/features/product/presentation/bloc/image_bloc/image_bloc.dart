@@ -1,43 +1,67 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:io';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 
-// Define BLoC Events
-abstract class ImageEvent {}
-
-class AddImage extends ImageEvent {
-  final File image;
-  AddImage(this.image);
+// Events for ImageBloc
+abstract class ImageEvent extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
 
-class RemoveImage extends ImageEvent {
+class AddImageEvent extends ImageEvent {
+  final String imagePath;
+
+  AddImageEvent(this.imagePath);
+
+  @override
+  List<Object?> get props => [imagePath];
+}
+
+class RemoveImageEvent extends ImageEvent {
   final int index;
-  RemoveImage(this.index);
+
+  RemoveImageEvent(this.index);
+
+  @override
+  List<Object?> get props => [index];
 }
 
-//BLoC State
-class ImageState {
-  final List<File> images;
-
-  ImageState({required this.images});
-
-  ImageState copyWith({List<File>? images}) {
-    return ImageState(images: images ?? this.images);
-  }
+// States for ImageBloc
+abstract class ImageState extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
 
-// ImageBloc using on<Event>
+class ImageInitialState extends ImageState {}
+
+class ImageLoadedState extends ImageState {
+  final List<String> images;
+
+  ImageLoadedState(this.images);
+
+  @override
+  List<Object?> get props => [images];
+}
+
+// Bloc for managing image state
 class ImageBloc extends Bloc<ImageEvent, ImageState> {
-  ImageBloc() : super(ImageState(images: [])) {
-    // Handle AddImage event
-    on<AddImage>((event, emit) {
-      emit(state.copyWith(images: List.from(state.images)..add(event.image)));
+  ImageBloc() : super(ImageInitialState()) {
+    on<AddImageEvent>((event, emit) {
+      final currentState = state;
+      if (currentState is ImageLoadedState) {
+        final updatedImages = List<String>.from(currentState.images)..add(event.imagePath);
+        emit(ImageLoadedState(updatedImages));
+      } else {
+        emit(ImageLoadedState([event.imagePath]));
+      }
     });
 
-    // Handle RemoveImage event
-    on<RemoveImage>((event, emit) {
-      final updatedImages = List<File>.from(state.images)
-        ..removeAt(event.index);
-      emit(state.copyWith(images: updatedImages));
+    on<RemoveImageEvent>((event, emit) {
+      final currentState = state;
+      if (currentState is ImageLoadedState) {
+        final updatedImages = List<String>.from(currentState.images);
+        updatedImages.removeAt(event.index);  // Remove the image at the specified index
+        emit(ImageLoadedState(updatedImages));
+      }
     });
   }
 }

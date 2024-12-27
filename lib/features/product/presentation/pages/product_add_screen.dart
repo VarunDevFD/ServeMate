@@ -1,16 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
-import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
-import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/dress_form.dart';
@@ -23,8 +15,7 @@ import 'package:serve_mate/features/product/presentation/widgets/venue_form.dart
 import 'package:flutter_animate/flutter_animate.dart';
 
 class AddPage extends StatelessWidget {
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   List<String> imageController = [];
   String? transmissionController;
   String? genderController;
@@ -125,8 +116,8 @@ class AddPage extends StatelessWidget {
     log("Location: ${locationController.toString()}");
   }
 
-  void onImageSelected(List<String> images) {
-    imageController = images;
+  void onImageSelected(List<String>? images) {
+    imageController = images!;
     log("Images: ${imageController.toString()}");
   }
 
@@ -159,83 +150,82 @@ class AddPage extends StatelessWidget {
     log("Toggle: ${toggleController.toString()}");
   }
 
-  Future<String?> _getCategoryFromPreferences() async {
+  Future<String?> _getCategoryFromPref() async {
     final PreferencesRepository prefs = serviceLocator<PreferencesRepository>();
-
     return prefs.getDataFn();
-    // return prefs.getString('selectedCategory');
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-        future: _getCategoryFromPreferences(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-
-          final category = snapshot.data;
-
-          if (category == null) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Error')),
-              body: const Center(child: Text('No category selected')),
-            );
-          }
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('$category  Rental Form'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.check),
-                  onPressed: () {
-                    // Use categoryName in form submission
-                    handleFormSubmission(
-                      categoryName: category,
-                      formKey: formKey,
-                      context: context,
-                      nameController: nameController,
-                      brandController: brandController,
-                      materialController: materialController,
-                      descriptionController: descriptionController,
-                      imageController: imageController,
-                      facilitiesVenue: facilities,
-                      capacityController: capacityController,
-                      durationController: durationController,
-                      genderController: genderController,
-                      typeController: typeController,
-                      sizeController: sizeController,
-                      colorController: colorController,
-                      modelController: modelController,
-                      priceController: double.tryParse(priceController.text),
-                      securityController:
-                          double.tryParse(securityController.text),
-                      conditionController: conditionController,
-                      dateController: dateController,
-                      locationController: locationController,
-                      phoneController: phoneController,
-                      emailController: emailController.text,
-                      fuelController: fuelController,
-                      seatCapacityController: seatCapacityController,
-                      regNumberController: regNumberController,
-                      transmission: transmissionController,
-                      toggleController: toggleController,
-                      categoryController: categorySelected,
-                    );
-                  },
-                ),
-              ],
-            ),
-            body: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _getFormForCategory(category), // Pass the category
-            ).animate().fadeIn(duration: 500.ms).slideY(),
+      future: _getCategoryFromPref(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+            // LoadingDialog.show(context)
           );
-        });
+        }
+
+        final category = snapshot.data;
+
+        if (category == null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Error')),
+            body: const Center(child: Text('No category selected')),
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('$category  Rental Form'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.check),
+                onPressed: () {
+                  handleFormSubmission(
+                    categoryName: category,
+                    formKey: formKey,
+                    context: context,
+                    nameController: nameController,
+                    brandController: brandController,
+                    materialController: materialController,
+                    descriptionController: descriptionController,
+                    imageController: imageController,
+                    facilitiesVenue: facilities,
+                    capacityController: capacityController,
+                    durationController: durationController,
+                    genderController: genderController,
+                    typeController: typeController,
+                    sizeController: sizeController,
+                    colorController: colorController,
+                    modelController: modelController,
+                    priceController: double.tryParse(priceController.text),
+                    securityController:
+                        double.tryParse(securityController.text),
+                    conditionController: conditionController,
+                    dateController: dateController,
+                    locationController: locationController,
+                    phoneController: phoneController,
+                    emailController: emailController.text,
+                    fuelController: fuelController,
+                    seatCapacityController: seatCapacityController,
+                    regNumberController: regNumberController,
+                    transmission: transmissionController,
+                    toggleController: toggleController,
+                    categoryController: categorySelected,
+                  );
+                },
+              ),
+            ],
+          ),
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: _getFormForCategory(category),
+          ).animate().fadeIn(duration: 500.ms).slideY(),
+        );
+      },
+    );
   }
 
   Widget _getFormForCategory(String? category) {
@@ -372,59 +362,4 @@ class AddPage extends StatelessWidget {
     }
   }
 }
-
-
-/*
-                    // // Trigger form validation before proceeding
-                    // final isValid = formKey.currentState?.validate() ?? false;
-                    // if (isValid) {
-                    //   formKey.currentState?.save();
-
-                    //   // Collect all the data and create a DressModel
-                    //   final dress = DressModel(
-                    //     gender: genderController,
-                    //     type: typeController,
-                    //     model: modelController,
-                    //     size: sizeController,
-                    //     color: colorController,
-                    //     material: materialController.text,
-                    //     brand: brandController.text,
-                    //     duration: durationController,
-                    //     price: double.tryParse(priceController.text),
-                    //     security: double.tryParse(securityController.text),
-                    //     condition: conditionController,
-                    //     date: dateController,
-                    //     location: locationController,
-                    //     images: imageController,
-                    //     damage: damageController.text,
-                    //     description: descriptionController.text,
-                    //   );
-                    //   final venue = VenueModel(
-                    //     name: nameController.text,
-                    //     capacity: capacityController,
-                    //     rentalPrice: double.tryParse(priceController.text),
-                    //     securityDeposit: double.tryParse(securityController.text),
-                    //     venueType: typeController,
-                    //     phone: phoneController,
-                    //     email: emailController,
-                    //     location: locationController,
-                    //     duration: durationController,
-                    //     date: dateController,
-                    //     images: imageController,
-                    //     facilities: const [],
-                    //     selectedFacilities: const [],
-                    //     description: descriptionController.text,
-                    //   );
-
-                    //   _showSuccessDialog(context);
-                    //   // Form is valid, proceed to next screen or action
-                    // } else {
-                    //   // Optionally show an error message or do nothing if invalid
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //         content:
-                    //             Text('Please complete the form correctly.')),
-                    //   );
-                    // }
-                    */
                     

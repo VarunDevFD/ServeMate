@@ -45,7 +45,7 @@ class WelcomeScreen extends StatelessWidget {
                   Expanded(
                     child: CustomElevatedButton(
                       text: 'Sign In',
-                      onPressed: () => context.push('/sign-in'),
+                      onPressed: () => context.go('/sign-in'),
                       //----------Temp--------
                       onLongPress: () => context.go('/selectCategory'),
                     ),

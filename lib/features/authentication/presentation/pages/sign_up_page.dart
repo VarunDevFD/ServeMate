@@ -135,7 +135,7 @@ class SignUpPage extends StatelessWidget {
                         const OrDivider(),
                         SizedBox(height: 20.h),
                         GestureDetector(
-                          onTap: () => context.push('/sign-in'),
+                          onTap: () => context.go('/sign-in'),
                           child: RichText(
                             text: TextSpan(
                               text: 'Don\'t have an account?',

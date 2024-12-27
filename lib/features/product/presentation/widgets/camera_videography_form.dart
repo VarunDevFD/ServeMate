@@ -21,7 +21,7 @@ class CameraVideographyForm extends StatelessWidget {
   final TextEditingController insuranceController;
   final TextEditingController notesController;
 
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
   final Function(String?) onTypeSelected;
   final Function(String?) onBrandSelected;
   final Function(String?) locationController;
@@ -169,7 +169,6 @@ class CameraVideographyForm extends StatelessWidget {
         _buildSection(
           title: 'Images',
           child: ImagePickerFormField(
-            context: context,
             onSaved: onImageSelected,
             validator: (images) => images == null || images.isEmpty
                 ? 'Please select at least one image.'

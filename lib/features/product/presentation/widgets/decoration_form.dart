@@ -14,7 +14,7 @@ class DecorationForm extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController rentalPriceController;
   final TextEditingController securityDepositController;
-  final Function(List<String>) onImageSelected;
+  final Function(List<String>?) onImageSelected;
   final void Function(String) selectedFacilitiesFIrst;
   final void Function(String) selectedFacilitiesSecond;
   final Function(String?) locationController;
@@ -104,7 +104,6 @@ class DecorationForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              context: context,
               onSaved: onImageSelected,
               validator: (images) => images == null || images.isEmpty
                   ? 'Please select at least Two image.'
