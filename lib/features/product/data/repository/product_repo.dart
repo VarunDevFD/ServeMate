@@ -6,63 +6,78 @@ import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
+import 'package:serve_mate/features/product/doamin/entities/camera_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/decoration_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/footwear_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/jewelry_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
+import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
-class ProductRepository {
+class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource remoteDataSource;
 
-  ProductRepository({required this.remoteDataSource});
+  ProductRepositoryImpl({required this.remoteDataSource});
 
-  Future<void> addDress(DressModel dress) async {
+  @override
+  Future<void> addDress(DressEntity dress) async {
     try {
-      await remoteDataSource.addDress(dress);
+      await remoteDataSource.addDress(dress as DressModel);
     } catch (e) {
       throw Exception('Failed to add dress: $e');
     }
   }
 
-  Future<void> addJewelry(JewelryModel jewelry) async {
+  @override
+  Future<void> addJewelry(JewelryEntity jewelry) async {
     try {
-      await remoteDataSource.addJewelry(jewelry);
+      await remoteDataSource.addJewelry(jewelry as JewelryModel);
     } catch (e) {
       throw Exception('Failed to add jewelry: $e');
     }
   }
 
-  Future<void> addVenue(VenueModel venue) async {
+  @override
+  Future<void> addVenue(VenueEntity venue) async {
     try {
-      await remoteDataSource.addVenue(venue);
+      await remoteDataSource.addVenue(venue as VenueModel);
     } catch (e) {
       throw Exception('Failed to add venue: $e');
     }
   }
 
-  Future<void> addCamera(CameraModel camera) async {
+  @override
+  Future<void> addCamera(CameraEntity camera) async {
     try {
-      await remoteDataSource.addCamera(camera);
+      await remoteDataSource.addCamera(camera as CameraModel);
     } catch (e) {
       throw Exception('Failed to add camera: $e');
     }
   }
 
-  Future<void> addVehicle(VehicleModel vehicle) async {
+  @override
+  Future<void> addVehicle(VehicleEntity vehicle) async {
     try {
-      await remoteDataSource.addVehicle(vehicle);
+      await remoteDataSource.addVehicle(vehicle as VehicleModel);
     } catch (e) {
       throw Exception('Failed to add vehicle: $e');
     }
   }
 
-  Future<void> addFootwear(FootwearModel footwear) async {
+  @override
+  Future<void> addFootwear(FootwearEntity footwear) async {
     try {
-      await remoteDataSource.addFootwear(footwear);
+      await remoteDataSource.addFootwear(footwear as FootwearModel);
     } catch (e) {
       throw Exception('Failed to add footwear: $e');
     }
   }
 
-  Future<void> addDecoration(DecorationItem decoration) async {
+  @override
+  Future<void> addDecoration(DecorationEntity decoration) async {
     try {
-      await remoteDataSource.addDecoration(decoration);
+      await remoteDataSource.addDecoration(decoration as DecorationModel);
     } catch (e) {
       throw Exception('Failed to add decoration: $e');
     }

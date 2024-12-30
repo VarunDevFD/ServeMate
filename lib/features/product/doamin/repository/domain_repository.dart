@@ -15,3 +15,4 @@ abstract class ProductRepository {
   Future<void> addFootwear(FootwearEntity footwear);
   Future<void> addDecoration(DecorationEntity decoration);
 }
+

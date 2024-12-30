@@ -7,32 +7,32 @@ import 'package:serve_mate/features/product/presentation/bloc/location_bloc/loca
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 
-Widget buildLocationTextField(
-    BuildContext context, String hint, locationController) {
+Widget buildLocationTextField(BuildContext context, String hint,
+    Function(TextEditingController? controller) locationController) {
   return Padding(
     padding: EdgeInsets.only(top: 8.h),
     child: BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
-        return TextField(
+        TextEditingController controller = TextEditingController();
+        return TextFormField(
+          controller: locationController(controller),
           cursorColor: AppColors.balck1,
           decoration: InputDecorations.defaultDecoration(
             // Display place name if available, otherwise show the default hint
-            hintText: state.placeName!.isNotEmpty
+            hintText: hint,
+            labelText: state.placeName!.isNotEmpty
                 ? state.placeName
                 : (state.currentLocation ?? hint),
             suffixIcon: IconButton(
               icon: const Icon(Icons.location_on),
               onPressed: () {
-                locationController(state.placeName);
-                // Trigger the CurrentLocation event to fetch the current location
                 BlocProvider.of<LocationBloc>(context)
                     .add(FetchCurrentLocation());
               },
             ),
             errorText: state.locationError,
           ),
-          readOnly:
-              true, // The text field is read-only since it's just displaying the location
+          readOnly: true, // The text field is read-only
         );
       },
     ),

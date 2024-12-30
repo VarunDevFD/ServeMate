@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
@@ -19,13 +21,13 @@ class FootwearForm extends StatelessWidget {
   final TextEditingController brandController;
   final TextEditingController securityController;
   final TextEditingController descriptionController;
-  final Function(String?) onConditionSelected;
-  final Function(String?) onSizeSelected;
-  final Function(String?) onColorSelected;
-  final Function(String?) onCategorySelected;
+  final Function(TextEditingController?) onConditionSelected;
+  final Function(TextEditingController?) onSizeSelected;
+  final Function(TextEditingController?) onColorSelected;
+  final Function(TextEditingController?) onCategorySelected;
   final Function(String?) onToggleSelected;
-  final Function(List<String>?) onImageSelected;
-  final Function(String?) locationController;
+  final Function(List<TextEditingController>?) onImageSelected;
+  final Function(TextEditingController?) locationController;
   final Function(String?) dateController;
 
   const FootwearForm({
@@ -171,10 +173,18 @@ class FootwearForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              onSaved: onImageSelected,
-              validator: (images) => images == null || images.isEmpty
-                  ? 'Please select at least one image.'
-                  : null,
+              onSaved: (images) {
+                // Save the list of TextEditingControllers (image paths)
+                for (var controller in images ?? []) {
+                  print('Image path: ${controller.text}');
+                }
+              },
+              validator: (images) {
+                if (images == null || images.isEmpty) {
+                  return 'Please pick at least one image.';
+                }
+                return null;
+              },
             ),
           ),
           // Condition

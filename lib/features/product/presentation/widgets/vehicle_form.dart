@@ -25,16 +25,16 @@ class VehicleForm extends StatelessWidget {
   final TextEditingController securityController;
   final TextEditingController descriptionController;
 
-  final Function(String?) onTypeSelected;
-  final Function(String?) onModelSelected;
-  final Function(String?) onFuelSelected;
-  final Function(String?) onTransmissionSelected;
-  final void Function(String) selectedFacilities;
-  final Function(List<String>?) onImageSelected;
-  final Function(String?) locationController;
+  final Function(TextEditingController?) onTypeSelected;
+  final Function(TextEditingController?) onModelSelected;
+  final Function(TextEditingController?) onFuelSelected;
+  final Function(TextEditingController?) onTransmissionSelected;
+  final Function(TextEditingController?) selectedFacilities;
+  final Function(List<TextEditingController>?) onImageSelected;
+  final Function(TextEditingController?) locationController;
   final Function(String?) onToggleSelected;
   final Function(String?) dateController;
-  final Function(String?) onColorSelected;
+  final Function(TextEditingController?) onColorSelected;
 
   const VehicleForm({
     super.key,
@@ -239,9 +239,22 @@ class VehicleForm extends StatelessWidget {
             title: 'Images',
             child: ImagePickerFormField(
               onSaved: onImageSelected,
-              validator: (images) => images == null || images.isEmpty
-                  ? 'Please select at least one image.'
-                  : null,
+              //  (images) {
+              //   // Save the list of TextEditingControllers (image paths)
+              //   List<String> imagesPaths = [];
+              //   for (var controller in images ?? []) {
+              //     log('Image path ithan moyntygheee: ${controller.text}');
+              //     imagesPaths.add(controller.text);
+              //   }
+              //   // final value = onImageSelected;
+                
+              // },
+              validator: (images) {
+                if (images == null || images.isEmpty) {
+                  return 'Please pick at least one image.';
+                }
+                return null;
+              },
             ),
           ),
 

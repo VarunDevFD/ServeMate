@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
@@ -14,17 +16,17 @@ class CameraVideographyForm extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController rentalPriceController;
   final TextEditingController securityDepositController;
-  final Function(String?) onConditionSelected;
+  final Function(TextEditingController?) onConditionSelected;
   final Function(String?) dateController;
   final TextEditingController accessoriesController;
   final TextEditingController pickupOptionController;
   final TextEditingController insuranceController;
   final TextEditingController notesController;
 
-  final Function(List<String>?) onImageSelected;
-  final Function(String?) onTypeSelected;
-  final Function(String?) onBrandSelected;
-  final Function(String?) locationController;
+  final Function(List<TextEditingController>?) onImageSelected;
+  final Function(TextEditingController?) onTypeSelected;
+  final Function(TextEditingController?) onBrandSelected;
+  final Function(TextEditingController?) locationController;
 
   const CameraVideographyForm({
     super.key,
@@ -169,15 +171,24 @@ class CameraVideographyForm extends StatelessWidget {
         _buildSection(
           title: 'Images',
           child: ImagePickerFormField(
-            onSaved: onImageSelected,
-            validator: (images) => images == null || images.isEmpty
-                ? 'Please select at least one image.'
-                : null,
+            onSaved: (images) {
+              // Save the list of TextEditingControllers (image paths)
+              for (var controller in images ?? []) {
+                log('Image path: ${controller.text}');
+              }
+            },
+            validator: (images) {
+              if (images == null || images.isEmpty) {
+                return 'Please pick at least one image.';
+              }
+              return null;
+            },
           ),
         ),
         _buildSection(
           title: 'Pickup/Location Option',
-          child: buildLocationTextField(context, 'Enter Location', locationController),
+          child: buildLocationTextField(
+              context, 'Enter Location', locationController),
         ),
         _buildSection(
           title: 'Damage policy',

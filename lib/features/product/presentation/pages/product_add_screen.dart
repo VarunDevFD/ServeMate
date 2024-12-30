@@ -16,92 +16,84 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 class AddPage extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
-  List<String> imageController = [];
-  String? transmissionController;
-  String? genderController;
-  String? typeController;
-  String? materials;
-  String? modelController;
-  String? sizeController;
-  String? colorController;
-  String? fuelController;
-  String? toggleController;
-  String? categorySelected;
-  String? conditionController;
-  String? durationController;
-  String? locationController;
-  String? dateController;
-
-  final materialController = TextEditingController();
+  // Controllers
   final brandController = TextEditingController();
-  final priceController = TextEditingController();
-  final securityController = TextEditingController();
-  final damageController = TextEditingController();
-  final descriptionController = TextEditingController();
-  // venues
-  final nameController = TextEditingController();
   final capacityController = TextEditingController();
+  TextEditingController? categorySelected;
+  TextEditingController? colorController;
+  TextEditingController? conditionController;
+  final damageController = TextEditingController();
+  String? dateController;
+  final descriptionController = TextEditingController();
+  TextEditingController? durationController;
+  List<TextEditingController>? facilities = [];
+  List<TextEditingController>? facilitiesSecond = [];
+  TextEditingController? fuelController;
+  TextEditingController? genderController;
+  List<TextEditingController>? imageController = [];
+  TextEditingController locationController = TextEditingController();
+  TextEditingController? materials;
+  final materialController = TextEditingController();
+  TextEditingController modelController = TextEditingController();
+  final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
-  List<String> facilities = [];
-  // Vehicle
-  final seatCapacityController = TextEditingController();
-  final regNumberController = TextEditingController();
-  // Jwelery
+  final priceController = TextEditingController();
   final quantityController = TextEditingController();
+  final regNumberController = TextEditingController();
+  final seatCapacityController = TextEditingController();
+  TextEditingController? sizeController;
   final sizejweleryController = TextEditingController();
-  // Decoration
-  List<String> facilitiesSecond = [];
+  final securityController = TextEditingController();
+  String? toggleController;
+  TextEditingController? transmissionController;
+  TextEditingController? typeController;
 
   AddPage({super.key});
 
   // Callback to handle gender selection
-  void onGenderSelected(String? gender) {
+  void onGenderSelected(TextEditingController? gender) {
     genderController = gender;
     log("Gender: ${genderController.toString()}");
   }
 
-  void onTypeSelected(String? type) {
+  void onTypeSelected(TextEditingController? type) {
     typeController = type;
     log("Type: ${typeController.toString()}");
   }
 
   // FootWear
-  void onCategorySelected(String? category) {
+  void onCategorySelected(TextEditingController? category) {
     categorySelected = category;
     log("Type: ${categorySelected.toString()}");
   }
 
-  void onMaterialSelected(String? material) {
+  void onMaterialSelected(TextEditingController? material) {
     materials = material;
     log("Type: ${materials.toString()}");
   }
 
-  void onModelSelected(String? model) {
-    modelController = model;
+  void onModelSelected(TextEditingController? model) {
+    modelController = model!;
     log("Model: ${modelController.toString()}");
   }
 
-  void onSizeSelected(String? size) {
+  void onSizeSelected(TextEditingController? size) {
     sizeController = size;
     log("Size: ${sizeController.toString()}");
   }
 
-  void onColorSelected(String? color) {
+  void onColorSelected(TextEditingController? color) {
     colorController = color;
     log("Color: ${colorController.toString()}");
-    log(materialController.toString());
-    log(brandController.toString());
   }
 
-  void onDurationSelected(String? duration) {
+  void onDurationSelected(TextEditingController? duration) {
     durationController = duration;
     log("Duration: ${durationController.toString()}");
-    log(priceController.toString());
-    log(securityController.toString());
   }
 
-  void onConditionSelected(String? condition) {
+  void onConditionSelected(TextEditingController? condition) {
     conditionController = condition;
     log("Condition: ${conditionController.toString()}");
   }
@@ -111,36 +103,38 @@ class AddPage extends StatelessWidget {
     log("Date: ${dateController.toString()}");
   }
 
-  void onLocationSelected(String? location) {
-    locationController = location;
+  void onLocationSelected(TextEditingController? location) {
+    locationController = location!;
     log("Location: ${locationController.toString()}");
   }
 
-  void onImageSelected(List<String>? images) {
+  void onImageSelected(List<TextEditingController>? images) {
     imageController = images!;
-    log("Images: ${imageController.toString()}");
+    for (var controller in images) {
+      log('this is image ${controller.text}');
+    }
   }
 
-  void onFacilitySelected(String? facility) {
+  void onFacilitySelected(TextEditingController? facility) {
     if (facility != null) {
-      facilities.add(facility);
+      facilities?.add(facility);
       log("Selected Facility: ${facility.toString()}");
     }
   }
 
-  void onFacilitySelected2(String? facility2) {
+  void onFacilitySelected2(TextEditingController? facility2) {
     if (facility2 != null) {
-      facilitiesSecond.add(facility2);
+      facilitiesSecond?.add(facility2);
       log("Selected Facility: ${facility2.toString()}");
     }
   }
 
-  void onFuelSelected(String? fuel) {
+  void onFuelSelected(TextEditingController? fuel) {
     fuelController = fuel;
     log("Fuel: ${fuelController.toString()}");
   }
 
-  void onTransmissionSelected(String? transmission) {
+  void onTransmissionSelected(TextEditingController? transmission) {
     transmissionController = transmission;
     log("Transmission: ${transmissionController.toString()}");
   }
@@ -153,6 +147,27 @@ class AddPage extends StatelessWidget {
   Future<String?> _getCategoryFromPref() async {
     final PreferencesRepository prefs = serviceLocator<PreferencesRepository>();
     return prefs.getDataFn();
+  }
+
+  // Reset all the controllers
+  void onFormReset() {
+    nameController.clear();
+    brandController.clear();
+    materialController.clear();
+    descriptionController.clear();
+    capacityController.clear();
+    durationController?.clear();
+    genderController?.clear();
+    typeController?.clear();
+    sizeController?.clear();
+    colorController?.clear();
+    modelController.clear();
+    priceController.clear();
+    securityController.clear();
+    phoneController.clear();
+    emailController.clear();
+    seatCapacityController.clear();
+    regNumberController.clear();
   }
 
   @override
@@ -187,6 +202,7 @@ class AddPage extends StatelessWidget {
                     categoryName: category,
                     formKey: formKey,
                     context: context,
+                    onFormReset: onFormReset,
                     nameController: nameController,
                     brandController: brandController,
                     materialController: materialController,
@@ -207,7 +223,6 @@ class AddPage extends StatelessWidget {
                     dateController: dateController,
                     locationController: locationController,
                     phoneController: phoneController,
-                    emailController: emailController.text,
                     fuelController: fuelController,
                     seatCapacityController: seatCapacityController,
                     regNumberController: regNumberController,
@@ -219,10 +234,7 @@ class AddPage extends StatelessWidget {
               ),
             ],
           ),
-          body: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _getFormForCategory(category),
-          ).animate().fadeIn(duration: 500.ms).slideY(),
+          body: _getFormForCategory(category),
         );
       },
     );
@@ -362,4 +374,3 @@ class AddPage extends StatelessWidget {
     }
   }
 }
-                    

@@ -9,7 +9,7 @@ import 'package:serve_mate/features/product/presentation/bloc/venues_bloc/venues
 import 'package:serve_mate/features/product/presentation/bloc/venues_bloc/venues_state.dart';
 
 class VenueFacilitiesWidget extends StatelessWidget {
-  final ValueChanged<String> selectedFacilities;
+  final ValueChanged<TextEditingController> selectedFacilities;
   final List<String> facilities;
 
   const VenueFacilitiesWidget({
@@ -38,8 +38,10 @@ class VenueFacilitiesWidget extends StatelessWidget {
                   selected: state.selectedFacilities.contains(facility),
                   onSelected: (selected) {
                     log('Facility: $facility, Selected: $selected');
-                    selectedFacilities(facility);
-                    bloc.add(ToggleFacility(facility));
+                    TextEditingController controller =
+                        TextEditingController(text: facility);
+                    selectedFacilities(controller);
+                    bloc.add(ToggleFacility(controller.text));
                   },
                 );
               }).toList(),

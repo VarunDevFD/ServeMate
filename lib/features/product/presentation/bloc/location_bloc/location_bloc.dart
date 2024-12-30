@@ -13,24 +13,24 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('service: Location services are disabled.');
-    }
 
+    if (!serviceEnabled) {
+      // Show a dialog or snackbar to notify the user
+      throw 'Location services are disabled. Please enable them to proceed.';
+    }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('permission: Location permissions are denied');
+        throw 'Location permissions are denied. Please allow location permissions.';
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.',
-      );
+      throw 'Location permissions are permanently denied. Please enable them in app settings.';
     }
 
+    // If all checks pass, return the position
     return await Geolocator.getCurrentPosition();
   }
 

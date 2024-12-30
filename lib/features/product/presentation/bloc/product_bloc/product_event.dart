@@ -40,7 +40,7 @@ class SubmitCameraEvent extends ProductEvent {
 }
 
 class SubmitDecorationEvent extends ProductEvent {
-  final DecorationItem decoration;
+  final DecorationModel decoration;
 
   SubmitDecorationEvent(this.decoration);
 }

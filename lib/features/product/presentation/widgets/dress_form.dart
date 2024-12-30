@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
@@ -20,16 +22,16 @@ class DressForm extends StatelessWidget {
   final TextEditingController damageController;
   final TextEditingController descriptionController;
 
-  final Function(String?) onGenderSelected;
-  final Function(String?) onTypeSelected;
-  final Function(String?) onModelSelected;
-  final Function(String?) onSizeSelected;
-  final Function(String?) onColorSelected;
-  final Function(String?) onDurationSelected;
-  final Function(String?) onConditionSelected;
+  final Function(TextEditingController?) onGenderSelected;
+  final Function(TextEditingController?) onTypeSelected;
+  final Function(TextEditingController?) onModelSelected;
+  final Function(TextEditingController?) onSizeSelected;
+  final Function(TextEditingController?) onColorSelected;
+  final Function(TextEditingController?) onDurationSelected;
+  final Function(TextEditingController?) onConditionSelected;
   final Function(String?) dateController;
-  final Function(String?) locationController;
-  final Function(List<String>?) onImageSelected;
+  final Function(TextEditingController?) locationController;
+  final Function(List<TextEditingController>?) onImageSelected;
 
   const DressForm({
     super.key,
@@ -194,12 +196,17 @@ class DressForm extends StatelessWidget {
           const CustomSideHeadText(title: 'Images'),
           // Image Field
           ImagePickerFormField(
-            onSaved: onImageSelected,
+            onSaved: (images) {
+              // Save the list of TextEditingControllers (image paths)
+              for (var controller in images ?? []) {
+                log('Image path: ${controller.text}');
+              }
+            },
             validator: (images) {
               if (images == null || images.isEmpty) {
-                return 'Please select at least one image.';
+                return 'Please pick at least one image.';
               }
-              return null; // Indicates no validation errors.
+              return null;
             },
           ),
           // Damage Policy Side Head

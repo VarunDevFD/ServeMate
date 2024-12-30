@@ -1,7 +1,6 @@
 import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
 
 class VehicleModel extends VehicleEntity {
-  // Constructor
   VehicleModel({
     required String name,
     required String model,
@@ -21,12 +20,14 @@ class VehicleModel extends VehicleEntity {
     required String toggleOption,
     required String color,
   }) : super(
-    name: name,
+          name: name,
           model: model,
           brand: brand,
           price: rentalPrice,
           description: description,
-          image: images.isNotEmpty ? images[0] : '', // Just an example for the image field
+          image: images.isNotEmpty
+              ? images[0]
+              : '', // Just an example for the image field
           type: vehicleType,
           rentalPrice: rentalPrice,
           securityDeposit: securityDeposit,
@@ -50,7 +51,7 @@ class VehicleModel extends VehicleEntity {
       rentalPrice: (json['rentalPrice'] as num?)?.toDouble() ?? 0.0,
       securityDeposit: (json['securityDeposit'] as num?)?.toDouble() ?? 0.0,
       location: json['location'] ?? '',
-      images: List<String>.from(json['images'] ?? []),
+      images: List<String>.from(json['images'] ?? ['', '']),
       description: json['description'] ?? '',
       brand: json['brand'] ?? '',
       seatCapacity: json['seatCapacity'] ?? 0,

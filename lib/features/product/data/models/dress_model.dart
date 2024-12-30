@@ -13,7 +13,7 @@ class DressModel extends DressEntity {
     required double price,
     required double security,
     required String condition,
-    required DateTime date,
+    required String date,
     required String location,
     required List<String> images,
     required String damage,
@@ -81,13 +81,5 @@ class DressModel extends DressEntity {
     };
   }
 
-  // Convert a JSON to DressModel
-  factory DressModel.fromJson(Map<String, dynamic> json) {
-    return DressModel.fromMap(json);
-  }
-
-  // Convert DressModel to JSON
-  Map<String, dynamic> toJson() {
-    return toMap();
-  }
+  
 }

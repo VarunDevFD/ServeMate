@@ -23,12 +23,14 @@ import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboard
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/get_on_boarding_data.dart';
 import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
+import 'package:serve_mate/features/product/data/repository/product_repo.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
-import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
 
 import 'package:serve_mate/firebase_options.dart';
 
@@ -112,29 +114,42 @@ Future<void> init() async {
   );
 
   //--------------------Product-------------------------------------------------
+  
+  //--------------------Data Sources--------------------
   serviceLocator.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(),
   );
 
-  // Register use case
-  serviceLocator.registerLazySingleton<AddDressUseCase>(
-    () => AddDressUseCase(serviceLocator<ProductRepository>()),
-  );
-  // Register use case
-  serviceLocator.registerLazySingleton<AddJewelryUseCase>(
-    () => AddJewelryUseCase(serviceLocator<ProductRepository>()),
-  );
-  // Register use case
-  serviceLocator.registerLazySingleton<AddVehicleUseCase>(
-    () => AddVehicleUseCase(serviceLocator<ProductRepository>()),
-  );
-  // Register use case
-  serviceLocator.registerLazySingleton<AddVenueUseCase>(
-    () => AddVenueUseCase(serviceLocator<ProductRepository>()),
+  //--------------------Repository--------------------
+  serviceLocator.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(
+      remoteDataSource: serviceLocator<ProductRemoteDataSource>(),
+    ),
   );
 
-  // Register BLoC
-  serviceLocator.registerFactory<ProductBloc>(
-    () => ProductBloc(),
-  );
+  // Dress Usecase
+  serviceLocator.registerLazySingleton<AddDressUseCase>(
+      () => AddDressUseCase(serviceLocator<ProductRepository>()));
+
+  // Jewelry Usecase
+  serviceLocator.registerLazySingleton<AddJewelryUseCase>(
+      () => AddJewelryUseCase(serviceLocator<ProductRepository>()));
+
+  // Venue Usecase
+  serviceLocator.registerLazySingleton<AddVenueUseCase>(
+      () => AddVenueUseCase(serviceLocator<ProductRepository>()));
+
+  // Vehicle Usecase
+  serviceLocator.registerLazySingleton<AddVehicleUseCase>(
+      () => AddVehicleUseCase(serviceLocator<ProductRepository>()));
+
+  // Camera Usecase
+  serviceLocator.registerLazySingleton<AddCameraUseCase>(
+      () => AddCameraUseCase(serviceLocator<ProductRepository>()));
+
+  // Decoration Usecase
+  serviceLocator.registerLazySingleton<AddDecorationUseCase>(
+      () => AddDecorationUseCase(serviceLocator<ProductRepository>()));
+
+  
 }

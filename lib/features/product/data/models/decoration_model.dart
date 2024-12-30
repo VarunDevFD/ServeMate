@@ -1,12 +1,12 @@
 import 'package:serve_mate/features/product/doamin/entities/decoration_entity.dart';
 
-class DecorationItem extends DecorationEntity {
-  DecorationItem({
+class DecorationModel extends DecorationEntity {
+  DecorationModel({
     required String name,
     required double rentalPrice,
     required double securityDeposit,
     required String location,
-    required List<String> imageUrls,
+    required List<String> images,
     required String description,
     required List<String> selectedFacilitiesFirst,
     required List<String> selectedFacilitiesSecond,
@@ -16,7 +16,7 @@ class DecorationItem extends DecorationEntity {
           rentalPrice: rentalPrice,
           securityDeposit: securityDeposit,
           location: location,
-          imageUrls: imageUrls,
+          images: images,
           description: description,
           selectedFacilitiesFirst: selectedFacilitiesFirst,
           selectedFacilitiesSecond: selectedFacilitiesSecond,
@@ -30,7 +30,7 @@ class DecorationItem extends DecorationEntity {
       'rentalPrice': rentalPrice,
       'securityDeposit': securityDeposit,
       'location': location,
-      'imageUrls': imageUrls,
+      'images': images,
       'description': description,
       'selectedFacilitiesFirst': selectedFacilitiesFirst,
       'selectedFacilitiesSecond': selectedFacilitiesSecond,
@@ -39,13 +39,13 @@ class DecorationItem extends DecorationEntity {
   }
 
   // Method to create a model instance from a Map (e.g., fetched from a database)
-  factory DecorationItem.fromMap(Map<String, dynamic> map) {
-    return DecorationItem(
+  factory DecorationModel.fromMap(Map<String, dynamic> map) {
+    return DecorationModel(
       name: map['name'],
       rentalPrice: map['rentalPrice'],
       securityDeposit: map['securityDeposit'],
       location: map['location'],
-      imageUrls: List<String>.from(map['imageUrls'] ?? []),
+      images: List<String>.from(map['images'] ?? []),
       description: map['description'],
       selectedFacilitiesFirst:
           List<String>.from(map['selectedFacilitiesFirst'] ?? []),

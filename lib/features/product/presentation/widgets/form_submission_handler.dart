@@ -17,37 +17,36 @@ void handleFormSubmission({
   required String categoryName,
   required GlobalKey<FormState> formKey,
   required BuildContext context,
-  TextEditingController? nameController,
+  required VoidCallback onFormReset, // Callback for resetting controllers
   TextEditingController? brandController,
-  TextEditingController? materialController,
-  TextEditingController? descriptionController,
   TextEditingController? capacityController,
-  TextEditingController? phoneController,
+  TextEditingController? categoryController,
+  TextEditingController? colorController,
+  TextEditingController? conditionController,
   TextEditingController? damageController,
-  TextEditingController? seatCapacityController,
-  TextEditingController? regNumberController,
-  TextEditingController? quantityController,
-  TextEditingController? sizejweleryController,
-  List<String>? imageController,
-  List<String>? facilitiesVenue,
-  List<String>? facilities1,
-  List<String>? facilities2,
-  String? durationController,
-  String? genderController,
-  String? typeController,
-  String? sizeController,
-  String? colorController,
-  String? modelController,
-  double? priceController,
-  double? securityController,
-  String? conditionController,
   String? dateController,
-  String? locationController,
-  String? emailController,
-  String? fuelController,
-  String? transmission,
+  TextEditingController? descriptionController,
+  TextEditingController? durationController,
+  List<TextEditingController>? facilitiesVenue,
+  List<TextEditingController>? facilitiesVenue2,
+  TextEditingController? fuelController,
+  TextEditingController? genderController,
+  List<TextEditingController>? imageController,
+  TextEditingController? locationController,
+  TextEditingController? materialController,
+  TextEditingController? modelController,
+  TextEditingController? nameController,
+  double? priceController,
+  TextEditingController? quantityController,
+  TextEditingController? regNumberController,
+  TextEditingController? seatCapacityController,
+  double? securityController,
+  TextEditingController? sizeController,
+  TextEditingController? sizejweleryController,
   String? toggleController,
-  String? categoryController,
+  TextEditingController? transmission,
+  TextEditingController? typeController,
+  TextEditingController? phoneController,
 }) {
   // Validate the form
   if (formKey.currentState?.validate() ?? false) {
@@ -57,24 +56,26 @@ void handleFormSubmission({
     switch (categoryName) {
       case 'Dresses':
         final dress = DressModel(
-          gender: genderController ?? '',
-          type: typeController ?? '',
-          model: modelController ?? '',
-          size: sizeController ?? '',
-          color: colorController ?? '',
+          gender: genderController?.text ?? '',
+          type: typeController?.text ?? '',
+          model: modelController?.text ?? '',
+          size: sizeController?.text ?? '',
+          color: colorController?.text ?? '',
           material: materialController?.text ?? '',
           brand: brandController?.text ?? '',
-          duration: durationController ?? '',
+          duration: durationController?.text ?? '',
           price: priceController ?? 0.0,
           security: securityController ?? 0.0,
-          condition: conditionController ?? '',
-          date: DateTime.tryParse(dateController ?? '') ?? DateTime.now(),
-          location: locationController ?? '',
-          images: imageController ?? [],
+          condition: conditionController?.text ?? '',
+          date: dateController ?? '',
+          location: locationController?.text ?? '',
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           damage: damageController?.text ?? '',
           description: descriptionController?.text ?? '',
         );
-        _submitDressForm(dress, context, categoryName);
+        _submitDressForm(dress, context, onFormReset);
         break;
 
       case 'Venue':
@@ -83,17 +84,22 @@ void handleFormSubmission({
           capacity: int.tryParse(capacityController?.text ?? '0') ?? 0,
           rentalPrice: priceController ?? 0.0,
           securityDeposit: securityController ?? 0.0,
-          venueType: typeController ?? '',
-          location: locationController ?? '',
-          duration: durationController ?? '',
+          venueType: typeController?.text ?? '',
+          location: locationController?.text ?? '',
+          duration: durationController?.text ?? '',
           date: dateController ?? '',
-          images: imageController ?? [], // Ensure this is a List<String>
-          facilities: facilitiesVenue ?? [], // Ensure this is a List<String>
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
+          facilities:
+              facilitiesVenue?.map((controller) => controller.text).toList() ??
+                  [],
           selectedFacilities:
-              facilitiesVenue ?? [], // Ensure this is a List<String>
+              facilitiesVenue?.map((controller) => controller.text).toList() ??
+                  [],
           description: descriptionController?.text ?? '',
         );
-        _submitVenueForm(venue, context, categoryName);
+        _submitVenueForm(venue, context, onFormReset);
         break;
 
       case 'Cameras':
@@ -101,79 +107,95 @@ void handleFormSubmission({
           name: nameController?.text ?? '',
           price: priceController ?? 0.0,
           securityDeposit: securityController ?? 0.0,
-          location: locationController ?? '',
-          images: imageController ?? [], // Ensure this is a List<String>
+          location: locationController?.text ?? '',
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           notes: descriptionController?.text ?? '',
-          equipmentType: typeController ?? '',
+          equipmentType: typeController?.text ?? '',
           brandModel: brandController?.text ?? '',
-          condition: conditionController ?? '',
+          condition: conditionController?.text ?? '',
           dateAdded: dateController ?? '',
-          accessories: facilitiesVenue ?? [], // Ensure this is a List<String>
+          accessories:
+              facilitiesVenue?.map((controller) => controller.text).toList() ??
+                  [],
           damage: damageController?.text ?? '',
         );
 
-        _submitCameraForm(camera, context, categoryName);
+        _submitCameraForm(camera, context, onFormReset);
         break;
 
       case 'Vehicles':
         final vehicle = VehicleModel(
           name: nameController?.text ?? '',
           brand: brandController?.text ?? '',
-          color: colorController ?? '',
+          color: colorController?.text ?? '',
           seatCapacity: int.tryParse(seatCapacityController?.text ?? '0') ?? 0,
           registrationNumber: regNumberController?.text ?? '',
           rentalPrice: priceController ?? 0.0,
           securityDeposit: securityController ?? 0.0,
-          vehicleType: typeController ?? '',
+          vehicleType: typeController?.text ?? '',
           model: brandController?.text ?? '',
-          fuelType: fuelController ?? '',
-          transmission: transmission ?? '',
-          facilities: facilitiesVenue ?? [],
-          images: imageController ?? [],
+          fuelType: fuelController?.text ?? '',
+          transmission: transmission?.text ?? '',
+          facilities:
+              facilitiesVenue?.map((controller) => controller.text).toList() ??
+                  [],
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           date: dateController ?? '',
-          location: locationController ?? '',
+          location: locationController?.text ?? '',
           toggleOption: toggleController ?? '',
           description: descriptionController?.text ?? '',
         );
-        _submitVehicleForm(vehicle, context, categoryName);
+        _submitVehicleForm(vehicle, context, onFormReset);
         break;
 
       case 'Decoration':
-        final decorationItem = DecorationItem(
+        final decorationItem = DecorationModel(
           name: nameController?.text ?? '',
-          selectedFacilitiesFirst: facilities1 ?? [],
+          selectedFacilitiesFirst:
+              facilitiesVenue?.map((controller) => controller.text).toList() ??
+                  [],
           rentalPrice: priceController ?? 0.0,
           securityDeposit: securityController ?? 0.0,
-          imageUrls: imageController ?? [],
-          selectedFacilitiesSecond: facilities2 ?? [],
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
+          selectedFacilitiesSecond:
+              facilitiesVenue2?.map((controller) => controller.text).toList() ??
+                  [],
           date: dateController ?? '',
-          location: locationController ?? '',
+          location: locationController?.text ?? '',
           description: descriptionController?.text ?? '',
         );
 
-        _submitDecorationForm(decorationItem, context, categoryName);
+        _submitDecorationForm(decorationItem, context, onFormReset);
         break;
 
       case 'Jewelry':
         final jewelryItem = JewelryModel(
           name: nameController?.text ?? '',
-          type: typeController ?? '',
+          type: typeController?.text ?? '',
           material: materialController?.text ?? '',
           price: priceController ?? 0.0,
           quantity: quantityController?.text ?? '',
-          condition: conditionController ?? '',
+          condition: conditionController?.text ?? '',
           brand: brandController?.text ?? '',
           size: sizejweleryController?.text ?? '',
-          color: colorController ?? '',
+          color: colorController?.text ?? '',
           securityDeposit: securityController ?? 0.0,
           isAvailable: toggleController ?? '',
           description: descriptionController?.text ?? '',
           dateAdded: dateController ?? '',
-          location: locationController ?? '',
-          images: imageController ?? [],
+          location: locationController?.text ?? '',
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
         );
 
-        _submitJewelryForm(jewelryItem, context);
+        _submitJewelryForm(jewelryItem, context, onFormReset);
         break;
       case 'Footwear':
         final footwearItem = FootwearModel(
@@ -182,17 +204,19 @@ void handleFormSubmission({
           brand: brandController?.text ?? '',
           securityDeposit: securityController,
           description: descriptionController?.text,
-          condition: conditionController ?? '',
+          condition: conditionController?.text ?? '',
           size: sizejweleryController?.text ?? '',
-          color: colorController ?? '',
-          category: categoryController ?? '',
+          color: colorController?.text ?? '',
+          category: categoryController?.text ?? '',
           isAvailable: toggleController ?? '',
-          location: locationController,
-          images: imageController ?? [],
+          location: locationController?.text,
+          images:
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           date: dateController ?? '',
         );
 
-        _submitFootWearForm(footwearItem, context);
+        _submitFootWearForm(footwearItem, context, onFormReset);
         break;
 
       default:
@@ -209,56 +233,85 @@ void handleFormSubmission({
 }
 
 void _submitDressForm(
-    DressModel dress, BuildContext context, String categoryName) {
+  DressModel dress,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   context.read<ProductBloc>().add(SubmitDressEvent(dress));
   log(dress.toString());
-  _showSuccessDialog(context);
+  _showSuccessDialog(
+    context,
+    onFormReset,
+  );
 }
 
 void _submitVenueForm(
-    VenueModel venue, BuildContext context, String categoryName) {
+  VenueModel venue,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   context.read<ProductBloc>().add(SubmitVenueEvent(venue));
   log(venue.toString());
-  _showSuccessDialog(context);
+  _showSuccessDialog(
+    context,
+    onFormReset,
+  );
 }
 
 void _submitCameraForm(
-    CameraModel camera, BuildContext context, String categoryName) {
+  CameraModel camera,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   context.read<ProductBloc>().add(SubmitCameraEvent(camera));
   log(camera.toString());
-  _showSuccessDialog(context);
+  _showSuccessDialog(context, onFormReset);
 }
 
 void _submitVehicleForm(
-    VehicleModel vehicle, BuildContext context, String categoryName) {
+  VehicleModel vehicle,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   context.read<ProductBloc>().add(SubmitVehicleEvent(vehicle));
   log("------------------------------");
   log(vehicle.toString());
   log("------------------------------");
 
-  _showSuccessDialog(context);
+  _showSuccessDialog(context, onFormReset);
 }
 
 void _submitDecorationForm(
-    DecorationItem decoration, BuildContext context, String categoryName) {
+  DecorationModel decoration,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   context.read<ProductBloc>().add(SubmitDecorationEvent(decoration));
   log(decoration.toString());
-  _showSuccessDialog(context);
+  _showSuccessDialog(context, onFormReset);
 }
 
-void _submitJewelryForm(JewelryModel jewelry, BuildContext context) {
+void _submitJewelryForm(
+  JewelryModel jewelry,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   context.read<ProductBloc>().add(SubmitJewelryEvent(jewelry));
   log(jewelry.toString());
-  _showSuccessDialog(context);
+  _showSuccessDialog(context, onFormReset);
 }
 
-void _submitFootWearForm(FootwearModel footwear, BuildContext context) {
+void _submitFootWearForm(
+  FootwearModel footwear,
+  BuildContext context,
+  VoidCallback onFormReset,
+) {
   log(footwear.toString());
-  _showSuccessDialog(context);
+  _showSuccessDialog(context, onFormReset);
   context.read<ProductBloc>().add(SubmitFootwearEvent(footwear));
 }
 
-void _showSuccessDialog(BuildContext context) {
+void _showSuccessDialog(BuildContext context, VoidCallback onFormReset) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -268,6 +321,7 @@ void _showSuccessDialog(BuildContext context) {
         TextButton(
           onPressed: () {
             context.pop();
+            onFormReset(); // Reset controllers here
           },
           child: const Text('OK'),
         ),

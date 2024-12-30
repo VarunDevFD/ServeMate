@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
@@ -12,7 +14,6 @@ import 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(ProductInitialState()) {
-    // Registering handlers for different events
     on<SubmitDressEvent>(_handleSubmitDressEvent);
     on<SubmitJewelryEvent>(_handleSubmitJewelryEvent);
     on<SubmitVenueEvent>(_handleSubmitVenueEvent);
@@ -62,7 +63,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     final addVehicleUseCase = serviceLocator<AddVehicleUseCase>();
     emit(ProductLoadingState());
     try {
+      log("----------------------------------------------");
       await addVehicleUseCase.execute(event.vehicle);
+     
+      log("----------------------------------------------");
+
       emit(ProductSuccessState());
     } catch (e) {
       emit(ProductErrorState(e.toString()));

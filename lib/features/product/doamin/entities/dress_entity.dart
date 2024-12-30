@@ -10,7 +10,7 @@ class DressEntity {
   final double price;
   final double security;
   final String condition;
-  final DateTime date;
+  final String date;
   final String location;
   final List<String> images;
   final String damage;

@@ -6,7 +6,7 @@ import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/drop
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_state.dart';
 
 class ReusableDropdown extends StatelessWidget {
-  final ValueChanged<String> onDataSelected;
+  final ValueChanged<TextEditingController> onDataSelected;
   final DropdownBloc bloc;
   final List items;
   final String hint;
@@ -53,8 +53,10 @@ class ReusableDropdown extends StatelessWidget {
           menuMaxHeight: 200,
           onChanged: (newValue) {
             if (newValue != null && newValue is String) {
-              bloc.add(DropdownValueChangedEvent(newValue));
-              onDataSelected(newValue);
+              TextEditingController controller =
+                  TextEditingController(text: newValue);
+              bloc.add(DropdownValueChangedEvent(controller.text));
+              onDataSelected(controller);
             }
           },
         );

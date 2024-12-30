@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
@@ -13,7 +15,7 @@ abstract class ProductRemoteDataSource {
   Future<void> addJewelry(JewelryModel jewelry);
   Future<void> addVenue(VenueModel venue);
   Future<void> addCamera(CameraModel camera);
-  Future<void> addDecoration(DecorationItem decoration);
+  Future<void> addDecoration(DecorationModel decoration);
   Future<void> addVehicle(VehicleModel vehicle);
   Future<void> addFootwear(FootwearModel footwear);
 }
@@ -70,7 +72,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<void> addDecoration(DecorationItem decoration) async {
+  Future<void> addDecoration(DecorationModel decoration) async {
     await _addToFirestore(
       collectionName: 'decoration',
       model: decoration,
@@ -85,6 +87,13 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       model: vehicle,
       toMap: (model) => model.toJson(),
     );
+    // try {
+    //   await _firebaseFirestore
+    //       .collection('vehicle')
+    //       .add({'brand': vehicle.brand, 'images': vehicle.image});
+    // } catch (e) {
+    //   throw Exception('Failed to add product to: $e');
+    // }
   }
 
   @override

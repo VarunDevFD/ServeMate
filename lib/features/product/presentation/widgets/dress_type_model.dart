@@ -4,10 +4,13 @@ import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/drop
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 
 class DressTypeAndModel extends StatelessWidget {
-  final ValueChanged<String> onTypeSelected;
-  final ValueChanged<String> onModelSelected;
-  const DressTypeAndModel(
-      {super.key, required this.onModelSelected, required this.onTypeSelected});
+  final ValueChanged<TextEditingController> onTypeSelected;
+  final ValueChanged<TextEditingController> onModelSelected;
+  const DressTypeAndModel({
+    super.key,
+    required this.onModelSelected,
+    required this.onTypeSelected,
+  });
 
   @override
   Widget build(BuildContext context) {

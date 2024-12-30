@@ -3,7 +3,7 @@ class DecorationEntity {
   final double rentalPrice;
   final double securityDeposit;
   final String location;
-  final List<String> imageUrls;
+  final List<String> images;
   final String description;
   final List<String> selectedFacilitiesFirst;
   final List<String> selectedFacilitiesSecond;
@@ -14,7 +14,7 @@ class DecorationEntity {
     required this.rentalPrice,
     required this.securityDeposit,
     required this.location,
-    required this.imageUrls,
+    required this.images,
     required this.description,
     required this.selectedFacilitiesFirst,
     required this.selectedFacilitiesSecond,

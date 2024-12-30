@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
@@ -22,12 +24,12 @@ class VenueForm extends StatelessWidget {
   final TextEditingController phoneController;
   final TextEditingController emailController;
 
-  final Function(String?) locationController;
-  final Function(String?) onDurationSelected;
-  final Function(String?) onTypeSelected;
+  final Function(TextEditingController?) locationController;
+  final Function(TextEditingController?) onDurationSelected;
+  final Function(TextEditingController?) onTypeSelected;
   final Function(String?) dateController;
-  final Function(List<String>?) onImageSelected;
-  final void Function(String) selectedFacilities;
+  final Function(List<TextEditingController>?) onImageSelected;
+  final void Function(TextEditingController) selectedFacilities;
 
   const VenueForm({
     super.key,
@@ -186,10 +188,18 @@ class VenueForm extends StatelessWidget {
           _buildSection(
             title: 'Images',
             child: ImagePickerFormField(
-              onSaved: onImageSelected,
-              validator: (images) => images == null || images.isEmpty
-                  ? 'Please select at least one image.'
-                  : null,
+              onSaved: (images) {
+                // Save the list of TextEditingControllers (image paths)
+                for (var controller in images ?? []) {
+                  log('Image path: ${controller.text}');
+                }
+              },
+              validator: (images) {
+                if (images == null || images.isEmpty) {
+                  return 'Please pick at least one image.';
+                }
+                return null;
+              },
             ),
           ),
           _buildSection(

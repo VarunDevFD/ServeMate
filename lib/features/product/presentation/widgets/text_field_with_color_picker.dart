@@ -12,7 +12,7 @@ import 'color_picker_widget.dart';
 
 class TextFieldWithColorPicker extends StatelessWidget {
   final String hint;
-  final ValueChanged<String> onColorSelected;
+  final ValueChanged<TextEditingController?> onColorSelected;
 
   const TextFieldWithColorPicker(
       {super.key, required this.hint, required this.onColorSelected});
@@ -31,8 +31,12 @@ class TextFieldWithColorPicker extends StatelessWidget {
             onChanged: (text) {
               final color = getColorByName(text);
               if (color != null) {
-                context.read<DressFormBloc>().add(ColorChanged(color, text));
-                onColorSelected(text);
+                TextEditingController controller =
+                    TextEditingController(text: text);
+                context
+                    .read<DressFormBloc>()
+                    .add(ColorChanged(color, controller.text));
+                onColorSelected(controller);
               }
             },
             decoration: InputDecorations.defaultDecoration(

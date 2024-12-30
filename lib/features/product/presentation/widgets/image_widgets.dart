@@ -1,175 +1,123 @@
-import 'dart:io';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 
-class ImagePickerFormField extends StatelessWidget {
-  final void Function(List<String>?) onSaved;
-  final String? Function(List<String>?) validator;
-
-  const ImagePickerFormField({
+class ImagePickerFormField extends FormField<List<TextEditingController>> {
+  ImagePickerFormField({
     Key? key,
-    required this.onSaved,
-    required this.validator,
-  }) : super(key: key);
-
-  // Function to pick an image from camera or gallery
-  Future<void> pickImage(
-    BuildContext context,
-    ImageSource source,
-    ImageBloc imageBloc,
-  ) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      // Add picked image to Bloc
-      imageBloc.add(AddImageEvent(pickedFile.path));
-
-      // Show success snack bar
-      Future.delayed(Duration.zero, () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Image selected from ${source == ImageSource.camera ? 'Camera' : 'Gallery'}',
-            ),
-          ),
-        );
-      });
-    } else {
-      // Show failure snack bar
-      Future.delayed(Duration.zero, () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No image selected')),
-        );
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ImageBloc(),
-      child: BlocBuilder<ImageBloc, ImageState>(
-        builder: (context, state) {
-          final imageBloc = context.read<ImageBloc>();
-          final List<String> images =
-              state is ImageLoadedState ? state.images : [];
-
-          return FormField<List<String>>(
-            onSaved: (value) => onSaved(images),
-            validator: (value) {
-              // Check if the images list is empty
-              if (images.isEmpty) {
-                return 'Please select at least one image';
-              }
-              return null;
-            },
-            builder: (fieldState) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Add Image Button
-                  ElevatedButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(16.0),
+    FormFieldSetter<List<TextEditingController>>? onSaved,
+    FormFieldValidator<List<TextEditingController>>? validator,
+    List<TextEditingController>? initialValue,
+    AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
+  }) : super(
+          key: key,
+          onSaved: onSaved,
+          validator: validator,
+          initialValue: initialValue ?? [],
+          autovalidateMode: autovalidateMode,
+          builder: (FormFieldState<List<TextEditingController>> state) {
+            // List<String> imagesPaths = [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ...state.value!.map((controller) {
+                      final imagePath = controller.text;
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: imagePath.isEmpty
+                                    ? const AssetImage(
+                                        'assets/placeholder_image.png',
+                                      ) as ImageProvider
+                                    : FileImage(File(imagePath)),
+                              ),
+                            ),
                           ),
-                        ),
-                        builder: (context) => Wrap(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.camera_alt),
-                              title: const Text('Camera'),
+                          Positioned(
+                            top: -10,
+                            right: -10,
+                            child: GestureDetector(
                               onTap: () {
-                                pickImage(
-                                    context, ImageSource.camera, imageBloc);
-                                Navigator.pop(context);
+                                state.value!.remove(controller);
+                                state.didChange(state.value);
                               },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.photo_library),
-                              title: const Text('Gallery'),
-                              onTap: () {
-                                pickImage(
-                                    context, ImageSource.gallery, imageBloc);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: const Text('Pick Images'),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Display selected images
-                  if (images.isNotEmpty)
-                    Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
-                      children: images.map((imagePath) {
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            // Image Preview
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(
-                                  image: FileImage(File(imagePath)),
-                                  fit: BoxFit.cover,
+                              child: const CircleAvatar(
+                                radius: 12,
+                                backgroundColor: Colors.red,
+                                child: Icon(
+                                  Icons.close,
+                                  size: 16,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
-
-                            // Remove Button
-                            Positioned(
-                              top: -8,
-                              right: -8,
-                              child: IconButton(
-                                icon: Icon(Icons.highlight_remove,
-                                    color: AppColors.red),
-                                onPressed: () {
-                                  imageBloc.add(RemoveImageEvent(
-                                      images.indexOf(imagePath)));
-                                },
-                              ),
-                            ),
-                          ],
+                          ),
+                        ],
+                      );
+                    }),
+                    GestureDetector(
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final pickedFile = await picker.pickImage(
+                          source: ImageSource.gallery,
                         );
-                      }).toList(),
-                    )
-                  else
-                    const Text(
-                      'No images selected',
-                      style: TextStyle(color: AppColors.grey),
-                    ),
+                        if (pickedFile != null) {
+                          final controller = TextEditingController(
+                            text: pickedFile.path,
+                          );
 
-                  // Validation error
-                  if (fieldState.hasError)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        fieldState.errorText ?? '',
-                        style: const TextStyle(color: AppColors.error),
+                          state.value!.add(controller);
+                          // imagesPaths.add(pickedFile.path);
+                          // log(imagesPaths.toString());
+                          state.didChange(state.value);
+                        }
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.add_a_photo,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
-                ],
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
+                  ],
+                ),
+                if (state.hasError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      state.errorText ?? '',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
+        );
 }

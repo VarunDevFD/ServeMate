@@ -10,7 +10,7 @@ import '../bloc/dress_bloc/dress_event.dart';
 import '../bloc/dress_bloc/dress_state.dart';
 
 class CustomGenderWidget extends StatelessWidget {
-  final ValueChanged<String> onGenderSelected;
+  final ValueChanged<TextEditingController> onGenderSelected;
   const CustomGenderWidget({super.key, required this.onGenderSelected});
 
   @override
@@ -29,8 +29,11 @@ class CustomGenderWidget extends StatelessWidget {
                   groupValue: state.selectedGender,
                   activeColor: AppColors.primary,
                   onChanged: (value) {
-                    context.read<DressFormBloc>().add(GenderSelected(value!));
-                    onGenderSelected(value);
+                    final controller = TextEditingController(text: value);
+                    context
+                        .read<DressFormBloc>()
+                        .add(GenderSelected(controller.text));
+                    onGenderSelected(controller);
                   },
                   secondary: Icon(Icons.man_2_rounded,
                       color: state.selectedGender == 'Men'
@@ -45,8 +48,10 @@ class CustomGenderWidget extends StatelessWidget {
                   groupValue: state.selectedGender,
                   activeColor: AppColors.primary,
                   onChanged: (value) {
-                    context.read<DressFormBloc>().add(GenderSelected(value!));
-                    onGenderSelected(value);
+                    final controller = TextEditingController(text: value);
+
+                    context.read<DressFormBloc>().add(GenderSelected(controller.text));
+                    onGenderSelected(controller);
                   },
                   secondary: Icon(Icons.girl_rounded,
                       color: state.selectedGender == 'Girls'
