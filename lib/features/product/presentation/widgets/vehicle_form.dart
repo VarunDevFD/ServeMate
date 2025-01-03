@@ -239,16 +239,6 @@ class VehicleForm extends StatelessWidget {
             title: 'Images',
             child: ImagePickerFormField(
               onSaved: onImageSelected,
-              //  (images) {
-              //   // Save the list of TextEditingControllers (image paths)
-              //   List<String> imagesPaths = [];
-              //   for (var controller in images ?? []) {
-              //     log('Image path ithan moyntygheee: ${controller.text}');
-              //     imagesPaths.add(controller.text);
-              //   }
-              //   // final value = onImageSelected;
-                
-              // },
               validator: (images) {
                 if (images == null || images.isEmpty) {
                   return 'Please pick at least one image.';

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/features/authentication/presentation/widgets/loading_animation_widget.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
@@ -31,7 +32,7 @@ void handleFormSubmission({
   List<TextEditingController>? facilitiesVenue2,
   TextEditingController? fuelController,
   TextEditingController? genderController,
-  List<TextEditingController>? imageController,
+  List<String>? imageController,
   TextEditingController? locationController,
   TextEditingController? materialController,
   TextEditingController? modelController,
@@ -51,6 +52,7 @@ void handleFormSubmission({
   // Validate the form
   if (formKey.currentState?.validate() ?? false) {
     formKey.currentState?.save();
+    log("****************${imageController.toString()}***********************");
 
     // Switch case to handle different categories
     switch (categoryName) {
@@ -70,12 +72,17 @@ void handleFormSubmission({
           date: dateController ?? '',
           location: locationController?.text ?? '',
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
           damage: damageController?.text ?? '',
           description: descriptionController?.text ?? '',
         );
-        _submitDressForm(dress, context, onFormReset);
+        // _showLoadingIndicator(context);
+
+        Future.delayed(const Duration(seconds: 3), () {
+          // After 3 seconds, hide the loading indicator and show success dialog
+          Navigator.of(context).pop(); // Pop the loading indicator
+        });
+        _showSuccessDialogDress(context, onFormReset, dress);
         break;
 
       case 'Venue':
@@ -89,8 +96,7 @@ void handleFormSubmission({
           duration: durationController?.text ?? '',
           date: dateController ?? '',
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
           facilities:
               facilitiesVenue?.map((controller) => controller.text).toList() ??
                   [],
@@ -99,7 +105,7 @@ void handleFormSubmission({
                   [],
           description: descriptionController?.text ?? '',
         );
-        _submitVenueForm(venue, context, onFormReset);
+        _showSuccessDialogVenue(context, onFormReset, venue);
         break;
 
       case 'Cameras':
@@ -109,8 +115,7 @@ void handleFormSubmission({
           securityDeposit: securityController ?? 0.0,
           location: locationController?.text ?? '',
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
           notes: descriptionController?.text ?? '',
           equipmentType: typeController?.text ?? '',
           brandModel: brandController?.text ?? '',
@@ -121,8 +126,7 @@ void handleFormSubmission({
                   [],
           damage: damageController?.text ?? '',
         );
-
-        _submitCameraForm(camera, context, onFormReset);
+        _showSuccessDialogCamera(context, onFormReset, camera);
         break;
 
       case 'Vehicles':
@@ -142,14 +146,21 @@ void handleFormSubmission({
               facilitiesVenue?.map((controller) => controller.text).toList() ??
                   [],
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
           date: dateController ?? '',
           location: locationController?.text ?? '',
           toggleOption: toggleController ?? '',
           description: descriptionController?.text ?? '',
         );
-        _submitVehicleForm(vehicle, context, onFormReset);
+        _showLoadingIndicator(context);
+
+        Future.delayed(const Duration(seconds: 5), () {
+          LoadingDialog.show(context);
+        });
+        LoadingDialog.hide(context);
+
+        _showSuccessDialogVehicle(context, onFormReset, vehicle);
+
         break;
 
       case 'Decoration':
@@ -161,8 +172,7 @@ void handleFormSubmission({
           rentalPrice: priceController ?? 0.0,
           securityDeposit: securityController ?? 0.0,
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
           selectedFacilitiesSecond:
               facilitiesVenue2?.map((controller) => controller.text).toList() ??
                   [],
@@ -170,8 +180,7 @@ void handleFormSubmission({
           location: locationController?.text ?? '',
           description: descriptionController?.text ?? '',
         );
-
-        _submitDecorationForm(decorationItem, context, onFormReset);
+        _showSuccessDialogDecoration(context, onFormReset, decorationItem);
         break;
 
       case 'Jewelry':
@@ -191,12 +200,11 @@ void handleFormSubmission({
           dateAdded: dateController ?? '',
           location: locationController?.text ?? '',
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
         );
-
-        _submitJewelryForm(jewelryItem, context, onFormReset);
+        _showSuccessDialogJewelry(context, onFormReset, jewelryItem);
         break;
+
       case 'Footwear':
         final footwearItem = FootwearModel(
           name: nameController?.text ?? '',
@@ -211,12 +219,10 @@ void handleFormSubmission({
           isAvailable: toggleController ?? '',
           location: locationController?.text,
           images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
+              imageController?.map((controller) => controller).toList() ?? [],
           date: dateController ?? '',
         );
-
-        _submitFootWearForm(footwearItem, context, onFormReset);
+        _showSuccessDialogFootwear(context, onFormReset, footwearItem);
         break;
 
       default:
@@ -232,100 +238,250 @@ void handleFormSubmission({
   }
 }
 
-void _submitDressForm(
-  DressModel dress,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  context.read<ProductBloc>().add(SubmitDressEvent(dress));
-  log(dress.toString());
-  _showSuccessDialog(
-    context,
-    onFormReset,
-  );
-}
-
-void _submitVenueForm(
-  VenueModel venue,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  context.read<ProductBloc>().add(SubmitVenueEvent(venue));
-  log(venue.toString());
-  _showSuccessDialog(
-    context,
-    onFormReset,
-  );
-}
-
-void _submitCameraForm(
-  CameraModel camera,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  context.read<ProductBloc>().add(SubmitCameraEvent(camera));
-  log(camera.toString());
-  _showSuccessDialog(context, onFormReset);
-}
-
-void _submitVehicleForm(
-  VehicleModel vehicle,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  context.read<ProductBloc>().add(SubmitVehicleEvent(vehicle));
-  log("------------------------------");
-  log(vehicle.toString());
-  log("------------------------------");
-
-  _showSuccessDialog(context, onFormReset);
-}
-
-void _submitDecorationForm(
-  DecorationModel decoration,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  context.read<ProductBloc>().add(SubmitDecorationEvent(decoration));
-  log(decoration.toString());
-  _showSuccessDialog(context, onFormReset);
-}
-
-void _submitJewelryForm(
-  JewelryModel jewelry,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  context.read<ProductBloc>().add(SubmitJewelryEvent(jewelry));
-  log(jewelry.toString());
-  _showSuccessDialog(context, onFormReset);
-}
-
-void _submitFootWearForm(
-  FootwearModel footwear,
-  BuildContext context,
-  VoidCallback onFormReset,
-) {
-  log(footwear.toString());
-  _showSuccessDialog(context, onFormReset);
-  context.read<ProductBloc>().add(SubmitFootwearEvent(footwear));
-}
-
-void _showSuccessDialog(BuildContext context, VoidCallback onFormReset) {
+void _showLoadingIndicator(BuildContext context) {
   showDialog(
     context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Success'),
-      content: const Text('Form submitted successfully!'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            context.pop();
-            onFormReset(); // Reset controllers here
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    ),
+    barrierDismissible:
+        false, // Prevents the dialog from being dismissed by tapping outside
+    builder: (context) {
+      return const Center(
+        child: CircularProgressIndicator(), // Loading indicator
+      );
+    },
   );
 }
+
+void _showSuccessDialogDress(
+  BuildContext context,
+  VoidCallback onFormReset,
+  DressModel dress,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Dress form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(SubmitDressEvent(dress));
+              context.pop();
+
+              onFormReset();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSuccessDialogVenue(
+  BuildContext context,
+  VoidCallback onFormReset,
+  VenueModel venue,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Venue form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(SubmitVenueEvent(venue));
+              context.pop();
+              onFormReset();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSuccessDialogCamera(
+  BuildContext context,
+  VoidCallback onFormReset,
+  CameraModel camera,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Camera form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(SubmitCameraEvent(camera));
+              context.pop();
+              onFormReset();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSuccessDialogVehicle(
+  BuildContext context,
+  VoidCallback onFormReset,
+  VehicleModel vehicle,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Vehicle form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(SubmitVehicleEvent(vehicle));
+              LoadingDialog.show(context);
+              context.pop();
+              onFormReset();
+              LoadingDialog.hide(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+void _showSuccessDialogDecoration(
+  BuildContext context,
+  VoidCallback onFormReset,
+  DecorationModel decoration,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Decoration form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context
+                  .read<ProductBloc>()
+                  .add(SubmitDecorationEvent(decoration));
+              context.pop();
+              onFormReset();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSuccessDialogJewelry(
+  BuildContext context,
+  VoidCallback onFormReset,
+  JewelryModel jewelry,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Jewelry form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(SubmitJewelryEvent(jewelry));
+              context.pop();
+              onFormReset();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSuccessDialogFootwear(
+  BuildContext context,
+  VoidCallback onFormReset,
+  FootwearModel footWear,
+) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Footwear form submitted successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<ProductBloc>().add(SubmitFootwearEvent(footWear));
+
+              context.pop();
+              onFormReset();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+/*
+
+// void _submitDressForm(
+//   DressModel dress,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogDress(context, onFormReset, dress);
+
+// void _submitVenueForm(
+//   VenueModel venue,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogVenue(context, onFormReset, venue);
+
+// void _submitCameraForm(
+//   CameraModel camera,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogCamera(context, onFormReset, camera);
+
+// void _submitVehicleForm(
+//   VehicleModel vehicle,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogVehicle(context, onFormReset, vehicle);
+
+// void _submitDecorationForm(
+//   DecorationModel decorationItem,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogDecoration(context, onFormReset, decorationItem);
+
+// void _submitJewelryForm(
+//   JewelryModel jewelryItem,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogJewelry(context, onFormReset, jewelryItem);
+
+// void _submitFootWearForm(
+//   FootwearModel footwearItem,
+//   BuildContext context,
+//   VoidCallback onFormReset,
+// ) =>
+//     _showSuccessDialogFootwear(context, onFormReset, footwearItem);
+*/
+

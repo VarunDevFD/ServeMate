@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/splash_bloc.dart';
 import 'package:serve_mate/features/product/data/repository/product_repo.dart';
+import 'package:serve_mate/features/product/presentation/bloc/animation_bloc/animation_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
@@ -41,7 +42,8 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => DateBloc()),
         BlocProvider(create: (_) => VenueFormBloc()),
         BlocProvider(create: (_) => TabTogglCubit()),
-        BlocProvider(create: (_) => ProductBloc())
+        BlocProvider(create: (_) => ProductBloc()),
+        BlocProvider(create: (_) => SearchBarBloc()),
       ],
       child: child,
     );

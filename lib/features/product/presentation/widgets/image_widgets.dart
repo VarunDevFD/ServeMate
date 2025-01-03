@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 
 class ImagePickerFormField extends FormField<List<TextEditingController>> {
   ImagePickerFormField({
@@ -18,7 +18,6 @@ class ImagePickerFormField extends FormField<List<TextEditingController>> {
           initialValue: initialValue ?? [],
           autovalidateMode: autovalidateMode,
           builder: (FormFieldState<List<TextEditingController>> state) {
-            // List<String> imagesPaths = [];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -32,8 +31,8 @@ class ImagePickerFormField extends FormField<List<TextEditingController>> {
                         clipBehavior: Clip.none,
                         children: [
                           Container(
-                            width: 100,
-                            height: 100,
+                            width: 100.w,
+                            height: 100.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               image: DecorationImage(
@@ -54,13 +53,13 @@ class ImagePickerFormField extends FormField<List<TextEditingController>> {
                                 state.value!.remove(controller);
                                 state.didChange(state.value);
                               },
-                              child: const CircleAvatar(
-                                radius: 12,
-                                backgroundColor: Colors.red,
+                              child: CircleAvatar(
+                                radius: 12.r,
+                                backgroundColor: AppColors.red,
                                 child: Icon(
                                   Icons.close,
-                                  size: 16,
-                                  color: Colors.white,
+                                  size: 16.sp,
+                                  color: AppColors.white,
                                 ),
                               ),
                             ),
@@ -80,25 +79,24 @@ class ImagePickerFormField extends FormField<List<TextEditingController>> {
                           );
 
                           state.value!.add(controller);
-                          // imagesPaths.add(pickedFile.path);
-                          // log(imagesPaths.toString());
+                         
                           state.didChange(state.value);
                         }
                       },
                       child: Container(
-                        width: 100,
-                        height: 100,
+                        width: 100.w,
+                        height: 100.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
+                            color: AppColors.grey,
+                            width: 1.w,
                           ),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.add_a_photo,
-                            color: Colors.grey,
+                            color: AppColors.grey,
                           ),
                         ),
                       ),
@@ -107,12 +105,12 @@ class ImagePickerFormField extends FormField<List<TextEditingController>> {
                 ),
                 if (state.hasError)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: EdgeInsets.only(top: 8.h),
                     child: Text(
                       state.errorText ?? '',
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
+                      style: TextStyle(
+                        color: AppColors.red,
+                        fontSize: 12.sp,
                       ),
                     ),
                   ),

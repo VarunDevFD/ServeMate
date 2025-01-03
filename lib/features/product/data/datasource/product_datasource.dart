@@ -87,13 +87,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       model: vehicle,
       toMap: (model) => model.toJson(),
     );
-    // try {
-    //   await _firebaseFirestore
-    //       .collection('vehicle')
-    //       .add({'brand': vehicle.brand, 'images': vehicle.image});
-    // } catch (e) {
-    //   throw Exception('Failed to add product to: $e');
-    // }
+    
   }
 
   @override
