@@ -188,7 +188,10 @@ class CameraVideographyForm extends StatelessWidget {
         _buildSection(
           title: 'Pickup/Location Option',
           child: buildLocationTextField(
-              context, 'Enter Location', locationController),
+            context: context,
+            hint: 'Current Place',
+            locationController: locationController,
+          ),
         ),
         _buildSection(
           title: 'Damage policy',

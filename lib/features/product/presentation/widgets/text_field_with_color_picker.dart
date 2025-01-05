@@ -22,6 +22,7 @@ class TextFieldWithColorPicker extends StatelessWidget {
     return BlocBuilder<DressFormBloc, DressFormState>(
       builder: (context, state) {
         final controller = TextEditingController(text: state.colorName);
+        final color = getColorByName(controller.text);
 
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0.h),
@@ -36,7 +37,6 @@ class TextFieldWithColorPicker extends StatelessWidget {
                 context
                     .read<DressFormBloc>()
                     .add(ColorChanged(color, controller.text));
-                onColorSelected(controller);
               }
             },
             decoration: InputDecorations.defaultDecoration(
@@ -45,6 +45,19 @@ class TextFieldWithColorPicker extends StatelessWidget {
                 child: const ColorPickerWidget(),
               ),
             ),
+            validator: (value) {
+              if (value == null ||
+                  value.isEmpty ||
+                  value == "Choose the Color") {
+                return "Please choose a color.";
+              }
+              if (color == null) {
+                return "Please enter the valid Color Name";
+              } else {
+                onColorSelected(controller);
+              }
+              return null;
+            },
           ),
         );
       },

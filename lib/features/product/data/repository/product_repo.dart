@@ -82,4 +82,93 @@ class ProductRepositoryImpl implements ProductRepository {
       throw Exception('Failed to add decoration: $e');
     }
   }
+
+  // Fetch methods for each entity
+  @override
+  Future<List<DressModel>> fetchDresses() async {
+    try {
+      final dresses = await remoteDataSource.fetchDresses();
+      return dresses
+          .map((dress) => DressModel.fromMap(dress as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch dresses: $e');
+    }
+  }
+
+  @override
+  Future<List<JewelryModel>> fetchJewelry() async {
+    try {
+      final jewelry = await remoteDataSource.fetchJewelry();
+      return jewelry
+          .map((jewelryItem) =>
+              JewelryModel.fromJson(jewelryItem as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch jewelry: $e');
+    }
+  }
+
+  @override
+  Future<List<VenueModel>> fetchVenues() async {
+    try {
+      final venues = await remoteDataSource.fetchVenues();
+      return venues
+          .map((venue) => VenueModel.fromMap(venue as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch venues: $e');
+    }
+  }
+
+  @override
+  Future<List<CameraModel>> fetchCameras() async {
+    try {
+      final cameras = await remoteDataSource.fetchCameras();
+      return cameras
+          .map((camera) => CameraModel.fromMap(camera as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch cameras: $e');
+    }
+  }
+
+  @override
+  Future<List<DecorationModel>> fetchDecorations() async {
+    try {
+      final decorations = await remoteDataSource.fetchDecorations();
+      return decorations
+          .map((decoration) =>
+              DecorationModel.fromMap(decoration as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch decorations: $e');
+    }
+  }
+
+  @override
+  Future<List<VehicleModel>> fetchVehicles() async {
+    try {
+      final vehicles = await remoteDataSource.fetchVehicles();
+      return vehicles
+          .map((vehicle) =>
+              VehicleModel.fromJson(vehicle as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch vehicles: $e');
+    }
+  }
+
+  @override
+  Future<List<FootwearModel>> fetchFootwear() async {
+    try {
+      final footwear = await remoteDataSource.fetchFootwear();
+      return footwear
+          .map((footwearItem) =>
+              FootwearModel.fromJson(footwearItem as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch footwear: $e');
+    }
+  }
 }

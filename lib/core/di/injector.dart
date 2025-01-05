@@ -114,7 +114,7 @@ Future<void> init() async {
   );
 
   //--------------------Product-------------------------------------------------
-  
+
   //--------------------Data Sources--------------------
   serviceLocator.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(),
@@ -128,28 +128,26 @@ Future<void> init() async {
   );
 
   // Dress Usecase
-  serviceLocator.registerLazySingleton<AddDressUseCase>(
-      () => AddDressUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<DressUseCase>(
+      () => DressUseCase(serviceLocator<ProductRepository>()));
 
   // Jewelry Usecase
-  serviceLocator.registerLazySingleton<AddJewelryUseCase>(
-      () => AddJewelryUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<JewelryUseCase>(
+      () => JewelryUseCase(serviceLocator<ProductRepository>()));
 
   // Venue Usecase
-  serviceLocator.registerLazySingleton<AddVenueUseCase>(
-      () => AddVenueUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<VenueUseCase>(
+      () => VenueUseCase(serviceLocator<ProductRepository>()));
 
   // Vehicle Usecase
-  serviceLocator.registerLazySingleton<AddVehicleUseCase>(
-      () => AddVehicleUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<VehicleUseCase>(
+      () => VehicleUseCase(serviceLocator<ProductRepository>()));
 
   // Camera Usecase
-  serviceLocator.registerLazySingleton<AddCameraUseCase>(
-      () => AddCameraUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<CameraUseCase>(
+      () => CameraUseCase(serviceLocator<ProductRepository>()));
 
   // Decoration Usecase
-  serviceLocator.registerLazySingleton<AddDecorationUseCase>(
-      () => AddDecorationUseCase(serviceLocator<ProductRepository>()));
-
-  
+  serviceLocator.registerLazySingleton<DecorationUseCase>(
+      () => DecorationUseCase(serviceLocator<ProductRepository>()));
 }

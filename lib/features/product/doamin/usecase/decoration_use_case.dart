@@ -1,12 +1,16 @@
 import 'package:serve_mate/features/product/doamin/entities/decoration_entity.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
-class AddDecorationUseCase {
+class DecorationUseCase {
   final ProductRepository repository;
 
-  AddDecorationUseCase(this.repository);
+  DecorationUseCase(this.repository);
 
   Future<void> execute(DecorationEntity decorationEntity) async {
     return await repository.addDecoration(decorationEntity);
+  }
+
+  Future<List<DecorationEntity>> fetchDecorations() async {
+    return await repository.fetchDecorations();
   }
 }

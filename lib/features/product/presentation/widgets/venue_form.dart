@@ -59,6 +59,7 @@ class VenueForm extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.all(16.r),
         children: [
+          // Name
           _buildSection(
             title: 'Venue Name',
             child: CustomTextField(
@@ -71,10 +72,14 @@ class VenueForm extends StatelessWidget {
                   : null,
             ),
           ),
+          // 
           _buildSection(
             title: 'Location',
             child: buildLocationTextField(
-                context, 'Enter Location', locationController),
+              context: context,
+              hint: 'Current Place',
+              locationController: locationController,
+            ),
           ),
           _buildSection(
             title: 'Venue Capacity',

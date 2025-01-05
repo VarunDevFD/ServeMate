@@ -137,7 +137,11 @@ class DecorationForm extends StatelessWidget {
           _buildSection(
             title: 'Location',
             child: buildLocationTextField(
-                context, 'Enter Location', locationController),
+              context: context,
+              hint: 'Current Place',
+              locationController: locationController,
+              
+            ),
           ),
           // Description
           _buildSection(

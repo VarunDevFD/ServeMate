@@ -161,7 +161,11 @@ class FootwearForm extends StatelessWidget {
           _buildSection(
             title: 'Location',
             child: buildLocationTextField(
-                context, 'Enter Location', locationController),
+              context: context,
+              hint: 'Current Place',
+              locationController: locationController,
+              
+            ),
           ),
           // Date
           _buildSection(
@@ -176,7 +180,7 @@ class FootwearForm extends StatelessWidget {
               onSaved: (images) {
                 // Save the list of TextEditingControllers (image paths)
                 for (var controller in images ?? []) {
-                  print('Image path: ${controller.text}');
+                  log('Image path: ${controller.text}');
                 }
               },
               validator: (images) {

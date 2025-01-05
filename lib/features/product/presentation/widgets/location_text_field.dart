@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Add this for Bloc
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/theme/input_decoration.dart';
@@ -7,22 +7,25 @@ import 'package:serve_mate/features/product/presentation/bloc/location_bloc/loca
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 
-Widget buildLocationTextField(BuildContext context, String hint,
-    Function(TextEditingController? controller) locationController) {
+Widget buildLocationTextField({
+  required BuildContext context,
+  required String hint,
+  required Function(TextEditingController? controller) locationController,
+}) {
   return Padding(
     padding: EdgeInsets.only(top: 8.h),
     child: BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
-        TextEditingController controller = TextEditingController();
+        // Create the TextEditingController and update it when location changes
+        TextEditingController controller = TextEditingController(
+          text: state.placeName ?? "", // Default text from state
+        );
+
         return TextFormField(
-          controller: locationController(controller),
+          controller: controller,
           cursorColor: AppColors.balck1,
           decoration: InputDecorations.defaultDecoration(
-            // Display place name if available, otherwise show the default hint
             hintText: hint,
-            labelText: state.placeName!.isNotEmpty
-                ? state.placeName
-                : (state.currentLocation ?? hint),
             suffixIcon: IconButton(
               icon: const Icon(Icons.location_on),
               onPressed: () {
@@ -30,9 +33,25 @@ Widget buildLocationTextField(BuildContext context, String hint,
                     .add(FetchCurrentLocation());
               },
             ),
-            errorText: state.locationError,
+            errorText: state.locationError, // Show error if present
           ),
-          readOnly: true, // The text field is read-only
+          readOnly: true, //Allow user interaction
+          onChanged: (value) {
+            locationController(controller); // Update external controller
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty || value == hint) {
+              BlocProvider.of<LocationBloc>(context).add(
+                LocationValidationFailed("Please Choose the Location"),
+              );
+              return "Please Choose the Location";
+            }
+
+            BlocProvider.of<LocationBloc>(context)
+                .add(LocationValidationCleared());
+            locationController(controller); // Update  with valid input
+            return null;
+          },
         );
       },
     ),

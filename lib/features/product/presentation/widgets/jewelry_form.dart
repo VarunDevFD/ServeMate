@@ -208,7 +208,11 @@ class JewelryForm extends StatelessWidget {
           _buildSection(
             title: 'Location',
             child: buildLocationTextField(
-                context, 'Enter Location', locationController),
+              context: context,
+              hint: 'Current Place',
+              locationController: locationController,
+              
+            ),
           ),
           // Date
           _buildSection(

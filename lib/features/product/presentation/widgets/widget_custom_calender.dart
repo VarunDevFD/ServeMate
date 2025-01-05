@@ -93,6 +93,7 @@ class CalendarPickerWidget extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Please select a date';
                 }
+                onDateSelected(controller.text);
                 return null;
               },
             )

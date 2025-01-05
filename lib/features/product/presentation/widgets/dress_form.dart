@@ -191,7 +191,12 @@ class DressForm extends StatelessWidget {
           // Location Side Head
           const CustomSideHeadText(title: 'Location'),
           // Location Field
-          buildLocationTextField(context, 'Enter Location', locationController),
+          buildLocationTextField(
+            context: context,
+            hint: 'Current Place',
+            locationController: locationController,
+            
+          ),
           // Image Side Head
           const CustomSideHeadText(title: 'Images'),
           // Image Field

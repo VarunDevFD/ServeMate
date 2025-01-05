@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
@@ -18,11 +16,21 @@ abstract class ProductRemoteDataSource {
   Future<void> addDecoration(DecorationModel decoration);
   Future<void> addVehicle(VehicleModel vehicle);
   Future<void> addFootwear(FootwearModel footwear);
+
+  // Fetch methods
+  Future<List<DressModel>> fetchDresses();
+  Future<List<JewelryModel>> fetchJewelry();
+  Future<List<VenueModel>> fetchVenues();
+  Future<List<CameraModel>> fetchCameras();
+  Future<List<DecorationModel>> fetchDecorations();
+  Future<List<VehicleModel>> fetchVehicles();
+  Future<List<FootwearModel>> fetchFootwear();
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final _firebaseFirestore = serviceLocator<FirebaseFirestore>();
 
+  // Function to add data to Firestore
   Future<void> _addToFirestore<T>({
     required String collectionName,
     required T model,
@@ -83,11 +91,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<void> addVehicle(VehicleModel vehicle) async {
     await _addToFirestore(
-      collectionName: 'vehicle',
+      collectionName: 'Vehicles',
       model: vehicle,
       toMap: (model) => model.toJson(),
     );
-    
   }
 
   @override
@@ -96,6 +103,76 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       collectionName: 'footwear',
       model: footwear,
       toMap: (model) => model.toJson(),
+    );
+  }
+
+  // Function to fetch data from Firestore
+  Future<List<T>> fetchFromFirestoore<T>({
+    required String collectionName,
+    required T Function(Map<String, dynamic>) fromMap,
+  }) async {
+    try {
+      final snapshot = await _firebaseFirestore.collection(collectionName).get();
+      return snapshot.docs.map((doc) => fromMap(doc.data())).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch data from $collectionName: $e');
+    }
+  }
+
+  // Fetch methods for different collections
+  @override
+  Future<List<DressModel>> fetchDresses() async {
+    return await fetchFromFirestoore<DressModel>(
+      collectionName: 'dresses',
+      fromMap: (map) => DressModel.fromMap(map),
+    );
+  }
+
+  @override
+  Future<List<JewelryModel>> fetchJewelry() async {
+    return await fetchFromFirestoore<JewelryModel>(
+      collectionName: 'jewelry',
+      fromMap: (map) => JewelryModel.fromJson(map),
+    );
+  }
+
+  @override
+  Future<List<VenueModel>> fetchVenues() async {
+    return await fetchFromFirestoore<VenueModel>(
+      collectionName: 'venues',
+      fromMap: (map) => VenueModel.fromMap(map),
+    );
+  }
+
+  @override
+  Future<List<CameraModel>> fetchCameras() async {
+    return await fetchFromFirestoore<CameraModel>(
+      collectionName: 'camera',
+      fromMap: (map) => CameraModel.fromMap(map),
+    );
+  }
+
+  @override
+  Future<List<DecorationModel>> fetchDecorations() async {
+    return await fetchFromFirestoore<DecorationModel>(
+      collectionName: 'decoration',
+      fromMap: (map) => DecorationModel.fromMap(map),
+    );
+  }
+
+  @override
+  Future<List<VehicleModel>> fetchVehicles() async {
+    return await fetchFromFirestoore<VehicleModel>(
+      collectionName: 'vehicle',
+      fromMap: (map) => VehicleModel.fromJson(map),
+    );
+  }
+
+  @override
+  Future<List<FootwearModel>> fetchFootwear() async {
+    return await fetchFromFirestoore<FootwearModel>(
+      collectionName: 'footwear',
+      fromMap: (map) => FootwearModel.fromJson(map),
     );
   }
 }

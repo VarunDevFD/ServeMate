@@ -64,6 +64,7 @@ class VehicleForm extends StatelessWidget {
     final vehicleModel = DropdownBloc();
     final vehicleFuel = DropdownBloc();
     final vehicleTransmission = DropdownBloc();
+    log(locationController.toString());
 
     return Form(
       key: formKey,
@@ -252,7 +253,10 @@ class VehicleForm extends StatelessWidget {
           _buildSection(
             title: 'Location',
             child: buildLocationTextField(
-                context, 'Enter Location', locationController),
+              context: context,
+              hint: 'Current Place',
+              locationController: locationController,
+            ),
           ),
           // Available
           _buildSection(

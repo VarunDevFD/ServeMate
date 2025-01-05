@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/features/authentication/presentation/widgets/loading_animation_widget.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:serve_mate/core/services/image_upload_service.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
@@ -13,6 +16,32 @@ import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_event.dart';
+
+Future<List<String>> uploadImagesToCloudinary(
+    List<TextEditingController>? imageController) async {
+  if (imageController == null || imageController.isEmpty) {
+    return [];
+  }
+
+  final imageUploadService = ImageUploadService();
+
+  // Use parallel uploads with Future.wait
+  final uploads = await Future.wait(imageController.map((controller) async {
+    if (controller.text.isNotEmpty) {
+      try {
+        // Upload image and return URL
+        return await imageUploadService.uploadImage(controller.text);
+      } catch (e) {
+        log('Failed to upload image: $e');
+        return null;
+      }
+    }
+    return null;
+  }));
+
+  // Filter out null values and return successful uploads
+  return uploads.whereType<String>().toList();
+}
 
 void handleFormSubmission({
   required String categoryName,
@@ -32,7 +61,7 @@ void handleFormSubmission({
   List<TextEditingController>? facilitiesVenue2,
   TextEditingController? fuelController,
   TextEditingController? genderController,
-  List<String>? imageController,
+  List<TextEditingController>? imageController,
   TextEditingController? locationController,
   TextEditingController? materialController,
   TextEditingController? modelController,
@@ -52,7 +81,6 @@ void handleFormSubmission({
   // Validate the form
   if (formKey.currentState?.validate() ?? false) {
     formKey.currentState?.save();
-    log("****************${imageController.toString()}***********************");
 
     // Switch case to handle different categories
     switch (categoryName) {
@@ -72,17 +100,14 @@ void handleFormSubmission({
           date: dateController ?? '',
           location: locationController?.text ?? '',
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           damage: damageController?.text ?? '',
           description: descriptionController?.text ?? '',
         );
         // _showLoadingIndicator(context);
 
-        Future.delayed(const Duration(seconds: 3), () {
-          // After 3 seconds, hide the loading indicator and show success dialog
-          Navigator.of(context).pop(); // Pop the loading indicator
-        });
-        _showSuccessDialogDress(context, onFormReset, dress);
+        showSuccessDialogDress(context, onFormReset, dress);
         break;
 
       case 'Venue':
@@ -96,7 +121,8 @@ void handleFormSubmission({
           duration: durationController?.text ?? '',
           date: dateController ?? '',
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           facilities:
               facilitiesVenue?.map((controller) => controller.text).toList() ??
                   [],
@@ -105,7 +131,7 @@ void handleFormSubmission({
                   [],
           description: descriptionController?.text ?? '',
         );
-        _showSuccessDialogVenue(context, onFormReset, venue);
+        showSuccessDialogVenue(context, onFormReset, venue);
         break;
 
       case 'Cameras':
@@ -115,7 +141,8 @@ void handleFormSubmission({
           securityDeposit: securityController ?? 0.0,
           location: locationController?.text ?? '',
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           notes: descriptionController?.text ?? '',
           equipmentType: typeController?.text ?? '',
           brandModel: brandController?.text ?? '',
@@ -126,7 +153,7 @@ void handleFormSubmission({
                   [],
           damage: damageController?.text ?? '',
         );
-        _showSuccessDialogCamera(context, onFormReset, camera);
+        showSuccessDialogCamera(context, onFormReset, camera);
         break;
 
       case 'Vehicles':
@@ -146,20 +173,18 @@ void handleFormSubmission({
               facilitiesVenue?.map((controller) => controller.text).toList() ??
                   [],
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           date: dateController ?? '',
           location: locationController?.text ?? '',
-          toggleOption: toggleController ?? '',
+          availability: toggleController ?? '',
           description: descriptionController?.text ?? '',
         );
-        _showLoadingIndicator(context);
-
-        Future.delayed(const Duration(seconds: 5), () {
-          LoadingDialog.show(context);
+      
+        _showLoadingIndicator(context, imageController, vehicle,
+            (updatedVehicle) {
+          showSuccessDialogVehicle(context, onFormReset, updatedVehicle);
         });
-        LoadingDialog.hide(context);
-
-        _showSuccessDialogVehicle(context, onFormReset, vehicle);
 
         break;
 
@@ -172,7 +197,8 @@ void handleFormSubmission({
           rentalPrice: priceController ?? 0.0,
           securityDeposit: securityController ?? 0.0,
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           selectedFacilitiesSecond:
               facilitiesVenue2?.map((controller) => controller.text).toList() ??
                   [],
@@ -180,7 +206,7 @@ void handleFormSubmission({
           location: locationController?.text ?? '',
           description: descriptionController?.text ?? '',
         );
-        _showSuccessDialogDecoration(context, onFormReset, decorationItem);
+        showSuccessDialogDecoration(context, onFormReset, decorationItem);
         break;
 
       case 'Jewelry':
@@ -200,9 +226,10 @@ void handleFormSubmission({
           dateAdded: dateController ?? '',
           location: locationController?.text ?? '',
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
         );
-        _showSuccessDialogJewelry(context, onFormReset, jewelryItem);
+        showSuccessDialogJewelry(context, onFormReset, jewelryItem);
         break;
 
       case 'Footwear':
@@ -219,10 +246,11 @@ void handleFormSubmission({
           isAvailable: toggleController ?? '',
           location: locationController?.text,
           images:
-              imageController?.map((controller) => controller).toList() ?? [],
+              imageController?.map((controller) => controller.text).toList() ??
+                  [],
           date: dateController ?? '',
         );
-        _showSuccessDialogFootwear(context, onFormReset, footwearItem);
+        showSuccessDialogFootwear(context, onFormReset, footwearItem);
         break;
 
       default:
@@ -238,24 +266,52 @@ void handleFormSubmission({
   }
 }
 
-void _showLoadingIndicator(BuildContext context) {
+_showLoadingIndicator(
+    BuildContext context,
+    List<TextEditingController>? imageController,
+    VehicleModel vehicle,
+    Function(VehicleModel) onComplete) async {
+  List<String> updatedImages = await uploadImagesToCloudinary(imageController);
+
+  final updatedVehicle = vehicle.copyWith(
+    images: updatedImages,
+  );
   showDialog(
+    // ignore: use_build_context_synchronously
     context: context,
-    barrierDismissible:
-        false, // Prevents the dialog from being dismissed by tapping outside
+    barrierDismissible: false,
     builder: (context) {
-      return const Center(
-        child: CircularProgressIndicator(), // Loading indicator
+      return Center(
+        child: LoadingAnimationWidget.discreteCircle(
+          color: AppColors.orange,
+          size: 60.r,
+          secondRingColor: AppColors.grey,
+          thirdRingColor: AppColors.white,
+        ),
       );
+    },
+  );
+
+  // Dismiss the loading dialog and call the onComplete callback after a delay
+  Future.delayed(
+    const Duration(seconds: 5),
+    () {
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Close the loading dialog
+      onComplete(updatedVehicle);
     },
   );
 }
 
-void _showSuccessDialogDress(
+void showSuccessDialogDress(
   BuildContext context,
   VoidCallback onFormReset,
   DressModel dress,
 ) {
+  Future.delayed(const Duration(seconds: 3), () {
+    // After 3 seconds, hide the loading indicator and show success dialog
+    Navigator.of(context).pop(); // Pop the loading indicator
+  });
   showDialog(
     context: context,
     builder: (context) {
@@ -277,7 +333,7 @@ void _showSuccessDialogDress(
   );
 }
 
-void _showSuccessDialogVenue(
+void showSuccessDialogVenue(
   BuildContext context,
   VoidCallback onFormReset,
   VenueModel venue,
@@ -302,7 +358,7 @@ void _showSuccessDialogVenue(
   );
 }
 
-void _showSuccessDialogCamera(
+void showSuccessDialogCamera(
   BuildContext context,
   VoidCallback onFormReset,
   CameraModel camera,
@@ -327,7 +383,7 @@ void _showSuccessDialogCamera(
   );
 }
 
-void _showSuccessDialogVehicle(
+void showSuccessDialogVehicle(
   BuildContext context,
   VoidCallback onFormReset,
   VehicleModel vehicle,
@@ -340,11 +396,11 @@ void _showSuccessDialogVehicle(
         actions: [
           TextButton(
             onPressed: () {
+              log("image : ${vehicle.images.toString()}came");
               context.read<ProductBloc>().add(SubmitVehicleEvent(vehicle));
-              LoadingDialog.show(context);
-              context.pop();
+              log("image done");
               onFormReset();
-              LoadingDialog.hide(context);
+              context.pop();
             },
             child: const Text('OK'),
           ),
@@ -354,8 +410,7 @@ void _showSuccessDialogVehicle(
   );
 }
 
-
-void _showSuccessDialogDecoration(
+void showSuccessDialogDecoration(
   BuildContext context,
   VoidCallback onFormReset,
   DecorationModel decoration,
@@ -382,7 +437,7 @@ void _showSuccessDialogDecoration(
   );
 }
 
-void _showSuccessDialogJewelry(
+void showSuccessDialogJewelry(
   BuildContext context,
   VoidCallback onFormReset,
   JewelryModel jewelry,
@@ -407,7 +462,7 @@ void _showSuccessDialogJewelry(
   );
 }
 
-void _showSuccessDialogFootwear(
+void showSuccessDialogFootwear(
   BuildContext context,
   VoidCallback onFormReset,
   FootwearModel footWear,
@@ -484,4 +539,3 @@ void _showSuccessDialogFootwear(
 // ) =>
 //     _showSuccessDialogFootwear(context, onFormReset, footwearItem);
 */
-

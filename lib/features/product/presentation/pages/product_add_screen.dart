@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/core/services/image_upload_service.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/dress_form.dart';
@@ -30,11 +29,11 @@ class AddPage extends StatelessWidget {
   List<TextEditingController>? facilitiesSecond = [];
   TextEditingController? fuelController;
   TextEditingController? genderController;
-  List<String>? imageController = [];
+  List<TextEditingController>? imageController = [];
   TextEditingController locationController = TextEditingController();
   TextEditingController? materials;
   final materialController = TextEditingController();
-  TextEditingController modelController = TextEditingController();
+  TextEditingController? modelController;
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
@@ -108,13 +107,9 @@ class AddPage extends StatelessWidget {
     log("Location: ${locationController.toString()}");
   }
 
-  void onImageSelected(List<TextEditingController>? images) {
-    uploadImagesToCloudinary(images!);
-
-    // imageController = images!;
-    for (var controller in images) {
-      log('this is image ${controller.text}');
-    }
+  void onImageSelected(List<TextEditingController>? images) async {
+    imageController = images;
+    log(imageController.toString());
   }
 
   void onFacilitySelected(TextEditingController? facility) {
@@ -151,32 +146,9 @@ class AddPage extends StatelessWidget {
     return prefs.getDataFn();
   }
 
-  // Image
-  void uploadImagesToCloudinary(List<TextEditingController>? images) async {
-    if (images == null || images.isEmpty) {
-      imageController = [];
-    }
-
-    // Initialize the ImageUploadService
-    final imageUploadService = ImageUploadService();
-
-    for (var controller in images!) {
-      if (controller.text.isNotEmpty) {
-        try {
-          // Upload the image and replace the controller text with the URL
-          String url = await imageUploadService.uploadImage(controller.text);
-          imageController?.add(url);
-          log("Image successfuly done : ${imageController.toString()} ");
-        } catch (e) {
-          // Handle upload failure
-          log('Failed to upload image: $e');
-        }
-      }
-    }
-  }
-
   // Reset all the controllers
   void onFormReset() {
+    // Reset text controllers
     nameController.clear();
     brandController.clear();
     materialController.clear();
@@ -187,13 +159,19 @@ class AddPage extends StatelessWidget {
     typeController?.clear();
     sizeController?.clear();
     colorController?.clear();
-    modelController.clear();
     priceController.clear();
     securityController.clear();
-    phoneController.clear();
-    emailController.clear();
     seatCapacityController.clear();
     regNumberController.clear();
+
+    // Reset state variables for dropdowns and toggles
+    typeController = null;
+    modelController = null;
+    toggleController = null;
+    dateController = null;
+
+    // Log reset actions (optional)
+    log("Form and callbacks reset successfully");
   }
 
   @override

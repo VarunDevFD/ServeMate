@@ -9,4 +9,8 @@ class AddFootwearUseCase {
   Future<void> call(FootwearEntity footwearEntity) async {
     return await repository.addFootwear(footwearEntity);
   }
+
+  Future<List<FootwearEntity>> fetchFootwear() async {
+    return await repository.fetchFootwear();
+  }
 }

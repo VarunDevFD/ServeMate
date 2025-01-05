@@ -14,5 +14,12 @@ abstract class ProductRepository {
   Future<void> addVehicle(VehicleEntity vehicle);
   Future<void> addFootwear(FootwearEntity footwear);
   Future<void> addDecoration(DecorationEntity decoration);
+  // Fetch methods for each entity
+  Future<List<DressEntity>> fetchDresses();
+  Future<List<JewelryEntity>> fetchJewelry();
+  Future<List<VenueEntity>> fetchVenues();
+  Future<List<CameraEntity>> fetchCameras();
+  Future<List<DecorationEntity>> fetchDecorations();
+  Future<List<VehicleEntity>> fetchVehicles();
+  Future<List<FootwearEntity>> fetchFootwear();
 }
-

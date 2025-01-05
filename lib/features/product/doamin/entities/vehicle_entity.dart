@@ -3,9 +3,7 @@ class VehicleEntity {
   final String model;
   final String brand;
   final double price;
-  final String description;
-  final String image;
-  final String type;
+  final String vehicleType;
   final double rentalPrice;
   final double securityDeposit;
   final String location;
@@ -16,17 +14,16 @@ class VehicleEntity {
   final String transmission;
   final List<String> facilities;
   final String date;
-  final String toggleOption;
   final String color;
+  final String availability;
+  final String? description;
 
   VehicleEntity({
     required this.name,
     required this.model,
     required this.brand,
     required this.price,
-    required this.description,
-    required this.image,
-    required this.type,
+    required this.vehicleType,
     required this.rentalPrice,
     required this.securityDeposit,
     required this.location,
@@ -37,7 +34,9 @@ class VehicleEntity {
     required this.transmission,
     required this.facilities,
     required this.date,
-    required this.toggleOption,
+    required this.availability,
     required this.color,
+    this.description,
+
   });
 }

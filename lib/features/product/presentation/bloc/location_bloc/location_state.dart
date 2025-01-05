@@ -1,27 +1,27 @@
 class LocationState {
   final String? currentLocation;
   final String? placeName;
-  final bool isFetchingLocation;
   final String? locationError;
+  final bool isFetchingLocation;
 
-  LocationState({
+  const LocationState({
     this.currentLocation,
-    this.placeName = 'Current Place',
-    this.isFetchingLocation = false,
+    this.placeName,
     this.locationError,
+    this.isFetchingLocation = false,
   });
 
   LocationState copyWith({
     String? currentLocation,
     String? placeName,
-    bool? isFetchingLocation,
     String? locationError,
+    bool? isFetchingLocation,
   }) {
     return LocationState(
       currentLocation: currentLocation ?? this.currentLocation,
       placeName: placeName ?? this.placeName,
+      locationError: locationError,
       isFetchingLocation: isFetchingLocation ?? this.isFetchingLocation,
-      locationError: locationError ?? this.locationError,
     );
   }
 }

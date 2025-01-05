@@ -3,32 +3,29 @@ import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart'
 class VehicleModel extends VehicleEntity {
   VehicleModel({
     required String name,
-    required String model,
-    required double rentalPrice,
-    required double securityDeposit,
-    required String location,
-    required List<String> images,
-    required String description,
-    required String brand,
-    required int seatCapacity,
-    required String registrationNumber,
     required String vehicleType,
+    required String brand,
+    required String model,
+    required String color,
+    required int seatCapacity,
     required String fuelType,
     required String transmission,
-    required List<String> facilities,
+    required String registrationNumber,
+    required double rentalPrice,
+    required double securityDeposit,
     required String date,
-    required String toggleOption,
-    required String color,
+    required List<String> facilities,
+    required List<String> images,
+    required String location,
+    required String availability,
+    String? description,
   }) : super(
           name: name,
           model: model,
           brand: brand,
           price: rentalPrice,
           description: description,
-          image: images.isNotEmpty
-              ? images[0]
-              : '', // Just an example for the image field
-          type: vehicleType,
+          vehicleType: vehicleType,
           rentalPrice: rentalPrice,
           securityDeposit: securityDeposit,
           location: location,
@@ -39,9 +36,50 @@ class VehicleModel extends VehicleEntity {
           transmission: transmission,
           facilities: facilities,
           date: date,
-          toggleOption: toggleOption,
+          availability: availability,
           color: color,
         );
+
+  // CopyWith method to update specific fields
+  VehicleModel copyWith({
+    String? name,
+    String? model,
+    String? vehicleType,
+    double? rentalPrice,
+    double? securityDeposit,
+    String? location,
+    List<String>? images,
+    String? description,
+    String? brand,
+    int? seatCapacity,
+    String? registrationNumber,
+    String? fuelType,
+    String? transmission,
+    List<String>? facilities,
+    String? date,
+    String? availability,
+    String? color,
+  }) {
+    return VehicleModel(
+      name: name ?? this.name,
+      model: model ?? this.model,
+      vehicleType: vehicleType ?? this.vehicleType,
+      rentalPrice: rentalPrice ?? this.rentalPrice,
+      securityDeposit: securityDeposit ?? this.securityDeposit,
+      location: location ?? this.location,
+      images: images ?? this.images,
+      description: description ?? this.description,
+      brand: brand ?? this.brand,
+      seatCapacity: seatCapacity ?? this.seatCapacity,
+      registrationNumber: registrationNumber ?? this.registrationNumber,
+      fuelType: fuelType ?? this.fuelType,
+      transmission: transmission ?? this.transmission,
+      facilities: facilities ?? this.facilities,
+      date: date ?? this.date,
+      availability: availability ?? this.availability,
+      color: color ?? this.color,
+    );
+  }
 
   // Factory constructor for creating a VehicleModel object from a JSON map
   factory VehicleModel.fromJson(Map<String, dynamic> json) {
@@ -61,7 +99,7 @@ class VehicleModel extends VehicleEntity {
       transmission: json['transmission'] ?? '',
       facilities: List<String>.from(json['facilities'] ?? []),
       date: json['date'] ?? '',
-      toggleOption: json['toggleOption'] ?? '',
+      availability: json['availability'] ?? '',
       color: json['color'] ?? '',
     );
   }
@@ -79,12 +117,12 @@ class VehicleModel extends VehicleEntity {
       'brand': brand,
       'seatCapacity': seatCapacity,
       'registrationNumber': registrationNumber,
-      'vehicleType': type,
+      'vehicleType': vehicleType,
       'fuelType': fuelType,
       'transmission': transmission,
       'facilities': facilities,
       'date': date,
-      'toggleOption': toggleOption,
+      'availability': availability,
       'color': color,
     };
   }

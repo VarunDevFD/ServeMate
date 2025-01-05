@@ -22,7 +22,7 @@ class DressFormState {
     this.selectedCondition = '',
     this.selectedSize = '',
     this.selectedColor = AppColors.white,
-    this.colorName = 'White',
+    this.colorName = "Choose the Color",
     this.rentalDuration = '',
     this.securityDeposit = 0.0,
     this.damagePolicy = '',
