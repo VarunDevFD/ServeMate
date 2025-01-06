@@ -75,11 +75,7 @@ class ForgotPasswordpage extends StatelessWidget {
                   context.go('/sign-in');
                 } else if (state is ForgetPasswordFailState) {
                   // Show error message
-                   DialogUtils.showErrorMessage(
-                    context,
-                    state.error.message
-                  );
-                  
+                  DialogUtils.showErrorMessage(context, state.error.message);
                 }
               },
               builder: (context, state) {

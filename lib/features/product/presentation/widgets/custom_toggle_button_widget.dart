@@ -26,13 +26,17 @@ class CustomToggleButton extends StatelessWidget {
         bloc: bloc,
         builder: (context, selectedIndex) {
           // log('Selected Index: $selectedIndex');
-
           return Center(
             child: FlutterToggleTab(
+              // Replace `labels` with `dataTabs`
+              dataTabs: toggleList
+                  .map((label) =>
+                      DataTab(title: label)) // Map each string to DataTab
+                  .toList(),
               isShadowEnable: true,
               isScroll: false,
               height: 18.h,
-              width: 10.w,
+              width: 80.w, // Adjust width for better alignment
               borderRadius: 15.r,
               selectedIndex: selectedIndex,
               selectedBackgroundColors: [AppColors.orange1],
@@ -46,7 +50,6 @@ class CustomToggleButton extends StatelessWidget {
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w400,
               ),
-              labels: toggleList,
               selectedLabelIndex: (index) {
                 bloc.selectTab(index); // Emit new index
                 onToggleSelected(toggleList[index]);

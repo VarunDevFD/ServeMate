@@ -79,7 +79,7 @@ class ImagePickerFormField extends FormField<List<TextEditingController>> {
                           );
 
                           state.value!.add(controller);
-                         
+
                           state.didChange(state.value);
                         }
                       },

@@ -39,7 +39,6 @@ class AppColors {
   // Red
   static Color redAccent = Colors.redAccent;
 
-
   // Blue
   static Color blueAccent = Colors.blueAccent;
 

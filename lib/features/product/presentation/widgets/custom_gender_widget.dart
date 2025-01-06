@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,7 +48,9 @@ class CustomGenderWidget extends StatelessWidget {
                   onChanged: (value) {
                     final controller = TextEditingController(text: value);
 
-                    context.read<DressFormBloc>().add(GenderSelected(controller.text));
+                    context
+                        .read<DressFormBloc>()
+                        .add(GenderSelected(controller.text));
                     onGenderSelected(controller);
                   },
                   secondary: Icon(Icons.girl_rounded,

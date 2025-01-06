@@ -72,7 +72,7 @@ class VenueForm extends StatelessWidget {
                   : null,
             ),
           ),
-          // 
+          //
           _buildSection(
             title: 'Location',
             child: buildLocationTextField(
@@ -224,7 +224,7 @@ class VenueForm extends StatelessWidget {
 
   Widget _buildSection({required String title, required Widget child}) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomSideHeadText(title: title),

@@ -6,6 +6,7 @@ import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bott
 import 'package:serve_mate/features/bottom_navigation_bar/presentation/widgets/bottom_nav_bar_widget.dart';
 import 'package:serve_mate/features/product/presentation/pages/home_page_screen.dart';
 import 'package:serve_mate/features/product/presentation/pages/product_add_screen.dart';
+import 'package:serve_mate/features/profile/presentation/pages/profile_page.dart';
 
 class BottomNavigationBar extends StatelessWidget {
   final String? categoryName;
@@ -57,14 +58,5 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text('Notifications Page'));
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Profile Page'));
   }
 }

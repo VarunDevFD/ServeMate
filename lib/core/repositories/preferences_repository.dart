@@ -60,10 +60,12 @@ class PreferencesRepository {
     return _preferencesDataSource.getData('categoryName');
   }
 
+  Future<void> clearCategoryName() async {
+    await _preferencesDataSource.clearFromPreferences('categoryName');
+  }
+
   //-------------------------Remove---------------------------------------------
   Future<void> clearPreferences() async {
     await _preferencesDataSource.removeData();
   }
 }
-
-
