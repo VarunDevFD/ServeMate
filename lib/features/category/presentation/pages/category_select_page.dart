@@ -14,7 +14,6 @@ class CategorySelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<CategoryBloc>().add(LoadCategoriesEvent());
-
     return SafeArea(
       child: Scaffold(
         body: Padding(

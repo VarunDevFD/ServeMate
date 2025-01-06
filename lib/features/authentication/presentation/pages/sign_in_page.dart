@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
@@ -27,9 +29,9 @@ class SignInPage extends StatelessWidget {
     if (loginKey.currentState?.validate() == true) {
       final password = passwordController.text;
 
+      // Check if the password is at least 6 characters
       if (password.length < 6) {
         FocusScope.of(context).unfocus();
-        // Show error if password is too short
         DialogUtils.showErrorMessage(
           context,
           "Please ensure your password is at least 6 characters long. Thank you!",
@@ -37,7 +39,7 @@ class SignInPage extends StatelessWidget {
         return;
       }
 
-      // Check if the password contains at least one letter and one number
+      // Validate that password contains at least one letter and one number
       final RegExp regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)');
       if (!regex.hasMatch(password)) {
         FocusScope.of(context).unfocus();
@@ -47,7 +49,10 @@ class SignInPage extends StatelessWidget {
         );
         return;
       } else {
-        // Dispatch login event to AuthBloc
+        final pref = serviceLocator<PreferencesRepository>();
+
+        Future<bool> hasSeenHome = pref.hasSeenHome();
+
         BlocProvider.of<AuthBloc>(context).add(
           SignInEvent(
             email: emailController.text,
@@ -55,8 +60,15 @@ class SignInPage extends StatelessWidget {
             role: "ServiceProvider",
           ),
         );
-        context.go('/selectCategory');
+
+        if (hasSeenHome == false) {
+          context.go('/bottomNavBar');
+        } else {
+          context.go('/selectCategory');
+        }
       }
+    } else {
+      FocusScope.of(context).unfocus();
     }
   }
 
