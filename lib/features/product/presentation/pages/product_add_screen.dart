@@ -356,7 +356,7 @@ class AddPage extends StatelessWidget {
         );
       case 'Cameras':
         return CameraVideographyForm(
-          formKey: formKey, // Pass a unique GlobalKey for the form
+          formKey: formKey, 
           nameController: nameController,
           onTypeSelected: onTypeSelected,
           onBrandSelected: onModelSelected,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
-import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_event.dart';
-import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_state.dart';
-import 'package:serve_mate/features/bottom_navigation_bar/presentation/widgets/bottom_nav_bar_widget.dart';
-import 'package:serve_mate/features/product/presentation/pages/home_page_screen.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_event.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_state.dart';
+import 'package:serve_mate/features/home/presentation/widgets/bottom_nav_bar_widget.dart';
+import 'package:serve_mate/features/home/presentation/pages/home_page.dart';
 import 'package:serve_mate/features/product/presentation/pages/product_add_screen.dart';
 import 'package:serve_mate/features/profile/presentation/pages/profile_page.dart';
 

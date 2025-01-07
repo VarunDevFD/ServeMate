@@ -14,7 +14,7 @@ import 'package:serve_mate/features/category/presentation/bloc/category_bloc/cat
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/toggle_bloc/toggle_bloc_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
-import 'package:serve_mate/features/bottom_navigation_bar/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
 
 class AppBlocProvider extends StatelessWidget {
