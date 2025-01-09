@@ -3,16 +3,20 @@ import 'bottom_nav_bar_event.dart';
 import 'bottom_nav_bar_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(NavigationInitial(0)) {
-    // Register handlers for events
+  NavigationBloc() : super(NavigationState(0)) {
     on<PageChangedEvent>((event, emit) {
       // Emit the new state when the page changes
-      emit(NavigationPageChanged(event.index));
+      emit(NavigationState(event.index));
     });
 
     on<PageTappedEvent>((event, emit) {
       // Emit the new state when the user taps on the bottom navigation bar
-      emit(NavigationPageChanged(event.index));
+      emit(NavigationState(event.index));
+    });
+
+    on<RestBottomNavBarEvent>((event, emit) {
+      // Emit the return back initial page show on 
+      emit(NavigationState(0));
     });
   }
 }

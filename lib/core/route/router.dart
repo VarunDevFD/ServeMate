@@ -9,6 +9,7 @@ import 'package:serve_mate/features/category/presentation/pages/category_select_
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';
 import 'package:serve_mate/features/product/presentation/pages/product_detail_page.dart';
+import 'package:serve_mate/features/profile/presentation/pages/temp_page.dart';
 import 'package:serve_mate/features/welcome/presentation/page/s_welcome.dart';
 
 class AppRouter {
@@ -53,6 +54,10 @@ class AppRouter {
 
           return ProductDetailPage(category: category as Map<String, dynamic>);
         },
+      ),
+      GoRoute(
+        path: '/temp',
+        builder: (context, state) => TempPage(),
       ),
     ],
     errorBuilder: (context, state) {

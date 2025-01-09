@@ -31,6 +31,7 @@ class ProfileDeleteAccountWidget extends StatelessWidget {
                 context.pop();
                 pref.setHasSeenHome(false);
                 pref.clearCategoryName();
+                pref.clearAllPref(); // Delete all pref
                 context.push('/welcome');
               },
               child: Text(

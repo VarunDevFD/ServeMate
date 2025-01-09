@@ -11,3 +11,5 @@ class PageTappedEvent extends NavigationEvent {
 
   PageTappedEvent(this.index);
 }
+
+class RestBottomNavBarEvent extends NavigationEvent {}

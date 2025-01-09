@@ -16,10 +16,10 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationBloc, NavigationState>(
+    return BlocBuilder<NavigationBloc, NavState>(
       builder: (context, state) {
         int currentIndex = 0;
-        if (state is NavigationPageChanged) {
+        if (state is NavigationState) {
           currentIndex = state.pageIndex;
         }
 
@@ -38,6 +38,7 @@ class BottomNavBar extends StatelessWidget {
             Icon(Icons.chat_outlined, size: 33, color: AppColors.white),
             Icon(Icons.person, size: 33, color: AppColors.white),
           ],
+          
           onTap: (index) {
             // Update the Bloc and animate the page view to the selected index
             context.read<NavigationBloc>().add(PageTappedEvent(index));

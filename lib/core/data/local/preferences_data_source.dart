@@ -38,17 +38,12 @@ class PreferencesDataSource {
 
   Future<void> clearFromPreferences(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(key); 
+    await prefs.remove(key);
   }
 
   //-------------------------Clear----------------------------------------------
   Future<void> removeData() async {
     final prefs = await SharedPreferences.getInstance();
-
-    // Remove specific key
-    await prefs.remove('username');
-
-    // Clear all data
     await prefs.clear();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileInfoWidget extends StatelessWidget {
   const ProfileInfoWidget({super.key});
@@ -9,7 +10,7 @@ class ProfileInfoWidget extends StatelessWidget {
       leading: const Icon(Icons.info),
       title: const Text('Info'),
       onTap: () {
-        // Handle Info
+        context.go('/temp');
       },
     );
   }

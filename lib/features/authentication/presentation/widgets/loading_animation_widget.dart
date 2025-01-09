@@ -5,6 +5,7 @@ import 'package:serve_mate/core/theme/app_colors.dart';
 
 class LoadingDialog {
   static void show(BuildContext context) {
+    // Show the dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -24,6 +25,13 @@ class LoadingDialog {
         ),
       ),
     );
+
+    // Automatically close the dialog after 5 seconds
+    Future.delayed(const Duration(seconds: 5), () {
+      if (Navigator.of(context, rootNavigator: true).canPop()) {
+        hide(context);
+      }
+    });
   }
 
   static void hide(BuildContext context) {

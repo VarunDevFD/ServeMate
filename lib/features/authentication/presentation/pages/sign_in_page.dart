@@ -25,51 +25,60 @@ class SignInPage extends StatelessWidget {
 
   SignInPage({super.key});
 
-  void submitCredentials(BuildContext context) {
+  void submitCredentials(
+      BuildContext context, Function onSuccess, Function onError) {
     if (loginKey.currentState?.validate() == true) {
       final password = passwordController.text;
 
-      // Check if the password is at least 6 characters
+      // Password validation
       if (password.length < 6) {
-        FocusScope.of(context).unfocus();
-        DialogUtils.showErrorMessage(
-          context,
-          "Please ensure your password is at least 6 characters long. Thank you!",
-        );
+        onError("Password must be at least 6 characters long.");
         return;
       }
 
-      // Validate that password contains at least one letter and one number
-      final RegExp regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)');
+      final regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)');
       if (!regex.hasMatch(password)) {
-        FocusScope.of(context).unfocus();
-        DialogUtils.showErrorMessage(
-          context,
-          "Your password must contain at least one letter and one number.",
-        );
+        onError("Password must contain at least one letter and one number.");
         return;
-      } else {
-        final pref = serviceLocator<PreferencesRepository>();
-
-        Future<bool> hasSeenHome = pref.hasSeenHome();
-
-        BlocProvider.of<AuthBloc>(context).add(
-          SignInEvent(
-            email: emailController.text,
-            password: password,
-            role: "ServiceProvider",
-          ),
-        );
-
-        if (hasSeenHome == false) {
-          context.go('/bottomNavBar');
-        } else {
-          context.go('/selectCategory');
-        }
       }
-    } else {
-      FocusScope.of(context).unfocus();
+
+      // Dispatch the AuthBloc event
+      BlocProvider.of<AuthBloc>(context).add(
+        SignInEvent(
+          email: emailController.text,
+          password: password,
+          role: "ServiceProvider",
+        ),
+      );
+
+      // Handle async completion after event is dispatched
+      _handleAuthSuccess(context, onSuccess, onError);
     }
+  }
+
+  // Async completion handler
+  Future<void> _handleAuthSuccess(
+      BuildContext context, Function onSuccess, Function onError) async {
+    try {
+      final preferences = serviceLocator<PreferencesRepository>();
+      final hasSeenHome = await preferences.hasSeenHome();
+
+      if (!context.mounted) return;
+
+      // Perform navigation based on the result
+      if (!hasSeenHome) {
+        onSuccess(() => context.go('/bottomNavBar'));
+      } else {
+        onSuccess(() => context.go('/selectCategory'));
+      }
+    } catch (e) {
+      onError("An error occurred while navigating.");
+    }
+  }
+
+  // Show error message
+  void showErrorDialog(BuildContext context, String message) {
+    DialogUtils.showErrorMessage(context, message);
   }
 
   @override
@@ -117,7 +126,17 @@ class SignInPage extends StatelessWidget {
                     AuthButton(
                       buttonText: "Sign In",
                       onPressed: () async {
-                        submitCredentials(context);
+                        submitCredentials(
+                          context,
+                          (navigationCallback) {
+                            // If success, navigate using callback
+                            navigationCallback();
+                          },
+                          (errorMessage) {
+                            // If error occurs, show error dialog
+                            showErrorDialog(context, errorMessage);
+                          },
+                        );
                         FocusScope.of(context).unfocus();
                       },
                     ),

@@ -1,13 +1,7 @@
-abstract class NavigationState {}
+class NavState {}
 
-class NavigationInitial extends NavigationState {
+class NavigationState extends NavState {
   final int pageIndex;
 
-  NavigationInitial(this.pageIndex);
-}
-
-class NavigationPageChanged extends NavigationState {
-  final int pageIndex;
-
-  NavigationPageChanged(this.pageIndex);
+  NavigationState(this.pageIndex);
 }

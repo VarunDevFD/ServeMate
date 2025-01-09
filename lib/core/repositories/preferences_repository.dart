@@ -65,7 +65,7 @@ class PreferencesRepository {
   }
 
   //-------------------------Remove---------------------------------------------
-  Future<void> clearPreferences() async {
+  Future<void> clearAllPref() async {
     await _preferencesDataSource.removeData();
   }
 }
