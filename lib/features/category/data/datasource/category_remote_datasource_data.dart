@@ -23,45 +23,53 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
     try {
       return [
         const Category(
-            name: 'Cameras',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/cameras.jpg',
-            userId: null),
+          name: 'Cameras',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/cameras.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'Decoration',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/decoration.jpg',
-            userId: null),
+          name: 'Decoration',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/decoration.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'Dresses',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/dresses.jpg',
-            userId: null),
+          name: 'Dresses',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/dresses.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'FootWear',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/footwear.jpg',
-            userId: null),
+          name: 'Footwear',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/footwear.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'Jewelry',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/jewelry.jpg',
-            userId: null),
+          name: 'Jewelry',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/jewelry.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'Sound & DJ Systems',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/sound&dj.jpg',
-            userId: null),
+          name: 'Sound & DJ Systems',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/sound&dj.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'Vehicles',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/vehicles.jpg',
-            userId: null),
+          name: 'Vehicles',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/vehicles.jpg',
+          userId: null,
+        ),
         const Category(
-            name: 'Venue',
-            imageUrl:
-                'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/venues.jpg',
-            userId: null),
+          name: 'Venue',
+          imageUrl:
+              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/venues.jpg',
+          userId: null,
+        ),
       ];
     } catch (e) {
       log('Error fetching categories: $e');
@@ -93,20 +101,15 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
 
   Future<String?> getUserUID() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
-    log("Hellloooooooo");
     log(currentUser.toString());
-    log("Baaaaaaai");
 
     if (currentUser != null) {
       return currentUser.uid; // Fetch UID
     } else {
-      log("No user is logged in.");
       return null;
     }
   }
 }
-
-
 
 
 /*

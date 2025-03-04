@@ -1,27 +1,15 @@
-class LocationState {
-  final String? currentLocation;
-  final String? placeName;
-  final String? locationError;
-  final bool isFetchingLocation;
+abstract class LocationState {}
 
-  const LocationState({
-    this.currentLocation,
-    this.placeName,
-    this.locationError,
-    this.isFetchingLocation = false,
-  });
+class LocationInitial extends LocationState {}
 
-  LocationState copyWith({
-    String? currentLocation,
-    String? placeName,
-    String? locationError,
-    bool? isFetchingLocation,
-  }) {
-    return LocationState(
-      currentLocation: currentLocation ?? this.currentLocation,
-      placeName: placeName ?? this.placeName,
-      locationError: locationError,
-      isFetchingLocation: isFetchingLocation ?? this.isFetchingLocation,
-    );
-  }
+class LocationLoading extends LocationState {}
+
+class LocationLoaded extends LocationState {
+  final String address;
+  LocationLoaded(this.address);
+}
+
+class LocationError extends LocationState {
+  final String message;
+  LocationError(this.message);
 }

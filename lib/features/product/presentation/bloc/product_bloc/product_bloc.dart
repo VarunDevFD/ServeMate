@@ -73,7 +73,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     final addCameraUseCase = serviceLocator<CameraUseCase>();
     emit(ProductLoadingState());
     try {
-      await addCameraUseCase.execute(event.camera);
+      // await addCameraUseCase.execute(event.camera);
       emit(ProductSuccessState());
     } catch (e) {
       emit(ProductErrorState(e.toString()));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
+// import 'package:google_fonts/google_fonts.dart';
+// import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/profile/presentation/widgets/profile_delete_account_widget.dart';
 import 'package:serve_mate/features/profile/presentation/widgets/profile_image_widget.dart';
 import 'package:serve_mate/features/profile/presentation/widgets/profile_info_widget.dart';
@@ -17,16 +17,16 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Profile Page',
-          style: GoogleFonts.sora(
-            color: AppColors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Profile Page',
+      //     style: GoogleFonts.sora(
+      //       color: AppColors.white,
+      //       fontWeight: FontWeight.w600,
+      //     ),
+      //   ),
+      //   backgroundColor: AppColors.primary,
+      // ),
       body: Padding(
         padding: EdgeInsets.all(16.r),
         child: ListView(

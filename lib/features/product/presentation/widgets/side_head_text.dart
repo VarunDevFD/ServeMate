@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/widgets/custom_text.dart';
 
 class CustomSideHeadText extends StatelessWidget {
@@ -9,7 +10,7 @@ class CustomSideHeadText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
+      padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
       child: CustomText(
         text: title,
         styleType: TextStyleType.blackBody,

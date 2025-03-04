@@ -1,22 +1,25 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
+
+import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 
 class DressTypeAndModel extends StatelessWidget {
-  final ValueChanged<TextEditingController> onTypeSelected;
-  final ValueChanged<TextEditingController> onModelSelected;
-  const DressTypeAndModel({
-    super.key,
-    required this.onModelSelected,
-    required this.onTypeSelected,
-  });
+  final TextEditingController catergoryController = TextEditingController();
+  final TextEditingController modelController = TextEditingController();
+  final FocusNode catergoryFocusNode = FocusNode();
+  final FocusNode modelFocusNode = FocusNode();
+  final ValueChanged<bool> nextFocusNode;
+  DressTypeAndModel({
+    Key? key,
+    required this.nextFocusNode,
+    required TextEditingController catergoryController,
+    required TextEditingController modelController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dressCondition = DropdownBloc();
-    final dressModel = DropdownBloc();
-
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Row(
@@ -24,19 +27,14 @@ class DressTypeAndModel extends StatelessWidget {
         children: [
           Expanded(
             child: ReusableDropdown(
-              onDataSelected: onTypeSelected,
-              bloc: dressCondition,
-              items: const [
-                'Formal',
-                'Casual',
-                'Traditional',
-                'Bridal',
-                "Groom's",
-                'Bridesmaid',
-                'Groomsmen',
-                'Wedding Party'
-              ],
-              hint: "Select Dress Type",
+              labelText: "Select Dress Type *",
+              focusNode: catergoryFocusNode,
+              items: DropdownItems.categoriesDress,
+              onFieldSubmitted: (String? value) {
+                catergoryController.clear();
+                catergoryController.text = value ?? '';
+                FocusScope.of(context).requestFocus(modelFocusNode);
+              },
             ),
           ),
           SizedBox(
@@ -44,10 +42,14 @@ class DressTypeAndModel extends StatelessWidget {
           ),
           Expanded(
             child: ReusableDropdown(
-              onDataSelected: onModelSelected,
-              bloc: dressModel,
-              items: const ['Suit', 'Tuxedo', 'Jacket'],
-              hint: "Select Dress Model",
+              labelText: "Select Dress Model *",
+              focusNode: modelFocusNode,
+              items: DropdownItems.attireOptions,
+              onFieldSubmitted: (String? value) {
+                modelController.clear();
+                modelController.text = value ?? '';
+                nextFocusNode(true);
+              },
             ),
           ),
         ],

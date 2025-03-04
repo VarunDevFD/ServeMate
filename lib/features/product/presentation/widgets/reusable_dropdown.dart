@@ -1,65 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/theme/input_decoration.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/dropdown_bloc/dropdown_state.dart';
 
 class ReusableDropdown extends StatelessWidget {
-  final ValueChanged<TextEditingController> onDataSelected;
-  final DropdownBloc bloc;
-  final List items;
-  final String hint;
+  final List<String> items;
+  final String labelText;
+  final FocusNode? focusNode;
+  final dynamic onFieldSubmitted;
+  final FormFieldValidator<String>? validator;
 
   const ReusableDropdown({
     Key? key,
-    required this.bloc,
     required this.items,
-    required this.hint,
-    required this.onDataSelected,
+    required this.labelText,
+    required this.focusNode,
+    this.onFieldSubmitted,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DropdownBloc, DropdownState>(
-      bloc: bloc,
-      builder: (context, state) {
-        String? selectedValue;
-        if (state is DropdownValueChangedState) {
-          selectedValue = state.selectedValue;
-        }
-
-        final dropdownItems = items
-            .map((value) => DropdownMenuItem(
-                  value: value,
-                  child: Text(value.toString()),
-                ))
-            .toList();
-
-        return DropdownButtonFormField(
-          value: dropdownItems.any((item) => item.value == selectedValue)
-              ? selectedValue
-              : null,
-          validator: (value) {
-            if (value == null) {
-              return 'Please select an option';
-            }
-            return null;
-          },
-          items: dropdownItems,
-          hint: Text(hint),
-          decoration: InputDecorations.defaultDecoration(),
-          alignment: Alignment.centerLeft,
-          menuMaxHeight: 200,
-          onChanged: (newValue) {
-            if (newValue != null && newValue is String) {
-              TextEditingController controller =
-                  TextEditingController(text: newValue);
-              bloc.add(DropdownValueChangedEvent(controller.text));
-              onDataSelected(controller);
-            }
-          },
+    return DropdownButtonFormField<String>(
+      focusNode: focusNode,
+      decoration: InputDecorations.defaultDecoration(labelText: labelText),
+      iconDisabledColor: AppColors.orange,
+      alignment: Alignment.centerLeft,
+      menuMaxHeight: 200,
+      onChanged: onFieldSubmitted,
+      items: items.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value, style: TextStyle(fontSize: 12.sp)),
         );
+      }).toList(),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please select an option';
+        }
+        return null;
       },
     );
   }

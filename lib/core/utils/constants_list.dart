@@ -115,7 +115,7 @@ const List<String> facilitiesVehicle = [
   "Plug-In Hybrid Capability",
   "Energy Regeneration",
 ];
-const List<String> facilitiesDecorationStyle = [
+const List<String> decorThemes = [
   "Traditional",
   "Modern",
   "Rustic",
@@ -127,20 +127,14 @@ const List<String> facilitiesDecorationStyle = [
   "Cultural",
   "Themed"
 ];
-const List<String> facilitiesDecorationCategory = [
-  "Stage Decoration",
-  "Floral Arrangements",
-  "Lighting",
-  "Table Centerpieces",
-  "Ceiling Decorations",
-  "Backdrop Designs",
-  "Mandap Decorations",
-  "Entrance Arch",
-  "Aisle Decorations",
-  "Seating Decorations",
-  "Wall Hangings",
-  "Balloon Arrangements",
-  "Thematic Props",
-  "Car Decorations",
-  "Customized Decorations",
+const List<String> decorationCategory = [
+  "Stage & Mandap",
+  "Entry Gate",
+  "Aisle",
+  "Ceiling",
+  "Table",
+  "Stage",
+  "Floral",
+  "Lounge",
+  "All in All",
 ];

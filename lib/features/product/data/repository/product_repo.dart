@@ -1,12 +1,12 @@
 import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
-import 'package:serve_mate/features/product/data/models/camera_model.dart';
+// import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
-import 'package:serve_mate/features/product/doamin/entities/camera_entity.dart';
+// import 'package:serve_mate/features/product/doamin/entities/camera_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear_entity.dart';
@@ -47,14 +47,14 @@ class ProductRepositoryImpl implements ProductRepository {
     }
   }
 
-  @override
-  Future<void> addCamera(CameraEntity camera) async {
-    try {
-      await remoteDataSource.addCamera(camera as CameraModel);
-    } catch (e) {
-      throw Exception('Failed to add camera: $e');
-    }
-  }
+  // @override
+  // Future<void> addCamera(CameraEntity camera) async {
+  //   try {
+  //     await remoteDataSource.addCamera(camera as CameraModel);
+  //   } catch (e) {
+  //     throw Exception('Failed to add camera: $e');
+  //   }
+  // }
 
   @override
   Future<void> addVehicle(VehicleEntity vehicle) async {
@@ -121,17 +121,17 @@ class ProductRepositoryImpl implements ProductRepository {
     }
   }
 
-  @override
-  Future<List<CameraModel>> fetchCameras() async {
-    try {
-      final cameras = await remoteDataSource.fetchCameras();
-      return cameras
-          .map((camera) => CameraModel.fromMap(camera as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch cameras: $e');
-    }
-  }
+  // @override
+  // Future<List<CameraModel>> fetchCameras() async {
+  //   try {
+  //     final cameras = await remoteDataSource.fetchCameras();
+  //     return cameras
+  //         .map((camera) => CameraModel.fromMap(camera as Map<String, dynamic>))
+  //         .toList();
+  //   } catch (e) {
+  //     throw Exception('Failed to fetch cameras: $e');
+  //   }
+  // }
 
   @override
   Future<List<DecorationModel>> fetchDecorations() async {

@@ -12,7 +12,7 @@ class AuthGoogleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.background,
         padding: EdgeInsets.symmetric(vertical: 10.h),
       ),
       onPressed: () => context.read<AuthBloc>().add(GoogleSignInEvent()),

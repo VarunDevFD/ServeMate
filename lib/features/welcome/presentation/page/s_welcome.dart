@@ -53,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(width: 20),
                   Expanded(
                     child: CustomElevatedButton(
-                      backgroundColor: AppColors.backgroundColor,
+                      backgroundColor: AppColors.background,
                       text: 'Sign Up',
                       textStyle: AppTextStyles.buttonTextStyleWelcomeBn2,
                       onPressed: () {

@@ -1,3 +1,4 @@
+/*
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -201,7 +202,7 @@ class AddPage extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.check),
-                onPressed: () {
+                onPressed: () { 
                   handleFormSubmission(
                     categoryName: category,
                     formKey: formKey,
@@ -211,7 +212,7 @@ class AddPage extends StatelessWidget {
                     brandController: brandController,
                     materialController: materialController,
                     descriptionController: descriptionController,
-                    imageController: imageController,
+                    imageController: imageController,     
                     facilitiesVenue: facilities,
                     capacityController: capacityController,
                     durationController: durationController,
@@ -378,3 +379,4 @@ class AddPage extends StatelessWidget {
     }
   }
 }
+*/

@@ -1,31 +1,22 @@
-part of 'temp_bloc.dart';
+abstract class FormTempState{}
 
-class MyFormState {
-  final Map<String, String> fields;
-  final bool isValid;
+class FormInitialState extends FormTempState {}
 
-  MyFormState({required this.fields, required this.isValid});
+class FormAddingState extends FormTempState {}
 
-  factory MyFormState.initial() {
-    return MyFormState(
-      fields: {
-        'Name': '',
-        'Age': '',
-        'Brand': '',
-        'Model': '',
-        'Size': '',
-        'Height': '',
-      },
-      isValid: false,
-    );
-  }
+class FormSuccessState extends FormTempState {
+  final String successMessage;
+  FormSuccessState(this.successMessage);
+}
 
-  MyFormState copyWith({Map<String, String>? fields, bool? isValid}) {
-    return MyFormState(
-      fields: fields ?? this.fields,
-      isValid: isValid ?? this.isValid,
-    );
-  }
+class FormFailureState extends FormTempState {
+  final String errorMessage;
+  FormFailureState(this.errorMessage);
+}
+
+class FormValidationState extends FormTempState {
+  final Map<String, String> validationErrors;
+  FormValidationState(this.validationErrors);
 }
 
 

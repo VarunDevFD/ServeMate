@@ -14,8 +14,14 @@ class AppColors {
   static Color blue = Colors.blue;
   static Color transparent = Colors.transparent;
   static Color primary = const Color(0xFFD59C71);
-  static Color backgroundColor = const Color(0xFFEDF4F5);
+  static const Color secondary = Color(0xFFFFE0B2);
+  static const Color textPrimary = Color(0xFF424242);
+  static const Color textSecondary = Color(0xFF757575);
+  static Color background = const Color(0xFFEDF4F5);
   static Color dimBlack = const Color.fromARGB(255, 213, 212, 212);
+  static Color dimOrange = const Color.fromARGB(255, 255, 248, 244);
+  static const Color cardBackground = Color(0xFFFFFBFA);
+  static const Color border = Color(0xFFEEEEEE);
 
   // Error
   static const Color error = Color.fromARGB(255, 240, 13, 13);
@@ -29,12 +35,15 @@ class AppColors {
 
   // White
   static Color white1 = Colors.white.withOpacity(0.2);
+  static Color white2 =
+      const Color.fromARGB(255, 255, 188, 149).withOpacity(0.2);
 
   // Orange
   static Color orange1 = const Color.fromARGB(255, 239, 145, 74);
   static Color orange2 = const Color(0xFFFCD9A3);
   static Color orange3 = const Color.fromARGB(255, 255, 111, 0);
   static Color orange4 = const Color.fromARGB(199, 224, 105, 19);
+  static Color orange5 = const Color.fromARGB(175, 255, 116, 17);
 
   // Red
   static Color redAccent = Colors.redAccent;

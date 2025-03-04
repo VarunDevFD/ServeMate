@@ -1,14 +1,13 @@
-part of 'temp_bloc.dart';
+import 'model.dart';
 
 abstract class FormEvent {}
 
-class TextFieldChanged extends FormEvent {
-  final String fieldName;
-  final String fieldValue;
+class FormFieldChanged extends FormEvent {
+  final FormModel updatedFormModel;
 
-  TextFieldChanged(this.fieldName, this.fieldValue);
+  FormFieldChanged(this.updatedFormModel);
 }
 
-class ValidateForm extends FormEvent {}
+class FormSubmitEvent extends FormEvent {}
 
-class ResetForm extends FormEvent {}
+class ResetFormEvent extends FormEvent {}

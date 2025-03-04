@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             routerConfig: AppRouter.router,
             title: 'Serve Mate',
-            theme: AppTheme.lightThemeMode,
+            theme: AppTheme.buildWeddingTheme(),
           );
         },
       ),

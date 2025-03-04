@@ -1,77 +1,50 @@
-import 'package:bloc/bloc.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'location_event.dart';
 import 'location_state.dart';
 
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
-  Future<Position> determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw 'Location services are disabled. Please enable them to proceed.';
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw 'Location permissions are denied. Please allow location permissions.';
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      throw 'Location permissions are permanently denied. Please enable them in app settings.';
-    }
-
-    return await Geolocator.getCurrentPosition();
+  LocationBloc() : super(LocationInitial()) {
+    on<FetchLocation>(_getLocation);
   }
 
-  Future<String> getPlaceName(double latitude, double longitude) async {
+  Future<void> _getLocation(
+      FetchLocation event, Emitter<LocationState> emit) async {
     try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
-      Placemark place = placemarks[0];
-      return "${place.locality}, ${place.country}";
-    } catch (e) {
-      return "Unable to retrieve place name";
-    }
-  }
+      emit(LocationLoading());
 
-  LocationBloc() : super(const LocationState()) {
-    on<FetchCurrentLocation>((event, emit) async {
-      emit(state.copyWith(isFetchingLocation: true, locationError: null));
-      try {
-        Position position = await determinePosition();
-        String placeName =
-            await getPlaceName(position.latitude, position.longitude);
-
-        emit(state.copyWith(
-          currentLocation: "${position.latitude}, ${position.longitude}",
-          placeName: placeName,
-          isFetchingLocation: false,
-          locationError: null,
-        ));
-      } catch (error) {
-        emit(state.copyWith(
-          locationError: error.toString(),
-          isFetchingLocation: false,
-        ));
+      // Request permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          emit(LocationError("Location permission denied."));
+          return;
+        }
       }
-    });
 
-    on<ClearLocationError>((event, emit) {
-      emit(state.copyWith(locationError: null));
-    });
+      if (permission == LocationPermission.deniedForever) {
+        emit(LocationError(
+            "Location permissions are permanently denied. Enable from settings."));
+        return;
+      }
 
-    on<LocationValidationFailed>((event, emit) {
-      emit(state.copyWith(locationError: event.error));
-    });
+      // Use new settings parameter
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high, // Set accuracy level
+        ),
+      );
 
-    on<LocationValidationCleared>((event, emit) {
-      emit(state.copyWith(locationError: null));
-    });
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      String address =
+          "${placemarks.first.locality}, ${placemarks.first.country}";
+
+      emit(LocationLoaded(address));
+    } catch (e) {
+      emit(LocationError("Failed to get location"));
+    }
   }
 }
