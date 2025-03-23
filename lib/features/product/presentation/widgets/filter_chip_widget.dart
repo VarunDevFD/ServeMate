@@ -2,67 +2,86 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_state.dart';
+import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 
 class FilterChipScreen extends StatelessWidget {
-  final Function(List<String>) onSelectionChanged;
-  final List<String> categories;
   final String id;
-  const FilterChipScreen({
+  final List<String> categories;
+  final FormSubmissionBloc? bloc;
+
+  FilterChipScreen({
     Key? key,
-    required this.categories,
-    required this.onSelectionChanged,
+    this.bloc,
     required this.id,
+    required this.categories,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FormSubBloc, FormSubState>(
+    return BlocBuilder<FilterChipCubit, FilterChipState>(
       builder: (context, state) {
-        final bloc = context.read<FormSubBloc>();
-        final isExpanded = state.isFilterChipExpanded[id] ?? false;
-        final int visibleCount = isExpanded ? categories.length : 5;
+        final selectedItems = state.selections[id] ?? [];
+        final isExpanded = state.isExpanded;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
-              children: categories.take(visibleCount).map((category) {
+              children: categories
+                  .take(isExpanded ? categories.length : 5)
+                  .map((category) {
                 return FilterChip(
                   label: Text(category),
-                  // focusNode: focusNode,
                   backgroundColor: AppColors.white2,
-                  selected: state.selectedFilters.contains(category),
+                  selected: selectedItems.contains(category),
                   selectedColor: AppColors.orange5,
                   onSelected: (bool selected) {
-                    // bloc.add(ToggleFilterEvent(category));
-                    final updatedSelection =
-                        List<String>.from(state.selectedFilters);
+                    final newSelection = List<String>.from(selectedItems);
                     if (selected) {
-                      updatedSelection.add(category);
+                      newSelection.add(category);
                     } else {
-                      updatedSelection.remove(category);
+                      newSelection.remove(category);
                     }
-                    onSelectionChanged(updatedSelection);
+                    context
+                        .read<FilterChipCubit>()
+                        .updateSelection(id, newSelection);
+                    bloc?.add(UpdateField(id, newSelection));
                   },
                 );
               }).toList(),
             ),
-            SizedBox(height: 3.h),
-            if (categories.length > 5)
-              TextButton(
-                // focusNode: focusNode,
-                onPressed: () {
-                  bloc.add(FilterExpantionEvent(id));
-                },
-                child: Text(
-                  isExpanded ? "Show Less" : "Show More",
-                  style: TextStyle(color: AppColors.orange1),
+            if (categories.length > 5) ...[
+              SizedBox(height: 3.h),
+              if (!isExpanded)
+                TextButton(
+                  onPressed: () {
+                    context.read<FilterChipCubit>().toggleExpanded(id);
+                  },
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: AppColors.orange1),
+                  ),
+                  child: Text(
+                    "Show More",
+                    style: TextStyle(color: AppColors.orange1),
+                  ),
+                )
+              else
+                TextButton(
+                  onPressed: () {
+                    context.read<FilterChipCubit>().toggleExpanded(id);
+                  },
+                  style: TextButton.styleFrom(
+                    textStyle: TextStyle(color: AppColors.orange1),
+                  ),
+                  child: Text(
+                    "Show Less",
+                    style: TextStyle(color: AppColors.orange1),
+                  ),
                 ),
-              ),
+            ],
           ],
         );
       },

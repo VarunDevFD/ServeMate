@@ -5,8 +5,10 @@ class LocationInitial extends LocationState {}
 class LocationLoading extends LocationState {}
 
 class LocationLoaded extends LocationState {
-  final String address;
-  LocationLoaded(this.address);
+  final List<String> location;
+
+  LocationLoaded()
+      : location = List.filled(3, ''); // Fixed-length list with 3 empty strings
 }
 
 class LocationError extends LocationState {

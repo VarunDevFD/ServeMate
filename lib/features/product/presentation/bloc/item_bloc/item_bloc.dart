@@ -1,16 +1,10 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
-import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'item_event.dart';
 import 'item_state.dart';
 
 class FormSubBloc extends Bloc<FormSubEvent, FormSubState> {
-  FormSubBloc() : super(FormSubState(cameraData: CameraModel())) {
+  FormSubBloc() : super(FormSubState()) {
     // on<FormFieldChanged>(addCameraData);
-    on<ToggleAvailableEvent>(addAvailable);
-    on<FilterExpantionEvent>(filterExpnaded);
-    on<AvailableCheckbox>(addAvailableCheckbox);
     on<GenderChanged>(genderChanged);
   }
 
@@ -67,28 +61,7 @@ class FormSubBloc extends Bloc<FormSubEvent, FormSubState> {
   }
   */
 
-  void addAvailable(ToggleAvailableEvent event, Emitter<FormSubState> emit) {
-    log('ToggleAvailability: ${event.isAvailable}');
-    emit(state.copyWith(isAvailable: event.isAvailable));
-  }
-
-  void addAvailableCheckbox(
-      AvailableCheckbox event, Emitter<FormSubState> emit) {
-    emit(state.copyWith(isAvailableCheckbox: event.isAvailableCheckbox));
-  }
-
   void genderChanged(GenderChanged event, Emitter<FormSubState> emit) {
     emit(state.copyWith(gender: event.gender));
-  }
-
-  void filterExpnaded(
-    FilterExpantionEvent event,
-    Emitter<FormSubState> emit,
-  ) {
-    final updateExpansionStates =
-        Map<String, bool>.from(state.isFilterChipExpanded);
-    updateExpansionStates[event.widgetId] =
-        !(updateExpansionStates[event.widgetId] ?? false);
-    emit(state.copyWith(isFilterChipExpanded: updateExpansionStates));
   }
 }

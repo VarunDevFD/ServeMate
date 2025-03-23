@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 // FormKey
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+// ScrollController
+  final ScrollController scrollController = ScrollController();
+
+
 // Camera Form
 final TextEditingController nameController = TextEditingController();
 final TextEditingController priceController = TextEditingController();
@@ -13,6 +17,7 @@ final TextEditingController notesController = TextEditingController();
 final TextEditingController equipmentTypeController = TextEditingController();
 final TextEditingController brandController = TextEditingController();
 final TextEditingController conditionController = TextEditingController();
+final TextEditingController storageController = TextEditingController();
 final TextEditingController accessoriesController = TextEditingController();
 final TextEditingController damageController = TextEditingController();
 
@@ -98,3 +103,6 @@ final TextEditingController phoneController = TextEditingController();
 final TextEditingController rentalDurationController = TextEditingController();
 final TextEditingController minDurationController = TextEditingController();
 final TextEditingController lateFeeController = TextEditingController();
+
+
+ 

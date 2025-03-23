@@ -1,16 +1,23 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
-import 'package:serve_mate/features/home/presentation/pages/bottom_nav_bar_page.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
-import 'package:serve_mate/features/product/presentation/widgets/switch_custom_widget.dart';
+import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 
 class Cameras extends StatelessWidget {
@@ -18,30 +25,40 @@ class Cameras extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<FormSubmissionBloc, FormMainState>(
+        builder: (context, state) {
+      final bloc = context.read<FormSubmissionBloc>();
+      return _buildForm(context, bloc);
+    });
+  }
+
+  Widget _buildForm(BuildContext context, FormSubmissionBloc bloc) {
     final FocusNode nameFocusNode = FocusNode();
+    final FocusNode brandFocusNode = FocusNode();
+    final FocusNode modelFocusNode = FocusNode();
+    final FocusNode categoryFocusNode = FocusNode();
+    final FocusNode descriptionFocusNode = FocusNode();
     final FocusNode priceFocusNode = FocusNode();
     final FocusNode sdFocusNode = FocusNode();
     final FocusNode locationFocusNode = FocusNode();
     final FocusNode phoneFocusNode = FocusNode();
-    final FocusNode rentalDurationFocusNode = FocusNode();
-    final FocusNode brandFocusNode = FocusNode();
-    final FocusNode modelFocusNode = FocusNode();
-    final FocusNode categoryFocusNode = FocusNode();
     final FocusNode conditionFocusNode = FocusNode();
-    final FocusNode dateAddedFocusNode = FocusNode();
     final FocusNode minDurationFocusNode = FocusNode();
-    final FocusNode descriptionFocusNode = FocusNode();
     final FocusNode lateFeeFocusNode = FocusNode();
+
+    final focusNode = FocusScope.of(context);
 
     return Form(
       key: formKey,
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        // controller: scrollController,
         child: Padding(
           padding: EdgeInsets.all(12.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Common fields
+              // Name, Brand, Model, Category and Description
               Card(
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -52,12 +69,10 @@ class Cameras extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Title
                       Row(
                         children: [
-                          Icon(
-                            Icons.info_outline,
-                            color: AppColors.orange1,
-                          ),
+                          Icon(Icons.info_outline, color: AppColors.orange1),
                           SizedBox(width: 8.w),
                           Text(
                             'Basic Information',
@@ -65,11 +80,10 @@ class Cameras extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 15.h),
                       // Name
                       TextFormField(
                         maxLength: 30,
-                        controller: nameController,
                         focusNode: nameFocusNode,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
@@ -78,35 +92,18 @@ class Cameras extends StatelessWidget {
                               '', // Hide the maxLength count TextFormField
                           prefixIcon: Icon(Icons.inventory_2_outlined),
                         ),
-                        onFieldSubmitted: (value) =>
-                            FocusScope.of(context).requestFocus(brandFocusNode),
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('name', value));
+                          focusNode.requestFocus(modelFocusNode);
+                        },
                         validator: (value) => value == null || value.isEmpty
-                            ? 'Please enter the Decoration Name'
+                            ? 'Please enter the Name'
                             : null,
                       ),
-                      SizedBox(height: 15.h),
-                      Text(
-                        'Brand',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      SizedBox(height: 6.h),
-                      // Brand
-                      ReusableDropdown(
-                        labelText: 'Equipment Brand *',
-                        focusNode: brandFocusNode,
-                        items: DropdownItems.brandsCamera,
-                        onFieldSubmitted: (value) {
-                          brandController
-                            ..clear()
-                            ..text = value ?? '';
-                          FocusScope.of(context).requestFocus(modelFocusNode);
-                        },
-                      ),
-                      SizedBox(height: 6.h),
+                      SizedBox(height: 10.h),
                       // Model
                       TextFormField(
                         maxLength: 30,
-                        controller: modelController,
                         focusNode: modelFocusNode,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
@@ -114,27 +111,37 @@ class Cameras extends StatelessWidget {
                           counterText: '',
                           prefixIcon: Icon(Icons.category),
                         ),
-                        onFieldSubmitted: (value) => FocusScope.of(context)
-                            .requestFocus(categoryFocusNode),
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('model', value));
+                          focusNode.requestFocus(brandFocusNode);
+                        },
                         validator: (value) => value == null || value.isEmpty
                             ? 'Please enter the Decoration Name'
                             : null,
                       ),
-                      SizedBox(height: 6.h),
+                      SizedBox(height: 10.h),
+                      // Brand
+                      ReusableDropdown(
+                        labelText: 'Equipment Brand *',
+                        focusNode: brandFocusNode,
+                        items: DropdownItems.brandsCamera,
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('brand', value));
+                          focusNode.requestFocus(categoryFocusNode);
+                        },
+                      ),
+                      SizedBox(height: 10.h),
                       // Category
                       ReusableDropdown(
                         labelText: 'Category*',
                         focusNode: categoryFocusNode,
                         items: DropdownItems.categoriesCamera,
                         onFieldSubmitted: (value) {
-                          categoryController
-                            ..clear()
-                            ..text = value ?? '';
-                          FocusScope.of(context)
-                              .requestFocus(descriptionFocusNode);
+                          bloc.add(UpdateField('category', value));
+                          focusNode.requestFocus(descriptionFocusNode);
                         },
                       ),
-                      SizedBox(height: 6.h),
+                      SizedBox(height: 10.h),
                       // Description
                       TextFormField(
                         controller: descriptionController,
@@ -147,6 +154,10 @@ class Cameras extends StatelessWidget {
                           prefixIcon: Icon(Icons.description_outlined),
                           alignLabelWithHint: true,
                         ),
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('description', value));
+                          focusNode.requestFocus(priceFocusNode);
+                        },
                       ),
                     ],
                   ),
@@ -163,24 +174,21 @@ class Cameras extends StatelessWidget {
                   padding: EdgeInsets.all(20.r),
                   child: Column(
                     children: [
+                      // Title
                       Row(
                         children: [
-                          Icon(
-                            Icons.attach_money,
-                            color: AppColors.orange1,
-                          ),
-                          const SizedBox(width: 8),
+                          Icon(Icons.attach_money, color: AppColors.orange1),
+                          SizedBox(width: 8.w),
                           Text(
                             'Pricing & Availability',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 10.h),
                       // Price
                       TextFormField(
                         maxLength: 6,
-                        controller: priceController,
                         focusNode: priceFocusNode,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -188,8 +196,10 @@ class Cameras extends StatelessWidget {
                           counterText: '',
                           prefixIcon: Icon(Icons.attach_money),
                         ),
-                        onFieldSubmitted: (value) =>
-                            FocusScope.of(context).requestFocus(sdFocusNode),
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('price', int.parse(value)));
+                          focusNode.requestFocus(sdFocusNode);
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter the Rental Price';
@@ -200,11 +210,10 @@ class Cameras extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 10.h),
                       // Security Deposit
                       TextFormField(
                         maxLength: 6,
-                        controller: sdController,
                         focusNode: sdFocusNode,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -212,8 +221,9 @@ class Cameras extends StatelessWidget {
                           counterText: '',
                           prefixIcon: Icon(Icons.security_outlined),
                         ),
-                        onFieldSubmitted: (value) => FocusScope.of(context)
-                            .requestFocus(locationFocusNode),
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('sdPrice', int.parse(value)));
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter the Security Deposit';
@@ -224,8 +234,8 @@ class Cameras extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16.h),
-                      const SwitchTileScreen(),
+                      SizedBox(height: 10.h),
+                      SwitchTileScreen(bloc: bloc),
                     ],
                   ),
                 ),
@@ -242,26 +252,45 @@ class Cameras extends StatelessWidget {
                         'Location & Contact',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 10.h),
+                      // Location
                       LocationTextField(
-                        controller: locationController,
                         locationFocusNode: locationFocusNode,
-                        // nextFocusNode: dateFocusNode,
+                        locationController: locationController,
+                        onFieldSubmitted: (List<String>? value) {
+                          bloc.add(UpdateField('location', value));
+                          focusNode.requestFocus(phoneFocusNode);
+                        },
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 10.h),
+                      // Phone value),
                       TextFormField(
+                        maxLength: 10,
                         controller: phoneController,
                         focusNode: phoneFocusNode,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.phone,
-                        onFieldSubmitted: (value) => FocusScope.of(context)
-                            .requestFocus(locationFocusNode),
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('phoneNumber', value));
+                          focusNode.requestFocus(conditionFocusNode);
+                        },
                         decoration: const InputDecoration(
                           labelText: 'Phone Number',
                           counterText: '',
                           prefixIcon: Icon(Icons.phone_outlined),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the Phone Number';
+                          }
+                          if (value.length != 10) {
+                            return 'Please enter a valid 10-digit number';
+                          }
+
+                          return null;
+                        },
                       ),
+                      SizedBox(height: 16.h),
                     ],
                   ),
                 ),
@@ -277,7 +306,7 @@ class Cameras extends StatelessWidget {
                         'Features & Specifications',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 10.h),
                       // Condition
                       ReusableDropdown(
                         items: DropdownItems.condition,
@@ -286,9 +315,7 @@ class Cameras extends StatelessWidget {
                         onFieldSubmitted: (String? value) {
                           conditionController.clear();
                           conditionController.text = value ?? '';
-
-                          FocusScope.of(context)
-                              .requestFocus(dateAddedFocusNode);
+                          bloc.add(UpdateField('condition', value));
                         },
                       ),
                       SizedBox(height: 6.h),
@@ -296,69 +323,64 @@ class Cameras extends StatelessWidget {
                         'Storage Options',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-
                       SizedBox(height: 6.h),
                       FilterChipScreen(
-                        id: 'accessories',
+                        id: 'storage',
                         categories: DropdownItems.storageOptionsCamera,
-                        onSelectionChanged: (List<String> value) {
-                          categoryController.text = value.join(', ');
-                          FocusScope.of(context).requestFocus(priceFocusNode);
-                        },
+                        bloc: bloc,
                       ),
                       SizedBox(height: 6.h),
                       Text(
                         'Connectivity Options',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-
                       SizedBox(height: 6.h),
                       FilterChipScreen(
-                        id: 'accessories',
+                        id: 'connectivity',
                         categories: DropdownItems.connectivityOptionsCamera,
-                        onSelectionChanged: (List<String> value) {
-                          categoryController.text = value.join(', ');
-                          FocusScope.of(context).requestFocus(priceFocusNode);
-                        },
-                      ),
-                      SizedBox(height: 16.h),
-                      TextFormField(
-                        controller: rentalDurationController,
-                        focusNode: rentalDurationFocusNode,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.phone,
-                        onFieldSubmitted: (value) => FocusScope.of(context)
-                            .requestFocus(locationFocusNode),
-                        decoration: const InputDecoration(
-                          labelText: 'Phone Number',
-                          prefixIcon: Icon(Icons.phone_outlined),
-                        ),
+                        bloc: bloc,
                       ),
                       SizedBox(height: 16.h),
                       // Minimum Rental Duration
                       TextFormField(
-                        controller: minDurationController,
                         focusNode: minDurationFocusNode,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           labelText: 'Minimum Rental Duration (days)*',
                         ),
-                        onFieldSubmitted: (_) {
-                          FocusScope.of(context).requestFocus(lateFeeFocusNode);
+                        onFieldSubmitted: (value) {
+                          bloc.add(UpdateField('duration', value));
+                          focusNode.requestFocus(lateFeeFocusNode);
                         },
-                        validator: (value) =>
-                            value!.isEmpty ? 'Accessories are required' : null,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter minimum rental duration';
+                          }
+                          final number = int.tryParse(value);
+                          if (number == null) {
+                            return 'Please enter a valid number';
+                          }
+                          if (number <= 0) {
+                            return 'Duration must be greater than 0';
+                          }
+                          if (number > 30) {
+                            return 'Duration cannot exceed 30 days or One Month';
+                          }
+
+                          return null;
+                        },
                       ),
                       SizedBox(height: 6.h),
                       // Late Fee Policy
                       TextFormField(
-                        controller: lateFeeController,
                         focusNode: lateFeeFocusNode,
                         decoration: const InputDecoration(
                           labelText: 'Late Fee Policy*',
                         ),
-                        onFieldSubmitted: (_) {
-                          FocusScope.of(context).requestFocus(phoneFocusNode);
+                        onFieldSubmitted: (value) {
+                          lateFeeFocusNode.unfocus();
+                          bloc.add(UpdateField('latePolicy', value));
+                          log(value);
                         },
                         validator: (value) =>
                             value!.isEmpty ? 'Accessories are required' : null,
@@ -373,39 +395,53 @@ class Cameras extends StatelessWidget {
 
               // Image Upload Section
               Card(
-                child: ValueListenableBuilder<List<File>>(
-                  valueListenable: imagesNotifier,
-                  builder: (context, images, _) {
-                    return Padding(
-                      padding: EdgeInsets.all(20.r),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: Padding(
+                  padding: EdgeInsets.all(20.r),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.photo_library,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Product Images',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
+                          Icon(
+                            Icons.photo_library,
+                            color: AppColors.orange1,
                           ),
-                          SizedBox(height: 16.h),
-                          ImagePickerPage(
-                            imageNotifier: imagesNotifier,
-                          )
+                          SizedBox(width: 8.w),
+                          Text(
+                            'Product Images',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                         ],
                       ),
-                    );
-                  },
+                      SizedBox(height: 16.h),
+                      ImagePickerPage(bloc: bloc),
+                      BlocBuilder<ImagePickerCubit, List<File>>(
+                        builder: (context, images) {
+                          return images.isNotEmpty
+                              ? TextButton(
+                                  onPressed: () {
+                                    context
+                                        .read<ImagePickerCubit>()
+                                        .clearImages();
+                                  },
+                                  child: const Text('Clear'),
+                                )
+                              : const SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               // Terms and Conditions
-              const TermsAndConditionsScreen(),
+              TermsAndConditionsScreen(
+                onChanged: (bool? value) {
+                  context
+                      .read<AvailableSwitchCubit>()
+                      .checkeBoxAvailable(value!);
+                  bloc.add(UpdateField('privacyPolicy', value));
+                },
+              ),
               SizedBox(height: 50.h),
             ],
           ),
@@ -414,288 +450,3 @@ class Cameras extends StatelessWidget {
     );
   }
 }
-
-
-                  // Submit Button
-                  //             ElevatedButton(
-                  //               onPressed: () {
-                  //                 if (formKey.currentState!.validate()) {
-                  //                   context.read<FormSubBloc>().add(
-                  //                         SubmitForm(
-                  //                           formKey: formKey,
-                  //                           nameController: nameController,
-                  //                           priceController: priceController,
-                  //                           securityDepositController:
-                  //                               securityDepositController,
-                  //                           locationController: locationController,
-                  //                           imagesController: imagesController,
-                  //                           notesController: notesController,
-                  //                           equipmentTypeController:
-                  //                               equipmentTypeController,
-                  //                           brandModelController: brandModelController,
-                  //                           conditionController: conditionController,
-                  //                           dateAddedController: dateAddedController,
-                  //                           accessoriesController: accessoriesController,
-                  //                           damageController: damageController,
-                  //                           nameFocusNode: nameFocusNode,
-                  //                           priceFocusNode: priceFocusNode,
-                  //                           sdFocusNode:
-                  //                               sdFocusNode,
-                  //                           locationFocusNode: locationFocusNode,
-                  //                           imagesFocusNode: imagesFocusNode,
-                  //                           notesFocusNode: notesFocusNode,
-                  //                           equipmentTypeFocusNode: equipmentTypeFocusNode,
-                  //                           brandFocusNode: brandModelFocusNode,
-                  //                           conditionFocusNode: conditionFocusNode,
-                  //                           dateAddedFocusNode: dateAddedFocusNode,
-                  //                           accessoriesFocusNode: accessoriesFocusNode,
-                  //                           damageFocusNode: damageFocusNode,
-                  //                         ),
-                  //                       );
-                  //                   log('''
-                  // Name: ${nameController.text}
-                  // Price: ${priceController.text}
-                  // Security Deposit: ${securityDepositController.text}
-                  // Location: ${locationController.text}
-                  // Images: ${imagesController.text}
-                  // Notes: ${notesController.text}
-                  // Equipment Type: ${equipmentTypeController.text}
-                  // Brand/Model: ${brandModelController.text}
-                  // Condition: ${conditionController.text}
-                  // Date Added: ${dateAddedController.text}
-                  // Accessories: ${accessoriesController.text}
-                  // Damage: ${damageController.text}
-                  // ''');
-                  //                 }
-                  //               },
-                  //               child: const Text("Submit"),
-                  //             ),
-
-/*
-SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.r),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSection(
-                  title: 'Camera Type',
-                  child: CustomTextField(
-                    // controller: nameController,
-                    hint: 'Enter Camera Type',
-                    numberLimit: 20,
-                    keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        formBloc.add(UpdateField('cameraType', 'Invalid'));
-                        return 'Please enter the Camera Type';
-                      }
-                      formBloc.add(UpdateField('cameraType', value));
-                      log("name entered---------------------------");
-                      return null;
-                    },
-                  ),
-                ),
-                // _buildSection(
-                //   title: 'Camera Equipment Type',
-                //   child: ReusableDropdown(
-                //     bloc: cameraType,
-                //     items: const [
-                //       "Photography",
-                //       "Videography",
-                //       "Action",
-                //       "Specialized",
-                //       "Hybrid",
-                //     ],
-                //     hint: 'Enter Equipment Type (e.g., Camera, Lens, Gimbal)',
-                //     onDataSelected: onTypeSelected,
-                //   ),
-                // ),
-                // _buildSection(
-                //   title: 'Brand/Model',
-                //   child: ReusableDropdown(
-                //     bloc: cameraBrand,
-                //     items: const [
-                //       "Blackmagic Design",
-                //       "Canon",
-                //       "DJI",
-                //       "Fujifilm",
-                //       "GoPro",
-                //       "Hasselblad",
-                //       "InstaX (Fujifilm)",
-                //       "Kodak",
-                //       "Leica",
-                //       "Nikon",
-                //       "Olympus (OM System)",
-                //       "Panasonic (Lumix)",
-                //       "Pentax",
-                //       "Polaroid",
-                //       "Phase One",
-                //       "Red Digital Cinema",
-                //       "Ricoh",
-                //       "Sigma",
-                //       "Sony",
-                //       "Z Cam",
-                //     ],
-                //     hint: 'Choose a Camera Brand',
-                //     onDataSelected: onBrandSelected,
-                //   ),
-                // ),
-                _buildSection(
-                  title: 'Rental Price (Per Day)',
-                  child: CustomTextField(
-                    hint: 'Enter Rental Price Per Day',
-                    numberLimit: 6,
-                    // controller: rentalPriceController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        formBloc.add(UpdateField('Price', 'Invalid'));
-                        return 'Please enter the Camera Price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid number';
-                      }
-                      formBloc.add(UpdateField('Price', value));
-
-                      return null;
-                    },
-                  ),
-                ),
-                _buildSection(
-                  title: 'Security Deposit',
-                  child: CustomTextField(
-                    hint: 'Enter Security Deposit Amount',
-                    numberLimit: 6,
-                    // controller: securityDepositController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        // return 'Please enter the Security Deposit';
-                        formBloc.add(UpdateField('Security', 'Invalid'));
-                        return 'Please enter the Camera Security Price';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Please enter a valid deposit';
-                      }
-                      formBloc.add(UpdateField('Security', value));
-                      return null;
-                    },
-                  ),
-                ),
-                // _buildSection(
-                //   title: 'Condition',
-                //   child: ReusableDropdown(
-                //     onDataSelected: onConditionSelected,
-                //     bloc: cameraCondition,
-                //     items: const ['New', 'Like New', 'Good'],
-                //     hint: "Condition",
-                //   ),
-                // ),
-                _buildSection(
-                  title: 'Available Date',
-                  child: buildCalender(context, onDaySelected),
-                ),
-                _buildSection(
-                  title: 'Accessories Included',
-                  child: CustomTextField(
-                    hint:
-                        'List Any Included Accessories (e.g., Tripod, Memory Card)',
-                    numberLimit: 100,
-                    // controller: accessoriesController,
-                    keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        formBloc.add(UpdateField('Accessories', 'Invalid'));
-                        return 'Please enter the Camera Accessories';
-                      }
-                      formBloc.add(UpdateField('Accessories', value));
-                      return null;
-                    },
-                  ),
-                ),
-                _buildSection(
-                  title: 'Images',
-                  child: ImagePickerFormField(
-                    onSaved: (images) {
-                      for (var controller in images ?? []) {
-                        log('Image path: ${controller.text}');
-                      }
-                    },
-                    validator: (images) {
-                      if (images == null || images.isEmpty) {
-                        formBloc.add(UpdateField('Images', 'Invalid'));
-                        return 'Please enter the Camera Images';
-                      }
-                      formBloc.add(UpdateField('Images', images));
-                      return null;
-                    },
-                  ),
-                ),
-                _buildSection(
-                  title: 'Pickup/Location Option',
-                  child: buildLocationTextField(
-                    context: context,
-                    hint: 'Current Place',
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value == 'Current Place') {
-                        BlocProvider.of<LocationBloc>(context).add(
-                          LocationValidationFailed(
-                              "Please Choose the Location"),
-                        );
-                        return "Please Choose the Location";
-                      }
-
-                      BlocProvider.of<LocationBloc>(context)
-                          .add(LocationValidationCleared());
-                      formBloc.add(UpdateField('Location', value));
-                      return value;
-                    },
-                    locationController: onLocationSelected,
-                  ),
-                ),
-                _buildSection(
-                  title: 'Damage Policy',
-                  child: CustomTextField(
-                    hint: 'Enter the damage policy',
-                    maxLines: 5,
-                    // controller: insuranceController,
-                    keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        formBloc.add(UpdateField('Damage', 'Invalid'));
-                        return 'Please enter the Camera Damage';
-                      }
-                      formBloc.add(UpdateField('Images', value));
-                      return null;
-                    },
-                  ),
-                ),
-                _buildSection(
-                  title: 'Notes or Additional Information',
-                  child: CustomTextField(
-                    hint: 'Enter Any Additional Notes',
-                    keyboardType: TextInputType.text,
-                    // controller: notesController,
-                    maxLines: 5,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        formBloc.add(UpdateField('Notes', 'Invalid'));
-                        return 'Please enter the Camera Notes';
-                      }
-                      formBloc.add(UpdateField('Notes', value));
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 50),
-              ],
-            ),
-          ),
-        ),
-      ),
-
-      */

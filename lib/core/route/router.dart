@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/forgot_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_up_page.dart';
-import 'package:serve_mate/features/home/presentation/pages/bottom_nav_bar_page.dart';
+import 'package:serve_mate/features/naviaton/presentation/pages/bottom_nav_bar_page.dart';
 import 'package:serve_mate/features/category/presentation/pages/category_select_page.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';

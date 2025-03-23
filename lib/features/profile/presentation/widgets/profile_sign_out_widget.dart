@@ -4,8 +4,7 @@ import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
-import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_event.dart';
+import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart'; 
 
 class ProfileSignOutWidget extends StatelessWidget {
   const ProfileSignOutWidget({super.key});
@@ -29,7 +28,7 @@ class ProfileSignOutWidget extends StatelessWidget {
             TextButton(
               onPressed: () {
                 pref.setHasSeenHome(false);
-                context.read<NavigationBloc>().add(RestBottomNavBarEvent());
+                context.read<BottomNavCubit>().updateIndex(0);
                 context.pop();
                 context.go('/sign-in');
               },

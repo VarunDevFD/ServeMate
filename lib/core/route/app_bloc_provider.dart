@@ -4,17 +4,19 @@ import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/sp
 import 'package:serve_mate/features/product/presentation/bloc/animation_bloc/animation_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/venues_bloc/venues_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/toggle_bloc/toggle_bloc_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
-import 'package:serve_mate/features/home/presentation/bloc/bottom_nav_bar_bloc/bottom_nav_bar_bloc.dart';
+import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 
 class AppBlocProvider extends StatelessWidget {
   final Widget child;
@@ -31,15 +33,17 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => AuthBloc()),
         BlocProvider(create: (_) => ForgetPasswordBloc()),
         BlocProvider(create: (_) => CategoryBloc()),
-        BlocProvider(create: (_) => NavigationBloc()),
+        BlocProvider(create: (_) => BottomNavCubit()),
         BlocProvider(create: (_) => DressFormBloc()),
-        BlocProvider(create: (_) => ImageBloc()),
         BlocProvider(create: (_) => LocationBloc()),
         BlocProvider(create: (_) => DateBloc()),
-        BlocProvider(create: (_) => VenueFormBloc()),
         BlocProvider(create: (_) => ProductBloc()),
         BlocProvider(create: (_) => SearchBarBloc()),
         BlocProvider(create: (_) => FormSubBloc()),
+        BlocProvider(create: (_) => FormSubmissionBloc()),
+        BlocProvider(create: (_) => AvailableSwitchCubit()),
+        BlocProvider(create: (_) => FilterChipCubit()),
+        BlocProvider(create: (_) => ImagePickerCubit()),
       ],
       child: child,
     );

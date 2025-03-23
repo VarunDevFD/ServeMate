@@ -1,17 +1,10 @@
-import 'dart:io';
-
+ 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
-import 'package:serve_mate/features/home/presentation/pages/bottom_nav_bar_page.dart';
-import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
+import 'package:serve_mate/core/utils/constants_dropdown_name.dart'; 
+import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';  
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
-import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
-import 'package:serve_mate/features/product/presentation/widgets/switch_custom_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
+import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart'; 
 
 class SoundDJPage extends StatelessWidget {
   final FocusNode nameFocusNode = FocusNode();
@@ -147,52 +140,52 @@ class SoundDJPage extends StatelessWidget {
               SizedBox(height: 10.h),
 
               // Available Switch
-              const SwitchTileScreen(),
+              // const SwitchTileScreen(),
               SizedBox(height: 10.h),
 
               // Service DropDown
 
-              // Images
-              Card(
-                child: ValueListenableBuilder<List<File>>(
-                  valueListenable: imagesNotifier,
-                  builder: (context, images, _) {
-                    return Padding(
-                      padding: EdgeInsets.all(20.r),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.photo_library,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Product Images',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 6.h),
-                          ImagePickerPage(
-                            imageNotifier: imagesNotifier,
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 10.h),
+              // // Images
+              // Card(
+              //   child: ValueListenableBuilder<List<File>>(
+              //     valueListenable: imagesNotifier,
+              //     builder: (context, images, _) {
+              //       return Padding(
+              //         padding: EdgeInsets.all(20.r),
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             Row(
+              //               children: [
+              //                 Icon(
+              //                   Icons.photo_library,
+              //                   color: AppColors.orange1,
+              //                 ),
+              //                 SizedBox(width: 8.w),
+              //                 Text(
+              //                   'Product Images',
+              //                   style: Theme.of(context).textTheme.titleMedium,
+              //                 ),
+              //               ],
+              //             ),
+              //             SizedBox(height: 6.h),
+              //             ImagePickerPage(
+              //               imageNotifier: imagesNotifier,
+              //             )
+              //           ],
+              //         ),
+              //       );
+              //     },
+              //   ),
+              // ),
+              // SizedBox(height: 10.h),
 
               // Location Field
-              LocationTextField(
-                controller: locationController,
-                locationFocusNode: locationFocusNode,
-                nextFocusNode: phoneFocusNode,
-              ),
+              // LocationTextField( bloc: bloc,
+              //   controller: locationController,
+              //   locationFocusNode: locationFocusNode,
+              //   nextFocusNode: phoneFocusNode,
+              // ),
               SizedBox(height: 10.h),
               // Contact Number Field
               TextFormField(
@@ -209,7 +202,7 @@ class SoundDJPage extends StatelessWidget {
               ),
 
               // Terms and Conditions
-              const TermsAndConditionsScreen(),
+              // const TermsAndConditionsScreen(),
               SizedBox(height: 50.h),
             ],
           ),

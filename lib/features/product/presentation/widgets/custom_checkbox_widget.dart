@@ -3,22 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_state.dart';
-
-import '../bloc/item_bloc/item_event.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
-  const TermsAndConditionsScreen({super.key});
+  
+  final void Function(bool?)? onChanged;
+  const TermsAndConditionsScreen({
+    super.key, 
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.r),
-      child: BlocBuilder<FormSubBloc, FormSubState>(
+      child: BlocBuilder<AvailableSwitchCubit, bool>(
         builder: (context, state) {
-          final bloc = context.read<FormSubBloc>();
-
           return Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -55,10 +55,8 @@ class TermsAndConditionsScreen extends StatelessWidget {
               ),
               SizedBox(width: 8.w),
               Checkbox(
-                value: state.isAvailableCheckbox,
-                onChanged: (bool? value) {
-                  bloc.add(AvailableCheckbox(value ?? false));
-                },
+                value: state,
+                onChanged: onChanged,
               ),
             ],
           );

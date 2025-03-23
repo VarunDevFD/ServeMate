@@ -40,9 +40,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
       String address =
-          "${placemarks.first.locality}, ${placemarks.first.country}";
+          "${placemarks.first.thoroughfare}, ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.postalCode}, ${placemarks.first.country}";
 
-      emit(LocationLoaded(address));
+      LocationLoaded locationLoaded = LocationLoaded();
+      locationLoaded.location[0] = address;
+      locationLoaded.location[1] = position.latitude.toString();
+      locationLoaded.location[2] = position.longitude.toString();
+
+      emit(locationLoaded);
     } catch (e) {
       emit(LocationError("Failed to get location"));
     }

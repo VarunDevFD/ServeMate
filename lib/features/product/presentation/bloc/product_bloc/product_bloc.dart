@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
-import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
@@ -70,7 +69,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<void> _handleSubmitCameraEvent(
       SubmitCameraEvent event, Emitter<ProductState> emit) async {
-    final addCameraUseCase = serviceLocator<CameraUseCase>();
     emit(ProductLoadingState());
     try {
       // await addCameraUseCase.execute(event.camera);

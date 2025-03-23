@@ -34,9 +34,20 @@ import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
 
 import 'package:serve_mate/firebase_options.dart';
 
+// void configureCloudinary() {
+//   Cloudinary.fromCloudName(
+//     cloudName: 'dwnoatc3h', // Replace with your Cloudinary cloud name
+//     apiKey: '387979586456272',       // Replace with your Cloudinary API key
+//   );
+// }
+
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
+  //--------------------Initialize Cloudinary-----------------------------------
+  // configureCloudinary();
+
+
   //--------------------Initialize Firebase-------------------------------------
 
   await Firebase.initializeApp(

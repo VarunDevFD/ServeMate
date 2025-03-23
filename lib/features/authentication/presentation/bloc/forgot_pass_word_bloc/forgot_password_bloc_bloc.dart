@@ -8,35 +8,32 @@ import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass
 class ForgetPasswordBloc
     extends Bloc<ForgetPasswordEvent, ForgetPasswordState> {
   ForgetPasswordBloc() : super(ForgetPasswordInitial()) {
-    on<ForgetPasswordEvent>(_onForgetPassword);
-  }
+    on<SendPasswordResetEmail>((event, emit) async {
+      // Emit loading state when the process starts
+      emit(ForgetPasswordInitial());
 
-  void _onForgetPassword(
-      ForgetPasswordEvent event, Emitter<ForgetPasswordState> emit) async {
-    // Emit loading state when the process starts
-    emit(ForgetPasswordLoadingState());
+      try {
+        final firebaseAuth = serviceLocator<FirebaseAuth>();
+        // Send the password reset email using Firebase Auth
+        await firebaseAuth.sendPasswordResetEmail(email: event.email);
 
-    try {
-      final firebaseAuth = serviceLocator<FirebaseAuth>();
-      // Send the password reset email using Firebase Auth
-      await firebaseAuth.sendPasswordResetEmail(email: event.email);
+        // Emit success state when the password reset email is successfully sent
+        emit(ForgetPasswordSuccess());
+      } on FirebaseAuthException catch (e) {
+        // Convert FirebaseAuthException to Failure
+        final failure =
+            Failure(message: e.message ?? 'An unknown error occurred');
 
-      // Emit success state when the password reset email is successfully sent
-      emit(ForgetPasswordSuccessState());
-    } on FirebaseAuthException catch (e) {
-      // Convert FirebaseAuthException to Failure
-      final failure =
-          Failure(message: e.message ?? 'An unknown error occurred');
+        // Emit failure state with the converted Failure object
+        emit(ForgetPasswordFailure(error: failure));
+      } catch (e) {
+        // Handle any other unknown exceptions by converting them into a Failure
+        const failure =
+            Failure(message: 'An unknown error occurred. Please try again.');
 
-      // Emit failure state with the converted Failure object
-      emit(ForgetPasswordFailState(error: failure));
-    } catch (e) {
-      // Handle any other unknown exceptions by converting them into a Failure
-      const failure =
-          Failure(message: 'An unknown error occurred. Please try again.');
-
-      // Emit fail state for unknown errors
-      emit(ForgetPasswordFailState(error: failure));
-    }
+        // Emit fail state for unknown errors
+        emit(const ForgetPasswordFailure(error: failure));
+      }
+    });
   }
 }

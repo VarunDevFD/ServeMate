@@ -22,6 +22,7 @@ class AppColors {
   static Color dimOrange = const Color.fromARGB(255, 255, 248, 244);
   static const Color cardBackground = Color(0xFFFFFBFA);
   static const Color border = Color(0xFFEEEEEE);
+  static const Color imageBr = Color(0xFFEEEEEE);
 
   // Error
   static const Color error = Color.fromARGB(255, 240, 13, 13);

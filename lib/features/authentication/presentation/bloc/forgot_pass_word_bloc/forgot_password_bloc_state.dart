@@ -1,19 +1,16 @@
-
 import 'package:serve_mate/core/error/failure.dart';
 
-sealed class ForgetPasswordState {
+class ForgetPasswordState {
   const ForgetPasswordState();
 }
 
-final class ForgetPasswordInitial extends ForgetPasswordState {}
+class ForgetPasswordInitial extends ForgetPasswordState {}
 
-final class ForgetPasswordLoadingState extends ForgetPasswordState {}
+class ForgetPasswordLoading extends ForgetPasswordState {}
 
-final class ForgetPasswordSuccessState extends ForgetPasswordState {}
+class ForgetPasswordSuccess extends ForgetPasswordState {}
 
-final class ForgetPasswordFailState extends ForgetPasswordState {
+class ForgetPasswordFailure extends ForgetPasswordState {
   final Failure error;
-  ForgetPasswordFailState({
-    required this.error,
-  });
+  const ForgetPasswordFailure({required this.error});
 }

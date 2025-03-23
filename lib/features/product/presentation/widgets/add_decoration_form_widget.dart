@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
-import 'package:serve_mate/features/home/presentation/pages/bottom_nav_bar_page.dart';
+import 'package:serve_mate/features/naviaton/presentation/pages/bottom_nav_bar_page.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/switch_custom_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 
 import 'image_widgets.dart';
 
@@ -87,10 +84,6 @@ class DecorationPage extends StatelessWidget {
                       FilterChipScreen(
                         id: 'category',
                         categories: decorationCategory,
-                        onSelectionChanged: (List<String> value) {
-                          categoryController.text = value.join(', ');
-                          FocusScope.of(context).requestFocus(priceFocusNode);
-                        },
                       ),
                       SizedBox(height: 10.h),
                       Text(
@@ -101,9 +94,6 @@ class DecorationPage extends StatelessWidget {
                       FilterChipScreen(
                         id: 'decorStyles',
                         categories: decorThemes,
-                        onSelectionChanged: (List<String> value) {
-                          decorStylesController.text = value.join(', ');
-                        },
                       ),
                       SizedBox(height: 6.h),
                       TextFormField(
@@ -193,8 +183,10 @@ class DecorationPage extends StatelessWidget {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16.h),
-                      const SwitchTileScreen(),
+                      // SizedBox(height: 16.h),
+                      //   SwitchTileScreen(
+                      //     bloc:  , // Replace 'someBlocInstance' with the actual bloc instance
+                      //   ),
                     ],
                   ),
                 ),
@@ -213,11 +205,11 @@ class DecorationPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(height: 16.h),
-                      LocationTextField(
-                        controller: locationController,
-                        locationFocusNode: locationFocusNode,
-                        // nextFocusNode: dateFocusNode,
-                      ),
+                      // LocationTextField( bloc: bloc,
+                      //   controller: locationController,
+                      //   locationFocusNode: locationFocusNode,
+                      //   // nextFocusNode: dateFocusNode,
+                      // ),
                       SizedBox(height: 16.h),
                       TextFormField(
                         controller: phoneController,
@@ -260,9 +252,7 @@ class DecorationPage extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 6.h),
-                          ImagePickerPage(
-                            imageNotifier: imagesNotifier,
-                          )
+                          const ImagePickerPage()
                         ],
                       ),
                     );
@@ -271,7 +261,7 @@ class DecorationPage extends StatelessWidget {
               ),
 
               // Terms and Conditions
-              const TermsAndConditionsScreen(),
+              // const TermsAndConditionsScreen(),
               SizedBox(height: 50.h),
             ],
           ),

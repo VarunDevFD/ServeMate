@@ -10,7 +10,7 @@ class CustomSideHeadText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+      padding:  EdgeInsets.only(top: 4.h),
       child: CustomText(
         text: title,
         styleType: TextStyleType.blackBody,

@@ -1,17 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
-import 'package:serve_mate/features/home/presentation/pages/bottom_nav_bar_page.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
-import 'package:serve_mate/features/product/presentation/widgets/switch_custom_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
-import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 import 'reusable_dropdown.dart';
 
 class DressesPage extends StatelessWidget {
@@ -100,12 +94,12 @@ class DressesPage extends StatelessWidget {
                       ),
                       SizedBox(height: 6.h),
                       // Gender
-                        GenderSelectionWidget(
-                          onValue: (value) {
-                            genderController.clear();
-                            genderController.text = value;
-                          },
-                        ),
+                      GenderSelectionWidget(
+                        onValue: (value) {
+                          genderController.clear();
+                          genderController.text = value;
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -306,7 +300,7 @@ class DressesPage extends StatelessWidget {
                         },
                       ),
                       SizedBox(height: 16.h),
-                      const SwitchTileScreen(),
+                      // const SwitchTileScreen(),
                     ],
                   ),
                 ),
@@ -325,11 +319,11 @@ class DressesPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(height: 16.h),
-                      LocationTextField(
-                        controller: locationController,
-                        locationFocusNode: locationFocusNode,
-                        nextFocusNode: phoneFocusNode,
-                      ),
+                      // LocationTextField( bloc: bloc,
+                      //   controller: locationController,
+                      //   locationFocusNode: locationFocusNode,
+                      //   nextFocusNode: phoneFocusNode,
+                      // ),
                       SizedBox(height: 16.h),
                       TextFormField(
                         controller: phoneController,
@@ -350,40 +344,33 @@ class DressesPage extends StatelessWidget {
               const SizedBox(height: 16),
               // Image Upload Section
               Card(
-                child: ValueListenableBuilder<List<File>>(
-                  valueListenable: imagesNotifier,
-                  builder: (context, images, _) {
-                    return Padding(
-                      padding: EdgeInsets.all(20.r),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: Padding(
+                  padding: EdgeInsets.all(20.r),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.photo_library,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Product Images',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
+                          Icon(
+                            Icons.photo_library,
+                            color: AppColors.orange1,
                           ),
-                          SizedBox(height: 6.h),
-                          ImagePickerPage(
-                            imageNotifier: imagesNotifier,
-                          )
+                          SizedBox(width: 8.w),
+                          Text(
+                            'Product Images',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                         ],
                       ),
-                    );
-                  },
+                      SizedBox(height: 16.h),
+                      const ImagePickerPage()
+                    ],
+                  ),
                 ),
               ),
 
               // Terms and Conditions
-              const TermsAndConditionsScreen(),
+              // const TermsAndConditionsScreen(),
 
               SizedBox(height: 50.h)
             ],

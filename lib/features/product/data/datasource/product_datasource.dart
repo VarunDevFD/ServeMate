@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
-// import 'package:serve_mate/features/product/data/models/camera_model.dart';
+import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/footwear_model.dart';
@@ -12,7 +12,7 @@ abstract class ProductRemoteDataSource {
   Future<void> addDress(DressModel dress);
   Future<void> addJewelry(JewelryModel jewelry);
   Future<void> addVenue(VenueModel venue);
-  // Future<void> addCamera(CameraModel camera);
+  Future<void> addCamera(CameraModel camera);
   Future<void> addDecoration(DecorationModel decoration);
   Future<void> addVehicle(VehicleModel vehicle);
   Future<void> addFootwear(FootwearModel footwear);
@@ -21,7 +21,7 @@ abstract class ProductRemoteDataSource {
   Future<List<DressModel>> fetchDresses();
   Future<List<JewelryModel>> fetchJewelry();
   Future<List<VenueModel>> fetchVenues();
-  // Future<List<CameraModel>> fetchCameras();
+  Future<List<CameraModel>> fetchCameras();
   Future<List<DecorationModel>> fetchDecorations();
   Future<List<VehicleModel>> fetchVehicles();
   Future<List<FootwearModel>> fetchFootwear();
@@ -70,14 +70,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     );
   }
 
-  // @override
-  // Future<void> addCamera(CameraModel camera) async {
-    // await _addToFirestore(
-    //   collectionName: 'camera',
-    //   model: camera,
-    //   toMap: (model) => model.toMap(),
-    // );
-  // }
+  @override
+  Future<void> addCamera(CameraModel camera) async {
+    await _addToFirestore(
+      collectionName: 'camera',
+      model: camera,
+      toMap: (model) => model.toMap(),
+    );
+  }
 
   @override
   Future<void> addDecoration(DecorationModel decoration) async {
@@ -144,13 +144,13 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     );
   }
 
-  // @override
-  // Future<List<CameraModel>> fetchCameras() async {
-  //   return await fetchFromFirestoore<CameraModel>(
-  //     collectionName: 'camera',
-  //     fromMap: (map) => CameraModel.fromMap(map),
-  //   );
-  // }
+  @override
+  Future<List<CameraModel>> fetchCameras() async {
+    return await fetchFromFirestoore<CameraModel>(
+      collectionName: 'camera',
+      fromMap: (map) => CameraModel.fromMap(map),
+    );
+  }
 
   @override
   Future<List<DecorationModel>> fetchDecorations() async {

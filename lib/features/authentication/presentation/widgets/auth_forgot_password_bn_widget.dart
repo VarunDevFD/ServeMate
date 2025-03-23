@@ -17,13 +17,13 @@ class ForgotPasswordBn extends StatelessWidget {
           width: 10.w,
           height: 5.h,
         ),
-        TextButton(
-          onPressed: () => context.go('/forgotPassword'),
-          child: Text(
-            'Forgot Password?',
-            style: AppTextStyles.buttonTextStyleForgotBn,
-          ),
-        ),
+        // TextButton(
+        //   onPressed: () => context.go('/forgotPassword'),
+        //   child: Text(
+        //     'Forgot Password?',
+        //     style: AppTextStyles.buttonTextStyleForgotBn,
+        //   ),
+        // ),
       ],
     );
   }

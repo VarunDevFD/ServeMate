@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
-import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_event.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_state.dart';
 import 'package:serve_mate/features/authentication/presentation/widgets/auth_button.dart';
 import 'package:serve_mate/features/authentication/presentation/widgets/auth_field.dart';
@@ -28,9 +27,9 @@ class ForgotPasswordpage extends StatelessWidget {
           'Please enter a valid Email',
         );
       } else {
-        context.read<ForgetPasswordBloc>().add(
-              ForgetPasswordEvent(email: _emailController.text),
-            );
+        // context.read<ForgetPasswordBloc>().add(
+        //       SendPasswordResetEmail(email: _emailController.text),
+        //     );
       }
     }
   }
@@ -65,7 +64,7 @@ class ForgotPasswordpage extends StatelessWidget {
             SizedBox(height: 20.h),
             BlocConsumer<ForgetPasswordBloc, ForgetPasswordState>(
               listener: (context, state) {
-                if (state is ForgetPasswordSuccessState) {
+                if (state is ForgetPasswordSuccess) {
                   // Show success message and navigate to sign-in screen
                   DialogUtils.showSuccessMessage(
                     context,
@@ -73,13 +72,13 @@ class ForgotPasswordpage extends StatelessWidget {
                   );
 
                   context.go('/sign-in');
-                } else if (state is ForgetPasswordFailState) {
+                } else if (state is ForgetPasswordFailure) {
                   // Show error message
                   DialogUtils.showErrorMessage(context, state.error.message);
                 }
               },
               builder: (context, state) {
-                if (state is ForgetPasswordLoadingState) {
+                if (state is ForgetPasswordLoading) {
                   LoadingDialog.show(context);
                 } else {
                   LoadingDialog.hide(context);

@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,15 +6,15 @@ import 'package:serve_mate/features/product/presentation/bloc/location_bloc/loca
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 
 class LocationTextField extends StatelessWidget {
-  final TextEditingController controller;
   final FocusNode locationFocusNode;
-  final FocusNode? nextFocusNode;
+  final dynamic onFieldSubmitted;
+  final TextEditingController locationController;
 
-  const LocationTextField({
+  LocationTextField({
     Key? key,
-    required this.controller,
+    required this.locationController,
     required this.locationFocusNode,
-    this.nextFocusNode,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -23,8 +22,8 @@ class LocationTextField extends StatelessWidget {
     return BlocConsumer<LocationBloc, LocationState>(
       listener: (context, state) {
         if (state is LocationLoaded) {
-          controller.text = state.address;
-          FocusScope.of(context).requestFocus(nextFocusNode);
+          locationController.text = state.location[0];
+          onFieldSubmitted(state.location);
         }
         if (state is LocationError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -34,18 +33,16 @@ class LocationTextField extends StatelessWidget {
       },
       builder: (context, state) {
         return TextFormField(
-          controller: controller,
+          controller: locationController,
           focusNode: locationFocusNode,
-          readOnly: true, // Prevent manual input
+          readOnly: true, 
           decoration: InputDecoration(
             labelText: "Location",
             prefixIcon: const Icon(Icons.location_on_outlined),
             suffixIcon: IconButton(
               icon: const Icon(Icons.location_on),
-              onPressed: () {
-                context.read<LocationBloc>().add(FetchLocation());
-                FocusScope.of(context).requestFocus(nextFocusNode);
-              },
+              onPressed: () =>
+                  context.read<LocationBloc>().add(FetchLocation()),
             ),
           ),
         );
