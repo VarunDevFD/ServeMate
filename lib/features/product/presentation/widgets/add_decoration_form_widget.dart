@@ -7,8 +7,7 @@ import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/naviaton/presentation/pages/bottom_nav_bar_page.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
-
-import 'image_widgets.dart';
+ 
 
 class DecorationPage extends StatelessWidget {
   final FocusNode nameFocusNode = FocusNode();
@@ -252,7 +251,7 @@ class DecorationPage extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 6.h),
-                          const ImagePickerPage()
+                          //  ImagePickerPage()
                         ],
                       ),
                     );

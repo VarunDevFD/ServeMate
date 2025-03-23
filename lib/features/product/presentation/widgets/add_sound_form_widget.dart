@@ -1,10 +1,9 @@
- 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; 
-import 'package:serve_mate/core/utils/constants_dropdown_name.dart'; 
-import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';  
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
-import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart'; 
+import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 
 class SoundDJPage extends StatelessWidget {
   final FocusNode nameFocusNode = FocusNode();
@@ -64,7 +63,6 @@ class SoundDJPage extends StatelessWidget {
               // Category DropDown
               ReusableDropdown(
                 labelText: 'Category*',
-                focusNode: categoryFocusNode,
                 items: DropdownItems.soundCategorys,
                 onFieldSubmitted: (value) {
                   categoryController

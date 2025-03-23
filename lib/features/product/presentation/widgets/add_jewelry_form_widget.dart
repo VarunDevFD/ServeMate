@@ -68,7 +68,6 @@ class JewelryPage extends StatelessWidget {
               // Category  DropDown
               ReusableDropdown(
                 labelText: 'Category*',
-                focusNode: categoryFocusNode,
                 items: DropdownItems.jewelryCategorys,
                 onFieldSubmitted: (value) {
                   categoryController
@@ -82,7 +81,6 @@ class JewelryPage extends StatelessWidget {
               // Jewelry Type DropDown
               ReusableDropdown(
                 labelText: 'Type*',
-                focusNode: typeFocusNode,
                 items: DropdownItems.jewelryTypes,
                 onFieldSubmitted: (value) {
                   typeController
@@ -233,7 +231,6 @@ class JewelryPage extends StatelessWidget {
               ReusableDropdown(
                 items: DropdownItems.condition,
                 labelText: 'Duration *',
-                focusNode: conditionFocusNode,
                 onFieldSubmitted: (String? value) {
                   conditionController
                     ..clear()

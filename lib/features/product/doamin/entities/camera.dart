@@ -1,40 +1,40 @@
 class Camera {
-  final String name;
-  final String brand;
-  final String model;
-  final String description;
-  final String category;
-  final int price;
-  final int sdPrice;
-  final bool available;
-  final List<String> location;
-  final String phoneNumber;
-  final String condition;
+  final String? name;
+  final String? brand;
+  final String? model;
+  final String? description;
+  final String? category;
+  final int? price;
+  final int? sdPrice;
+  final bool? available;
+  final List<String>? location;
+  final String? phoneNumber;
+  final String? condition;
   final List<String>? storage;
   final List<String>? connectivity;
-  final String duration;
-  final String latePolicy;
-  final List<String> images;
-  final bool privacyPolicy;
+  final String? duration;
+  final String? latePolicy;
+  final List<String>? images;
+  final bool? privacyPolicy;
 
   Camera(
-      {required this.name,
-      required this.brand,
-      required this.model,
-      required this.category,
-      required this.description,
-      required this.price,
-      required this.sdPrice,
-      required this.available,
-      required this.location,
-      required this.phoneNumber,
-      required this.condition,
-      required this.storage,
-      required this.connectivity,
-      required this.duration,
-      required this.latePolicy,
-      required this.images,
-      required this.privacyPolicy});
+      {  this.name,
+        this.brand,
+        this.model,
+        this.category,
+        this.description,
+        this.price,
+        this.sdPrice,
+        this.available,
+        this.location,
+        this.phoneNumber,
+        this.condition,
+        this.storage,
+        this.connectivity,
+        this.duration,
+        this.latePolicy,
+        this.images,
+        this.privacyPolicy});
 
   Camera copyWith({
     String? name,

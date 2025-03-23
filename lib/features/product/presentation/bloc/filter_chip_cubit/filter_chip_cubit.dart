@@ -32,6 +32,18 @@ class FilterChipCubit extends Cubit<FilterChipState> {
     ));
   }
 
+   void resetAll() {
+    final newSelections = <String, List<String>>{};
+    // Iterate through existing keys and set them to empty lists
+    state.selections.forEach((key, value) {
+      newSelections[key] = [];
+    });
+    emit(FilterChipState(
+      selections: newSelections,
+      isExpanded: false, // Optionally reset isExpanded to false
+    ));
+  }
+
   void toggleExpanded(String id) {
     emit(FilterChipState(
       selections: state.selections,

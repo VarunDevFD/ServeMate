@@ -97,7 +97,6 @@ class FootwearPage extends StatelessWidget {
                   padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
                   child: ReusableDropdown(
                     labelText: "Footwear Type",
-                    focusNode: typeFocusNode,
                     onFieldSubmitted: (String? value) {
                       typeController.clear();
                       typeController.text = value ?? '';
@@ -113,7 +112,6 @@ class FootwearPage extends StatelessWidget {
                 title: 'Size',
                 child: ReusableDropdown(
                   labelText: 'Size',
-                  focusNode: sizeFocusNode,
                   items: DropdownItems.sizeFootwear,
                   onFieldSubmitted: (String? value) {
                     sizeController.clear();
@@ -170,7 +168,6 @@ class FootwearPage extends StatelessWidget {
                 child: ReusableDropdown(
                   items: DropdownItems.condition,
                   labelText: 'Condition *',
-                  focusNode: conditionFocusNode,
                   onFieldSubmitted: (String? value) {
                     conditionController.clear();
                     conditionController.text = value ?? '';

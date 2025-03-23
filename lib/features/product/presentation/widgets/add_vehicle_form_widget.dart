@@ -1,15 +1,13 @@
- 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
-import 'package:serve_mate/core/utils/constants_list.dart'; 
+import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 // import 'package:serve_mate/temp/custom_calendar_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart'; 
+import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
-import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';  
+import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
- 
 
 class VehiclesPage extends StatelessWidget {
   final FocusNode nameFocusNode = FocusNode();
@@ -75,7 +73,6 @@ class VehiclesPage extends StatelessWidget {
                 title: 'Vehicle Type',
                 child: ReusableDropdown(
                   labelText: "Vehicle Type",
-                  focusNode: typeFocusNode,
                   onFieldSubmitted: (String? value) {
                     typeController.clear();
                     typeController.text = value ?? '';
@@ -108,7 +105,6 @@ class VehiclesPage extends StatelessWidget {
                 title: 'Vehicle Model',
                 child: ReusableDropdown(
                   labelText: "Model Year *",
-                  focusNode: modelFocusNode,
                   onFieldSubmitted: (String? value) {
                     modelController.clear();
                     modelController.text = value ?? '';
@@ -152,7 +148,6 @@ class VehiclesPage extends StatelessWidget {
                 title: 'Vehicle Fuel',
                 child: ReusableDropdown(
                   labelText: "Fuel Type *",
-                  focusNode: fuelFocusNode,
                   onFieldSubmitted: (String? value) {
                     fuelController.clear();
                     fuelController.text = value ?? '';
@@ -166,7 +161,6 @@ class VehiclesPage extends StatelessWidget {
                 title: 'Vehicle Transmission Type',
                 child: ReusableDropdown(
                   labelText: "Transmission Type *",
-                  focusNode: transmissionFocusNode,
                   onFieldSubmitted: (String? value) {
                     transmissionController.clear();
                     transmissionController.text = value ?? '';

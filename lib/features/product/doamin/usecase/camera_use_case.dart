@@ -1,4 +1,4 @@
-// import 'package:serve_mate/features/product/doamin/entities/camera_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class CameraUseCase {
@@ -6,11 +6,13 @@ class CameraUseCase {
 
   CameraUseCase(this.repository);
 
-  // Future<void> execute(CameraEntity cameraEntity) async {
-  //   return await repository.addCamera(cameraEntity);
-  // }
+  Future<void> execute(Camera camera) async { 
+    return await repository.addCamera(camera);
+    
+  }
+   
 
-  // Future<List<CameraEntity>> fetchCameras() async {
+  // Future<List<Camera>> fetchCameras() async {
   //   return await repository.fetchCameras();
   // }
 }

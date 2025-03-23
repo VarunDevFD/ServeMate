@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart'; 
 import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
 import 'reusable_dropdown.dart';
 
@@ -82,7 +81,6 @@ class DressesPage extends StatelessWidget {
                       // Category
                       ReusableDropdown(
                         labelText: 'Category*',
-                        focusNode: categoryFocusNode,
                         items: DropdownItems.categoriesDress,
                         onFieldSubmitted: (value) {
                           categoryController
@@ -133,7 +131,6 @@ class DressesPage extends StatelessWidget {
                       // Dress Size
                       ReusableDropdown(
                         labelText: 'Size*',
-                        focusNode: sizeFocusNode,
                         items: DropdownItems.sizes,
                         onFieldSubmitted: (value) {
                           sizeController
@@ -147,7 +144,6 @@ class DressesPage extends StatelessWidget {
                       // Dress Condition
                       ReusableDropdown(
                         labelText: 'condition *',
-                        focusNode: sizeFocusNode,
                         items: DropdownItems.sizes,
                         onFieldSubmitted: (value) {
                           sizeController
@@ -363,7 +359,7 @@ class DressesPage extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 16.h),
-                      const ImagePickerPage()
+                        // ImagePickerPage()
                     ],
                   ),
                 ),

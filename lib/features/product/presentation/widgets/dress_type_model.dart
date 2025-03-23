@@ -28,7 +28,6 @@ class DressTypeAndModel extends StatelessWidget {
           Expanded(
             child: ReusableDropdown(
               labelText: "Select Dress Type *",
-              focusNode: catergoryFocusNode,
               items: DropdownItems.categoriesDress,
               onFieldSubmitted: (String? value) {
                 catergoryController.clear();
@@ -43,7 +42,6 @@ class DressTypeAndModel extends StatelessWidget {
           Expanded(
             child: ReusableDropdown(
               labelText: "Select Dress Model *",
-              focusNode: modelFocusNode,
               items: DropdownItems.attireOptions,
               onFieldSubmitted: (String? value) {
                 modelController.clear();

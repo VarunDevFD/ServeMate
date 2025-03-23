@@ -12,6 +12,10 @@ class SwitchTileScreen extends StatelessWidget {
     required this.bloc,
   }) : super(key: key);
 
+  void onEvent(UpdateField event) {
+    bloc.add(event);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AvailableSwitchCubit, bool>(
@@ -21,7 +25,7 @@ class SwitchTileScreen extends StatelessWidget {
           value: state,
           onChanged: (bool value) {
             context.read<AvailableSwitchCubit>().toggleAvailable(value);
-            bloc.add(UpdateField('available', value));
+            onEvent(UpdateField('available', value));
           },
         );
       },

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart'; 
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 
 class LocationTextField extends StatelessWidget {
-  final FocusNode locationFocusNode;
   final dynamic onFieldSubmitted;
   final TextEditingController locationController;
 
   LocationTextField({
     Key? key,
     required this.locationController,
-    required this.locationFocusNode,
     this.onFieldSubmitted,
   }) : super(key: key);
 
@@ -34,10 +31,9 @@ class LocationTextField extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           controller: locationController,
-          focusNode: locationFocusNode,
-          readOnly: true, 
+          readOnly: true,
           decoration: InputDecoration(
-            labelText: "Location",
+            labelText: "Location", 
             prefixIcon: const Icon(Icons.location_on_outlined),
             suffixIcon: IconButton(
               icon: const Icon(Icons.location_on),

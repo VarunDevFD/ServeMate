@@ -1,3 +1,5 @@
+ 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
@@ -35,7 +37,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     required String collectionName,
     required T model,
     required Map<String, dynamic> Function(T) toMap,
-  }) async {
+  }) async { 
+
     try {
       await _firebaseFirestore.collection(collectionName).add(toMap(model));
     } catch (e) {
@@ -71,7 +74,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<void> addCamera(CameraModel camera) async {
+  Future<void> addCamera(CameraModel camera) async { 
     await _addToFirestore(
       collectionName: 'camera',
       model: camera,
@@ -112,7 +115,8 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     required T Function(Map<String, dynamic>) fromMap,
   }) async {
     try {
-      final snapshot = await _firebaseFirestore.collection(collectionName).get();
+      final snapshot =
+          await _firebaseFirestore.collection(collectionName).get();
       return snapshot.docs.map((doc) => fromMap(doc.data())).toList();
     } catch (e) {
       throw Exception('Failed to fetch data from $collectionName: $e');

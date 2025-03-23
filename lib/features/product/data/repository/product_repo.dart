@@ -50,7 +50,7 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<void> addCamera(Camera camera) async {
     try {
-      await remoteDataSource.addCamera(camera as CameraModel);
+      await remoteDataSource.addCamera(CameraModel.fromEntity(camera));
     } catch (e) {
       throw Exception('Failed to add camera: $e');
     }

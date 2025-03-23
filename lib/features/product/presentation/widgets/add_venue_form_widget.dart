@@ -102,7 +102,6 @@ class VenuePage extends StatelessWidget {
                 child: ReusableDropdown(
                   items: DropdownItems.rentalDurationItems,
                   labelText: 'Duration *',
-                  focusNode: durationFocusNode,
                   onFieldSubmitted: (String? value) {
                     durationController.clear();
                     durationController.text = value ?? '';
@@ -169,7 +168,6 @@ class VenuePage extends StatelessWidget {
                 child: ReusableDropdown(
                   items: DropdownItems.venueTypeItems,
                   labelText: 'Venue Type *',
-                  focusNode: venueTypeFocusNode,
                   onFieldSubmitted: (String? value) {
                     venueTypeController.clear();
                     venueTypeController.text = value ?? '';

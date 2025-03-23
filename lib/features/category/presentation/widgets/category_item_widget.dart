@@ -50,8 +50,7 @@ class CategoryItem extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(5.r),
             decoration: BoxDecoration(
-              color: AppColors.balck4.withOpacity(0.6),  
-              borderRadius: BorderRadius.circular(15.r),
+              color: Colors.black.withAlpha(153), // Equivalent to 60% opacity
             ),
             child: Align(
               alignment: Alignment.bottomLeft,

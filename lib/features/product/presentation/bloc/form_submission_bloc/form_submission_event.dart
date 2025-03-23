@@ -1,5 +1,7 @@
 abstract class FormSubmissionEvent {}
 
+class InitializeForm extends FormSubmissionEvent {}
+
 class UpdateField extends FormSubmissionEvent {
   final String field;
   final dynamic value;
@@ -8,3 +10,5 @@ class UpdateField extends FormSubmissionEvent {
 }
 
 class CameraEvent extends FormSubmissionEvent {}
+
+class ResetForm extends FormSubmissionEvent {}

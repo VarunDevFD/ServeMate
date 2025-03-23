@@ -29,15 +29,15 @@ class AppColors {
 
   //------------------Shade-----------------------------------------------------
   // Black
-  static Color balck1 = Colors.black.withOpacity(0.6);
-  static Color balck2 = Colors.black.withOpacity(0.4);
-  static Color balck3 = Colors.black.withOpacity(0.2);
-  static Color balck4 = Colors.black.withOpacity(0.5);
+  static Color balck1 = Colors.black.withAlpha((0.6 * 255).toInt());
+  static Color balck2 = Colors.black.withAlpha((0.4 * 255).toInt());
+  static Color balck3 = Colors.black.withAlpha((0.2 * 255).toInt());
+  static Color balck4 = Colors.black.withAlpha((0.5 * 255).toInt());
 
   // White
-  static Color white1 = Colors.white.withOpacity(0.2);
+  static Color white1 = Colors.white.withAlpha((0.2 * 255).toInt());
   static Color white2 =
-      const Color.fromARGB(255, 255, 188, 149).withOpacity(0.2);
+      const Color.fromARGB(255, 255, 188, 149).withAlpha((0.2 * 255).toInt());
 
   // Orange
   static Color orange1 = const Color.fromARGB(255, 239, 145, 74);

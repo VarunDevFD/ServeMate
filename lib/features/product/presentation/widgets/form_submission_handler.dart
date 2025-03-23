@@ -6,8 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/services/image_upload_service.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/product/data/models/camera_model.dart';
+import 'package:serve_mate/core/theme/app_colors.dart'; 
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/footwear_model.dart';
@@ -136,34 +135,34 @@ void handleFormSubmission({
 
       case 'Cameras':
          
-        final camera = CameraModel(
-          name: nameController?.text ?? '',
-          model: modelController?.text ?? '',
-          description: descriptionController?.text ?? '',
-          available:  true,
-          phoneNumber: phoneController?.text ?? '',
-          storageOption:  [],
-          connectivityOptions:  [],
-          duration: durationController?.text ?? '',
-          latePolicy: '', 
-          privacyPolicy: true,
-          price: priceController ?? 0.0,
-          sdPrice: securityController ?? 0.0,
-          location: locationController?.text ?? '',
-          images:
-              imageController?.map((controller) => controller.text).toList() ??
-                  [],
-          // notes: descriptionController?.text ?? '',
-          // equipmentType: typeController?.text ?? '',
-          brand: brandController?.text ?? '',
-          condition: conditionController?.text ?? '',
-          // date: dateController ?? '',
-          // accessories:
-          //     facilitiesVenue?.map((controller) => controller.text).toList() ??
-          //         [],
-          // damage: damageController?.text ?? '',
-        );
-        showSuccessDialogCamera(context, onFormReset, camera);
+        // final camera = Camera(
+        //   name: nameController?.text ?? '',
+        //   model: modelController?.text ?? '',
+        //   description: descriptionController?.text ?? '',
+        //   available:  true,
+        //   phoneNumber: phoneController?.text ?? '',
+        //   storageOption:  [],
+        //   connectivityOptions:  [],
+        //   duration: durationController?.text ?? '',
+        //   latePolicy: '', 
+        //   privacyPolicy: true,
+        //   price: priceController ?? 0.0,
+        //   sdPrice: securityController ?? 0.0,
+        //   location: locationController?.text ?? '',
+        //   images:
+        //       imageController?.map((controller) => controller.text).toList() ??
+        //           [],
+        //   // notes: descriptionController?.text ?? '',
+        //   // equipmentType: typeController?.text ?? '',
+        //   brand: brandController?.text ?? '',
+        //   condition: conditionController?.text ?? '',
+        //   // date: dateController ?? '',
+        //   // accessories:
+        //   //     facilitiesVenue?.map((controller) => controller.text).toList() ??
+        //   //         [],
+        //   // damage: damageController?.text ?? '',
+        // );
+        showSuccessDialogCamera(context, onFormReset,);
         break;
 
       case 'Vehicles':
@@ -371,7 +370,7 @@ void showSuccessDialogVenue(
 void showSuccessDialogCamera(
   BuildContext context,
   VoidCallback onFormReset,
-  CameraModel camera,
+  
 ) {
   showDialog(
     context: context,
@@ -381,7 +380,7 @@ void showSuccessDialogCamera(
         actions: [
           TextButton(
             onPressed: () {
-              context.read<ProductBloc>().add(SubmitCameraEvent(camera));
+              // context.read<ProductBloc>().add(SubmitCameraEvent(camera));
               context.pop();
               onFormReset();
             },

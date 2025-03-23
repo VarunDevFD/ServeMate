@@ -49,8 +49,8 @@ class ImageCarousel extends StatelessWidget {
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.7),
-                          Colors.black.withOpacity(0.4),
+                          Colors.black.withAlpha(178),
+                          Colors.black.withAlpha(102),
                           Colors.transparent,
                         ],
                       ),

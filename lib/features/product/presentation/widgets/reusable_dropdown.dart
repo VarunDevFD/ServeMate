@@ -6,7 +6,6 @@ import 'package:serve_mate/core/theme/input_decoration.dart';
 class ReusableDropdown extends StatelessWidget {
   final List<String> items;
   final String labelText;
-  final FocusNode? focusNode;
   final dynamic onFieldSubmitted;
   final FormFieldValidator<String>? validator;
 
@@ -14,7 +13,6 @@ class ReusableDropdown extends StatelessWidget {
     Key? key,
     required this.items,
     required this.labelText,
-    required this.focusNode,
     this.onFieldSubmitted,
     this.validator,
   }) : super(key: key);
@@ -22,7 +20,6 @@ class ReusableDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      focusNode: focusNode,
       decoration: InputDecorations.defaultDecoration(labelText: labelText),
       iconDisabledColor: AppColors.orange,
       alignment: Alignment.centerLeft,

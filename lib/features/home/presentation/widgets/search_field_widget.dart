@@ -24,7 +24,7 @@ class AnimatedSearchBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20.r),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
+                        color: Colors.black.withAlpha(153),
                         blurRadius: 5.0.r,
                         offset: Offset(0, 4.h),
                       ),
@@ -68,7 +68,7 @@ class AnimatedSearchBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(22.0.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withAlpha(10),
                       blurRadius: 6.0.r,
                       offset: Offset(0, 2.h),
                     ),

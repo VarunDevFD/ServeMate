@@ -1,18 +1,19 @@
-// import 'package:serve_mate/features/product/doamin/entities/camera_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 
 class CameraModel {
   final String name;
   final String brand;
   final String model;
   final String description;
-  final num price;
-  final num sdPrice;
+  final String category;
+  final int price;
+  final int sdPrice;
   final bool available;
-  final String location;
+  final List<String> location;
   final String phoneNumber;
   final String condition;
-  final List<String> storageOption;
-  final List<String> connectivityOptions;
+  final List<String>? storage;
+  final List<String>? connectivity;
   final String duration;
   final String latePolicy;
   final List<String> images;
@@ -22,6 +23,7 @@ class CameraModel {
     required this.name,
     required this.brand,
     required this.model,
+    required this.category,
     required this.description,
     required this.price,
     required this.sdPrice,
@@ -29,8 +31,8 @@ class CameraModel {
     required this.location,
     required this.phoneNumber,
     required this.condition,
-    required this.storageOption,
-    required this.connectivityOptions,
+    required this.storage,
+    required this.connectivity,
     required this.duration,
     required this.latePolicy,
     required this.images,
@@ -39,17 +41,18 @@ class CameraModel {
 
   CameraModel copyWith({
     String? name,
-    String? brand,
     String? model,
+    String? brand,
+    String? category,
     String? description,
-    num? price,
-    num? sdPrice,
+    int? price,
+    int? sdPrice,
     bool? available,
-    String? location,
+    List<String>? location,
     String? phoneNumber,
     String? condition,
-    List<String>? storageOption,
-    List<String>? connectivityOptions,
+    List<String>? storage,
+    List<String>? connectivity,
     String? duration,
     String? latePolicy,
     List<String>? images,
@@ -59,6 +62,7 @@ class CameraModel {
       name: name ?? this.name,
       brand: brand ?? this.brand,
       model: model ?? this.model,
+      category: category ?? this.category,
       description: description ?? this.description,
       price: price ?? this.price,
       sdPrice: sdPrice ?? this.sdPrice,
@@ -66,8 +70,8 @@ class CameraModel {
       location: location ?? this.location,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       condition: condition ?? this.condition,
-      storageOption: storageOption ?? this.storageOption,
-      connectivityOptions: connectivityOptions ?? this.connectivityOptions,
+      storage: storage ?? this.storage,
+      connectivity: connectivity ?? this.connectivity,
       duration: duration ?? this.duration,
       latePolicy: latePolicy ?? this.latePolicy,
       images: images ?? this.images,
@@ -81,14 +85,15 @@ class CameraModel {
       'brand': brand,
       'model': model,
       'description': description,
+      'category': category,
       'price': price,
       'sdPrice': sdPrice,
       'available': available,
       'location': location,
       'phoneNumber': phoneNumber,
       'condition': condition,
-      'storageOption': storageOption,
-      'connectivityOptions': connectivityOptions,
+      'storageOption': storage, // Adjusted key to match Firestore
+      'connectivityOptions': connectivity, // Adjusted key to match Firestore
       'duration': duration,
       'latePolicy': latePolicy,
       'images': images,
@@ -98,88 +103,46 @@ class CameraModel {
 
   factory CameraModel.fromMap(Map<String, dynamic> map) {
     return CameraModel(
-      name: map['name'] as String,
-      brand: map['brand'] as String,
-      model: map['model'] as String,
-      description: map['description'] as String,
-      price: map['price'] as num,
-      sdPrice: map['sdPrice'] as num,
-      available: map['available'] as bool,
-      location: map['location'] as String,
-      phoneNumber: map['phoneNumber'] as String,
-      condition: map['condition'] as String,
-      storageOption: List<String>.from(map['storageOption'] ?? []),
-      connectivityOptions: List<String>.from(map['connectivityOptions'] ?? []),
-      duration: map['duration'] as String,
-      latePolicy: map['latePolicy'] as String,
+      name: map['name'] as String? ?? '',
+      brand: map['brand'] as String? ?? '',
+      model: map['model'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      category: map['category'] as String? ?? '',
+      price: map['price'] as int? ?? 0,
+      sdPrice: map['sdPrice'] as int? ?? 0,
+      available: map['available'] as bool? ?? false,
+      location: List<String>.from(map['location'] ?? ['', '', '']),
+      phoneNumber: map['phoneNumber'] as String? ?? '',
+      condition: map['condition'] as String? ?? '',
+      storage: List<String>.from(map['storageOption'] ?? []),
+      connectivity: List<String>.from(map['connectivityOptions'] ?? []),
+      duration: map['duration'] as String? ?? '',
+      latePolicy: map['latePolicy'] as String? ?? '',
       images: List<String>.from(map['images'] ?? []),
-      privacyPolicy: map['privacyPolicy'] as bool,
+      privacyPolicy: map['privacyPolicy'] as bool? ?? false,
+    );
+  }
+
+  // New factory method to convert from Camera entity
+  factory CameraModel.fromEntity(Camera camera) {
+    return CameraModel(
+      name: camera.name ?? '',
+      brand: camera.brand ?? '',
+      model: camera.model ?? '',
+      category: camera.category   ?? '',
+      description: camera.description ?? '',
+      price: camera.price ?? 0,
+      sdPrice: camera.sdPrice ?? 0,
+      available: camera.available ?? false,
+      location: camera.location ?? ['', '', ''],
+      phoneNumber: camera.phoneNumber ?? '',
+      condition: camera.condition ?? '',
+      storage: camera.storage,
+      connectivity: camera.connectivity,
+      duration: camera.duration   ?? '',
+      latePolicy: camera.latePolicy ?? '',
+      images: camera.images ?? [],
+      privacyPolicy: camera.privacyPolicy ?? false,
     );
   }
 }
-
-// class CameraModel extends CameraEntity {
-//   CameraModel({
-//     required String name,
-//     required double price,
-//     required double securityDeposit,
-//     required String location,
-//     required List<String> images,
-//     required String notes,
-//     required String equipmentType,
-//     required String brandModel,
-//     required String condition,
-//     required String dateAdded,
-//     required List<String> accessories,
-//     required String damage,
-//   }) : super(
-//           name: name,
-//           price: price,
-//           securityDeposit: securityDeposit,
-//           location: location,
-//           images: images,
-//           notes: notes,
-//           equipmentType: equipmentType,
-//           brandModel: brandModel,
-//           condition: condition,
-//           dateAdded: dateAdded,
-//           accessories: accessories,
-//           damage: damage,
-//         );
-
-//   /// Convert the model into a Map for Firestore or local storage.
-//   Map<String, dynamic> toMap() {
-//     return {
-//       'name': name,
-//       'price': price,
-//       'securityDeposit': securityDeposit,
-//       'location': location,
-//       'images': images,
-//       'notes': notes,
-//       'equipmentType': equipmentType,
-//       'brandModel': brandModel,
-//       'condition': condition,
-//       'dateAdded': dateAdded,
-//       'accessories': accessories,
-//       'damage': damage,
-//     };
-//   }
-
-//   /// Create a `CameraModel` object from a Map.
-//   factory CameraModel.fromMap(Map<String, dynamic> map) {
-//     return CameraModel(
-//       name: map['name'] as String,
-//       price: (map['price'] as num).toDouble(),
-//       securityDeposit: (map['securityDeposit'] as num).toDouble(),
-//       location: map['location'] as String,
-//       images: List<String>.from(map['images'] ?? []),
-//       notes: map['notes'] as String,
-//       equipmentType: map['equipmentType'] as String,
-//       brandModel: map['brandModel'] as String,
-//       condition: map['condition'] as String,
-//       dateAdded: map['dateAdded'] as String,
-//       accessories: List<String>.from(map['accessories'] ?? []),
-//       damage: map['damage'] as String,
-//     );
-//   }
-// }

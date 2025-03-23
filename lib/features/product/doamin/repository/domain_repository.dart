@@ -1,4 +1,3 @@
-// import 'package:serve_mate/features/product/doamin/entities/camera_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';

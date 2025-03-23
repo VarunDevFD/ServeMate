@@ -10,11 +10,13 @@ import 'package:serve_mate/features/product/presentation/bloc/form_submission_bl
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 
 class ImagePickerPage extends StatelessWidget {
-  final FormSubmissionBloc? bloc;
+  final FormSubmissionBloc bloc;
+  final String? Function(List<File>)? validator;
 
   const ImagePickerPage({
     super.key,
-    this.bloc,
+    required this.bloc,
+    this.validator,
   });
 
   void _showImageSourceDialog(BuildContext context) {
@@ -102,86 +104,102 @@ class ImagePickerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () => _showImageSourceDialog(context),
-          child: Container(
-            height: 100.h,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFECF1),
-              border: Border.all(color: AppColors.imageBr),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.add_photo_alternate_outlined,
-                    size: 35.r,
-                    color: AppColors.orange1,
-                  ),
-                  SizedBox(height: 6.h),
-                  Text(
-                    'Upload Images',
-                    style: TextStyle(
+    return BlocListener<ImagePickerCubit, List<File>>(
+      listener: (context, images) {
+        final pics = images.map((e) => e.path).toList();
+        // Update the FormSubmissionBloc only when images change
+        bloc.add(UpdateField('images', pics));
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () => _showImageSourceDialog(context),
+            child: Container(
+              height: 100.h,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFECF1),
+                border: Border.all(color: AppColors.imageBr),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add_photo_alternate_outlined,
+                      size: 35.r,
                       color: AppColors.orange1,
-                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                ],
+                    SizedBox(height: 6.h),
+                    Text(
+                      'Upload Images',
+                      style: TextStyle(
+                        color: AppColors.orange1,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        BlocBuilder<ImagePickerCubit, List<File>>(
-          builder: (context, images) {
-            if (images.isEmpty) {
-              return const SizedBox.shrink();
-            } else {
-              bloc?.add(
-                  UpdateField('images', images.map((e) => e.path).toList()));
-            }
-            return Padding(
-              padding: EdgeInsets.all(8.r),
-              child: Wrap(
-                spacing: 8.r,
-                runSpacing: 8.r,
-                children: images
-                    .asMap()
-                    .entries
-                    .map(
-                      (entry) => InkWell(
-                        onTap: () =>
-                            _showImagePreview(context, entry.value, entry.key),
-                        child: Chip(
-                          label: Container(
-                            height: 25.h,
-                            width: 25.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.r),
-                              image: DecorationImage(
-                                image: FileImage(entry.value),
-                                fit: BoxFit.cover,
+          BlocBuilder<ImagePickerCubit, List<File>>(
+            builder: (context, images) {
+              final validationError = validator?.call(images);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (images.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.all(8.r),
+                      child: Wrap(
+                        spacing: 8.r,
+                        runSpacing: 8.r,
+                        children: images
+                            .asMap()
+                            .entries
+                            .map(
+                              (entry) => InkWell(
+                                onTap: () => _showImagePreview(
+                                    context, entry.value, entry.key),
+                                child: Chip(
+                                  label: Container(
+                                    height: 25.h,
+                                    width: 25.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      image: DecorationImage(
+                                        image: FileImage(entry.value),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  backgroundColor: AppColors.white2,
+                                  deleteIconColor: AppColors.orange1,
+                                  onDeleted: () => context
+                                      .read<ImagePickerCubit>()
+                                      .removeImage(entry.key),
+                                ),
                               ),
-                            ),
-                          ),
-                          backgroundColor: AppColors.white2,
-                          deleteIconColor: AppColors.orange1,
-                          onDeleted: () => context
-                              .read<ImagePickerCubit>()
-                              .removeImage(entry.key),
-                        ),
+                            )
+                            .toList(),
                       ),
-                    )
-                    .toList(),
-              ),
-            );
-          },
-        ),
-      ],
+                    ),
+                  if (validationError != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        validationError,
+                        style: TextStyle(color: Colors.red, fontSize: 12.sp),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
