@@ -129,7 +129,7 @@ class CameraModel {
       name: camera.name ?? '',
       brand: camera.brand ?? '',
       model: camera.model ?? '',
-      category: camera.category   ?? '',
+      category: camera.category ?? '',
       description: camera.description ?? '',
       price: camera.price ?? 0,
       sdPrice: camera.sdPrice ?? 0,
@@ -139,10 +139,32 @@ class CameraModel {
       condition: camera.condition ?? '',
       storage: camera.storage,
       connectivity: camera.connectivity,
-      duration: camera.duration   ?? '',
+      duration: camera.duration ?? '',
       latePolicy: camera.latePolicy ?? '',
       images: camera.images ?? [],
       privacyPolicy: camera.privacyPolicy ?? false,
+    );
+  }
+
+  Camera toEntity() {
+    return Camera(
+      name: name,
+      brand: brand,
+      model: model,
+      category: category,
+      description: description,
+      price: price,
+      sdPrice: sdPrice,
+      available: available,
+      location: location,
+      phoneNumber: phoneNumber,
+      condition: condition,
+      storage: storage,
+      connectivity: connectivity,
+      duration: duration,
+      latePolicy: latePolicy,
+      images: images,
+      privacyPolicy: privacyPolicy,
     );
   }
 }

@@ -49,6 +49,7 @@ class FilterChipScreen extends StatelessWidget {
                         .read<FilterChipCubit>()
                         .updateSelection(id, newSelection);
                     bloc?.add(UpdateField(id, newSelection));
+                    bloc?.add(DecorationUpdateField(id, newSelection));
                   },
                 );
               }).toList(),

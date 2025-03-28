@@ -6,10 +6,9 @@ import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
-  
   final void Function(bool?)? onChanged;
   const TermsAndConditionsScreen({
-    super.key, 
+    super.key,
     required this.onChanged,
   });
 

@@ -91,12 +91,12 @@ class JewelryPage extends StatelessWidget {
               SizedBox(height: 10.h),
 
               // Suitable for Gender DropDown
-              GenderSelectionWidget(
-                onValue: (value) {
-                  genderController.clear();
-                  genderController.text = value;
-                },
-              ),
+              // GenderSelectionWidget(
+              //   onValue: (value) {
+              //     genderController.clear();
+              //     genderController.text = value;
+              //   },
+              // ),
               SizedBox(height: 10.h),
 
               // Rental Price Field

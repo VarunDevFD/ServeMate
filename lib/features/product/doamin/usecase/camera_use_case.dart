@@ -12,7 +12,7 @@ class CameraUseCase {
   }
    
 
-  // Future<List<Camera>> fetchCameras() async {
-  //   return await repository.fetchCameras();
-  // }
+  Future<List<Camera>> fetchCameras() async {
+    return await repository.fetchCameras();
+  }
 }

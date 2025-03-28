@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +7,7 @@ import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_eve
 import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_state.dart';
 
 class GenderSelectionWidget extends StatelessWidget {
-  final Null Function(dynamic value) onValue;
+  final  Function(String? value) onValue;
   const GenderSelectionWidget({
     Key? key,
     required this.onValue,

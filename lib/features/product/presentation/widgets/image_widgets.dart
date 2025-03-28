@@ -109,6 +109,8 @@ class ImagePickerPage extends StatelessWidget {
         final pics = images.map((e) => e.path).toList();
         // Update the FormSubmissionBloc only when images change
         bloc.add(UpdateField('images', pics));
+        bloc.add(DecorationUpdateField('images', pics));
+        bloc.add(DressUpdateField('images', pics));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

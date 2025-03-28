@@ -11,11 +11,9 @@ import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_s
 import 'color_picker_widget.dart';
 
 class TextFieldWithColorPicker extends StatelessWidget {
-  final String hint;
   final ValueChanged<TextEditingController?> onColorSelected;
 
-  const TextFieldWithColorPicker(
-      {super.key, required this.hint, required this.onColorSelected});
+  const TextFieldWithColorPicker({super.key, required this.onColorSelected});
 
   @override
   Widget build(BuildContext context) {

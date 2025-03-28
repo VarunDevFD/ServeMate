@@ -21,10 +21,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<void> _handleSubmitDressEvent(
       SubmitDressEvent event, Emitter<ProductState> emit) async {
-    final addDressUseCase = serviceLocator<DressUseCase>();
+    // final addDressUseCase = serviceLocator<DressUseCase>();
     emit(ProductLoadingState());
     try {
-      await addDressUseCase.execute(event.dress);
+      // await addDressUseCase.execute(event.dress);
       emit(ProductSuccessState());
     } catch (e) {
       emit(ProductErrorState(e.toString()));
@@ -83,7 +83,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     final addDecorationUseCase = serviceLocator<DecorationUseCase>();
     emit(ProductLoadingState());
     try {
-      await addDecorationUseCase.execute(event.decoration);
+      // await addDecorationUseCase.execute(event.decoration);
       emit(ProductSuccessState());
     } catch (e) {
       emit(ProductErrorState(e.toString()));

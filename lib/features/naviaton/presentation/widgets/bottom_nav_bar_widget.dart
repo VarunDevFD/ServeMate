@@ -1,4 +1,5 @@
- 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -50,16 +51,23 @@ class BottomNavBar extends StatelessWidget {
       ],
       onTap: (index) {
         if (index == 2 && currentIndex == 2) {
+          log(formName);
           if (formKey.currentState != null &&
-              formKey.currentState!.validate()) { 
-            context.read<FormSubmissionBloc>().add(CameraEvent());
-            formKey.currentState!.reset();
+              formKey.currentState!.validate()) {
+            if (formName == 'cameras') {
+              context.read<FormSubmissionBloc>().add(CameraEvent());
+            } else if (formName == 'Decoration') {
+              context.read<FormSubmissionBloc>().add(DecorationEvent());
+            } else if(formName == "Dresses") {
+              context.read<FormSubmissionBloc>().add(DressEvent());
+            }
+              formKey.currentState!.reset();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Form Submitted Successfully'),
               ),
             );
-          } else { 
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Please fill all required fields')),
             );

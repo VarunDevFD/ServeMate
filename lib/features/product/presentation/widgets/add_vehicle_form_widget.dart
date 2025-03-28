@@ -117,7 +117,6 @@ class VehiclesPage extends StatelessWidget {
               _buildSection(
                 title: "Vehicle Color",
                 child: TextFieldWithColorPicker(
-                  hint: 'Enter Dress Color',
                   onColorSelected: (controller) {
                     colorController.clear();
                     colorController.text = controller?.text ?? '';

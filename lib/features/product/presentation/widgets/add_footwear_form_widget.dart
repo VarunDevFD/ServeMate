@@ -122,18 +122,18 @@ class FootwearPage extends StatelessWidget {
               ),
 
               // Gender Selection
-              GenderSelectionWidget(
-                onValue: (value) {
-                  genderController.clear();
-                  genderController.text = value;
-                },
-              ),
+              // GenderSelectionWidget(
+              //   onValue: (value) {
+              //     genderController.clear();
+              //     genderController.text = value;
+              //   },
+              // ),
 
               // Color
               _buildSection(
                 title: "Color",
                 child: TextFieldWithColorPicker(
-                  hint: 'Enter Dress Color',
+                   
                   onColorSelected: (controller) {
                     colorController.clear();
                     colorController.text = controller?.text ?? '';

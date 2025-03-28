@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/utils/card_constant.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
@@ -27,11 +28,10 @@ class Cameras extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormMainState>(
         listener: (context, state) {
-      if (state is Success) {
+      if (state is CameraSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Form submitted successfully!')),
         );
-        // No need for manual reset here; BLoC handles it
       } else if (state is Failure) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(state.message)),
@@ -40,12 +40,10 @@ class Cameras extends StatelessWidget {
     }, builder: (context, state) {
       final bloc = context.read<FormSubmissionBloc>();
 
-      // Show animation if in Success state and animating
-      if (state is Success && state.isAnimating) {
+      if (state is CameraSuccess && state.isAnimating) {
         context.read<ImagePickerCubit>().clearImages();
         context.read<AvailableSwitchCubit>().toggleAvailable(false);
         context.read<FilterChipCubit>().resetAll();
-
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,26 +58,25 @@ class Cameras extends StatelessWidget {
           ),
         );
       }
-      final camera =
-          state is UpdatedForm ? state.camera : (state as InitialForm).camera;
+      const initialState = '';
+
+      final paddingEdges = EdgeInsets.all(20.r);
+
       return Form(
         key: formKey,
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          // controller: scrollController,
           child: Padding(
-            padding: EdgeInsets.all(12.r),
+            padding: paddingEdges,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Name, Brand, Model, Category and Description
                 Card(
                   elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
-                  ),
+                  shape: CardProperties.cardShape,
                   child: Padding(
-                    padding: EdgeInsets.all(20.r),
+                    padding: paddingEdges,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -97,7 +94,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 15.h),
                         // Name
                         TextFormField(
-                          initialValue: camera.name,
+                          initialValue: initialState,
                           maxLength: 30,
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
@@ -115,7 +112,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 10.h),
                         // Model
                         TextFormField(
-                          initialValue: camera.model,
+                          initialValue: initialState,
                           maxLength: 30,
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
@@ -150,7 +147,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 10.h),
                         // Description
                         TextFormField(
-                          initialValue: camera.description,
+                          initialValue: initialState,
                           maxLength: 100,
                           maxLines: 3,
                           keyboardType: TextInputType.text,
@@ -171,11 +168,9 @@ class Cameras extends StatelessWidget {
                 // Pricing and Availability Card
                 Card(
                   elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
-                  ),
+                  shape: CardProperties.cardShape,
                   child: Padding(
-                    padding: EdgeInsets.all(20.r),
+                    padding: paddingEdges,
                     child: Column(
                       children: [
                         // Title
@@ -192,7 +187,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 10.h),
                         // Price
                         TextFormField(
-                          initialValue: camera.price?.toString(),
+                          initialValue: '',
                           maxLength: 6,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
@@ -215,7 +210,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 10.h),
                         // Security Deposit
                         TextFormField(
-                          initialValue: camera.sdPrice?.toString(),
+                          initialValue: '',
                           maxLength: 6,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
@@ -244,8 +239,9 @@ class Cameras extends StatelessWidget {
                 SizedBox(height: 16.h),
                 // Location and Contact Card
                 Card(
+                  shape: CardProperties.cardShape,
                   child: Padding(
-                    padding: EdgeInsets.all(16.r),
+                    padding: paddingEdges,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -256,15 +252,15 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 10.h),
                         // Location
                         LocationTextField(
-                          locationController: TextEditingController(
-                              text: camera.location.toString()),
+                          locationController:
+                              TextEditingController(text: initialState),
                           onFieldSubmitted: (value) =>
                               bloc.add(UpdateField('location', value)),
                         ),
                         SizedBox(height: 10.h),
                         // Phone value),
                         TextFormField(
-                          initialValue: camera.phoneNumber,
+                          initialValue: initialState,
                           maxLength: 10,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.phone,
@@ -293,8 +289,9 @@ class Cameras extends StatelessWidget {
                 ),
                 // Features & Specifications
                 Card(
+                  shape: CardProperties.cardShape,
                   child: Padding(
-                    padding: EdgeInsets.all(16.r),
+                    padding: paddingEdges,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -335,7 +332,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 16.h),
                         // Minimum Rental Duration
                         TextFormField(
-                          initialValue: camera.duration,
+                          initialValue: initialState,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                             labelText: 'Minimum Rental Duration (days)*',
@@ -363,7 +360,7 @@ class Cameras extends StatelessWidget {
                         SizedBox(height: 6.h),
                         // Late Fee Policy
                         TextFormField(
-                          initialValue: camera.latePolicy,
+                          initialValue: initialState,
                           decoration: const InputDecoration(
                             labelText: 'Late Fee Policy*',
                           ),
@@ -383,8 +380,9 @@ class Cameras extends StatelessWidget {
 
                 // Image Upload Section
                 Card(
+                  shape: CardProperties.cardShape,
                   child: Padding(
-                    padding: EdgeInsets.all(20.r),
+                    padding: paddingEdges,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
