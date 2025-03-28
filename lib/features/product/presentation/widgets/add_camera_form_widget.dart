@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/card_constant.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
@@ -58,9 +59,8 @@ class Cameras extends StatelessWidget {
           ),
         );
       }
-      const initialState = '';
-
-      final paddingEdges = EdgeInsets.all(20.r);
+      const initialState = AppString.initialValue;
+      final paddingEdges = AppPadding.paddingEdgesAll;
 
       return Form(
         key: formKey,

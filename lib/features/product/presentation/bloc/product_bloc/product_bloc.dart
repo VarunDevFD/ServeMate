@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
-import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';

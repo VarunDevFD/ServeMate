@@ -28,6 +28,7 @@ import 'package:serve_mate/features/product/doamin/repository/domain_repository.
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/footwear_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
@@ -47,7 +48,6 @@ final serviceLocator = GetIt.instance;
 Future<void> init() async {
   //--------------------Initialize Cloudinary-----------------------------------
   // configureCloudinary();
-
 
   //--------------------Initialize Firebase-------------------------------------
 
@@ -143,6 +143,10 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<DressUseCase>(
       () => DressUseCase(serviceLocator<ProductRepository>()));
 
+  // FootWear Usecase
+  serviceLocator.registerLazySingleton<FootwearUseCase>(
+      () => FootwearUseCase(serviceLocator<ProductRepository>()));
+
   // Jewelry Usecase
   serviceLocator.registerLazySingleton<JewelryUseCase>(
       () => JewelryUseCase(serviceLocator<ProductRepository>()));
@@ -162,9 +166,8 @@ Future<void> init() async {
   // Decoration Usecase
   serviceLocator.registerLazySingleton<DecorationUseCase>(
       () => DecorationUseCase(serviceLocator<ProductRepository>()));
-  
+
 //   // Cloudinary Usecase
 //  serviceLocator.registerLazySingleton<ImageRepository>(
 //       () => ImageRepository());
-
 }

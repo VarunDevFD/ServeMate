@@ -1,4 +1,3 @@
-
 import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
@@ -10,7 +9,7 @@ import 'package:serve_mate/features/product/data/models/venues_model.dart';
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
-import 'package:serve_mate/features/product/doamin/entities/footwear_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
@@ -50,6 +49,15 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
+  Future<void> addFootwear(Footwear footwear) async {
+    try {
+      await remoteDataSource.addFootwear(FootwearModel.fromEntity(footwear));
+    } catch (e) {
+      throw Exception('Failed to add footwear: $e');
+    }
+  }
+
+  @override
   Future<void> addJewelry(JewelryEntity jewelry) async {
     try {
       await remoteDataSource.addJewelry(jewelry as JewelryModel);
@@ -73,15 +81,6 @@ class ProductRepositoryImpl implements ProductRepository {
       await remoteDataSource.addVehicle(vehicle as VehicleModel);
     } catch (e) {
       throw Exception('Failed to add vehicle: $e');
-    }
-  }
-
-  @override
-  Future<void> addFootwear(FootwearEntity footwear) async {
-    try {
-      await remoteDataSource.addFootwear(footwear as FootwearModel);
-    } catch (e) {
-      throw Exception('Failed to add footwear: $e');
     }
   }
 
@@ -118,10 +117,25 @@ class ProductRepositoryImpl implements ProductRepository {
     try {
       final dresses = await remoteDataSource.fetchDresses();
       return dresses
-          .map((dressModel) => DressModel.fromMap(dressModel as Map<String, dynamic>).toEntity())
+          .map((dressModel) =>
+              DressModel.fromMap(dressModel as Map<String, dynamic>).toEntity())
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch dresses: $e');
+    }
+  }
+
+  @override
+  Future<List<Footwear>> fetchFootwear() async {
+    try {
+      final footwear = await remoteDataSource.fetchFootwear();
+      return footwear
+          .map((footwearModel) =>
+              FootwearModel.fromMap(footwearModel as Map<String, dynamic>)
+                  .toEntity())
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch footwear: $e');
     }
   }
 
@@ -160,19 +174,6 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch vehicles: $e');
-    }
-  }
-
-  @override
-  Future<List<FootwearModel>> fetchFootwear() async {
-    try {
-      final footwear = await remoteDataSource.fetchFootwear();
-      return footwear
-          .map((footwearItem) =>
-              FootwearModel.fromJson(footwearItem as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch footwear: $e');
     }
   }
 }

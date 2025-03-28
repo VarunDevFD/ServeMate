@@ -31,7 +31,8 @@ class DressesPage extends StatelessWidget {
       listener: (context, state) {
         if (state is DressSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Form submitted successfully!')),
+            const SnackBar(
+                content: Text('Form submitted successfully-------------')),
           );
         } else if (state is Failure) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -41,8 +42,11 @@ class DressesPage extends StatelessWidget {
       },
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
-        if (state is DressSuccess && state.isAnimating) {
+        if (state is DressSuccess) {
           log("DressSuccess animation");
+          context.read<ImagePickerCubit>().clearImages();
+          context.read<AvailableSwitchCubit>().toggleAvailable(false);
+          context.read<FilterChipCubit>().resetAll();
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,15 +60,9 @@ class DressesPage extends StatelessWidget {
                 ),
               ],
             ),
-          );
-        } else if (state is DressSuccess && !state.isAnimating) {
-          log("DressSuccess without animation");
-          // Reset cubits here to prepare for form rebuild
-          context.read<ImagePickerCubit>().clearImages();
-          context.read<AvailableSwitchCubit>().toggleAvailable(false);
-          context.read<FilterChipCubit>().resetAll();
+          ); // Reset cubits here to prepare for form rebuild
         }
-        if (state is DressSuccess) log('Success State State');
+
         return Form(
           key: formKey,
           child: SingleChildScrollView(

@@ -58,10 +58,13 @@ class BottomNavBar extends StatelessWidget {
               context.read<FormSubmissionBloc>().add(CameraEvent());
             } else if (formName == 'Decoration') {
               context.read<FormSubmissionBloc>().add(DecorationEvent());
-            } else if(formName == "Dresses") {
+            } else if (formName == "Dresses") {
               context.read<FormSubmissionBloc>().add(DressEvent());
+            } else if (formName == "Footwear") {
+              context.read<FormSubmissionBloc>().add(FootWearEvent());
             }
-              formKey.currentState!.reset();
+
+            formKey.currentState!.reset();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Form Submitted Successfully'),

@@ -111,6 +111,7 @@ class ImagePickerPage extends StatelessWidget {
         bloc.add(UpdateField('images', pics));
         bloc.add(DecorationUpdateField('images', pics));
         bloc.add(DressUpdateField('images', pics));
+        bloc.add(FootWearUpdateField('images', pics));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

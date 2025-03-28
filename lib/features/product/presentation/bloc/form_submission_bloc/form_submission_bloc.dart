@@ -5,9 +5,11 @@ import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/footwear_use_case.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 
@@ -50,26 +52,30 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   final DecorationUseCase _decorationRepository =
       serviceLocator<DecorationUseCase>();
   final DressUseCase _dressRepository = serviceLocator<DressUseCase>();
+  final FootwearUseCase _footwearRepository = serviceLocator<FootwearUseCase>();
 
   Camera _camera;
   Decoration _decoration;
   Dress _dress;
+  Footwear _footwear;
 
   FormSubmissionBloc()
       : _camera = initialCamera,
         _decoration = initialDecoration,
         _dress = Dress.empty(),
+        _footwear = Footwear.empty(),
         super(InitialForm()) {
     // Field Listeners
     on<UpdateField>(_onUpdateCameraField);
     on<DecorationUpdateField>(_onUpdateDecorationField);
     on<DressUpdateField>(_onUpdateDressField);
-    // on<DecorationUpdateField>(_onUpdateDecorationField);
+    on<FootWearUpdateField>(_onUpdateFootWearField);
 
     // Form Submission Listeners
     on<CameraEvent>(_onSubmitCameraForm);
     on<DecorationEvent>(_onSubmitDecorationForm);
     on<DressEvent>(_onSubmitDressForm);
+    on<FootWearEvent>(_onSubmitFootWearForm);
     on<ResetForm>(_onResetForm);
   }
 
@@ -149,6 +155,29 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     }
   }
 
+  _onUpdateFootWearField(
+      FootWearUpdateField event, Emitter<FormMainState> emit) {
+    final data = {
+      'name': () => _footwear.copyWith(name: event.value),
+      'price': () => _footwear.copyWith(price: event.value),
+      'sdPrice': () => _footwear.copyWith(sdPrice: event.value),
+      'location': () => _footwear.copyWith(location: event.value),
+      'images': () => _footwear.copyWith(images: event.value),
+      'description': () => _footwear.copyWith(description: event.value),
+      'brand': () => _footwear.copyWith(brand: event.value),
+      'condition': () => _footwear.copyWith(condition: event.value),
+      'size': () => _footwear.copyWith(size: event.value),
+      'color': () => _footwear.copyWith(color: event.value),
+      'category': () => _footwear.copyWith(category: event.value),
+      'available': () => _footwear.copyWith(isAvailable: event.value),
+    };
+
+    if (data.containsKey(event.field)) {
+      _footwear = data[event.field]!();
+      emit(UpdatedFootWearForm(_footwear));
+    }
+  }
+
   void _onSubmitCameraForm(
       CameraEvent event, Emitter<FormMainState> emit) async {
     emit(CameraSuccess(isAnimating: true)); // Show processing
@@ -170,12 +199,26 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   }
 
   void _onSubmitDressForm(DressEvent event, Emitter<FormMainState> emit) async {
-    emit(DressSuccess(isAnimating: true)); // Show processing
+    emit(DressSuccess(isAnimating: true));
     try {
       await Future.delayed(const Duration(seconds: 5));
       log("Bloc DressUseCase: ${_dress.name.toString()}");
 
       await _dressRepository.execute(_dress);
+      _resetDedcoration(emit); // Reset after success
+    } catch (e) {
+      emit(Failure('Submission failed: $e'));
+    }
+  }
+
+  void _onSubmitFootWearForm(
+      FootWearEvent event, Emitter<FormMainState> emit) async {
+    emit(FootWearSuccess());
+    try {
+      await Future.delayed(const Duration(seconds: 5));
+      log("Bloc DressUseCase: ${_dress.name.toString()}");
+
+      await _footwearRepository.execute(_footwear);
       _resetDedcoration(emit); // Reset after success
     } catch (e) {
       emit(Failure('Submission failed: $e'));

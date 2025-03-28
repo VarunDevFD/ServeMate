@@ -1,43 +1,72 @@
-import 'package:serve_mate/features/product/doamin/entities/footwear_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 
-class FootwearModel extends FootwearEntity {
-  // Constructor to initialize FootwearModel, and call the parent constructor
+class FootwearModel {
+  final String name;
+  final int price;
+  final int sdPrice;
+  final List<String> location;
+  final List<String> images;
+  final String description;
+  final String brand;
+  final String condition;
+  final String size;
+  final String color;
+  final String category;
+  final bool isAvailable;
+  final String date;
   FootwearModel({
-    required String name,
-    required double? price,
-    required double? securityDeposit,
-    required String? location,
-    required List<String>? images,
-    required String? description,
-    required String brand,
-    required String condition,
-    required String size,
-    required String color,
-    required String category,
-    required String isAvailable,
-    required String date,
-  }) : super(
-          name: name,
-          price: price ?? 0.0,  // Default to 0.0 if null
-          securityDeposit: securityDeposit ?? 0.0,  // Default to 0.0 if null
-          location: location ?? '',  // Default to empty string if null
-          images: images ?? [],  // Default to empty list if null
-          description: description ?? '',
-          brand: brand,
-          condition: condition,
-          size: size,
-          color: color,
-          category: category,
-          isAvailable: isAvailable,
-          date: date,
-        );
+    required this.name,
+    required this.price,
+    required this.sdPrice,
+    required this.location,
+    required this.images,
+    required this.description,
+    required this.brand,
+    required this.condition,
+    required this.size,
+    required this.color,
+    required this.category,
+    required this.isAvailable,
+    required this.date,
+  });
 
-  /// Converts the FootwearModel to a JSON map (useful for sending data to APIs or storing in a database)
-  Map<String, dynamic> toJson() {
-    return {
+  FootwearModel copyWith({
+    String? name,
+    int? price,
+    int? sdPrice,
+    List<String>? location,
+    List<String>? images,
+    String? description,
+    String? brand,
+    String? condition,
+    String? size,
+    String? color,
+    String? category,
+    bool? isAvailable,
+    String? date,
+  }) {
+    return FootwearModel(
+      name: name ?? this.name,
+      price: price ?? this.price,
+      sdPrice: sdPrice ?? this.sdPrice,
+      location: location ?? this.location,
+      images: images ?? this.images,
+      description: description ?? this.description,
+      brand: brand ?? this.brand,
+      condition: condition ?? this.condition,
+      size: size ?? this.size,
+      color: color ?? this.color,
+      category: category ?? this.category,
+      isAvailable: isAvailable ?? this.isAvailable,
+      date: date ?? this.date,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
       'name': name,
       'price': price,
-      'securityDeposit': securityDeposit,
+      'sdPrice': sdPrice,
       'location': location,
       'images': images,
       'description': description,
@@ -51,22 +80,59 @@ class FootwearModel extends FootwearEntity {
     };
   }
 
-  /// Factory constructor to create a FootwearModel object from a JSON map
-  factory FootwearModel.fromJson(Map<String, dynamic> json) {
+  factory FootwearModel.fromMap(Map<String, dynamic> map) {
     return FootwearModel(
-      name: json['name'] ?? '',
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      securityDeposit: (json['securityDeposit'] as num?)?.toDouble() ?? 0.0,
-      description: json['description'] ?? '',
-      brand: json['brand'] ?? '',
-      condition: json['condition'] ?? '',
-      size: json['size'] ?? '',
-      color: json['color'] ?? '',
-      category: json['category'] ?? '',
-      isAvailable: json['isAvailable'] ?? '',
-      images: (json['images'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
-      location: json['location'] ?? '',
-      date: json['date'] ?? '',
+      name: map['name'] as String,
+      price: map['price'] as int,
+      sdPrice: map['sdPrice'] as int,
+      location: List<String>.from(
+          (map['location'] as List<dynamic>).map((x) => x as String)),
+      images: List<String>.from(
+          (map['images'] as List<dynamic>).map((x) => x as String)),
+      description: map['description'] as String,
+      brand: map['brand'] as String,
+      condition: map['condition'] as String,
+      size: map['size'] as String,
+      color: map['color'] as String,
+      category: map['category'] as String,
+      isAvailable: map['isAvailable'] as bool,
+      date: map['date'] as String,
+    );
+  }
+
+  factory FootwearModel.fromEntity(Footwear footwear) {
+    return FootwearModel(
+      name: footwear.name ?? '',
+      price: footwear.price ?? 0,
+      sdPrice: footwear.sdPrice ?? 0,
+      location: footwear.location ?? [''],
+      images: footwear.images ?? [''],
+      description: footwear.description ?? '',
+      brand: footwear.brand ?? '',
+      condition: footwear.condition ?? '',
+      size: footwear.size ?? '',
+      color: footwear.color ?? '',
+      category: footwear.category ?? '',
+      isAvailable: footwear.isAvailable ?? false,
+      date: footwear.date ?? '',
+    );
+  }
+
+  Footwear toEntity() {
+    return Footwear(
+      name: name,
+      price: price,
+      sdPrice: sdPrice,
+      location: location,
+      images: images,
+      description: description,
+      brand: brand,
+      condition: condition,
+      size: size,
+      color: color,
+      category: category,
+      isAvailable: isAvailable,
+      date: date,
     );
   }
 }

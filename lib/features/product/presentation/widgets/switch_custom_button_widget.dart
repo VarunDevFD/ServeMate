@@ -23,6 +23,7 @@ class SwitchTileScreen extends StatelessWidget {
             bloc.add(UpdateField('available', value));
             bloc.add(DecorationUpdateField('available', value));
             bloc.add(DressUpdateField('available', value));
+            bloc.add(FootWearUpdateField('available', value));
           },
         );
       },
