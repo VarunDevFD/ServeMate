@@ -30,6 +30,13 @@ class FootWearUpdateField extends FormSubmissionEvent {
   FootWearUpdateField(this.field, this.value);
 }
 
+class JewelryUpdateField extends FormSubmissionEvent {
+  final String field;
+  final dynamic value;
+
+  JewelryUpdateField(this.field, this.value);
+}
+
 class CameraEvent extends FormSubmissionEvent {}
 
 class DecorationEvent extends FormSubmissionEvent {}
@@ -37,5 +44,8 @@ class DecorationEvent extends FormSubmissionEvent {}
 class DressEvent extends FormSubmissionEvent {}
 
 class FootWearEvent extends FormSubmissionEvent {}
+
+class JewelryEvent extends FormSubmissionEvent {}
+
 
 class ResetForm extends FormSubmissionEvent {}

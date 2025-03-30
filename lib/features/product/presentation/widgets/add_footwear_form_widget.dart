@@ -1,37 +1,40 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/card_constant.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
-import 'reusable_dropdown.dart';
+import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 
 class FootwearPage extends StatelessWidget {
-  const FootwearPage({super.key});
+  FootwearPage({super.key});
 
   // Define FocusNode instances as static to persist across rebuilds
   static final _nameFocusNode = FocusNode();
-  static final _brandFocusNode = FocusNode();
   static final _descriptionFocusNode = FocusNode();
   static final _priceFocusNode = FocusNode();
   static final _securityDepositFocusNode = FocusNode();
-  static final _rentalDurationFocusNode = FocusNode();
+  static final _quantityFocusNode = FocusNode();
+  static final _locationFocusNode = FocusNode();
+  static final _phoneFocusNode = FocusNode();
+
+  // Define controllers
+  final priceController = TextEditingController();
+  final sdController = TextEditingController();
+  final quantityController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final locationController = TextEditingController();
+  final phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class FootwearPage extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Form submitted successfully!')),
           );
-          _clearFocus(context); // Clear focus on success
+          _clearFocus(context);
         } else if (state is Failure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
@@ -50,8 +53,9 @@ class FootwearPage extends StatelessWidget {
       },
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
+
         if (state is FootWearSuccess && state.isAnimating) {
-          log("FootWear Animation true");
+          log("Footwear Animation true");
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +81,7 @@ class FootwearPage extends StatelessWidget {
             children: [
               CustomSideHeadText(title: title),
               child,
-              SizedBox(height: 6.h),
+              SizedBox(height: 10.h),
             ],
           );
         }
@@ -90,134 +94,53 @@ class FootwearPage extends StatelessWidget {
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Padding(
-              padding: EdgeInsets.all(16.r),
+              padding: paddingEdges,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Name
                   buildSection(
-                    title: 'Name',
+                    title: 'Product Name',
                     child: _buildTextFormField(
                       focusNode: _nameFocusNode,
                       initialValue: initialState,
                       maxLength: 20,
                       keyboardType: TextInputType.text,
-                      labelText: 'Enter Name*',
-                      prefixIcon: const Icon(Icons.shopping_bag_outlined),
+                      labelText: 'Enter Footwear Name *',
                       onChanged: (value) =>
-                          bloc.add(FootWearUpdateField('name', value)),
+                          bloc.add(UpdateField('name', value)),
                       validator: (value) => value == null || value.isEmpty
-                          ? 'Please enter the Name'
+                          ? 'Please enter the Footwear Name'
                           : null,
-                      nextFocusNode: _brandFocusNode,
-                      context: context,
-                    ),
-                  ),
-
-                  // Brand
-                  buildSection(
-                    title: 'Brand',
-                    child: _buildTextFormField(
-                      focusNode: _brandFocusNode,
-                      initialValue: initialState,
-                      maxLength: 20,
-                      keyboardType: TextInputType.text,
-                      labelText: 'Enter the brand name*',
-                      prefixIcon: const Icon(Icons.bubble_chart_rounded),
-                      onChanged: (value) =>
-                          bloc.add(FootWearUpdateField('brand', value)),
-                      validator: (value) => value == null || value.isEmpty
-                          ? 'Please Enter the Name'
-                          : null,
-                      nextFocusNode: _descriptionFocusNode,
-                      context: context,
-                    ),
-                  ),
-
-                  // Type
-                  buildSection(
-                    title: 'Category',
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 8.0.h, bottom: 5.h),
-                      child: ReusableDropdown(
-                        labelText: 'Footwear Type',
-                        items: DropdownItems.footwearTypes,
-                        onFieldSubmitted: (value) {
-                          bloc.add(FootWearUpdateField('category', value));
-                        },
-                      ),
-                    ),
-                  ),
-
-                  // Size
-                  buildSection(
-                    title: 'Size',
-                    child: ReusableDropdown(
-                      labelText: 'Size',
-                      items: DropdownItems.sizeFootwear,
-                      onFieldSubmitted: (value) {
-                        bloc.add(FootWearUpdateField('size', value));
-                      },
-                    ),
-                  ),
-
-                  // Gender Selection
-                  GenderSelectionWidget(
-                    onValue: (value) =>
-                        bloc.add(FootWearUpdateField('gender', value)),
-                  ),
-
-                  // Color
-                  buildSection(
-                    title: 'Color',
-                    child: TextFieldWithColorPicker(
-                      onColorSelected: (controller) => bloc
-                          .add(FootWearUpdateField('color', controller?.text)),
-                    ),
-                  ),
-
-                  // Condition Dropdown
-                  buildSection(
-                    title: 'Condition',
-                    child: ReusableDropdown(
-                      items: DropdownItems.condition,
-                      labelText: 'Condition *',
-                      onFieldSubmitted: (value) {
-                        bloc.add(FootWearUpdateField('condition', value));
-                      },
-                    ),
-                  ),
-
-                  // Description Field
-                  buildSection(
-                    title: 'Description',
-                    child: _buildTextFormField(
-                      focusNode: _descriptionFocusNode,
-                      initialValue: initialState,
-                      maxLength: 100,
-                      maxLines: 5,
-                      keyboardType: TextInputType.text,
-                      labelText: 'Enter description *',
-                      prefixIcon: const Icon(Icons.description_outlined),
-                      alignLabelWithHint: true,
-                      onChanged: (value) =>
-                          bloc.add(FootWearUpdateField('description', value)),
                       nextFocusNode: _priceFocusNode,
                       context: context,
                     ),
                   ),
-
-                  // Price Field
+                  buildSection(
+                    title: 'Category',
+                    child: ReusableDropdown(
+                      labelText: 'Category*',
+                      items: DropdownItems.footwearTypes,
+                      onFieldSubmitted: (value) {
+                        bloc.add(UpdateField('category', value));
+                      },
+                    ),
+                  ),
                   buildSection(
                     title: 'Rental Price',
-                    child: _buildTextFormField(
-                      focusNode: _priceFocusNode,
-                      initialValue: initialState,
+                    child: TextFormField(
                       maxLength: 6,
+                      controller: priceController,
+                      focusNode: _priceFocusNode,
                       keyboardType: TextInputType.number,
-                      labelText: 'Enter Rental Price*',
-                      onChanged: (value) => bloc
-                          .add(FootWearUpdateField('price', int.parse(value))),
+                      decoration: const InputDecoration(
+                        labelText: 'Price (per day)*',
+                        counterText: '',
+                        prefixIcon: Icon(Icons.attach_money),
+                      ),
+                      onChanged: (value) =>
+                          bloc.add(UpdateField('price', int.tryParse(value))),
+                      onFieldSubmitted: (value) =>
+                          _moveFocus(context, _securityDepositFocusNode),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Rental Price';
@@ -227,127 +150,175 @@ class FootwearPage extends StatelessWidget {
                         }
                         return null;
                       },
-                      nextFocusNode: _securityDepositFocusNode,
-                      context: context,
                     ),
                   ),
-
-                  // Security Deposit Field
                   buildSection(
                     title: 'Security Deposit',
-                    child: _buildTextFormField(
-                      focusNode: _securityDepositFocusNode,
-                      initialValue: initialState,
+                    child: TextFormField(
                       maxLength: 6,
+                      controller: sdController,
+                      focusNode: _securityDepositFocusNode,
                       keyboardType: TextInputType.number,
-                      labelText: 'Enter Security Deposit *',
-                      onChanged: (value) => bloc.add(
-                          FootWearUpdateField('sdPrice', int.parse(value))),
+                      decoration: const InputDecoration(
+                        labelText: 'Security Deposit *',
+                        counterText: '',
+                        prefixIcon: Icon(Icons.security_outlined),
+                      ),
+                      onChanged: (value) =>
+                          bloc.add(UpdateField('sdPrice', int.tryParse(value))),
+                      onFieldSubmitted: (value) =>
+                          _moveFocus(context, _quantityFocusNode),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the security deposit';
+                          return 'Please enter the Security Deposit';
                         }
                         if (double.tryParse(value) == null) {
                           return 'Please enter a valid deposit';
                         }
                         return null;
                       },
-                      nextFocusNode: _rentalDurationFocusNode,
-                      context: context,
                     ),
                   ),
-
-                  // Availability Switch
-                  SwitchTileScreen(bloc: bloc),
-
-                  // Rental Duration Field
                   buildSection(
-                    title: 'Rental Duration',
-                    child: _buildTextFormField(
-                      focusNode: _rentalDurationFocusNode,
-                      initialValue: initialState,
-                      maxLength: 6,
+                    title: 'Available Quantity',
+                    child: TextFormField(
+                      controller: quantityController,
+                      focusNode: _quantityFocusNode,
+                      maxLength: 10,
                       keyboardType: TextInputType.number,
-                      labelText: 'Rental Duration Period*',
-                      prefixIcon: const Icon(Icons.security_outlined),
+                      decoration: const InputDecoration(
+                        labelText: 'Enter the Count *',
+                        counterText: '',
+                        prefixIcon: Icon(Icons.add_outlined),
+                      ),
+                      onChanged: (value) => bloc
+                          .add(UpdateField('quantity', int.tryParse(value))),
+                      onFieldSubmitted: (value) =>
+                          _moveFocus(context, _descriptionFocusNode),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter the Rental Duration Period';
+                          return 'Please enter the quantity';
                         }
-                        if (double.tryParse(value) == null) {
-                          return 'Please enter a valid Period';
+                        if (int.tryParse(value) == null) {
+                          return 'Please enter a valid number';
                         }
                         return null;
                       },
-                      onFieldSubmitted: (_) => _clearFocus(context),
-                      context: context,
                     ),
                   ),
-
-                  // Image Upload Section
-                  Card(
-                    shape: CardProperties.cardShape,
-                    child: Padding(
-                      padding: paddingEdges,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.photo_library,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Product Images',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16.h),
-                          ImagePickerPage(
-                            bloc: bloc,
-                            validator: (images) => images.isEmpty
-                                ? 'Please upload at least one image'
-                                : null,
-                          ),
-                          BlocBuilder<ImagePickerCubit, List<File>>(
-                            builder: (context, images) {
-                              return images.isNotEmpty
-                                  ? TextButton(
-                                      onPressed: () => context
-                                          .read<ImagePickerCubit>()
-                                          .clearImages(),
-                                      child: const Text('Clear'),
-                                    )
-                                  : const SizedBox.shrink();
-                            },
-                          ),
-                        ],
+                  buildSection(
+                    title: 'Availability',
+                    child: SwitchTileScreen(bloc: bloc),
+                  ),
+                  buildSection(
+                    title: 'Description',
+                    child: TextFormField(
+                      controller: descriptionController,
+                      focusNode: _descriptionFocusNode,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                        prefixIcon: Icon(Icons.description_outlined),
+                        counterText: '',
+                        alignLabelWithHint: true,
+                      ),
+                      onChanged: (value) =>
+                          bloc.add(UpdateField('description', value)),
+                      onFieldSubmitted: (value) =>
+                          _moveFocus(context, _locationFocusNode),
+                    ),
+                  ),
+                  buildSection(
+                    title: 'Product Images',
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(20.r),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.photo_library,
+                                    color: Colors.orange),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  'Product Images',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 6.h),
+                            ImagePickerPage(
+                              bloc: bloc,
+                              validator: (images) => images.isEmpty
+                                  ? 'Please upload at least one image'
+                                  : null,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.h),
-
-                  // Pickup Location Field
+                  buildSection(
+                    title: 'Condition',
+                    child: ReusableDropdown(
+                      items: DropdownItems.condition,
+                      labelText: 'Condition *',
+                      onFieldSubmitted: (value) {
+                        bloc.add(UpdateField('condition', value));
+                        _moveFocus(context, _locationFocusNode);
+                      },
+                    ),
+                  ),
                   buildSection(
                     title: 'Location',
                     child: LocationTextField(
-                      locationController:
-                          TextEditingController(text: initialState),
+                      locationController: locationController,
                       onFieldSubmitted: (value) =>
-                          bloc.add(FootWearUpdateField('location', value)),
+                          bloc.add(UpdateField('location', value)),
                     ),
                   ),
-
-                  // Terms and Conditions
-                  TermsAndConditionsScreen(
-                    onChanged: (value) {
-                      bloc.add(FootWearUpdateField('privacyPolicy', value));
-                    },
+                  buildSection(
+                    title: 'Contact Number',
+                    child: TextFormField(
+                      controller: phoneController,
+                      focusNode: _phoneFocusNode,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 10,
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number *',
+                        prefixIcon: Icon(Icons.phone_outlined),
+                        counterText: '',
+                      ),
+                      onChanged: (value) =>
+                          bloc.add(UpdateField('phoneNumber', value)),
+                      onFieldSubmitted: (value) => _clearFocus(context),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the Phone Number';
+                        }
+                        if (value.length != 10) {
+                          return 'Please enter a valid 10-digit number';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-
+                  buildSection(
+                    title: 'Terms and Conditions',
+                    child: TermsAndConditionsScreen(
+                      onChanged: (value) {
+                        bloc.add(UpdateField('privacyPolicy', value));
+                      },
+                    ),
+                  ),
                   SizedBox(height: 50.h),
                 ],
               ),
@@ -358,7 +329,6 @@ class FootwearPage extends StatelessWidget {
     );
   }
 
-  // Helper method to build TextFormField with focus management
   Widget _buildTextFormField({
     required FocusNode focusNode,
     required String initialValue,
@@ -379,20 +349,14 @@ class FootwearPage extends StatelessWidget {
       initialValue: initialValue,
       maxLength: maxLength,
       keyboardType: keyboardType,
-      maxLines: maxLines,
+      maxLines: maxLines ?? 1,
       decoration: InputDecoration(
         labelText: labelText,
         counterText: '',
         prefixIcon: prefixIcon,
         alignLabelWithHint: alignLabelWithHint,
       ),
-      onChanged: (value) {
-        onChanged?.call(value);
-        // Ensure focus is retained when editing
-        if (!focusNode.hasFocus) {
-          focusNode.requestFocus();
-        }
-      },
+      onChanged: onChanged,
       validator: validator,
       onFieldSubmitted: (value) {
         onFieldSubmitted?.call(value);
@@ -405,12 +369,10 @@ class FootwearPage extends StatelessWidget {
     );
   }
 
-  // Helper method to move focus to the next field
   void _moveFocus(BuildContext context, FocusNode nextFocusNode) {
     FocusScope.of(context).requestFocus(nextFocusNode);
   }
 
-  // Helper method to clear focus (hide keyboard)
   void _clearFocus(BuildContext context) {
     FocusScope.of(context).unfocus();
   }

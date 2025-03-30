@@ -6,6 +6,7 @@ import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
+import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
@@ -58,24 +59,29 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   Decoration _decoration;
   Dress _dress;
   Footwear _footwear;
+  Jewelry _jewelry;
 
   FormSubmissionBloc()
       : _camera = initialCamera,
         _decoration = initialDecoration,
         _dress = Dress.empty(),
         _footwear = Footwear.empty(),
+        _jewelry = Jewelry.empty(),
         super(InitialForm()) {
     // Field Listeners
     on<UpdateField>(_onUpdateCameraField);
     on<DecorationUpdateField>(_onUpdateDecorationField);
     on<DressUpdateField>(_onUpdateDressField);
     on<FootWearUpdateField>(_onUpdateFootWearField);
+    on<JewelryUpdateField>(_onUpdateJewelryField);
 
     // Form Submission Listeners
     on<CameraEvent>(_onSubmitCameraForm);
     on<DecorationEvent>(_onSubmitDecorationForm);
     on<DressEvent>(_onSubmitDressForm);
     on<FootWearEvent>(_onSubmitFootWearForm);
+    on<JewelryEvent>(_onSubmitJewelryForm);
+
     on<ResetForm>(_onResetForm);
   }
 
@@ -178,6 +184,30 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     }
   }
 
+  _onUpdateJewelryField(JewelryUpdateField event, Emitter<FormMainState> emit) {
+    final data = {
+      'name': () => _jewelry.copyWith(name: event.value),
+      'price': () => _jewelry.copyWith(price: event.value),
+      'securityDeposit': () => _jewelry.copyWith(securityDeposit: event.value),
+      'location': () => _jewelry.copyWith(location: event.value),
+      'images': () => _jewelry.copyWith(images: event.value),
+      'description': () => _jewelry.copyWith(description: event.value),
+      'type': () => _jewelry.copyWith(type: event.value),
+      'material': () => _jewelry.copyWith(material: event.value),
+      'quantity': () => _jewelry.copyWith(quantity: event.value),
+      'condition': () => _jewelry.copyWith(condition: event.value),
+      'brand': () => _jewelry.copyWith(brand: event.value),
+      'size': () => _jewelry.copyWith(size: event.value),
+      'color': () => _jewelry.copyWith(color: event.value),
+      'available': () => _jewelry.copyWith(isAvailable: event.value),
+    };
+
+    if (data.containsKey(event.field)) {
+      _jewelry = data[event.field]!();
+      emit(UpdatedJewelryForm(_jewelry));
+    }
+  }
+
   void _onSubmitCameraForm(
       CameraEvent event, Emitter<FormMainState> emit) async {
     emit(CameraSuccess(isAnimating: true)); // Show processing
@@ -225,10 +255,25 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     }
   }
 
+  void _onSubmitJewelryForm(
+      JewelryEvent event, Emitter<FormMainState> emit) async {
+    emit(JewelrySuccess());
+    try {
+      await Future.delayed(const Duration(seconds: 5));
+      log("Bloc DressUseCase: ${_dress.name.toString()}");
+
+      await _footwearRepository.execute(_footwear);
+      _resetJewelry(emit); // Reset after success
+    } catch (e) {
+      emit(Failure('Submission failed: $e'));
+    }
+  }
+
   void _onResetForm(ResetForm event, Emitter<FormMainState> emit) {
     _resetCamera(emit);
     _resetDedcoration(emit);
     _resetDress(emit);
+    _resetJewelry(emit);
   }
 
   // Helper to reset camera state
@@ -246,5 +291,10 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   void _resetDress(Emitter<FormMainState> emit) {
     _dress = Dress.empty();
     emit(InitialForm(dress: _dress));
+  }
+
+  void _resetJewelry(Emitter<FormMainState> emit) {
+    _jewelry = Jewelry.empty();
+    emit(InitialForm(jewelry: _jewelry));
   }
 }

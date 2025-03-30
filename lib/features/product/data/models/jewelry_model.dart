@@ -1,42 +1,41 @@
-import 'package:serve_mate/features/product/doamin/entities/jewelry_entity.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 
-class JewelryModel extends JewelryEntity {
+class JewelryModel {
+  final String? name;
+  final int? price;
+  final int? securityDeposit;
+  final List<String>? location;
+  final List<String>? images;
+  final String? description;
+  final String? type;
+  final String? material;
+  final String? quantity;
+  final String? condition;
+  final String? brand;
+  final String? size;
+  final String? color;
+  final bool? isAvailable;
+  final String? dateAdded;
   JewelryModel({
-    required String name,
-    required double price,
-    required double securityDeposit,
-    required String location,
-    required List<String> images,
-    required String description,
-    required String type,
-    required String material,
-    required String quantity,
-    required String condition,
-    required String brand,
-    required String size,
-    required String color,
-    required String isAvailable,
-    required String dateAdded,
-  }) : super(
-          name: name,
-          price: price,
-          securityDeposit: securityDeposit,
-          location: location,
-          images: images,
-          description: description,
-          type: type,
-          material: material,
-          quantity: quantity,
-          condition: condition,
-          brand: brand,
-          size: size,
-          color: color,
-          isAvailable: isAvailable,
-          dateAdded: dateAdded,
-        );
+    this.name,
+    this.price,
+    this.securityDeposit,
+    this.location,
+    this.images,
+    this.description,
+    this.type,
+    this.material,
+    this.quantity,
+    this.condition,
+    this.brand,
+    this.size,
+    this.color,
+    this.isAvailable,
+    this.dateAdded,
+  });
 
-  /// Converts the JewelryModel to a JSON map (useful for sending data to APIs or storing in a database)
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'price': price,
@@ -56,24 +55,100 @@ class JewelryModel extends JewelryEntity {
     };
   }
 
-  /// Factory constructor to create a JewelryModel object from a JSON map
-  factory JewelryModel.fromJson(Map<String, dynamic> json) {
+  factory JewelryModel.fromMap(Map<String, dynamic> map) {
     return JewelryModel(
-      name: json['name'],
-      price: json['price'].toDouble(),
-      securityDeposit: json['securityDeposit'].toDouble(),
-      location: json['location'],
-      images: List<String>.from(json['images']), // Corrected to fetch 'images' from JSON
-      description: json['description'],
-      type: json['type'],
-      material: json['material'],
-      quantity: json['quantity'],
-      condition: json['condition'],
-      brand: json['brand'],
-      size: json['size'],
-      color: json['color'],
-      isAvailable: json['isAvailable'],
-      dateAdded: json['dateAdded'],
+      name: map['name'],
+      price: map['price'],
+      securityDeposit: map['securityDeposit'].toDouble(),
+      location: map['location'],
+      images: List<String>.from(
+          map['images']), // Corrected to fetch 'images' from map
+      description: map['description'],
+      type: map['type'],
+      material: map['material'],
+      quantity: map['quantity'],
+      condition: map['condition'],
+      brand: map['brand'],
+      size: map['size'],
+      color: map['color'],
+      isAvailable: map['isAvailable'],
+      dateAdded: map['dateAdded'],
+    );
+  }
+
+  factory JewelryModel.fromEntity(Jewelry jewelry) {
+    return JewelryModel(
+      name: jewelry.name,
+      price: jewelry.price,
+      securityDeposit: jewelry.securityDeposit,
+      location: jewelry.location,
+      images: jewelry.images,
+      description: jewelry.description,
+      type: jewelry.type,
+      material: jewelry.material,
+      quantity: jewelry.quantity,
+      condition: jewelry.condition,
+      brand: jewelry.brand,
+      size: jewelry.size,
+      color: jewelry.color,
+      isAvailable: jewelry.isAvailable,
+      dateAdded: jewelry.dateAdded,
+    );
+  }
+
+  Jewelry toEntity() {
+    return Jewelry(
+      name: name,
+      price: price,
+      securityDeposit: securityDeposit,
+      location: location,
+      images: images,
+      description: description,
+      type: type,
+      material: material,
+      quantity: quantity,
+      condition: condition,
+      brand: brand,
+      size: size,
+      color: color,
+      isAvailable: isAvailable,
+      dateAdded: dateAdded,
+    );
+  }
+
+  JewelryModel copyWith({
+    String? name,
+    int? price,
+    int? securityDeposit,
+    List<String>? location,
+    List<String>? images,
+    String? description,
+    String? type,
+    String? material,
+    String? quantity,
+    String? condition,
+    String? brand,
+    String? size,
+    String? color,
+    bool? isAvailable,
+    String? dateAdded,
+  }) {
+    return JewelryModel(
+      name: name ?? this.name,
+      price: price ?? this.price,
+      securityDeposit: securityDeposit ?? this.securityDeposit,
+      location: location ?? this.location,
+      images: images ?? this.images,
+      description: description ?? this.description,
+      type: type ?? this.type,
+      material: material ?? this.material,
+      quantity: quantity ?? this.quantity,
+      condition: condition ?? this.condition,
+      brand: brand ?? this.brand,
+      size: size ?? this.size,
+      color: color ?? this.color,
+      isAvailable: isAvailable ?? this.isAvailable,
+      dateAdded: dateAdded ?? this.dateAdded,
     );
   }
 }

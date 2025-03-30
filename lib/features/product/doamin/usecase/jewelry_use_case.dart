@@ -1,4 +1,4 @@
-import 'package:serve_mate/features/product/doamin/entities/jewelry_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class JewelryUseCase {
@@ -6,11 +6,11 @@ class JewelryUseCase {
 
   JewelryUseCase(this.repository);
 
-  Future<void> execute(JewelryEntity jewelry) async {
+  Future<void> execute(Jewelry jewelry) async {
     return await repository.addJewelry(jewelry);
   }
 
-  Future<List<JewelryEntity>> fetchJewelry() async {
+  Future<List<Jewelry>> fetchJewelry() async {
     return await repository.fetchJewelry();
   }
 }

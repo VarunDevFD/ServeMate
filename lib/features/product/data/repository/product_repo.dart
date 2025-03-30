@@ -10,7 +10,7 @@ import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
-import 'package:serve_mate/features/product/doamin/entities/jewelry_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
@@ -58,7 +58,7 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> addJewelry(JewelryEntity jewelry) async {
+  Future<void> addJewelry(Jewelry jewelry) async {
     try {
       await remoteDataSource.addJewelry(jewelry as JewelryModel);
     } catch (e) {
@@ -140,12 +140,13 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<List<JewelryModel>> fetchJewelry() async {
+  Future<List<Jewelry>> fetchJewelry() async {
     try {
       final jewelry = await remoteDataSource.fetchJewelry();
       return jewelry
           .map((jewelryItem) =>
-              JewelryModel.fromJson(jewelryItem as Map<String, dynamic>))
+              JewelryModel.fromMap(jewelryItem as Map<String, dynamic>)
+                  .toEntity())
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch jewelry: $e');

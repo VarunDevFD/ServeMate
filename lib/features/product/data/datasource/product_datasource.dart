@@ -84,7 +84,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     await _addToFirestore(
       collectionName: 'jewelry',
       model: jewelry,
-      toMap: (model) => model.toJson(),
+      toMap: (model) => model.toMap(),
     );
   }
 
@@ -157,7 +157,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<List<JewelryModel>> fetchJewelry() async {
     return await fetchFromFirestoore<JewelryModel>(
       collectionName: 'jewelry',
-      fromMap: (map) => JewelryModel.fromJson(map),
+      fromMap: (map) => JewelryModel.fromMap(map),
     );
   }
 

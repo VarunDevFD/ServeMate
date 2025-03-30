@@ -2,6 +2,7 @@ import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
+import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 
 abstract class FormMainState {}
 
@@ -10,15 +11,21 @@ class InitialForm extends FormMainState {
   final Decoration? decoration;
   final Dress? dress;
   final Footwear? footwear;
+  final Jewelry? jewelry;
 
-  InitialForm({this.camera, this.decoration, this.dress, this.footwear});
+  InitialForm({
+    this.camera,
+    this.decoration,
+    this.dress,
+    this.footwear,
+    this.jewelry,
+  });
 }
 
 class Failure extends FormMainState {
   final String message;
   Failure(this.message);
 }
-
 
 // Camera States
 class UpdatedForm extends FormMainState {
@@ -64,3 +71,13 @@ class FootWearSuccess extends FormMainState {
   FootWearSuccess({this.isAnimating = true});
 }
 
+// Jewelry States
+class UpdatedJewelryForm extends FormMainState {
+  final Jewelry jewelry;
+  UpdatedJewelryForm(this.jewelry);
+}
+
+class JewelrySuccess extends FormMainState {
+  final bool isAnimating; // Indicates if animation is active
+  JewelrySuccess({this.isAnimating = true});
+}
