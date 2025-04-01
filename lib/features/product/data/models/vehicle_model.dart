@@ -1,129 +1,182 @@
-import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
 
-class VehicleModel extends VehicleEntity {
+class VehicleModel {
+  final String name;
+  final String model;
+  final String brand;
+  final int price;
+  final String vehicleType;
+  final int rentalPrice;
+  final int securityDeposit;
+  final List<String> location;
+  final List<String> images;
+  final int seatCapacity;
+  final String registrationNumber;
+  final String fuelType;
+  final String transmission;
+  final List<String> facilities;
+  final String date;
+  final String color;
+  final bool availability;
+  final String? description;
+
   VehicleModel({
-    required String name,
-    required String vehicleType,
-    required String brand,
-    required String model,
-    required String color,
-    required int seatCapacity,
-    required String fuelType,
-    required String transmission,
-    required String registrationNumber,
-    required double rentalPrice,
-    required double securityDeposit,
-    required String date,
-    required List<String> facilities,
-    required List<String> images,
-    required String location,
-    required String availability,
-    String? description,
-  }) : super(
-          name: name,
-          model: model,
-          brand: brand,
-          price: rentalPrice,
-          description: description,
-          vehicleType: vehicleType,
-          rentalPrice: rentalPrice,
-          securityDeposit: securityDeposit,
-          location: location,
-          images: images,
-          seatCapacity: seatCapacity,
-          registrationNumber: registrationNumber,
-          fuelType: fuelType,
-          transmission: transmission,
-          facilities: facilities,
-          date: date,
-          availability: availability,
-          color: color,
-        );
+    required this.name,
+    required this.model,
+    required this.brand,
+    required this.price,
+    required this.vehicleType,
+    required this.rentalPrice,
+    required this.securityDeposit,
+    required this.location,
+    required this.images,
+    required this.seatCapacity,
+    required this.registrationNumber,
+    required this.fuelType,
+    required this.transmission,
+    required this.facilities,
+    required this.date,
+    required this.color,
+    required this.availability,
+    this.description,
+  });
 
-  // CopyWith method to update specific fields
+  // copyWith method
   VehicleModel copyWith({
     String? name,
     String? model,
-    String? vehicleType,
-    double? rentalPrice,
-    double? securityDeposit,
-    String? location,
-    List<String>? images,
-    String? description,
     String? brand,
+    int? price,
+    String? vehicleType,
+    int? rentalPrice,
+    int? securityDeposit,
+    List<String>? location,
+    List<String>? images,
     int? seatCapacity,
     String? registrationNumber,
     String? fuelType,
     String? transmission,
     List<String>? facilities,
     String? date,
-    String? availability,
     String? color,
+    bool? availability,
+    String? description,
   }) {
     return VehicleModel(
       name: name ?? this.name,
       model: model ?? this.model,
+      brand: brand ?? this.brand,
+      price: price ?? this.price,
       vehicleType: vehicleType ?? this.vehicleType,
       rentalPrice: rentalPrice ?? this.rentalPrice,
       securityDeposit: securityDeposit ?? this.securityDeposit,
       location: location ?? this.location,
       images: images ?? this.images,
-      description: description ?? this.description,
-      brand: brand ?? this.brand,
       seatCapacity: seatCapacity ?? this.seatCapacity,
       registrationNumber: registrationNumber ?? this.registrationNumber,
       fuelType: fuelType ?? this.fuelType,
       transmission: transmission ?? this.transmission,
       facilities: facilities ?? this.facilities,
       date: date ?? this.date,
-      availability: availability ?? this.availability,
       color: color ?? this.color,
+      availability: availability ?? this.availability,
+      description: description ?? this.description,
     );
   }
 
-  // Factory constructor for creating a VehicleModel object from a JSON map
-  factory VehicleModel.fromJson(Map<String, dynamic> json) {
-    return VehicleModel(
-      name: json['name'] ?? '',
-      model: json['model'] ?? '',
-      rentalPrice: (json['rentalPrice'] as num?)?.toDouble() ?? 0.0,
-      securityDeposit: (json['securityDeposit'] as num?)?.toDouble() ?? 0.0,
-      location: json['location'] ?? '',
-      images: List<String>.from(json['images'] ?? ['', '']),
-      description: json['description'] ?? '',
-      brand: json['brand'] ?? '',
-      seatCapacity: json['seatCapacity'] ?? 0,
-      registrationNumber: json['registrationNumber'] ?? '',
-      vehicleType: json['vehicleType'] ?? '',
-      fuelType: json['fuelType'] ?? '',
-      transmission: json['transmission'] ?? '',
-      facilities: List<String>.from(json['facilities'] ?? []),
-      date: json['date'] ?? '',
-      availability: json['availability'] ?? '',
-      color: json['color'] ?? '',
-    );
-  }
-
-  // Converts the VehicleModel object to a JSON map
-  Map<String, dynamic> toJson() {
+  // toMap method
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'model': model,
+      'brand': brand,
+      'price': price,
+      'vehicleType': vehicleType,
       'rentalPrice': rentalPrice,
       'securityDeposit': securityDeposit,
       'location': location,
       'images': images,
-      'description': description,
-      'brand': brand,
       'seatCapacity': seatCapacity,
       'registrationNumber': registrationNumber,
-      'vehicleType': vehicleType,
       'fuelType': fuelType,
       'transmission': transmission,
       'facilities': facilities,
       'date': date,
-      'availability': availability,
       'color': color,
+      'availability': availability,
+      'description': description,
     };
+  }
+
+  // fromMap method
+  factory VehicleModel.fromMap(Map<String, dynamic> map) {
+    return VehicleModel(
+      name: map['name'] ?? '',
+      model: map['model'] ?? '',
+      brand: map['brand'] ?? '',
+      price: map['price'] ?? 0,
+      vehicleType: map['vehicleType'] ?? '',
+      rentalPrice: map['rentalPrice'] ?? 0,
+      securityDeposit: map['securityDeposit'] ?? 0,
+      location: map['location'] ?? [],
+      images: List<String>.from(map['images'] ?? []),
+      seatCapacity: map['seatCapacity'] ?? 0,
+      registrationNumber: map['registrationNumber'] ?? '',
+      fuelType: map['fuelType'] ?? '',
+      transmission: map['transmission'] ?? '',
+      facilities: List<String>.from(map['facilities'] ?? []),
+      date: map['date'] ?? '',
+      color: map['color'] ?? '',
+      availability: map['availability'] ?? false,
+      description: map['description'],
+    );
+  }
+
+  // fromEntity method
+  factory VehicleModel.fromEntity(Vehicle entity) {
+    return VehicleModel(
+      name: entity.name,
+      model: entity.model,
+      brand: entity.brand,
+      price: entity.price,
+      vehicleType: entity.vehicleType,
+      rentalPrice: entity.rentalPrice,
+      securityDeposit: entity.securityDeposit,
+      location: entity.location,
+      images: entity.images,
+      seatCapacity: entity.seatCapacity,
+      registrationNumber: entity.registrationNumber,
+      fuelType: entity.fuelType,
+      transmission: entity.transmission,
+      facilities: entity.facilities,
+      date: entity.date,
+      color: entity.color,
+      availability: entity.availability,
+      description: entity.description,
+    );
+  }
+
+  // toEntity method
+  Vehicle toEntity() {
+    return Vehicle(
+      name: name,
+      model: model,
+      brand: brand,
+      price: price,
+      vehicleType: vehicleType,
+      rentalPrice: rentalPrice,
+      securityDeposit: securityDeposit,
+      location: location,
+      images: images,
+      seatCapacity: seatCapacity,
+      registrationNumber: registrationNumber,
+      fuelType: fuelType,
+      transmission: transmission,
+      facilities: facilities,
+      date: date,
+      color: color,
+      availability: availability,
+      description: description,
+    );
   }
 }

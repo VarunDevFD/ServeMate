@@ -50,6 +50,11 @@ class FilterChipScreen extends StatelessWidget {
                         .updateSelection(id, newSelection);
                     bloc?.add(UpdateField(id, newSelection));
                     bloc?.add(DecorationUpdateField(id, newSelection));
+                    bloc?.add(DressUpdateField(id, newSelection));
+                    bloc?.add(FootWearUpdateField(id, newSelection));
+                    bloc?.add(JewelryUpdateField(id, newSelection));
+                    bloc?.add(SoundUpdateField(id, newSelection));
+                    bloc?.add(VehicleUpdateField(id, newSelection));
                   },
                 );
               }).toList(),

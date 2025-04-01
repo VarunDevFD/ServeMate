@@ -59,7 +59,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     final addVehicleUseCase = serviceLocator<VehicleUseCase>();
     emit(ProductLoadingState());
     try {
-      await addVehicleUseCase.execute(event.vehicle);
+      // await addVehicleUseCase.execute(event.vehicle);
       emit(ProductSuccessState());
     } catch (e) {
       emit(ProductErrorState(e.toString()));

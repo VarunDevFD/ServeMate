@@ -13,7 +13,7 @@ import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
-import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
 import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
@@ -87,9 +87,9 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> addVehicle(VehicleEntity vehicle) async {
+  Future<void> addVehicle(Vehicle vehicle) async {
     try {
-      await remoteDataSource.addVehicle(vehicle as VehicleModel);
+      await remoteDataSource.addVehicle(VehicleModel.fromEntity(vehicle));
     } catch (e) {
       throw Exception('Failed to add vehicle: $e');
     }
@@ -176,6 +176,16 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
+  Future<List<Vehicle>> fetchVehicles() async {
+    try {
+      final vehicles = await remoteDataSource.fetchVehicles();
+      return vehicles.map((vehicle) => vehicle.toEntity()).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch vehicles: $e');
+    }
+  }
+
+  @override
   Future<List<VenueModel>> fetchVenues() async {
     try {
       final venues = await remoteDataSource.fetchVenues();
@@ -184,19 +194,6 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch venues: $e');
-    }
-  }
-
-  @override
-  Future<List<VehicleModel>> fetchVehicles() async {
-    try {
-      final vehicles = await remoteDataSource.fetchVehicles();
-      return vehicles
-          .map((vehicle) =>
-              VehicleModel.fromJson(vehicle as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch vehicles: $e');
     }
   }
 }
