@@ -3,6 +3,7 @@ import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
+import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 
 abstract class FormMainState {}
 
@@ -12,6 +13,7 @@ class InitialForm extends FormMainState {
   final Dress? dress;
   final Footwear? footwear;
   final Jewelry? jewelry;
+  final Sound? sound;
 
   InitialForm({
     this.camera,
@@ -19,6 +21,7 @@ class InitialForm extends FormMainState {
     this.dress,
     this.footwear,
     this.jewelry,
+    this.sound,
   });
 }
 
@@ -80,4 +83,15 @@ class UpdatedJewelryForm extends FormMainState {
 class JewelrySuccess extends FormMainState {
   final bool isAnimating; // Indicates if animation is active
   JewelrySuccess({this.isAnimating = true});
+}
+
+// Sound States
+class UpdatedSoundForm extends FormMainState {
+  final Sound sound;
+  UpdatedSoundForm(this.sound);
+}
+
+class SoundSuccess extends FormMainState {
+  final bool isAnimating; // Indicates if animation is active
+  SoundSuccess({this.isAnimating = true});
 }

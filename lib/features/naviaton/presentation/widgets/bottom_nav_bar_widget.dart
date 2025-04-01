@@ -62,7 +62,12 @@ class BottomNavBar extends StatelessWidget {
               context.read<FormSubmissionBloc>().add(DressEvent());
             } else if (formName == "Footwear") {
               context.read<FormSubmissionBloc>().add(FootWearEvent());
+            } else if (formName == "Jewelry") {
+              context.read<FormSubmissionBloc>().add(JewelryEvent());
+            } else if (formName == "Sound & DJ Systems") {
+              context.read<FormSubmissionBloc>().add(SoundEvent());
             }
+          
 
             formKey.currentState!.reset();
             ScaffoldMessenger.of(context).showSnackBar(

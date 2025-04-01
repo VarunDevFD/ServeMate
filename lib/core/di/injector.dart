@@ -30,6 +30,7 @@ import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart'
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/footwear_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/sound_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
 
@@ -150,6 +151,10 @@ Future<void> init() async {
   // Jewelry Usecase
   serviceLocator.registerLazySingleton<JewelryUseCase>(
       () => JewelryUseCase(serviceLocator<ProductRepository>()));
+
+  // Sound Usecase
+  serviceLocator.registerLazySingleton<SoundUseCase>(
+      () => SoundUseCase(serviceLocator<ProductRepository>()));
 
   // Venue Usecase
   serviceLocator.registerLazySingleton<VenueUseCase>(

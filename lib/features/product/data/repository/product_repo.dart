@@ -4,6 +4,7 @@ import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
+import 'package:serve_mate/features/product/data/models/sound_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
@@ -11,6 +12,7 @@ import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
+import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
@@ -60,9 +62,18 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<void> addJewelry(Jewelry jewelry) async {
     try {
-      await remoteDataSource.addJewelry(jewelry as JewelryModel);
+      await remoteDataSource.addJewelry(JewelryModel.fromEntity(jewelry));
     } catch (e) {
       throw Exception('Failed to add jewelry: $e');
+    }
+  }
+
+  @override
+  Future<void> addSound(Sound sound) async {
+    try {
+      await remoteDataSource.addSound(SoundModel.fromEntity(sound));
+    } catch (e) {
+      throw Exception('Failed to add sound: $e');
     }
   }
 
@@ -150,6 +161,17 @@ class ProductRepositoryImpl implements ProductRepository {
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch jewelry: $e');
+    }
+  }
+
+  @override
+  Future<List<Sound>> fetchSound() async {
+    try {
+      final soundModels = await remoteDataSource
+          .fetchSound(); // Returns Future<List<SoundModel>>
+      return soundModels.map((soundModel) => soundModel.toEntity()).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch sound: $e');
     }
   }
 

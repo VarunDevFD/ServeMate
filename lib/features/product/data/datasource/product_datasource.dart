@@ -5,6 +5,7 @@ import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
 import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
+import 'package:serve_mate/features/product/data/models/sound_model.dart';
 import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
 import 'package:serve_mate/features/product/data/models/venues_model.dart';
 
@@ -14,6 +15,7 @@ abstract class ProductRemoteDataSource {
   Future<void> addDress(DressModel dress);
   Future<void> addFootwear(FootwearModel footwear);
   Future<void> addJewelry(JewelryModel jewelry);
+  Future<void> addSound(SoundModel sound);
   Future<void> addVenue(VenueModel venue);
   Future<void> addVehicle(VehicleModel vehicle);
 
@@ -22,6 +24,7 @@ abstract class ProductRemoteDataSource {
   Future<List<DecorationModel>> fetchDecorations();
   Future<List<DressModel>> fetchDresses();
   Future<List<JewelryModel>> fetchJewelry();
+  Future<List<SoundModel>> fetchSound();
   Future<List<VenueModel>> fetchVenues();
   Future<List<VehicleModel>> fetchVehicles();
   Future<List<FootwearModel>> fetchFootwear();
@@ -84,6 +87,15 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     await _addToFirestore(
       collectionName: 'jewelry',
       model: jewelry,
+      toMap: (model) => model.toMap(),
+    );
+  }
+
+  @override
+  Future<void> addSound(SoundModel sound) async {
+    await _addToFirestore(
+      collectionName: 'sound',
+      model: sound,
       toMap: (model) => model.toMap(),
     );
   }
@@ -158,6 +170,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     return await fetchFromFirestoore<JewelryModel>(
       collectionName: 'jewelry',
       fromMap: (map) => JewelryModel.fromMap(map),
+    );
+  }
+
+  @override
+  Future<List<SoundModel>> fetchSound() async {
+    return await fetchFromFirestoore<SoundModel>(
+      collectionName: 'sound',
+      fromMap: (map) => SoundModel.fromMap(map),
     );
   }
 

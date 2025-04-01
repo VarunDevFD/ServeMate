@@ -29,14 +29,6 @@ class JewelryPage extends StatelessWidget {
   static final _locationFocusNode = FocusNode();
   static final _phoneFocusNode = FocusNode();
 
-  // Define controllers
-  final priceController = TextEditingController();
-  final sdController = TextEditingController();
-  final quantityController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final locationController = TextEditingController();
-  final phoneController = TextEditingController();
-
   // Define form key
   final formKey = GlobalKey<FormState>();
 
@@ -152,7 +144,6 @@ class JewelryPage extends StatelessWidget {
                     title: 'Rental Price',
                     child: TextFormField(
                       maxLength: 6,
-                      controller: priceController,
                       focusNode: _priceFocusNode,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
@@ -179,7 +170,6 @@ class JewelryPage extends StatelessWidget {
                     title: 'Security Deposit',
                     child: TextFormField(
                       maxLength: 6,
-                      controller: sdController,
                       focusNode: _securityDepositFocusNode,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
@@ -205,7 +195,6 @@ class JewelryPage extends StatelessWidget {
                   buildSection(
                     title: 'Available Quantity',
                     child: TextFormField(
-                      controller: quantityController,
                       focusNode: _rentalDurationFocusNode,
                       maxLength: 10,
                       keyboardType: TextInputType.number,
@@ -236,7 +225,7 @@ class JewelryPage extends StatelessWidget {
                   buildSection(
                     title: 'Description',
                     child: TextFormField(
-                      controller: descriptionController,
+                      initialValue: initialState,
                       focusNode: _descriptionFocusNode,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
@@ -267,7 +256,8 @@ class JewelryPage extends StatelessWidget {
                   buildSection(
                     title: 'Location',
                     child: LocationTextField(
-                      locationController: locationController,
+                      locationController:
+                          TextEditingController(text: initialState),
                       onFieldSubmitted: (value) =>
                           bloc.add(JewelryUpdateField('location', value)),
                     ),
@@ -275,7 +265,7 @@ class JewelryPage extends StatelessWidget {
                   buildSection(
                     title: 'Contact Number',
                     child: TextFormField(
-                      controller: phoneController,
+                      initialValue: initialState,
                       focusNode: _phoneFocusNode,
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.phone,

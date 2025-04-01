@@ -7,10 +7,12 @@ import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
+import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/footwear_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/sound_use_case.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 
@@ -54,12 +56,14 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
       serviceLocator<DecorationUseCase>();
   final DressUseCase _dressRepository = serviceLocator<DressUseCase>();
   final FootwearUseCase _footwearRepository = serviceLocator<FootwearUseCase>();
+  final SoundUseCase _soundRepository = serviceLocator<SoundUseCase>();
 
   Camera _camera;
   Decoration _decoration;
   Dress _dress;
   Footwear _footwear;
   Jewelry _jewelry;
+  Sound _sound;
 
   FormSubmissionBloc()
       : _camera = initialCamera,
@@ -67,6 +71,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
         _dress = Dress.empty(),
         _footwear = Footwear.empty(),
         _jewelry = Jewelry.empty(),
+        _sound = Sound.empty(),
         super(InitialForm()) {
     // Field Listeners
     on<UpdateField>(_onUpdateCameraField);
@@ -74,6 +79,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     on<DressUpdateField>(_onUpdateDressField);
     on<FootWearUpdateField>(_onUpdateFootWearField);
     on<JewelryUpdateField>(_onUpdateJewelryField);
+    on<SoundUpdateField>(_onUpdateSoundField);
 
     // Form Submission Listeners
     on<CameraEvent>(_onSubmitCameraForm);
@@ -81,8 +87,9 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     on<DressEvent>(_onSubmitDressForm);
     on<FootWearEvent>(_onSubmitFootWearForm);
     on<JewelryEvent>(_onSubmitJewelryForm);
+    on<SoundEvent>(_onSubmitSoundForm);
 
-    on<ResetForm>(_onResetForm);
+    on<ResetForm>(onResetForm);
   }
 
   _onUpdateCameraField(UpdateField event, Emitter<FormMainState> emit) {
@@ -208,12 +215,32 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     }
   }
 
+  _onUpdateSoundField(SoundUpdateField event, Emitter<FormMainState> emit) {
+    final data = {
+      'name': () => _sound.copyWith(name: event.value),
+      'category': () => _sound.copyWith(category: event.value),
+      'equipmentTypes': () => _sound.copyWith(equipmentTypes: event.value),
+      'description': () => _sound.copyWith(description: event.value),
+      'isAvailable': () => _sound.copyWith(isAvailable: event.value),
+      'price': () => _sound.copyWith(price: event.value),
+      'securityDeposit': () => _sound.copyWith(securityDeposit: event.value),
+      'location': () => _sound.copyWith(location: event.value),
+      'images': () => _sound.copyWith(images: event.value),
+      'privacyPolicy': () => _sound.copyWith(privacyPolicy: event.value),
+    };
+
+    if (data.containsKey(event.field)) {
+      _sound = data[event.field]!();
+      emit(UpdatedSoundForm(_sound));
+    }
+  }
+
   void _onSubmitCameraForm(
       CameraEvent event, Emitter<FormMainState> emit) async {
     emit(CameraSuccess(isAnimating: true)); // Show processing
     await _productRepository.execute(_camera); // Submit to repository
     await Future.delayed(const Duration(seconds: 5)); // Simulate delay
-    _resetCamera(emit); // Reset after success
+    resetCamera(emit); // Reset after success
   }
 
   void _onSubmitDecorationForm(
@@ -222,7 +249,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     try {
       await Future.delayed(const Duration(seconds: 5));
       await _decorationRepository.execute(_decoration);
-      _resetDedcoration(emit); // Reset after success
+      resetDedcoration(emit); // Reset after success
     } catch (e) {
       emit(Failure('Submission failed: $e'));
     }
@@ -235,7 +262,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
       log("Bloc DressUseCase: ${_dress.name.toString()}");
 
       await _dressRepository.execute(_dress);
-      _resetDedcoration(emit); // Reset after success
+      resetDedcoration(emit); // Reset after success
     } catch (e) {
       emit(Failure('Submission failed: $e'));
     }
@@ -249,7 +276,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
       log("Bloc DressUseCase: ${_dress.name.toString()}");
 
       await _footwearRepository.execute(_footwear);
-      _resetDedcoration(emit); // Reset after success
+      resetDedcoration(emit); // Reset after success
     } catch (e) {
       emit(Failure('Submission failed: $e'));
     }
@@ -263,38 +290,56 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
       log("Bloc DressUseCase: ${_dress.name.toString()}");
 
       await _footwearRepository.execute(_footwear);
-      _resetJewelry(emit); // Reset after success
+      resetJewelry(emit); // Reset after success
     } catch (e) {
       emit(Failure('Submission failed: $e'));
     }
   }
 
-  void _onResetForm(ResetForm event, Emitter<FormMainState> emit) {
-    _resetCamera(emit);
-    _resetDedcoration(emit);
-    _resetDress(emit);
-    _resetJewelry(emit);
+  void _onSubmitSoundForm(SoundEvent event, Emitter<FormMainState> emit) async {
+    emit(SoundSuccess());
+    try {
+      await Future.delayed(const Duration(seconds: 5));
+
+      await _soundRepository.execute(_sound);
+
+      resetSound(emit);
+    } catch (e) {
+      emit(Failure('Submission failed: $e'));
+    }
+  }
+
+  void onResetForm(ResetForm event, Emitter<FormMainState> emit) {
+    resetCamera(emit);
+    resetDedcoration(emit);
+    resetDress(emit);
+    resetJewelry(emit);
   }
 
   // Helper to reset camera state
-  void _resetCamera(Emitter<FormMainState> emit) {
+  void resetCamera(Emitter<FormMainState> emit) {
     _camera = initialCamera;
     _decoration = initialDecoration;
     emit(InitialForm(camera: _camera));
   }
 
-  void _resetDedcoration(Emitter<FormMainState> emit) {
+  void resetDedcoration(Emitter<FormMainState> emit) {
     _decoration = initialDecoration;
     emit(InitialForm(decoration: _decoration));
   }
 
-  void _resetDress(Emitter<FormMainState> emit) {
+  void resetDress(Emitter<FormMainState> emit) {
     _dress = Dress.empty();
     emit(InitialForm(dress: _dress));
   }
 
-  void _resetJewelry(Emitter<FormMainState> emit) {
+  void resetJewelry(Emitter<FormMainState> emit) {
     _jewelry = Jewelry.empty();
     emit(InitialForm(jewelry: _jewelry));
+  }
+
+  void resetSound(Emitter<FormMainState> emit) {
+    _sound = Sound.empty();
+    emit(InitialForm(sound: _sound));
   }
 }

@@ -145,6 +145,15 @@ class DropdownItems {
     'Combo (Lights + Sounds)',
     'Above All Are Included',
   ];
+
+  static const List<String> soundEquipmentTypes = [
+    'Speaker',
+    'Mixer',
+    'Microphone',
+    'Amplifier',
+    'Turntable',
+  ];
+
   static const List<String> jewelryTypes = [
     'Gold',
     'Diamond',
