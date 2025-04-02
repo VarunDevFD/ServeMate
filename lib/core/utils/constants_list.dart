@@ -1,3 +1,11 @@
+final List<String> appBarTitles = [
+    "SERVEMATE",
+    "List",
+    "Add List",
+    "Notifications",
+    "Profile"
+  ];
+
 const List<String> facilitiesVenue = [
   "Parking",
   "Catering",

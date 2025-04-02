@@ -15,3 +15,5 @@ class AppPadding {
 class AppString {
   static const initialValue = '';
 }
+
+

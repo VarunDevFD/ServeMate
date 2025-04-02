@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
+import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 import 'package:serve_mate/features/naviaton/presentation/widgets/bottom_nav_bar_widget.dart';
 import 'package:serve_mate/features/home/presentation/pages/home_page.dart';
@@ -10,16 +11,7 @@ import 'package:serve_mate/features/product/presentation/pages/add_product_page.
 import 'package:serve_mate/features/profile/presentation/pages/profile_page.dart';
 
 class BottomNavigationBar extends StatelessWidget {
-  final String? categoryName;
-
-  BottomNavigationBar({super.key, this.categoryName});
-  final List<String> _appBarTitles = [
-    "SERVEMATE",
-    "List",
-    "Add List",
-    "Notifications",
-    "Profile"
-  ];
+  BottomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +28,11 @@ class BottomNavigationBar extends StatelessWidget {
 
           final formName = snapshot.data ?? "Invalid Category";
           return BlocBuilder<BottomNavCubit, int>(builder: (context, index) {
-            final PageController pageController = PageController(
-              initialPage: index,
-            );
+            final pageController = PageController(initialPage: index);
             return Scaffold(
               appBar: AppBar(
                 title: Text(
-                  _appBarTitles[index],
+                  index == 2 ? "$formName Form" : appBarTitles[index],
                   style: TextStyle(
                     color: index == 0 ? AppColors.orange : AppColors.black,
                     fontWeight:
@@ -56,9 +46,8 @@ class BottomNavigationBar extends StatelessWidget {
               ),
               body: PageView(
                 controller: pageController,
-                onPageChanged: (index) {
-                  context.read<BottomNavCubit>().updateIndex(index);
-                },
+                onPageChanged: (index) =>
+                    context.read<BottomNavCubit>().updateIndex(index),
                 children: [
                   const HomePage(),
                   const ListPage(),
@@ -69,7 +58,6 @@ class BottomNavigationBar extends StatelessWidget {
               ),
               extendBody: true,
               bottomNavigationBar: BottomNavBar(
-                // currentIndex: index,
                 formName: formName,
                 pageController: pageController,
               ),
