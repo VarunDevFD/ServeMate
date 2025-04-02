@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/core/di/injector.dart';
-import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
-import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
-import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
-import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
+// import 'package:serve_mate/core/di/injector.dart';
+// import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
+// import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
+// import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
+// import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
 
 import 'product_event.dart';
 import 'product_state.dart';
@@ -32,7 +32,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<void> _handleSubmitJewelryEvent(
       SubmitJewelryEvent event, Emitter<ProductState> emit) async {
-    final addJewelryUseCase = serviceLocator<JewelryUseCase>();
+    // final addJewelryUseCase = serviceLocator<JewelryUseCase>();
     emit(ProductLoadingState());
     try {
       // await addJewelryUseCase.execute(event.jewelry);
@@ -44,10 +44,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<void> _handleSubmitVenueEvent(
       SubmitVenueEvent event, Emitter<ProductState> emit) async {
-    final addVenueUseCase = serviceLocator<VenueUseCase>();
+    // final addVenueUseCase = serviceLocator<VenueUseCase>();
     emit(ProductLoadingState());
     try {
-      await addVenueUseCase.execute(event.venue);
+      // await addVenueUseCase.execute(event.venue);
       emit(ProductSuccessState());
     } catch (e) {
       emit(ProductErrorState(e.toString()));
@@ -56,7 +56,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<void> _handleSubmitVehicleEvent(
       SubmitVehicleEvent event, Emitter<ProductState> emit) async {
-    final addVehicleUseCase = serviceLocator<VehicleUseCase>();
+    // final addVehicleUseCase = serviceLocator<VehicleUseCase>();
     emit(ProductLoadingState());
     try {
       // await addVehicleUseCase.execute(event.vehicle);
@@ -79,7 +79,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<void> _handleSubmitDecorationEvent(
       SubmitDecorationEvent event, Emitter<ProductState> emit) async {
-    final addDecorationUseCase = serviceLocator<DecorationUseCase>();
+    // final addDecorationUseCase = serviceLocator<DecorationUseCase>();
     emit(ProductLoadingState());
     try {
       // await addDecorationUseCase.execute(event.decoration);

@@ -14,7 +14,7 @@ import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
-import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
+import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
@@ -78,9 +78,9 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<void> addVenue(VenueEntity venue) async {
+  Future<void> addVenue(Venue venue) async {
     try {
-      await remoteDataSource.addVenue(venue as VenueModel);
+      await remoteDataSource.addVenue(VenueModel.fromEntity(venue));
     } catch (e) {
       throw Exception('Failed to add venue: $e');
     }
@@ -186,12 +186,10 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<List<VenueModel>> fetchVenues() async {
+  Future<List<Venue>> fetchVenues() async {
     try {
       final venues = await remoteDataSource.fetchVenues();
-      return venues
-          .map((venue) => VenueModel.fromMap(venue as Map<String, dynamic>))
-          .toList();
+      return venues.map((venue) => venue.toEntity()).toList();
     } catch (e) {
       throw Exception('Failed to fetch venues: $e');
     }

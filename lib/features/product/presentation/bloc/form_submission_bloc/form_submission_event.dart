@@ -51,6 +51,13 @@ class VehicleUpdateField extends FormSubmissionEvent {
   VehicleUpdateField(this.field, this.value);
 }
 
+class VenueUpdateField extends FormSubmissionEvent {
+  final String field;
+  final dynamic value;
+
+  VenueUpdateField(this.field, this.value);
+}
+
 class CameraEvent extends FormSubmissionEvent {}
 
 class DecorationEvent extends FormSubmissionEvent {}
@@ -64,5 +71,7 @@ class JewelryEvent extends FormSubmissionEvent {}
 class SoundEvent extends FormSubmissionEvent {}
 
 class VehicleEvent extends FormSubmissionEvent {}
+
+class VenueEvent extends FormSubmissionEvent {}
 
 class ResetForm extends FormSubmissionEvent {}

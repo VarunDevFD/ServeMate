@@ -108,6 +108,7 @@ class VehicleModel {
     };
   }
 
+
   // fromMap method
   factory VehicleModel.fromMap(Map<String, dynamic> map) {
     return VehicleModel(
@@ -155,6 +156,7 @@ class VehicleModel {
       description: entity.description,
     );
   }
+
 
   // toEntity method
   Vehicle toEntity() {

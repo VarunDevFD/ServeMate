@@ -19,77 +19,97 @@ import '../cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 // }
 
 class BottomNavBar extends StatelessWidget {
-  final int currentIndex;
+  // final int currentIndex;
   final String formName;
   final PageController pageController;
 
   const BottomNavBar({
     super.key,
-    required this.currentIndex,
+    // required this.currentIndex,
     required this.formName,
     required this.pageController,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CurvedNavigationBar(
-      index: currentIndex,
-      color: AppColors.orange1,
-      backgroundColor: AppColors.white,
-      buttonBackgroundColor:
-          currentIndex == 2 ? AppColors.green : AppColors.orange1,
-      height: 60,
-      animationDuration: const Duration(milliseconds: 500),
-      animationCurve: Curves.easeInOut,
-      items: [
-        const Icon(Icons.home, size: 33, color: AppColors.white),
-        const Icon(Icons.event_note_outlined, size: 33, color: AppColors.white),
-        Icon(currentIndex == 2 ? Icons.task_alt_rounded : Icons.add,
-            size: currentIndex == 2 ? 38 : 33, color: AppColors.white),
-        const Icon(Icons.chat_outlined, size: 33, color: AppColors.white),
-        const Icon(Icons.person, size: 33, color: AppColors.white),
-      ],
-      onTap: (index) {
-        if (index == 2 && currentIndex == 2) {
-          log(formName);
-          if (formKey.currentState != null &&
-              formKey.currentState!.validate()) {
-            if (formName == 'cameras') {
-              context.read<FormSubmissionBloc>().add(CameraEvent());
-            } else if (formName == 'Decoration') {
-              context.read<FormSubmissionBloc>().add(DecorationEvent());
-            } else if (formName == "Dresses") {
-              context.read<FormSubmissionBloc>().add(DressEvent());
-            } else if (formName == "Footwear") {
-              context.read<FormSubmissionBloc>().add(FootWearEvent());
-            } else if (formName == "Jewelry") {
-              context.read<FormSubmissionBloc>().add(JewelryEvent());
-            } else if (formName == "Sound & DJ Systems") {
-              context.read<FormSubmissionBloc>().add(SoundEvent());
-            } else if (formName == "Vehicles") {
-              context.read<FormSubmissionBloc>().add(VehicleEvent());
+    final bloc = context.read<FormSubmissionBloc>();
+    return BlocBuilder<BottomNavCubit, int>(
+      builder: (context, stateIndex) {
+        return CurvedNavigationBar(
+          index: stateIndex,
+          color: AppColors.orange1,
+          backgroundColor: AppColors.white,
+          buttonBackgroundColor:
+              stateIndex == 2 ? AppColors.green : AppColors.orange1,
+          height: 60,
+          animationDuration: const Duration(milliseconds: 500),
+          animationCurve: Curves.easeInOut,
+          items: [
+            const Icon(Icons.home, size: 33, color: AppColors.white),
+            const Icon(Icons.event_note_outlined,
+                size: 33, color: AppColors.white),
+            Icon(stateIndex == 2 ? Icons.task_alt_rounded : Icons.add,
+                size: stateIndex == 2 ? 38 : 33, color: AppColors.white),
+            const Icon(Icons.chat_outlined, size: 33, color: AppColors.white),
+            const Icon(Icons.person, size: 33, color: AppColors.white),
+          ],
+          onTap: (index) {
+            context.read<BottomNavCubit>().updateIndex(index);
+
+            if (index == 2 && stateIndex == 2) {
+              log(formName);
+              if (formKey.currentState != null &&
+                  formKey.currentState!.validate()) {
+                switch (formName) {
+                  case 'cameras':
+                    bloc.add(CameraEvent());
+                    break;
+                  case 'Decoration':
+                    bloc.add(DecorationEvent());
+                    break;
+                  case 'Dresses':
+                    bloc.add(DressEvent());
+                    break;
+                  case 'Footwear':
+                    bloc.add(FootWearEvent());
+                    break;
+                  case 'Jewelry':
+                    bloc.add(JewelryEvent());
+                    break;
+                  case 'Sound & DJ Systems':
+                    bloc.add(SoundEvent());
+                    break;
+                  case 'Vehicles':
+                    bloc.add(VehicleEvent());
+                    break;
+                  case 'Venue':
+                    bloc.add(VenueEvent());
+                    break;
+                  default:
+                    log('Unknown form name: $formName');
+                }
+                formKey.currentState!.reset();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Form Submitted Successfully'),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Please fill all required fields')),
+                );
+              }
             }
 
-            formKey.currentState!.reset();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Form Submitted Successfully'),
-              ),
+            // Animation Implemented
+            pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 50),
+              curve: Curves.easeInOut,
             );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please fill all required fields')),
-            );
-          }
-        }
-
-        // Animation Implemented
-        pageController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 50),
-          curve: Curves.easeInOut,
+          },
         );
-        context.read<BottomNavCubit>().updateIndex(index);
       },
     );
   }

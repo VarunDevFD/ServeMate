@@ -16,8 +16,8 @@ abstract class ProductRemoteDataSource {
   Future<void> addFootwear(FootwearModel footwear);
   Future<void> addJewelry(JewelryModel jewelry);
   Future<void> addSound(SoundModel sound);
-  Future<void> addVenue(VenueModel venue);
   Future<void> addVehicle(VehicleModel vehicle);
+  Future<void> addVenue(VenueModel venue);
 
   // Fetch methods
   Future<List<CameraModel>> fetchCameras();
@@ -25,9 +25,9 @@ abstract class ProductRemoteDataSource {
   Future<List<DressModel>> fetchDresses();
   Future<List<JewelryModel>> fetchJewelry();
   Future<List<SoundModel>> fetchSound();
-  Future<List<VenueModel>> fetchVenues();
   Future<List<VehicleModel>> fetchVehicles();
   Future<List<FootwearModel>> fetchFootwear();
+  Future<List<VenueModel>> fetchVenues();
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -100,20 +100,21 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     );
   }
 
-  @override
-  Future<void> addVenue(VenueModel venue) async {
-    await _addToFirestore(
-      collectionName: 'venues',
-      model: venue,
-      toMap: (model) => model.toMap(),
-    );
-  }
 
   @override
   Future<void> addVehicle(VehicleModel vehicle) async {
     await _addToFirestore(
       collectionName: 'Vehicles',
       model: vehicle,
+      toMap: (model) => model.toMap(),
+    );
+  }
+  
+  @override
+  Future<void> addVenue(VenueModel venue) async {
+    await _addToFirestore(
+      collectionName: 'venues',
+      model: venue,
       toMap: (model) => model.toMap(),
     );
   }

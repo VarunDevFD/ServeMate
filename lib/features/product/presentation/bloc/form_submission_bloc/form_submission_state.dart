@@ -5,6 +5,7 @@ import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
+import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 
 abstract class FormMainState {}
 
@@ -16,6 +17,7 @@ class InitialForm extends FormMainState {
   final Jewelry? jewelry;
   final Sound? sound;
   final Vehicle? vehicle;
+  final Venue? venue;
   
 
 
@@ -27,6 +29,7 @@ class InitialForm extends FormMainState {
     this.jewelry,
     this.sound,
     this.vehicle,
+    this.venue,
   });
 }
 
@@ -112,4 +115,15 @@ class VehicleSuccess extends FormMainState {
   VehicleSuccess({this.isAnimating = true});
 }
 
+
+// Venue States
+class UpdatedVenueForm extends FormMainState {
+  final Venue  venue;
+  UpdatedVenueForm(this.venue);
+}
+
+class VenueSuccess extends FormMainState {
+  final bool isAnimating; // Indicates if animation is active
+  VenueSuccess({this.isAnimating = true});
+}
 

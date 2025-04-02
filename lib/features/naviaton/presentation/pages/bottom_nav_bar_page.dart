@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart'; 
+import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 import 'package:serve_mate/features/naviaton/presentation/widgets/bottom_nav_bar_widget.dart';
-import 'package:serve_mate/features/home/presentation/pages/home_page.dart'; 
+import 'package:serve_mate/features/home/presentation/pages/home_page.dart';
 import 'package:serve_mate/features/product/presentation/pages/add_product_page.dart';
 import 'package:serve_mate/features/profile/presentation/pages/profile_page.dart';
 
@@ -70,14 +70,10 @@ class BottomNavigationBar extends StatelessWidget {
                 ],
               ),
               extendBody: true,
-              bottomNavigationBar: BlocBuilder<BottomNavCubit, int>(
-                builder: (context, index) {
-                  return BottomNavBar(
-                    currentIndex: index,
-                    formName: formName,
-                    pageController: _pageController,
-                  );
-                },
+              bottomNavigationBar: BottomNavBar(
+                // currentIndex: index,
+                formName: formName,
+                pageController: _pageController,
               ),
             ),
           );
@@ -108,4 +104,3 @@ class NotificationsPage extends StatelessWidget {
     return const Center(child: Text('Notifications Page'));
   }
 }
- 

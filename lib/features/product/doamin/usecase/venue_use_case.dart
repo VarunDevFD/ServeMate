@@ -1,4 +1,6 @@
-import 'package:serve_mate/features/product/doamin/entities/venue_entity.dart';
+import 'dart:developer';
+
+import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class VenueUseCase {
@@ -6,11 +8,12 @@ class VenueUseCase {
 
   VenueUseCase(this.repository);
 
-  Future<void> execute(VenueEntity venueEntity) async {
-    return await repository.addVenue(venueEntity);
+  Future<void> execute(Venue venue) async {
+    log("Venue Repository keri usecase");
+    return await repository.addVenue(venue);
   }
 
-  Future<List<VenueEntity>> fetchVenues() async {
+  Future<List<Venue>> fetchVenues() async {
     return await repository.fetchVenues();
   }
 }

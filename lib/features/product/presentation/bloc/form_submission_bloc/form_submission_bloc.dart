@@ -9,12 +9,15 @@ import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
+import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 import 'package:serve_mate/features/product/doamin/usecase/add_dress_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/camera_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/decoration_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/footwear_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/sound_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
+import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 
@@ -58,8 +61,10 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
       serviceLocator<DecorationUseCase>();
   final DressUseCase _dressRepository = serviceLocator<DressUseCase>();
   final FootwearUseCase _footwearRepository = serviceLocator<FootwearUseCase>();
+  final JewelryUseCase _jewelryUseCase = serviceLocator<JewelryUseCase>();
   final SoundUseCase _soundRepository = serviceLocator<SoundUseCase>();
   final VehicleUseCase _vehicleUseCase = serviceLocator<VehicleUseCase>();
+  final VenueUseCase _venueUseCase = serviceLocator<VenueUseCase>();
 
   Camera _camera;
   Decoration _decoration;
@@ -68,6 +73,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   Jewelry _jewelry;
   Sound _sound;
   Vehicle _vehicle;
+  Venue _venue;
 
   FormSubmissionBloc()
       : _camera = initialCamera,
@@ -77,6 +83,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
         _jewelry = Jewelry.empty(),
         _sound = Sound.empty(),
         _vehicle = Vehicle.empty(),
+        _venue = Venue.empty(),
         super(InitialForm()) {
     // Field Listeners
     on<UpdateField>(_onUpdateCameraField);
@@ -86,6 +93,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     on<JewelryUpdateField>(_onUpdateJewelryField);
     on<SoundUpdateField>(_onUpdateSoundField);
     on<VehicleUpdateField>(_onUpdateVehicleField);
+    on<VenueUpdateField>(_onUpdateVenueField);
 
     // Form Submission Listeners
     on<CameraEvent>(_onSubmitCameraForm);
@@ -95,6 +103,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     on<JewelryEvent>(_onSubmitJewelryForm);
     on<SoundEvent>(_onSubmitSoundForm);
     on<VehicleEvent>(_onSubmitVehicleForm);
+    on<VenueEvent>(_onSubmitVenueForm);
 
     on<ResetForm>(onResetForm);
   }
@@ -270,6 +279,29 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     }
   }
 
+  _onUpdateVenueField(VenueUpdateField event, Emitter<FormMainState> emit) {
+    final data = {
+      'venue_name': () => _venue.copyWith(name: event.value),
+      'price': () => _venue.copyWith(rentalPrice: event.value),
+      'sdPrice': () => _venue.copyWith(securityDeposit: event.value),
+      'location': () => _venue.copyWith(location: event.value),
+      'images': () => _venue.copyWith(images: event.value),
+      'description': () => _venue.copyWith(description: event.value),
+      'venueType': () => _venue.copyWith(venueType: event.value),
+      'capacity': () => _venue.copyWith(capacity: event.value),
+      'duration': () => _venue.copyWith(duration: event.value),
+      'phoneNumber': () => _venue.copyWith(phoneNumber: event.value),
+      'facilities': () => _venue.copyWith(facilities: event.value),
+      'isAvailable': () => _venue.copyWith(isAvailable: event.value),
+      'privacyPolicy': () => _venue.copyWith(privacyPolicy: event.value),
+    };
+
+    if (data.containsKey(event.field)) {
+      _venue = data[event.field]!();
+      emit(UpdatedVenueForm(_venue));
+    }
+  }
+
   void _onSubmitCameraForm(
       CameraEvent event, Emitter<FormMainState> emit) async {
     emit(CameraSuccess(isAnimating: true)); // Show processing
@@ -324,7 +356,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
       await Future.delayed(const Duration(seconds: 5));
       log("Bloc DressUseCase: ${_dress.name.toString()}");
 
-      await _footwearRepository.execute(_footwear);
+      await _jewelryUseCase.execute(_jewelry);
       resetJewelry(emit); // Reset after success
     } catch (e) {
       emit(Failure('Submission failed: $e'));
@@ -356,6 +388,17 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     }
   }
 
+  void _onSubmitVenueForm(VenueEvent event, Emitter<FormMainState> emit) async {
+    emit(VenueSuccess());
+    try {
+      await Future.delayed(const Duration(seconds: 5));
+      await _venueUseCase.execute(_venue);
+      resetVenue(emit);
+    } catch (e) {
+      emit(Failure('Submission failed: $e'));
+    }
+  }
+
   void onResetForm(ResetForm event, Emitter<FormMainState> emit) {
     resetCamera(emit);
     resetDedcoration(emit);
@@ -363,6 +406,7 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     resetJewelry(emit);
     resetSound(emit);
     resetVehicle(emit);
+    resetVenue(emit);
   }
 
   // Helper to reset camera state
@@ -395,5 +439,10 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   void resetVehicle(Emitter<FormMainState> emit) {
     _vehicle = Vehicle.empty();
     emit(InitialForm(vehicle: _vehicle));
+  }
+
+  void resetVenue(Emitter<FormMainState> emit) {
+    _venue = Venue.empty();
+    emit(InitialForm(venue: _venue));
   }
 }
