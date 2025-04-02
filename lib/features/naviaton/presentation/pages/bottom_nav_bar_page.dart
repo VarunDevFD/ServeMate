@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
@@ -11,11 +9,8 @@ import 'package:serve_mate/features/home/presentation/pages/home_page.dart';
 import 'package:serve_mate/features/product/presentation/pages/add_product_page.dart';
 import 'package:serve_mate/features/profile/presentation/pages/profile_page.dart';
 
-final ValueNotifier<List<File>> imagesNotifier = ValueNotifier<List<File>>([]);
-
 class BottomNavigationBar extends StatelessWidget {
   final String? categoryName;
-  final PageController _pageController = PageController(initialPage: 0);
 
   BottomNavigationBar({super.key, this.categoryName});
   final List<String> _appBarTitles = [
@@ -40,8 +35,11 @@ class BottomNavigationBar extends StatelessWidget {
           }
 
           final formName = snapshot.data ?? "Invalid Category";
-          return BlocBuilder<BottomNavCubit, int>(
-            builder: (context, index) => Scaffold(
+          return BlocBuilder<BottomNavCubit, int>(builder: (context, index) {
+            final PageController pageController = PageController(
+              initialPage: index,
+            );
+            return Scaffold(
               appBar: AppBar(
                 title: Text(
                   _appBarTitles[index],
@@ -57,7 +55,7 @@ class BottomNavigationBar extends StatelessWidget {
                 elevation: 0,
               ),
               body: PageView(
-                controller: _pageController,
+                controller: pageController,
                 onPageChanged: (index) {
                   context.read<BottomNavCubit>().updateIndex(index);
                 },
@@ -73,10 +71,10 @@ class BottomNavigationBar extends StatelessWidget {
               bottomNavigationBar: BottomNavBar(
                 // currentIndex: index,
                 formName: formName,
-                pageController: _pageController,
+                pageController: pageController,
               ),
-            ),
-          );
+            );
+          });
         });
   }
 

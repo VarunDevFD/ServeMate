@@ -36,7 +36,7 @@ class BottomNavBar extends StatelessWidget {
     return BlocBuilder<BottomNavCubit, int>(
       builder: (context, stateIndex) {
         return CurvedNavigationBar(
-          index: stateIndex,
+          index: pageController.initialPage,
           color: AppColors.orange1,
           backgroundColor: AppColors.white,
           buttonBackgroundColor:
