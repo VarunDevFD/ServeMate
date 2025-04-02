@@ -77,7 +77,7 @@ class AnimatedSearchBar extends StatelessWidget {
                 child: IconButton(
                   icon: Icon(Icons.image, color: Colors.white, size: 20.sp),
                   onPressed: () {
-                    // Close the keyboard when this button is pressed
+                    // Close the keyboard when this button is clicked
                   },
                 ),
               ),
