@@ -29,6 +29,7 @@ class ColorPickerWidget extends StatelessWidget {
                       paletteType: PaletteType.hslWithSaturation,
                       pickerColor: state.selectedColor,
                       onColorChanged: (color) {
+                        // ignore: deprecated_member_use
                         final colorName = getColorRange(color.value);
                         context
                             .read<DressFormBloc>()

@@ -21,50 +21,15 @@ import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 
-final Camera initialCamera = Camera(
-  name: '',
-  model: '',
-  brand: '',
-  category: '',
-  description: '',
-  price: 0,
-  sdPrice: 0,
-  available: false,
-  location: [''],
-  phoneNumber: '',
-  condition: '',
-  storage: [''],
-  connectivity: [''],
-  duration: '',
-  latePolicy: '',
-  images: [''],
-  privacyPolicy: false,
-);
-final Decoration initialDecoration = Decoration(
-  name: '',
-  decorCategory: [''],
-  decorStyles: [''],
-  description: '',
-  price: 0,
-  sdPrice: 0,
-  available: false,
-  location: [''],
-  phoneNumber: '',
-  duration: '',
-  images: [''],
-  privacyPolicy: false,
-);
-
 class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
-  final CameraUseCase _productRepository = serviceLocator<CameraUseCase>();
-  final DecorationUseCase _decorationRepository =
-      serviceLocator<DecorationUseCase>();
-  final DressUseCase _dressRepository = serviceLocator<DressUseCase>();
-  final FootwearUseCase _footwearRepository = serviceLocator<FootwearUseCase>();
-  final JewelryUseCase _jewelryUseCase = serviceLocator<JewelryUseCase>();
-  final SoundUseCase _soundRepository = serviceLocator<SoundUseCase>();
-  final VehicleUseCase _vehicleUseCase = serviceLocator<VehicleUseCase>();
-  final VenueUseCase _venueUseCase = serviceLocator<VenueUseCase>();
+  final _productRepository = serviceLocator<CameraUseCase>();
+  final _decorationRepository = serviceLocator<DecorationUseCase>();
+  final _dressRepository = serviceLocator<DressUseCase>();
+  final _footwearRepository = serviceLocator<FootwearUseCase>();
+  final _jewelryUseCase = serviceLocator<JewelryUseCase>();
+  final _soundRepository = serviceLocator<SoundUseCase>();
+  final _vehicleUseCase = serviceLocator<VehicleUseCase>();
+  final _venueUseCase = serviceLocator<VenueUseCase>();
 
   Camera _camera;
   Decoration _decoration;
@@ -76,8 +41,8 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
   Venue _venue;
 
   FormSubmissionBloc()
-      : _camera = initialCamera,
-        _decoration = initialDecoration,
+      : _camera = Camera.empty(),
+        _decoration = Decoration.empty(),
         _dress = Dress.empty(),
         _footwear = Footwear.empty(),
         _jewelry = Jewelry.empty(),
@@ -411,13 +376,13 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
 
   // Helper to reset camera state
   void resetCamera(Emitter<FormMainState> emit) {
-    _camera = initialCamera;
-    _decoration = initialDecoration;
+    _camera = Camera.empty();
+
     emit(InitialForm(camera: _camera));
   }
 
   void resetDedcoration(Emitter<FormMainState> emit) {
-    _decoration = initialDecoration;
+    _decoration = Decoration.empty();
     emit(InitialForm(decoration: _decoration));
   }
 
@@ -446,3 +411,4 @@ class FormSubmissionBloc extends Bloc<FormSubmissionEvent, FormMainState> {
     emit(InitialForm(venue: _venue));
   }
 }
+// 449

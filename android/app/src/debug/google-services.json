@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "54251147633",
+    "project_id": "wedding-rental-595ab",
+    "storage_bucket": "wedding-rental-595ab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54251147633:android:23acf4ec4e500f2c2026d0",
+        "android_client_info": {
+          "package_name": "com.example.serve_mate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54251147633-s1lafai5mgaa9i5mtbnuinaqmoqeqpfo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.serve_mate",
+            "certificate_hash": "13da78bbe5eb7ff342014447b00b2b4562df2774"
+          }
+        },
+        {
+          "client_id": "54251147633-lce01aleb1p1m0cksldediuld0d63sar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByBRstciOpAcbysqU8dspV48LJUlYl_6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54251147633-lce01aleb1p1m0cksldediuld0d63sar.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "54251147633-nl50tdumeu6s13cuadouqihjovg58lm5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.vrWeddingRental"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54251147633:android:ad44e1660e231d092026d0",
+        "android_client_info": {
+          "package_name": "com.varun.vr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54251147633-2riv42ti51vllkt5d62rjn87v9sb0qij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.varun.vr",
+            "certificate_hash": "13da78bbe5eb7ff342014447b00b2b4562df2774"
+          }
+        },
+        {
+          "client_id": "54251147633-lce01aleb1p1m0cksldediuld0d63sar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByBRstciOpAcbysqU8dspV48LJUlYl_6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54251147633-lce01aleb1p1m0cksldediuld0d63sar.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "54251147633-nl50tdumeu6s13cuadouqihjovg58lm5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.vrWeddingRental"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

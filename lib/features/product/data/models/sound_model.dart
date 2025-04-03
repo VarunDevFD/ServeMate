@@ -73,15 +73,15 @@ class SoundModel {
 
   factory SoundModel.fromMap(Map<String, dynamic> map) {
     return SoundModel(
-      name: map['name'] as String ?? '',
-      category: map['category'] as String ?? '',
+      name: map['name'] as String,
+      category: map['category'] as String,
       equipmentTypes: List<String>.from(map['equipmentTypes'] ?? []),
       description: map['description'] ?? '',
       price: map['price'] ?? 0,
       securityDeposit: map['securityDeposit'] ?? 0,
-      location: List<String>.from(map['location']) ?? [],
+      location: List<String>.from(map['location']),
       phoneNumber: map['phoneNumber'] ?? '',
-      images: List<String>.from(map['images']) ?? [],
+      images: List<String>.from(map['images']),
       isAvailable: map['isAvailable'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
     );
@@ -91,7 +91,7 @@ class SoundModel {
     return SoundModel(
       name: sound.name ?? '',
       category: sound.category ?? '',
-      equipmentTypes: sound.equipmentTypes ?? [],
+      equipmentTypes: sound.equipmentTypes,
       description: sound.description ?? '',
       price: sound.price ?? 0,
       securityDeposit: sound.securityDeposit ?? 0,

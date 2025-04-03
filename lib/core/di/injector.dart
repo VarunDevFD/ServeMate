@@ -33,8 +33,7 @@ import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart
 import 'package:serve_mate/features/product/doamin/usecase/sound_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
-
-import 'package:serve_mate/firebase_options.dart';
+import 'package:serve_mate/secrets/firebase_options.dart';
 
 // void configureCloudinary() {
 //   CloudinaryContext.cloudinary = Cloudinary.fromCloudName(
