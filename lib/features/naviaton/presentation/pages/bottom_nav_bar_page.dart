@@ -58,7 +58,7 @@ class BottomNavigationBar extends StatelessWidget {
               ),
               extendBody: true,
               bottomNavigationBar: BottomNavBar(
-                formName: formName,
+                formName: formName.toLowerCase(),
                 pageController: pageController,
               ),
             );

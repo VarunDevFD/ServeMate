@@ -7,8 +7,6 @@ import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -17,6 +15,8 @@ import 'package:serve_mate/features/product/presentation/widgets/widget_location
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
 import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 
 class VehiclesPage extends StatelessWidget {
   VehiclesPage({super.key});
@@ -37,14 +37,14 @@ class VehiclesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is VehicleSuccess) {
+        if (state is FormSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Form submitted successfully!')),
           );
           _clearFocus(context); // Clear focus on success
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -53,7 +53,7 @@ class VehiclesPage extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
 
-        if (state is VehicleSuccess && state.isAnimating) {
+        if (state is FormSuccess) {
           log("Vehicle Animation true");
           return Center(
             child: Column(
@@ -85,7 +85,7 @@ class VehiclesPage extends StatelessWidget {
           );
         }
 
-        const initialState = AppString.initialValue;
+        const initialState = Names.initialValue;
         final paddingEdges = AppPadding.paddingEdgesAll;
 
         return Form(
@@ -106,7 +106,7 @@ class VehiclesPage extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Vehicle Name *',
                       onChanged: (value) =>
-                          bloc.add(VehicleUpdateField('name', value)),
+                          bloc.add(FormUpdateEvent('vehicle', 'name', value)),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Vehicle Name'
                           : null,
@@ -120,7 +120,7 @@ class VehiclesPage extends StatelessWidget {
                       labelText: 'Vehicle Type *',
                       items: DropdownItems.vehicleTypeItems,
                       onFieldSubmitted: (value) {
-                        bloc.add(VehicleUpdateField('type', value));
+                        bloc.add(FormUpdateEvent('vehicle', 'type', value));
                         _moveFocus(context, _brandFocusNode);
                       },
                     ),
@@ -134,7 +134,7 @@ class VehiclesPage extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Vehicle Brand Name *',
                       onChanged: (value) =>
-                          bloc.add(VehicleUpdateField('brand', value)),
+                          bloc.add(FormUpdateEvent('vehicle', 'brand', value)),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Vehicle Brand Name'
                           : null,
@@ -148,7 +148,7 @@ class VehiclesPage extends StatelessWidget {
                       labelText: 'Model Year *',
                       items: DropdownItems.vehicleModelItems,
                       onFieldSubmitted: (value) {
-                        bloc.add(VehicleUpdateField('model', value));
+                        bloc.add(FormUpdateEvent('vehicle', 'model', value));
                         _moveFocus(context, _capacityFocusNode);
                       },
                     ),
@@ -157,7 +157,8 @@ class VehiclesPage extends StatelessWidget {
                     title: 'Vehicle Color',
                     child: TextFieldWithColorPicker(
                       onColorSelected: (controller) {
-                        bloc.add(VehicleUpdateField('color', controller?.text));
+                        bloc.add(FormUpdateEvent(
+                            'vehicle', 'color', controller?.text));
                       },
                     ),
                   ),
@@ -169,8 +170,8 @@ class VehiclesPage extends StatelessWidget {
                       maxLength: 2,
                       keyboardType: TextInputType.number,
                       labelText: 'Enter Vehicle Seating Capacity *',
-                      onChanged: (value) => bloc.add(
-                          VehicleUpdateField('capacity', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'vehicle', 'capacity', int.tryParse(value))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Vehicle Seating Capacity';
@@ -190,7 +191,7 @@ class VehiclesPage extends StatelessWidget {
                       labelText: 'Fuel Type *',
                       items: DropdownItems.vehicleFuelItems,
                       onFieldSubmitted: (value) {
-                        bloc.add(VehicleUpdateField('fuel', value));
+                        bloc.add(FormUpdateEvent('vehicle', 'fuel', value));
                         _moveFocus(context, _transmissionFocusNode);
                       },
                     ),
@@ -202,7 +203,8 @@ class VehiclesPage extends StatelessWidget {
                       items: DropdownItems
                           .vehicleTransmissionItems, // Assuming this exists
                       onFieldSubmitted: (value) {
-                        bloc.add(VehicleUpdateField('transmission', value));
+                        bloc.add(
+                            FormUpdateEvent('vehicle', 'transmission', value));
                         _moveFocus(context, _regNumberFocusNode);
                       },
                     ),
@@ -215,8 +217,8 @@ class VehiclesPage extends StatelessWidget {
                       maxLength: 10,
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Vehicle Registration Number *',
-                      onChanged: (value) =>
-                          bloc.add(VehicleUpdateField('regNumber', value)),
+                      onChanged: (value) => bloc
+                          .add(FormUpdateEvent('vehicle', 'regNumber', value)),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Registration Number'
                           : null,
@@ -233,8 +235,8 @@ class VehiclesPage extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       labelText: 'Price (per day) *',
                       prefixIcon: const Icon(Icons.attach_money),
-                      onChanged: (value) => bloc.add(
-                          VehicleUpdateField('price', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'vehicle', 'price', int.tryParse(value))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Rental Price';
@@ -257,8 +259,8 @@ class VehiclesPage extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       labelText: 'Security Deposit *',
                       prefixIcon: const Icon(Icons.security_outlined),
-                      onChanged: (value) => bloc.add(
-                          VehicleUpdateField('sdPrice', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'vehicle', 'sdPrice', int.tryParse(value))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Security Deposit';
@@ -275,6 +277,7 @@ class VehiclesPage extends StatelessWidget {
                   buildSection(
                     title: 'Facilities Available',
                     child: FilterChipScreen(
+                      keyName: 'vehicle',
                       id: 'facilities',
                       categories: facilitiesVehicle,
                       bloc: bloc,
@@ -282,15 +285,16 @@ class VehiclesPage extends StatelessWidget {
                   ),
                   buildSection(
                     title: 'Availability',
-                    child: SwitchTileScreen(bloc: bloc),
+                    child: SwitchTileScreen(
+                        categoryName: initialState, bloc: bloc),
                   ),
                   buildSection(
                     title: 'Location',
                     child: LocationTextField(
                       locationController:
                           TextEditingController(text: initialState),
-                      onFieldSubmitted: (value) =>
-                          bloc.add(VehicleUpdateField('location', value)),
+                      onFieldSubmitted: (value) => bloc
+                          .add(FormUpdateEvent('vehicle', 'location', value)),
                     ),
                   ),
                   buildSection(
@@ -304,8 +308,8 @@ class VehiclesPage extends StatelessWidget {
                       prefixIcon: const Icon(Icons.description_outlined),
                       maxLines: 3,
                       alignLabelWithHint: true,
-                      onChanged: (value) =>
-                          bloc.add(VehicleUpdateField('description', value)),
+                      onChanged: (value) => bloc.add(
+                          FormUpdateEvent('vehicle', 'description', value)),
                       context: context,
                     ),
                   ),
@@ -334,6 +338,7 @@ class VehiclesPage extends StatelessWidget {
                             ),
                             SizedBox(height: 6.h),
                             ImagePickerPage(
+                              categoryName: initialState,
                               bloc: bloc,
                               validator: (images) => images.isEmpty
                                   ? 'Please upload at least one image'

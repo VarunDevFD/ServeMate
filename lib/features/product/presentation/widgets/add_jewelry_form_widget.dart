@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -15,6 +13,8 @@ import 'package:serve_mate/features/product/presentation/widgets/switch_custom_b
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 
 class JewelryPage extends StatelessWidget {
   JewelryPage({super.key});
@@ -34,15 +34,15 @@ class JewelryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is JewelrySuccess) {
+        if (state is FormSuccess) {
           // Adjusted to use Success state
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Form submitted successfully!')),
           );
           _clearFocus(context); // Clear focus on success
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -51,7 +51,7 @@ class JewelryPage extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
 
-        if (state is JewelrySuccess && state.isAnimating) {
+        if (state is FormSuccess) {
           log("Jewelry Animation true");
           return Center(
             child: Column(
@@ -83,7 +83,7 @@ class JewelryPage extends StatelessWidget {
           );
         }
 
-        const initialState = AppString.initialValue;
+        const initialState = Names.initialValue;
         final paddingEdges = AppPadding.paddingEdgesAll;
 
         return Form(
@@ -104,7 +104,7 @@ class JewelryPage extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Jewelry Name *',
                       onChanged: (value) =>
-                          bloc.add(JewelryUpdateField('name', value)),
+                          bloc.add(FormUpdateEvent('jewelry', 'name', value)),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Jewelry Name'
                           : null,
@@ -118,7 +118,7 @@ class JewelryPage extends StatelessWidget {
                       labelText: 'Category*',
                       items: DropdownItems.jewelryCategorys,
                       onFieldSubmitted: (value) {
-                        bloc.add(JewelryUpdateField('category', value));
+                        bloc.add(FormUpdateEvent('jewelry', 'category', value));
                       },
                     ),
                   ),
@@ -128,7 +128,7 @@ class JewelryPage extends StatelessWidget {
                       labelText: 'Type*',
                       items: DropdownItems.jewelryTypes,
                       onFieldSubmitted: (value) {
-                        bloc.add(JewelryUpdateField('type', value));
+                        bloc.add(FormUpdateEvent('jewelry', 'type', value));
                       },
                     ),
                   ),
@@ -136,7 +136,7 @@ class JewelryPage extends StatelessWidget {
                     title: 'Suitable for Gender',
                     child: GenderSelectionWidget(
                       onValue: (value) {
-                        bloc.add(JewelryUpdateField('gender', value));
+                        bloc.add(FormUpdateEvent('jewelry', 'gender', value));
                       },
                     ),
                   ),
@@ -151,8 +151,8 @@ class JewelryPage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.attach_money),
                       ),
-                      onChanged: (value) => bloc.add(
-                          JewelryUpdateField('price', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'jewelry', 'price', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _securityDepositFocusNode),
                       validator: (value) {
@@ -177,8 +177,8 @@ class JewelryPage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.security_outlined),
                       ),
-                      onChanged: (value) => bloc.add(
-                          JewelryUpdateField('sdPrice', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'jewelry', 'sdPrice', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _rentalDurationFocusNode),
                       validator: (value) {
@@ -203,8 +203,8 @@ class JewelryPage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.add_outlined),
                       ),
-                      onChanged: (value) => bloc.add(
-                          JewelryUpdateField('quantity', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'jewelry', 'quantity', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _descriptionFocusNode),
                       validator: (value) {
@@ -220,7 +220,8 @@ class JewelryPage extends StatelessWidget {
                   ),
                   buildSection(
                     title: 'Availability',
-                    child: SwitchTileScreen(bloc: bloc),
+                    child:
+                        SwitchTileScreen(categoryName: 'jewelry', bloc: bloc),
                   ),
                   buildSection(
                     title: 'Description',
@@ -236,8 +237,8 @@ class JewelryPage extends StatelessWidget {
                         counterText: '',
                         alignLabelWithHint: true,
                       ),
-                      onChanged: (value) =>
-                          bloc.add(JewelryUpdateField('description', value)),
+                      onChanged: (value) => bloc.add(
+                          FormUpdateEvent('jewelry', 'description', value)),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _locationFocusNode),
                     ),
@@ -248,7 +249,8 @@ class JewelryPage extends StatelessWidget {
                       items: DropdownItems.condition,
                       labelText: 'Condition *',
                       onFieldSubmitted: (value) {
-                        bloc.add(JewelryUpdateField('condition', value));
+                        bloc.add(
+                            FormUpdateEvent('jewelry', 'condition', value));
                         _moveFocus(context, _locationFocusNode);
                       },
                     ),
@@ -258,8 +260,8 @@ class JewelryPage extends StatelessWidget {
                     child: LocationTextField(
                       locationController:
                           TextEditingController(text: initialState),
-                      onFieldSubmitted: (value) =>
-                          bloc.add(JewelryUpdateField('location', value)),
+                      onFieldSubmitted: (value) => bloc
+                          .add(FormUpdateEvent('jewelry', 'location', value)),
                     ),
                   ),
                   buildSection(
@@ -275,8 +277,8 @@ class JewelryPage extends StatelessWidget {
                         prefixIcon: Icon(Icons.phone_outlined),
                         counterText: '',
                       ),
-                      onChanged: (value) =>
-                          bloc.add(JewelryUpdateField('phoneNumber', value)),
+                      onChanged: (value) => bloc.add(
+                          FormUpdateEvent('jewelry', 'phoneNumber', value)),
                       onFieldSubmitted: (value) => _clearFocus(context),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -314,6 +316,7 @@ class JewelryPage extends StatelessWidget {
                             ),
                             SizedBox(height: 6.h),
                             ImagePickerPage(
+                              categoryName: 'jewelry',
                               bloc: bloc,
                               validator: (images) => images.isEmpty
                                   ? 'Please upload at least one image'
@@ -328,7 +331,8 @@ class JewelryPage extends StatelessWidget {
                     title: 'Terms and Conditions',
                     child: TermsAndConditionsScreen(
                       onChanged: (value) {
-                        bloc.add(JewelryUpdateField('privacyPolicy', value));
+                        bloc.add(
+                            FormUpdateEvent('jewelry', 'privacyPolicy', value));
                       },
                     ),
                   ),

@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
+
+import '../bloc/form_submission_bloc/form_submission_event.dart';
 
 class FilterChipScreen extends StatelessWidget {
+  final String keyName;
   final String id;
   final List<String> categories;
   final FormSubmissionBloc? bloc;
@@ -14,6 +16,7 @@ class FilterChipScreen extends StatelessWidget {
   FilterChipScreen({
     Key? key,
     this.bloc,
+    required this.keyName,
     required this.id,
     required this.categories,
   }) : super(key: key);
@@ -48,14 +51,7 @@ class FilterChipScreen extends StatelessWidget {
                     context
                         .read<FilterChipCubit>()
                         .updateSelection(id, newSelection);
-                    bloc?.add(UpdateField(id, newSelection));
-                    bloc?.add(DecorationUpdateField(id, newSelection));
-                    bloc?.add(DressUpdateField(id, newSelection));
-                    bloc?.add(FootWearUpdateField(id, newSelection));
-                    bloc?.add(JewelryUpdateField(id, newSelection));
-                    bloc?.add(SoundUpdateField(id, newSelection));
-                    bloc?.add(VehicleUpdateField(id, newSelection));
-                    bloc?.add(VenueUpdateField(id, newSelection));
+                    bloc?.add(FormUpdateEvent(keyName, id, newSelection));
                   },
                 );
               }).toList(),

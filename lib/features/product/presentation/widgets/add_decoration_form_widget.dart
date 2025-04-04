@@ -10,8 +10,6 @@ import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
@@ -20,19 +18,21 @@ import 'package:serve_mate/features/product/presentation/widgets/filter_chip_wid
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 
 class DecorationPage extends StatelessWidget {
   DecorationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is DecorationSuccess) {
+        if (state is FormSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Form submitted successfully!')),
           );
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -40,7 +40,7 @@ class DecorationPage extends StatelessWidget {
       },
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
-        if (state is DecorationSuccess && state.isAnimating) {
+        if (state is FormSuccess) {
           log("DecorationSuccess animation");
           return Center(
             child: Column(
@@ -56,14 +56,14 @@ class DecorationPage extends StatelessWidget {
               ],
             ),
           );
-        } else if (state is DecorationSuccess && !state.isAnimating) {
+        } else if (state is FormSuccess) {
           log("DecorationSuccess without animation");
           // Reset cubits here to prepare for form rebuild
           context.read<ImagePickerCubit>().clearImages();
           context.read<AvailableSwitchCubit>().toggleAvailable(false);
           context.read<FilterChipCubit>().resetAll();
         }
-        if (state is DecorationSuccess) log('Success State State');
+        if (state is FormSuccess) log('Success State State');
         return Form(
           key: formKey,
           child: SingleChildScrollView(
@@ -97,7 +97,7 @@ class DecorationPage extends StatelessWidget {
                           SizedBox(height: 6.h),
                           // Name
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 30,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
@@ -106,8 +106,8 @@ class DecorationPage extends StatelessWidget {
                                   '', // Hide the maxLength count TextFormField
                               prefixIcon: Icon(Icons.inventory_2_outlined),
                             ),
-                            onChanged: (value) =>
-                                bloc.add(DecorationUpdateField('name', value)),
+                            onChanged: (value) => bloc.add(
+                                FormUpdateEvent('decoration', 'name', value)),
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Please enter the Decoration Name'
                                 : null,
@@ -120,6 +120,7 @@ class DecorationPage extends StatelessWidget {
                           ),
                           SizedBox(height: 6.h),
                           FilterChipScreen(
+                            keyName: 'decoration',
                             id: 'decorCategory',
                             categories: decorationCategory,
                             bloc: bloc,
@@ -132,13 +133,14 @@ class DecorationPage extends StatelessWidget {
                           ),
                           SizedBox(height: 6.h),
                           FilterChipScreen(
+                            keyName: 'decoration',
                             id: 'decorStyles',
                             categories: decorThemes,
                           ),
                           SizedBox(height: 6.h),
                           // Description
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 100,
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next,
@@ -148,8 +150,8 @@ class DecorationPage extends StatelessWidget {
                               prefixIcon: Icon(Icons.description_outlined),
                               alignLabelWithHint: true,
                             ),
-                            onChanged: (value) => bloc.add(
-                                DecorationUpdateField('description', value)),
+                            onChanged: (value) => bloc.add(FormUpdateEvent(
+                                'decoration', 'description', value)),
                           ),
                         ],
                       ),
@@ -181,7 +183,7 @@ class DecorationPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Price
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 6,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -189,9 +191,8 @@ class DecorationPage extends StatelessWidget {
                               counterText: '',
                               prefixIcon: Icon(Icons.attach_money),
                             ),
-                            onChanged: (value) => bloc.add(
-                                DecorationUpdateField(
-                                    'price', int.tryParse(value))),
+                            onChanged: (value) => bloc.add(FormUpdateEvent(
+                                'decoration', 'price', int.tryParse(value))),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter the Rental Price';
@@ -205,7 +206,7 @@ class DecorationPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Security Deposit
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 6,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -213,9 +214,8 @@ class DecorationPage extends StatelessWidget {
                               counterText: '',
                               prefixIcon: Icon(Icons.security_outlined),
                             ),
-                            onChanged: (value) => bloc.add(
-                                DecorationUpdateField(
-                                    'sdPrice', int.tryParse(value))),
+                            onChanged: (value) => bloc.add(FormUpdateEvent(
+                                'decoration', 'sdPrice', int.tryParse(value))),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter the Security Deposit';
@@ -229,13 +229,13 @@ class DecorationPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Minimum Rental Duration
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
                               labelText: 'Minimum Rental Duration (days)*',
                             ),
-                            onChanged: (value) => bloc
-                                .add(DecorationUpdateField('duration', value)),
+                            onChanged: (value) => bloc.add(FormUpdateEvent(
+                                'decoration', 'duration', value)),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter minimum rental duration';
@@ -255,7 +255,8 @@ class DecorationPage extends StatelessWidget {
                             },
                           ),
                           SizedBox(height: 16.h),
-                          SwitchTileScreen(bloc: bloc),
+                          SwitchTileScreen(
+                              categoryName: 'decoration', bloc: bloc),
                         ],
                       ),
                     ),
@@ -277,15 +278,16 @@ class DecorationPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Location
                           LocationTextField(
-                            locationController: TextEditingController(
-                                text: AppString.initialValue),
-                            onFieldSubmitted: (value) => bloc
-                                .add(DecorationUpdateField('location', value)),
+                            locationController:
+                                TextEditingController(text: Names.initialValue),
+                            onFieldSubmitted: (value) => bloc.add(
+                                FormUpdateEvent(
+                                    'decoration', 'location', value)),
                           ),
                           SizedBox(height: 16.h),
                           // Phone Number
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 10,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.phone,
@@ -293,8 +295,8 @@ class DecorationPage extends StatelessWidget {
                               labelText: 'Phone Number',
                               prefixIcon: Icon(Icons.phone_outlined),
                             ),
-                            onChanged: (value) => bloc.add(
-                                DecorationUpdateField('phoneNumber', value)),
+                            onChanged: (value) => bloc.add(FormUpdateEvent(
+                                'decoration', 'phoneNumber', value)),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter the Phone Number';
@@ -334,6 +336,7 @@ class DecorationPage extends StatelessWidget {
                           ),
                           SizedBox(height: 16.h),
                           ImagePickerPage(
+                            categoryName: 'decoration',
                             bloc: bloc,
                             validator: (images) => images.isEmpty
                                 ? 'Please upload at least one image'
@@ -362,7 +365,8 @@ class DecorationPage extends StatelessWidget {
                       context
                           .read<AvailableSwitchCubit>()
                           .checkeBoxAvailable(value!);
-                      bloc.add(DecorationUpdateField('privacyPolicy', value));
+                      bloc.add(FormUpdateEvent(
+                          'decoration', 'privacyPolicy', value));
                     },
                   ),
                   SizedBox(height: 50.h),

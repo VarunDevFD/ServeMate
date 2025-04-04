@@ -111,20 +111,20 @@ class VenueModel {
   // fromEntity method
   factory VenueModel.fromEntity(Venue entity) {
     return VenueModel(
-      name: entity.name,
-      rentalPrice: entity.rentalPrice,
-      securityDeposit: entity.securityDeposit,
-      location: entity.location,
-      images: entity.images,
-      description: entity.description,
-      capacity: entity.capacity,
-      duration: entity.duration,
-      venueType: entity.venueType,
-      phoneNumber: entity.phoneNumber,
-      date: entity.date,
-      facilities: entity.facilities,
-      isAvailable: entity.isAvailable,
-      privacyPolicy: entity.privacyPolicy,
+      name: entity.name ?? '',
+      rentalPrice: entity.rentalPrice ?? 0,
+      securityDeposit: entity.securityDeposit ?? 0,
+      location: entity.location ?? [],
+      images: entity.images ?? [],
+      description: entity.description ?? '',
+      capacity: entity.capacity ?? 0,
+      duration: entity.duration ?? '',
+      venueType: entity.venueType ?? '',
+      phoneNumber: entity.phoneNumber ?? '',
+      date: entity.date ?? '',
+      facilities: entity.facilities ?? [],
+      isAvailable: entity.isAvailable ?? false,
+      privacyPolicy: entity.privacyPolicy ?? false,
     );
   }
 

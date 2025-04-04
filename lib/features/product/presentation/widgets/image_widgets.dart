@@ -6,15 +6,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+
 class ImagePickerPage extends StatelessWidget {
+  final String categoryName;
   final FormSubmissionBloc bloc;
   final String? Function(List<File>)? validator;
 
-  const ImagePickerPage({
+  ImagePickerPage({
     super.key,
+    required this.categoryName,
     required this.bloc,
     this.validator,
   });
@@ -108,14 +111,7 @@ class ImagePickerPage extends StatelessWidget {
       listener: (context, images) {
         final pics = images.map((e) => e.path).toList();
         // Update the FormSubmissionBloc only when images change
-        bloc.add(UpdateField('images', pics));
-        bloc.add(DecorationUpdateField('images', pics));
-        bloc.add(DressUpdateField('images', pics));
-        bloc.add(FootWearUpdateField('images', pics));
-        bloc.add(JewelryUpdateField('images', pics));
-        bloc.add(SoundUpdateField('images', pics));
-        bloc.add(VehicleUpdateField('images', pics));
-        bloc.add(VenueUpdateField('images', pics));
+        bloc.add(FormUpdateEvent(categoryName, 'images', pics));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

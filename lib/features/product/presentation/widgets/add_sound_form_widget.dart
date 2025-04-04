@@ -9,8 +9,6 @@ import 'package:serve_mate/core/utils/card_constant.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
@@ -21,6 +19,8 @@ import 'package:serve_mate/features/product/presentation/widgets/side_head_text.
 import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 import '../bloc/image_cubit/image_cubit_cubit.dart';
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 
 class SoundDJPage extends StatelessWidget {
   SoundDJPage({super.key});
@@ -35,14 +35,14 @@ class SoundDJPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is SoundSuccess) {
+        if (state is FormSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Form submitted successfully!')),
           );
           _clearFocus(context); // Clear focus on success
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -51,7 +51,7 @@ class SoundDJPage extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
 
-        if (state is SoundSuccess && state.isAnimating) {
+        if (state is FormSuccess) {
           log("Sound Animation true");
           return Center(
             child: Column(
@@ -83,7 +83,7 @@ class SoundDJPage extends StatelessWidget {
           );
         }
 
-        const initialState = AppString.initialValue;
+        const initialState = Names.initialValue;
         final paddingEdges = AppPadding.paddingEdgesAll;
 
         return Form(
@@ -104,7 +104,7 @@ class SoundDJPage extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Sound Name *',
                       onChanged: (value) =>
-                          bloc.add(SoundUpdateField('name', value)),
+                          bloc.add(FormUpdateEvent('sound', 'name', value)),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Sound Name'
                           : null,
@@ -118,11 +118,12 @@ class SoundDJPage extends StatelessWidget {
                       labelText: 'Category*',
                       items: DropdownItems.soundCategorys,
                       onFieldSubmitted: (value) {
-                        bloc.add(SoundUpdateField('category', value));
+                        bloc.add(FormUpdateEvent('sound', 'category', value));
                       },
                     ),
                   ),
                   FilterChipScreen(
+                    keyName: 'sound',
                     id: 'sound equipment',
                     categories: DropdownItems.soundEquipmentTypes,
                     bloc: bloc,
@@ -139,8 +140,8 @@ class SoundDJPage extends StatelessWidget {
                       labelText: 'Description',
                       prefixIcon: const Icon(Icons.description_outlined),
                       alignLabelWithHint: true,
-                      onChanged: (value) =>
-                          bloc.add(SoundUpdateField('description', value)),
+                      onChanged: (value) => bloc
+                          .add(FormUpdateEvent('sound', 'description', value)),
                       nextFocusNode: _priceFocusNode,
                       context: context,
                     ),
@@ -154,8 +155,8 @@ class SoundDJPage extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       labelText: 'Price (per day)*',
                       prefixIcon: const Icon(Icons.attach_money),
-                      onChanged: (value) => bloc
-                          .add(SoundUpdateField('price', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'sound', 'price', int.tryParse(value))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Rental Price';
@@ -178,8 +179,8 @@ class SoundDJPage extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       labelText: 'Security Deposit *',
                       prefixIcon: const Icon(Icons.security_outlined),
-                      onChanged: (value) => bloc.add(SoundUpdateField(
-                          'securityDeposit', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'sound', 'securityDeposit', int.tryParse(value))),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Security Deposit';
@@ -195,7 +196,7 @@ class SoundDJPage extends StatelessWidget {
                   ),
                   buildSection(
                     title: 'Availability',
-                    child: SwitchTileScreen(bloc: bloc),
+                    child: SwitchTileScreen(categoryName: 'sound', bloc: bloc),
                   ),
                   buildSection(
                     title: 'Location',
@@ -203,7 +204,7 @@ class SoundDJPage extends StatelessWidget {
                       locationController:
                           TextEditingController(text: initialState),
                       onFieldSubmitted: (value) =>
-                          bloc.add(SoundUpdateField('location', value)),
+                          bloc.add(FormUpdateEvent('sound', 'location', value)),
                     ),
                   ),
                   buildSection(
@@ -216,8 +217,8 @@ class SoundDJPage extends StatelessWidget {
                       keyboardType: TextInputType.phone,
                       labelText: 'Phone Number *',
                       prefixIcon: const Icon(Icons.phone_outlined),
-                      onChanged: (value) =>
-                          bloc.add(SoundUpdateField('phoneNumber', value)),
+                      onChanged: (value) => bloc
+                          .add(FormUpdateEvent('sound', 'phoneNumber', value)),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Phone Number';
@@ -253,6 +254,7 @@ class SoundDJPage extends StatelessWidget {
                             ),
                             SizedBox(height: 16.h),
                             ImagePickerPage(
+                              categoryName: 'sound',
                               bloc: bloc,
                               validator: (images) => images.isEmpty
                                   ? 'Please upload at least one image'
@@ -282,7 +284,8 @@ class SoundDJPage extends StatelessWidget {
                         context
                             .read<AvailableSwitchCubit>()
                             .checkeBoxAvailable(value!);
-                        bloc.add(SoundUpdateField('privacyPolicy', value));
+                        bloc.add(
+                            FormUpdateEvent('sound', 'privacyPolicy', value));
                       },
                     ),
                   ),

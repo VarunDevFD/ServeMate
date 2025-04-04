@@ -7,8 +7,6 @@ import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -17,6 +15,8 @@ import 'package:serve_mate/features/product/presentation/widgets/widget_location
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 
 class VenuePage extends StatelessWidget {
   VenuePage({super.key});
@@ -33,14 +33,14 @@ class VenuePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is VenueSuccess) {
+        if (state is FormSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Venue form submitted successfully!')),
           );
           _clearFocus(context);
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -49,7 +49,7 @@ class VenuePage extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
 
-        if (state is VenueSuccess && state.isAnimating) {
+        if (state is FormSuccess) {
           log("Venue Animation true");
           return Center(
             child: Column(
@@ -81,8 +81,9 @@ class VenuePage extends StatelessWidget {
           );
         }
 
-        const initialState = AppString.initialValue;
         final paddingEdges = AppPadding.paddingEdgesAll;
+        const initialState = Names.initialValue;
+        const kName = Names.venue;
 
         return Form(
           key: formKey,
@@ -102,7 +103,7 @@ class VenuePage extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Venue Name *',
                       onChanged: (value) =>
-                          bloc.add(VenueUpdateField('venue_name', value)),
+                          bloc.add(FormUpdateEvent(kName, Names.name, "My name")),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Venue Name'
                           : null,
@@ -116,7 +117,7 @@ class VenuePage extends StatelessWidget {
                       locationController:
                           TextEditingController(text: initialState),
                       onFieldSubmitted: (value) {
-                        bloc.add(VenueUpdateField('location', value));
+                        bloc.add(FormUpdateEvent(kName, Names.location, value));
                         _moveFocus(context, _venueCapacityFocusNode);
                       },
                     ),
@@ -132,8 +133,8 @@ class VenuePage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.people_outline),
                       ),
-                      onChanged: (value) => bloc.add(
-                          VenueUpdateField('capacity', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          kName, 'capacity', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _durationFocusNode),
                       validator: (value) {
@@ -153,8 +154,8 @@ class VenuePage extends StatelessWidget {
                       labelText: 'Duration *',
                       items: DropdownItems.rentalDurationItems,
                       onFieldSubmitted: (value) {
-                        bloc.add(
-                            VenueUpdateField('duration', value.toString()));
+                        bloc.add(FormUpdateEvent(
+                            kName, 'duration', value.toString()));
                         _moveFocus(context, _priceFocusNode);
                       },
                     ),
@@ -170,8 +171,8 @@ class VenuePage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.attach_money),
                       ),
-                      onChanged: (value) => bloc
-                          .add(VenueUpdateField('price', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(
+                          FormUpdateEvent(kName, 'price', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _sdFocusNode),
                       validator: (value) {
@@ -196,8 +197,8 @@ class VenuePage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.security_outlined),
                       ),
-                      onChanged: (value) => bloc.add(
-                          VenueUpdateField('sdPrice', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          kName, 'sdPrice', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _descriptionFocusNode),
                       validator: (value) {
@@ -217,17 +218,18 @@ class VenuePage extends StatelessWidget {
                       labelText: 'Venue Type *',
                       items: DropdownItems.venueTypeItems,
                       onFieldSubmitted: (value) {
-                        bloc.add(VenueUpdateField('venueType', value));
+                        bloc.add(FormUpdateEvent(kName, 'venueType', value));
                       },
                     ),
                   ),
                   buildSection(
                     title: 'Availability',
-                    child: SwitchTileScreen(bloc: bloc),
+                    child: SwitchTileScreen(categoryName: kName, bloc: bloc),
                   ),
                   buildSection(
                     title: 'Facilities Available',
                     child: FilterChipScreen(
+                      keyName: kName,
                       id: 'facilities',
                       categories: facilitiesVenue,
                       bloc: bloc,
@@ -248,8 +250,8 @@ class VenuePage extends StatelessWidget {
                         counterText: '',
                         alignLabelWithHint: true,
                       ),
-                      onChanged: (value) =>
-                          bloc.add(VenueUpdateField('description', value)),
+                      onChanged: (value) => bloc
+                          .add(FormUpdateEvent(kName, 'description', value)),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _phoneFocusNode),
                       validator: (value) => value == null || value.isEmpty
@@ -270,8 +272,8 @@ class VenuePage extends StatelessWidget {
                         prefixIcon: Icon(Icons.phone_outlined),
                         counterText: '',
                       ),
-                      onChanged: (value) =>
-                          bloc.add(VenueUpdateField('phoneNumber', value)),
+                      onChanged: (value) => bloc
+                          .add(FormUpdateEvent(kName, 'phoneNumber', value)),
                       onFieldSubmitted: (value) => _clearFocus(context),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -309,6 +311,7 @@ class VenuePage extends StatelessWidget {
                             ),
                             SizedBox(height: 6.h),
                             ImagePickerPage(
+                              categoryName: kName,
                               bloc: bloc,
                               validator: (images) => images.isEmpty
                                   ? 'Please upload at least one image'
@@ -323,7 +326,8 @@ class VenuePage extends StatelessWidget {
                     title: 'Terms and Conditions',
                     child: TermsAndConditionsScreen(
                       onChanged: (value) {
-                        bloc.add(VenueUpdateField('privacyPolicy', value));
+                        bloc.add(
+                            FormUpdateEvent(kName, 'privacyPolicy', value));
                       },
                     ),
                   ),

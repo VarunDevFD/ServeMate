@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -15,6 +13,8 @@ import 'package:serve_mate/features/product/presentation/widgets/switch_custom_b
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 
 class FootwearPage extends StatelessWidget {
   FootwearPage({super.key});
@@ -38,14 +38,14 @@ class FootwearPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is FootWearSuccess) {
+        if (state is FormSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Form submitted successfully!')),
           );
           _clearFocus(context);
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -54,7 +54,7 @@ class FootwearPage extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
 
-        if (state is FootWearSuccess && state.isAnimating) {
+        if (state is FormSuccess) {
           log("Footwear Animation true");
           return Center(
             child: Column(
@@ -86,7 +86,7 @@ class FootwearPage extends StatelessWidget {
           );
         }
 
-        const initialState = AppString.initialValue;
+        const initialState = Names.initialValue;
         final paddingEdges = AppPadding.paddingEdgesAll;
 
         return Form(
@@ -107,7 +107,7 @@ class FootwearPage extends StatelessWidget {
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Footwear Name *',
                       onChanged: (value) =>
-                          bloc.add(UpdateField('name', value)),
+                          bloc.add(FormUpdateEvent('footwear', 'name', value)),
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Footwear Name'
                           : null,
@@ -121,7 +121,8 @@ class FootwearPage extends StatelessWidget {
                       labelText: 'Category*',
                       items: DropdownItems.footwearTypes,
                       onFieldSubmitted: (value) {
-                        bloc.add(UpdateField('category', value));
+                        bloc.add(
+                            FormUpdateEvent('footwear', 'category', value));
                       },
                     ),
                   ),
@@ -137,8 +138,8 @@ class FootwearPage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.attach_money),
                       ),
-                      onChanged: (value) =>
-                          bloc.add(UpdateField('price', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'footwear', 'price', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _securityDepositFocusNode),
                       validator: (value) {
@@ -164,8 +165,8 @@ class FootwearPage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.security_outlined),
                       ),
-                      onChanged: (value) =>
-                          bloc.add(UpdateField('sdPrice', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'footwear', 'sdPrice', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _quantityFocusNode),
                       validator: (value) {
@@ -191,8 +192,8 @@ class FootwearPage extends StatelessWidget {
                         counterText: '',
                         prefixIcon: Icon(Icons.add_outlined),
                       ),
-                      onChanged: (value) => bloc
-                          .add(UpdateField('quantity', int.tryParse(value))),
+                      onChanged: (value) => bloc.add(FormUpdateEvent(
+                          'footwear', 'quantity', int.tryParse(value))),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _descriptionFocusNode),
                       validator: (value) {
@@ -208,7 +209,8 @@ class FootwearPage extends StatelessWidget {
                   ),
                   buildSection(
                     title: 'Availability',
-                    child: SwitchTileScreen(bloc: bloc),
+                    child:
+                        SwitchTileScreen(categoryName: 'footwear', bloc: bloc),
                   ),
                   buildSection(
                     title: 'Description',
@@ -224,8 +226,8 @@ class FootwearPage extends StatelessWidget {
                         counterText: '',
                         alignLabelWithHint: true,
                       ),
-                      onChanged: (value) =>
-                          bloc.add(UpdateField('description', value)),
+                      onChanged: (value) => bloc.add(
+                          FormUpdateEvent('footwear', 'description', value)),
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _locationFocusNode),
                     ),
@@ -255,6 +257,7 @@ class FootwearPage extends StatelessWidget {
                             ),
                             SizedBox(height: 6.h),
                             ImagePickerPage(
+                              categoryName: 'footwear',
                               bloc: bloc,
                               validator: (images) => images.isEmpty
                                   ? 'Please upload at least one image'
@@ -271,7 +274,8 @@ class FootwearPage extends StatelessWidget {
                       items: DropdownItems.condition,
                       labelText: 'Condition *',
                       onFieldSubmitted: (value) {
-                        bloc.add(UpdateField('condition', value));
+                        bloc.add(
+                            FormUpdateEvent('footwear', 'condition', value));
                         _moveFocus(context, _locationFocusNode);
                       },
                     ),
@@ -280,8 +284,8 @@ class FootwearPage extends StatelessWidget {
                     title: 'Location',
                     child: LocationTextField(
                       locationController: locationController,
-                      onFieldSubmitted: (value) =>
-                          bloc.add(UpdateField('location', value)),
+                      onFieldSubmitted: (value) => bloc
+                          .add(FormUpdateEvent('footwear', 'location', value)),
                     ),
                   ),
                   buildSection(
@@ -297,8 +301,8 @@ class FootwearPage extends StatelessWidget {
                         prefixIcon: Icon(Icons.phone_outlined),
                         counterText: '',
                       ),
-                      onChanged: (value) =>
-                          bloc.add(UpdateField('phoneNumber', value)),
+                      onChanged: (value) => bloc.add(
+                          FormUpdateEvent('footwear', 'phoneNumber', value)),
                       onFieldSubmitted: (value) => _clearFocus(context),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -315,7 +319,8 @@ class FootwearPage extends StatelessWidget {
                     title: 'Terms and Conditions',
                     child: TermsAndConditionsScreen(
                       onChanged: (value) {
-                        bloc.add(UpdateField('privacyPolicy', value));
+                        bloc.add(FormUpdateEvent(
+                            'footwear', 'privacyPolicy', value));
                       },
                     ),
                   ),

@@ -56,34 +56,44 @@ class BottomNavBar extends StatelessWidget {
           log(formName);
           if (formKey.currentState != null &&
               formKey.currentState!.validate()) {
-            switch (formName) {
-              case 'cameras':
-                bloc.add(CameraEvent());
-                break;
-              case 'Decoration':
-                bloc.add(DecorationEvent());
-                break;
-              case 'Dresses':
-                bloc.add(DressEvent());
-                break;
-              case 'Footwear':
-                bloc.add(FootWearEvent());
-                break;
-              case 'Jewelry':
-                bloc.add(JewelryEvent());
-                break;
-              case 'Sound & DJ Systems':
-                bloc.add(SoundEvent());
-                break;
-              case 'Vehicles':
-                bloc.add(VehicleEvent());
-                break;
-              case 'Venue':
-                bloc.add(VenueEvent());
-                break;
-              default:
-                log('Unknown form name: $formName');
-            }
+            bloc.add(FormSubmitEvent(formName));
+
+            // switch (formName) {
+            //   case 'cameras':
+            //     // bloc.add(CameraEvent());
+            //     break;
+            //   case 'Decoration':
+            //     // bloc.add(DecorationEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   case 'Dresses':
+            //     // bloc.add(DressEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   case 'Footwear':
+            //     // bloc.add(FootWearEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   case 'Jewelry':
+            //     // bloc.add(JewelryEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   case 'Sound & DJ Systems':
+            //     // bloc.add(SoundEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   case 'Vehicles':
+            //     // bloc.add(VehicleEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   case 'Venue':
+            //     // bloc.add(VenueEvent());
+            //     bloc.add(FormEvent());
+            //     break;
+            //   default:
+            //     log('Unknown form name: $formName');
+            // }
+
             formKey.currentState!.reset();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

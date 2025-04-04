@@ -10,8 +10,6 @@ import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
@@ -22,18 +20,21 @@ import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdo
 import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
+
 class Cameras extends StatelessWidget {
   Cameras({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
         listener: (context, state) {
-      if (state is CameraSuccess) {
+      if (state is FormSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Form submitted successfully!')),
         );
-      } else if (state is Failure) {
+      } else if (state is FormError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(state.message)),
         );
@@ -41,7 +42,7 @@ class Cameras extends StatelessWidget {
     }, builder: (context, state) {
       final bloc = context.read<FormSubmissionBloc>();
 
-      if (state is CameraSuccess && state.isAnimating) {
+      if (state is FormSuccess) {
         context.read<ImagePickerCubit>().clearImages();
         context.read<AvailableSwitchCubit>().toggleAvailable(false);
         context.read<FilterChipCubit>().resetAll();
@@ -59,7 +60,7 @@ class Cameras extends StatelessWidget {
           ),
         );
       }
-      const initialState = AppString.initialValue;
+      const initialState = Names.initialValue;
       final paddingEdges = AppPadding.paddingEdgesAll;
 
       return Form(
@@ -103,8 +104,8 @@ class Cameras extends StatelessWidget {
                                 '', // Hide the maxLength count TextFormField
                             prefixIcon: Icon(Icons.inventory_2_outlined),
                           ),
-                          onChanged: (value) =>
-                              bloc.add(UpdateField('name', value)),
+                          onChanged: (value) => bloc
+                              .add(FormUpdateEvent('camera', 'name', value)),
                           validator: (value) => value == null || value.isEmpty
                               ? 'Please enter the Name'
                               : null,
@@ -120,8 +121,8 @@ class Cameras extends StatelessWidget {
                             counterText: '',
                             prefixIcon: Icon(Icons.category),
                           ),
-                          onChanged: (value) =>
-                              bloc.add(UpdateField('model', value)),
+                          onChanged: (value) => bloc
+                              .add(FormUpdateEvent('camera', 'model', value)),
                           validator: (value) => value == null || value.isEmpty
                               ? 'Please enter the Model'
                               : null,
@@ -132,7 +133,7 @@ class Cameras extends StatelessWidget {
                           labelText: 'Equipment Brand *',
                           items: DropdownItems.brandsCamera,
                           onFieldSubmitted: (value) {
-                            bloc.add(UpdateField('brand', value));
+                            bloc.add(FormUpdateEvent('camera', 'brand', value));
                           },
                         ),
                         SizedBox(height: 10.h),
@@ -141,7 +142,8 @@ class Cameras extends StatelessWidget {
                           labelText: 'Category*',
                           items: DropdownItems.categoriesCamera,
                           onFieldSubmitted: (value) {
-                            bloc.add(UpdateField('category', value));
+                            bloc.add(
+                                FormUpdateEvent('camera', 'category', value));
                           },
                         ),
                         SizedBox(height: 10.h),
@@ -157,8 +159,8 @@ class Cameras extends StatelessWidget {
                             prefixIcon: Icon(Icons.description_outlined),
                             alignLabelWithHint: true,
                           ),
-                          onChanged: (value) =>
-                              bloc.add(UpdateField('description', value)),
+                          onChanged: (value) => bloc.add(
+                              FormUpdateEvent('camera', 'description', value)),
                         ),
                       ],
                     ),
@@ -195,8 +197,8 @@ class Cameras extends StatelessWidget {
                             counterText: '',
                             prefixIcon: Icon(Icons.attach_money),
                           ),
-                          onChanged: (value) => bloc
-                              .add(UpdateField('price', int.tryParse(value))),
+                          onChanged: (value) => bloc.add(FormUpdateEvent(
+                              'camera', 'price', int.tryParse(value))),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the Rental Price';
@@ -218,8 +220,8 @@ class Cameras extends StatelessWidget {
                             counterText: '',
                             prefixIcon: Icon(Icons.security_outlined),
                           ),
-                          onChanged: (value) => bloc
-                              .add(UpdateField('sdPrice', int.tryParse(value))),
+                          onChanged: (value) => bloc.add(FormUpdateEvent(
+                              'camera', 'sdPrice', int.tryParse(value))),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the Security Deposit';
@@ -231,7 +233,7 @@ class Cameras extends StatelessWidget {
                           },
                         ),
                         SizedBox(height: 10.h),
-                        SwitchTileScreen(bloc: bloc),
+                        SwitchTileScreen(categoryName: 'camera', bloc: bloc),
                       ],
                     ),
                   ),
@@ -254,8 +256,8 @@ class Cameras extends StatelessWidget {
                         LocationTextField(
                           locationController:
                               TextEditingController(text: initialState),
-                          onFieldSubmitted: (value) =>
-                              bloc.add(UpdateField('location', value)),
+                          onFieldSubmitted: (value) => bloc.add(
+                              FormUpdateEvent('camera', 'location', value)),
                         ),
                         SizedBox(height: 10.h),
                         // Phone value),
@@ -264,8 +266,8 @@ class Cameras extends StatelessWidget {
                           maxLength: 10,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.phone,
-                          onChanged: (value) =>
-                              bloc.add(UpdateField('phoneNumber', value)),
+                          onChanged: (value) => bloc.add(
+                              FormUpdateEvent('camera', 'phoneNumber', value)),
                           decoration: const InputDecoration(
                             labelText: 'Phone Number',
                             counterText: '',
@@ -304,8 +306,8 @@ class Cameras extends StatelessWidget {
                         ReusableDropdown(
                           items: DropdownItems.condition,
                           labelText: 'Condition *',
-                          onFieldSubmitted: (value) =>
-                              bloc.add(UpdateField('condition', value)),
+                          onFieldSubmitted: (value) => bloc.add(
+                              FormUpdateEvent('camera', 'condition', value)),
                         ),
                         SizedBox(height: 6.h),
                         Text(
@@ -314,6 +316,7 @@ class Cameras extends StatelessWidget {
                         ),
                         SizedBox(height: 6.h),
                         FilterChipScreen(
+                          keyName: 'camera',
                           id: 'storage',
                           categories: DropdownItems.storageOptionsCamera,
                           bloc: bloc,
@@ -325,6 +328,7 @@ class Cameras extends StatelessWidget {
                         ),
                         SizedBox(height: 6.h),
                         FilterChipScreen(
+                          keyName: 'camera',
                           id: 'connectivity',
                           categories: DropdownItems.connectivityOptionsCamera,
                           bloc: bloc,
@@ -337,8 +341,8 @@ class Cameras extends StatelessWidget {
                           decoration: const InputDecoration(
                             labelText: 'Minimum Rental Duration (days)*',
                           ),
-                          onChanged: (value) =>
-                              bloc.add(UpdateField('duration', value)),
+                          onChanged: (value) => bloc.add(
+                              FormUpdateEvent('camera', 'duration', value)),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter minimum rental duration';
@@ -364,8 +368,8 @@ class Cameras extends StatelessWidget {
                           decoration: const InputDecoration(
                             labelText: 'Late Fee Policy*',
                           ),
-                          onChanged: (value) =>
-                              bloc.add(UpdateField('latePolicy', value)),
+                          onChanged: (value) => bloc.add(
+                              FormUpdateEvent('camera', 'latePolicy', value)),
                           validator: (value) => value!.isEmpty
                               ? 'Accessories are required'
                               : null,
@@ -401,6 +405,7 @@ class Cameras extends StatelessWidget {
                         ),
                         SizedBox(height: 16.h),
                         ImagePickerPage(
+                          categoryName: 'camera',
                           bloc: bloc,
                           validator: (images) => images.isEmpty
                               ? 'Please upload at least one image'
@@ -428,7 +433,7 @@ class Cameras extends StatelessWidget {
                     context
                         .read<AvailableSwitchCubit>()
                         .checkeBoxAvailable(value!);
-                    bloc.add(UpdateField('privacyPolicy', value));
+                    bloc.add(FormUpdateEvent('camera', 'privacyPolicy', value));
                   },
                 ),
                 SizedBox(height: 50.h),

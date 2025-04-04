@@ -9,8 +9,6 @@ import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
@@ -21,20 +19,21 @@ import 'package:serve_mate/features/product/presentation/widgets/switch_custom_b
 import 'package:serve_mate/features/product/presentation/widgets/text_field_with_color_picker.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 import 'reusable_dropdown.dart';
-
+import '../bloc/form_submission_bloc/form_submission_event.dart';
+import '../bloc/form_submission_bloc/form_submission_state.dart';
 class DressesPage extends StatelessWidget {
   DressesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormMainState>(
+    return BlocConsumer<FormSubmissionBloc, FormSubState>(
       listener: (context, state) {
-        if (state is DressSuccess) {
+        if (state is FormSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
                 content: Text('Form submitted successfully-------------')),
           );
-        } else if (state is Failure) {
+        } else if (state is FormError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
@@ -42,8 +41,8 @@ class DressesPage extends StatelessWidget {
       },
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
-        if (state is DressSuccess) {
-          log("DressSuccess animation");
+        if (state is FormSuccess) {
+          log("FormSuccess animation");
           context.read<ImagePickerCubit>().clearImages();
           context.read<AvailableSwitchCubit>().toggleAvailable(false);
           context.read<FilterChipCubit>().resetAll();
@@ -96,7 +95,7 @@ class DressesPage extends StatelessWidget {
                           SizedBox(height: 6.h),
                           // Dress Name
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 30,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
@@ -104,8 +103,8 @@ class DressesPage extends StatelessWidget {
                               counterText: '', // Hide the no. of Characters
                               prefixIcon: Icon(Icons.shopping_bag),
                             ),
-                            onChanged: (value) =>
-                                bloc.add(DressUpdateField('name', value)),
+                            onChanged: (value) => bloc
+                                .add(FormUpdateEvent('dress', 'name', value)),
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Please enter dress name'
                                 : null,
@@ -113,7 +112,7 @@ class DressesPage extends StatelessWidget {
                           SizedBox(height: 15.h),
                           // Brand
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 30,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
@@ -121,8 +120,8 @@ class DressesPage extends StatelessWidget {
                               counterText: '', // Hide the no. Pof Characters
                               prefixIcon: Icon(Icons.breakfast_dining_rounded),
                             ),
-                            onChanged: (value) =>
-                                bloc.add(DressUpdateField('brand', value)),
+                            onChanged: (value) => bloc
+                                .add(FormUpdateEvent('dress', 'brand', value)),
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Please enter dress name'
                                 : null,
@@ -132,14 +131,14 @@ class DressesPage extends StatelessWidget {
                           ReusableDropdown(
                             labelText: 'Category*',
                             items: DropdownItems.categoriesDress,
-                            onFieldSubmitted: (value) =>
-                                bloc.add(DressUpdateField('type', value)),
+                            onFieldSubmitted: (value) => bloc
+                                .add(FormUpdateEvent('dress', 'type', value)),
                           ),
                           SizedBox(height: 6.h),
                           // Gender
                           GenderSelectionWidget(
-                            onValue: (value) =>
-                                bloc.add(DressUpdateField('gender', value)),
+                            onValue: (value) => bloc
+                                .add(FormUpdateEvent('dress', 'gender', value)),
                           ),
                         ],
                       ),
@@ -173,27 +172,28 @@ class DressesPage extends StatelessWidget {
                           ReusableDropdown(
                             labelText: 'Size*',
                             items: DropdownItems.sizes,
-                            onFieldSubmitted: (value) =>
-                                bloc.add(DressUpdateField("size", value)),
+                            onFieldSubmitted: (value) => bloc
+                                .add(FormUpdateEvent('dress', "size", value)),
                           ),
                           SizedBox(height: 6.h),
                           // Dress Condition
                           ReusableDropdown(
                             labelText: 'condition *',
                             items: DropdownItems.condition,
-                            onFieldSubmitted: (value) =>
-                                bloc.add(DressUpdateField("condition", value)),
+                            onFieldSubmitted: (value) => bloc.add(
+                                FormUpdateEvent('dress', "condition", value)),
                           ),
                           SizedBox(height: 6.h),
                           // Dress Color
                           TextFieldWithColorPicker(
                             onColorSelected: (controller) => bloc.add(
-                                DressUpdateField('color', controller?.text)),
+                                FormUpdateEvent(
+                                    'dress', 'color', controller?.text)),
                           ),
                           SizedBox(height: 6.h),
                           // Material
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 30,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
@@ -201,8 +201,8 @@ class DressesPage extends StatelessWidget {
                               counterText: '',
                               prefixIcon: Icon(Icons.sell_outlined),
                             ),
-                            onChanged: (value) =>
-                                bloc.add(DressUpdateField('material', value)),
+                            onChanged: (value) => bloc.add(
+                                FormUpdateEvent('dress', 'material', value)),
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Please enter dress material'
                                 : null,
@@ -211,7 +211,7 @@ class DressesPage extends StatelessWidget {
 
                           // Description
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 100,
                             keyboardType: TextInputType.text,
                             textInputAction: TextInputAction.next,
@@ -221,8 +221,8 @@ class DressesPage extends StatelessWidget {
                               prefixIcon: Icon(Icons.description_outlined),
                               alignLabelWithHint: true,
                             ),
-                            onChanged: (value) => bloc
-                                .add(DressUpdateField('description', value)),
+                            onChanged: (value) => bloc.add(
+                                FormUpdateEvent('dress', 'description', value)),
                           ),
                         ],
                       ),
@@ -256,7 +256,7 @@ class DressesPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Price
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 6,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -265,7 +265,8 @@ class DressesPage extends StatelessWidget {
                               prefixIcon: Icon(Icons.attach_money),
                             ),
                             onChanged: (value) => bloc.add(
-                              DressUpdateField('price', int.tryParse(value)),
+                              FormUpdateEvent(
+                                  'dress', 'price', int.tryParse(value)),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -280,7 +281,7 @@ class DressesPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Security Deposit
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             maxLength: 6,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -289,7 +290,8 @@ class DressesPage extends StatelessWidget {
                               prefixIcon: Icon(Icons.security_outlined),
                             ),
                             onChanged: (value) => bloc.add(
-                              DressUpdateField('sdPrice', int.tryParse(value)),
+                              FormUpdateEvent(
+                                  'dress', 'sdPrice', int.tryParse(value)),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -304,13 +306,13 @@ class DressesPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Minimum Rental Duration
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
                               labelText: 'Minimum Rental Duration (days)*',
                             ),
-                            onChanged: (value) =>
-                                bloc.add(DressUpdateField('duration', value)),
+                            onChanged: (value) => bloc.add(
+                                FormUpdateEvent('dress', 'duration', value)),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter minimum rental duration';
@@ -331,7 +333,7 @@ class DressesPage extends StatelessWidget {
                           ),
                           SizedBox(height: 16.h),
                           // Availability
-                          SwitchTileScreen(bloc: bloc),
+                          SwitchTileScreen(categoryName: 'dress', bloc: bloc),
                         ],
                       ),
                     ),
@@ -353,19 +355,19 @@ class DressesPage extends StatelessWidget {
                           SizedBox(height: 16.h),
                           // Location
                           LocationTextField(
-                            locationController: TextEditingController(
-                                text: AppString.initialValue),
-                            onFieldSubmitted: (value) =>
-                                bloc.add(DressUpdateField('location', value)),
+                            locationController:
+                                TextEditingController(text: Names.initialValue),
+                            onFieldSubmitted: (value) => bloc.add(
+                                FormUpdateEvent('dress', 'location', value)),
                           ),
                           SizedBox(height: 16.h),
                           // Phone
                           TextFormField(
-                            initialValue: AppString.initialValue,
+                            initialValue: Names.initialValue,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.phone,
-                            onChanged: (value) => bloc
-                                .add(DressUpdateField('phoneNumber', value)),
+                            onChanged: (value) => bloc.add(
+                                FormUpdateEvent('dress', 'phoneNumber', value)),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter the Phone Number';
@@ -408,6 +410,7 @@ class DressesPage extends StatelessWidget {
                           ),
                           SizedBox(height: 16.h),
                           ImagePickerPage(
+                            categoryName: 'dress',
                             bloc: bloc,
                             validator: (images) => images.isEmpty
                                 ? 'Please upload at least one image'
@@ -424,7 +427,8 @@ class DressesPage extends StatelessWidget {
                       context
                           .read<AvailableSwitchCubit>()
                           .checkeBoxAvailable(value!);
-                      bloc.add(DressUpdateField('privacyPolicy', value));
+                      bloc.add(
+                          FormUpdateEvent('dress', 'privacyPolicy', value));
                     },
                   ),
 

@@ -1,34 +1,34 @@
 class Venue {
-  final String name;
-  final int rentalPrice;
-  final int securityDeposit;
-  final List<String> location;
-  final List<String> images;
-  final String description;
-  final int capacity;
-  final String duration;
-  final String venueType;
-  final String phoneNumber;
-  final String date;
-  final List<String> facilities;
-  final bool isAvailable;
-  final bool privacyPolicy;
+  final String? name;
+  final int? rentalPrice;
+  final int? securityDeposit;
+  final List<String>? location;
+  final List<String>? images;
+  final String? description;
+  final int? capacity;
+  final String? duration;
+  final String? venueType;
+  final String? phoneNumber;
+  final String? date;
+  final List<String>? facilities;
+  final bool? isAvailable;
+  final bool? privacyPolicy;
 
   Venue({
-    required this.name,
-    required this.rentalPrice,
-    required this.securityDeposit,
-    required this.location,
-    required this.images,
-    required this.description,
-    required this.capacity,
-    required this.duration,
-    required this.venueType,
-    required this.phoneNumber,
-    required this.date,
-    required this.facilities,
-    required this.isAvailable,
-    required this.privacyPolicy,
+     this.name,
+     this.rentalPrice,
+     this.securityDeposit,
+     this.location,
+     this.images,
+     this.description,
+     this.capacity,
+     this.duration,
+     this.venueType,
+     this.phoneNumber,
+     this.date,
+     this.facilities,
+     this.isAvailable,
+     this.privacyPolicy,
   });
 
   Venue copyWith({
