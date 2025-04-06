@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
@@ -57,56 +58,16 @@ class BottomNavBar extends StatelessWidget {
           if (formKey.currentState != null &&
               formKey.currentState!.validate()) {
             bloc.add(FormSubmitEvent(formName));
-
-            // switch (formName) {
-            //   case 'cameras':
-            //     // bloc.add(CameraEvent());
-            //     break;
-            //   case 'Decoration':
-            //     // bloc.add(DecorationEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   case 'Dresses':
-            //     // bloc.add(DressEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   case 'Footwear':
-            //     // bloc.add(FootWearEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   case 'Jewelry':
-            //     // bloc.add(JewelryEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   case 'Sound & DJ Systems':
-            //     // bloc.add(SoundEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   case 'Vehicles':
-            //     // bloc.add(VehicleEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   case 'Venue':
-            //     // bloc.add(VenueEvent());
-            //     bloc.add(FormEvent());
-            //     break;
-            //   default:
-            //     log('Unknown form name: $formName');
-            // }
-
             formKey.currentState!.reset();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Form Submitted Successfully'),
-              ),
-            );
+            log("Form submitted successfully Done");
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please fill all required fields')),
+            AppSnackBar.show(
+              context,
+              content: 'Please fill all required fields',
+              backgroundColor: AppColors.red,
             );
           }
         }
-
         // Animation Implemented
         pageController.animateToPage(
           index,
@@ -117,3 +78,4 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 }
+// 120

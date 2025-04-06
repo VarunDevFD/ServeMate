@@ -2,8 +2,8 @@ import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 
 class VenueModel {
   final String name;
-  final int rentalPrice;
-  final int securityDeposit;
+  final int price;
+  final int sdPrice;
   final List<String> location;
   final List<String> images;
   final String description;
@@ -13,13 +13,13 @@ class VenueModel {
   final String phoneNumber;
   final String date;
   final List<String> facilities;
-  final bool isAvailable;
+  final bool available;
   final bool privacyPolicy;
 
   VenueModel({
     required this.name,
-    required this.rentalPrice,
-    required this.securityDeposit,
+    required this.price,
+    required this.sdPrice,
     required this.location,
     required this.images,
     required this.description,
@@ -29,15 +29,15 @@ class VenueModel {
     required this.phoneNumber,
     required this.date,
     required this.facilities,
-    required this.isAvailable,
+    required this.available,
     required this.privacyPolicy,
   });
 
   // copyWith method
   VenueModel copyWith({
     String? name,
-    int? rentalPrice,
-    int? securityDeposit,
+    int? price,
+    int? sdPrice,
     List<String>? location,
     List<String>? images,
     String? description,
@@ -47,13 +47,13 @@ class VenueModel {
     String? phoneNumber,
     String? date,
     List<String>? facilities,
-    bool? isAvailable,
+    bool? available,
     bool? privacyPolicy,
   }) {
     return VenueModel(
       name: name ?? this.name,
-      rentalPrice: rentalPrice ?? this.rentalPrice,
-      securityDeposit: securityDeposit ?? this.securityDeposit,
+      price: price ?? this.price,
+      sdPrice: sdPrice ?? this.sdPrice,
       location: location ?? this.location,
       images: images ?? this.images,
       description: description ?? this.description,
@@ -63,7 +63,7 @@ class VenueModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       date: date ?? this.date,
       facilities: facilities ?? this.facilities,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
     );
   }
@@ -72,8 +72,8 @@ class VenueModel {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'rentalPrice': rentalPrice,
-      'securityDeposit': securityDeposit,
+      'price': price,
+      'sdPrice;': sdPrice,
       'location': location,
       'images': images,
       'description': description,
@@ -83,7 +83,7 @@ class VenueModel {
       'phoneNumber': phoneNumber,
       'date': date,
       'facilities': facilities,
-      'isAvailable': isAvailable,
+      'available': available,
       'privacyPolicy': privacyPolicy,
     };
   }
@@ -92,8 +92,8 @@ class VenueModel {
   factory VenueModel.fromMap(Map<String, dynamic> map) {
     return VenueModel(
       name: map['name'] ?? '',
-      rentalPrice: map['rentalPrice'] ?? 0,
-      securityDeposit: map['securityDeposit'] ?? 0,
+      price: map['price'] ?? 0,
+      sdPrice: map['sdPrice'] ?? 0,
       location: List<String>.from(map['location'] ?? []),
       images: List<String>.from(map['images'] ?? []),
       description: map['description'] ?? '',
@@ -103,7 +103,7 @@ class VenueModel {
       phoneNumber: map['phoneNumber'] ?? '',
       date: map['date'] ?? '',
       facilities: List<String>.from(map['facilities'] ?? []),
-      isAvailable: map['isAvailable'] ?? false,
+      available: map['available'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
     );
   }
@@ -112,8 +112,8 @@ class VenueModel {
   factory VenueModel.fromEntity(Venue entity) {
     return VenueModel(
       name: entity.name ?? '',
-      rentalPrice: entity.rentalPrice ?? 0,
-      securityDeposit: entity.securityDeposit ?? 0,
+      price: entity.price ?? 0,
+      sdPrice: entity.sdPrice ?? 0,
       location: entity.location ?? [],
       images: entity.images ?? [],
       description: entity.description ?? '',
@@ -123,7 +123,7 @@ class VenueModel {
       phoneNumber: entity.phoneNumber ?? '',
       date: entity.date ?? '',
       facilities: entity.facilities ?? [],
-      isAvailable: entity.isAvailable ?? false,
+      available: entity.available ?? false,
       privacyPolicy: entity.privacyPolicy ?? false,
     );
   }
@@ -132,8 +132,8 @@ class VenueModel {
   Venue toEntity() {
     return Venue(
       name: name,
-      rentalPrice: rentalPrice,
-      securityDeposit: securityDeposit,
+      price: price,
+      sdPrice: sdPrice,
       location: location,
       images: images,
       description: description,
@@ -143,7 +143,7 @@ class VenueModel {
       phoneNumber: phoneNumber,
       date: date,
       facilities: facilities,
-      isAvailable: isAvailable,
+      available: available,
       privacyPolicy: privacyPolicy,
     );
   }

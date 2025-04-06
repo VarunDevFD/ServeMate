@@ -7,7 +7,7 @@ class Product {
   final String? description;
   final String? location;
   final List<String>? images;
-  final bool isAvailable;
+  final bool available;
   final String? phoneNumber;
   final Map<String, dynamic> attributes; // Type-specific fields
 
@@ -20,7 +20,7 @@ class Product {
     this.description,
     this.location,
     this.images,
-    this.isAvailable = true,
+    this.available = true,
     this.phoneNumber,
     Map<String, dynamic>? attributes,
   }) : attributes = attributes ?? {};
@@ -36,7 +36,7 @@ class Product {
     String? description,
     String? location,
     List<String>? images,
-    bool? isAvailable,
+    bool? available,
     String? phoneNumber,
     Map<String, dynamic>? attributes,
   }) {
@@ -49,8 +49,8 @@ class Product {
       description: description ?? this.description,
       location: location ?? this.location,
       images: images ?? this.images,
-      isAvailable: isAvailable ?? this.isAvailable,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      available: available ?? this.available,
+      phoneNumber: phoneNumber ?? phoneNumber,
       attributes: attributes ?? Map.from(this.attributes),
     );
   }

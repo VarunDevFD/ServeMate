@@ -15,7 +15,7 @@ class JewelryModel {
   final String? brand;
   final String? size;
   final String? color;
-  final bool? isAvailable;
+  final bool? available;
   final String? dateAdded;
   JewelryModel({
     this.name,
@@ -31,7 +31,7 @@ class JewelryModel {
     this.brand,
     this.size,
     this.color,
-    this.isAvailable,
+    this.available,
     this.dateAdded,
   });
 
@@ -50,7 +50,7 @@ class JewelryModel {
       'brand': brand,
       'size': size,
       'color': color,
-      'isAvailable': isAvailable,
+      'available': available,
       'dateAdded': dateAdded,
     };
   }
@@ -71,7 +71,7 @@ class JewelryModel {
       brand: map['brand'],
       size: map['size'],
       color: map['color'],
-      isAvailable: map['isAvailable'],
+      available: map['available'],
       dateAdded: map['dateAdded'],
     );
   }
@@ -91,7 +91,7 @@ class JewelryModel {
       brand: jewelry.brand,
       size: jewelry.size,
       color: jewelry.color,
-      isAvailable: jewelry.isAvailable,
+      available: jewelry.available,
       dateAdded: jewelry.dateAdded,
     );
   }
@@ -111,7 +111,7 @@ class JewelryModel {
       brand: brand,
       size: size,
       color: color,
-      isAvailable: isAvailable,
+      available: available,
       dateAdded: dateAdded,
     );
   }
@@ -130,7 +130,7 @@ class JewelryModel {
     String? brand,
     String? size,
     String? color,
-    bool? isAvailable,
+    bool? available,
     String? dateAdded,
   }) {
     return JewelryModel(
@@ -147,7 +147,7 @@ class JewelryModel {
       brand: brand ?? this.brand,
       size: size ?? this.size,
       color: color ?? this.color,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       dateAdded: dateAdded ?? this.dateAdded,
     );
   }

@@ -8,10 +8,12 @@ import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/card_constant.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
@@ -26,20 +28,29 @@ import '../bloc/form_submission_bloc/form_submission_state.dart';
 class Cameras extends StatelessWidget {
   Cameras({super.key});
 
+  static final tAcFocusNode =
+      FocusNode(); // FocusNode for the Terms and Conditions checkbox
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormSubState>(
-        listener: (context, state) {
-      if (state is FormSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Form submitted successfully!')),
-        );
-      } else if (state is FormError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(state.message)),
-        );
-      }
-    }, builder: (context, state) {
+        listener: (context, state) async {
+        if (state is FormSuccess) {
+          await Future.delayed(const Duration(seconds: 5));
+          AppSnackBar.show(
+            context,
+            content: 'Decoration form submitted successfully!',
+            backgroundColor: AppColors.green,
+          );
+        } else if (state is FormError) {
+          AppSnackBar.show(
+            context,
+            content: state.message,
+            backgroundColor: AppColors.green,
+          );
+        }
+      },
+       builder: (context, state) {
       final bloc = context.read<FormSubmissionBloc>();
 
       if (state is FormSuccess) {
@@ -429,11 +440,14 @@ class Cameras extends StatelessWidget {
                 ),
                 // Terms and Conditions
                 TermsAndConditionsScreen(
+                  focusNode: tAcFocusNode,
                   onChanged: (value) {
                     context
-                        .read<AvailableSwitchCubit>()
-                        .checkeBoxAvailable(value!);
-                    bloc.add(FormUpdateEvent('camera', 'privacyPolicy', value));
+                        .read<CheckBoxCubit>()
+                        .checkeBoxAvailable(value!); // Update CheckBoxCubit
+                    context.read<FormSubmissionBloc>().add(
+                          FormUpdateEvent('camera', 'privacyPolicy', value),
+                        );
                   },
                 ),
                 SizedBox(height: 50.h),
@@ -445,3 +459,4 @@ class Cameras extends StatelessWidget {
     });
   }
 }
+// 465

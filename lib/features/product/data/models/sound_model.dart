@@ -10,7 +10,7 @@ class SoundModel {
   final List<String> location;
   final String phoneNumber;
   final List<String> images;
-  final bool isAvailable;
+  final bool available;
   final bool privacyPolicy;
 
   SoundModel({
@@ -23,7 +23,7 @@ class SoundModel {
     required this.location,
     required this.phoneNumber,
     required this.images,
-    required this.isAvailable,
+    required this.available,
     required this.privacyPolicy,
   });
 
@@ -37,7 +37,7 @@ class SoundModel {
     List<String>? location,
     String? phoneNumber,
     List<String>? images,
-    bool? isAvailable,
+    bool? available,
     bool? privacyPolicy,
   }) {
     return SoundModel(
@@ -50,7 +50,7 @@ class SoundModel {
       location: location ?? this.location,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
     );
   }
@@ -66,7 +66,7 @@ class SoundModel {
       'location': location,
       'phoneNumber': phoneNumber,
       'images': images,
-      'isAvailable': isAvailable,
+      'available': available,
       'privacyPolicy': privacyPolicy,
     };
   }
@@ -82,7 +82,7 @@ class SoundModel {
       location: List<String>.from(map['location']),
       phoneNumber: map['phoneNumber'] ?? '',
       images: List<String>.from(map['images']),
-      isAvailable: map['isAvailable'] ?? false,
+      available: map['available'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
     );
   }
@@ -98,7 +98,7 @@ class SoundModel {
       location: sound.location ?? [],
       phoneNumber: sound.phoneNumber ?? '',
       images: sound.images ?? [],
-      isAvailable: sound.isAvailable ?? false,
+      available: sound.available ?? false,
       privacyPolicy: sound.privacyPolicy ?? false,
     );
   }
@@ -114,7 +114,7 @@ class SoundModel {
       location: location,
       phoneNumber: phoneNumber,
       images: images,
-      isAvailable: isAvailable,
+      available: available,
       privacyPolicy: privacyPolicy,
     );
   }

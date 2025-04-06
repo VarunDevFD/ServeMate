@@ -16,6 +16,7 @@ class Vehicle {
   final String date;
   final String color;
   final bool availability;
+  final bool privacyPolicy;
   final String? description;
 
   Vehicle({
@@ -35,6 +36,7 @@ class Vehicle {
     required this.facilities,
     required this.date,
     required this.availability,
+    required this.privacyPolicy,
     required this.color,
     this.description,
   });
@@ -56,6 +58,7 @@ class Vehicle {
     List<String>? facilities,
     String? date,
     bool? availability,
+    bool? privacyPolicy,
     String? color,
     String? description,
   }) {
@@ -76,6 +79,7 @@ class Vehicle {
       facilities: facilities ?? this.facilities,
       date: date ?? this.date,
       availability: availability ?? this.availability,
+       privacyPolicy:  privacyPolicy ?? this. privacyPolicy,
       color: color ?? this.color,
       description: description ?? this.description,
     );
@@ -99,6 +103,7 @@ class Vehicle {
       facilities: [],
       date: '',
       availability: false,
+      privacyPolicy: false,
       color: '',
       description: '',
     );

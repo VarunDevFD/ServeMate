@@ -1,13 +1,20 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
+import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
+import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
@@ -34,19 +41,24 @@ class VehiclesPage extends StatelessWidget {
   static final _securityDepositFocusNode = FocusNode();
   static final _facilitiesFocusNode = FocusNode();
   static final _descriptionFocusNode = FocusNode();
+  static final tAcFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormSubState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is FormSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Form submitted successfully!')),
+          await Future.delayed(const Duration(seconds: 5));
+          AppSnackBar.show(
+            context,
+            content: 'Vehicle form submitted successfully!',
+            backgroundColor: AppColors.green,
           );
-          _clearFocus(context); // Clear focus on success
         } else if (state is FormError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          AppSnackBar.show(
+            context,
+            content: state.message,
+            backgroundColor: AppColors.green,
           );
         }
       },
@@ -54,7 +66,11 @@ class VehiclesPage extends StatelessWidget {
         final bloc = context.read<FormSubmissionBloc>();
 
         if (state is FormSuccess) {
-          log("Vehicle Animation true");
+          context.read<CheckBoxCubit>().checkeBoxAvailable(false);
+          context.read<AvailableSwitchCubit>().toggleAvailable(false);
+          context.read<ImagePickerCubit>().clearImages();
+          context.read<FilterChipCubit>().resetAll();
+
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -200,8 +216,7 @@ class VehiclesPage extends StatelessWidget {
                     title: 'Transmission Type',
                     child: ReusableDropdown(
                       labelText: 'Transmission Type *',
-                      items: DropdownItems
-                          .vehicleTransmissionItems, // Assuming this exists
+                      items: DropdownItems.vehicleTransmissionItems,
                       onFieldSubmitted: (value) {
                         bloc.add(
                             FormUpdateEvent('vehicle', 'transmission', value));
@@ -344,9 +359,36 @@ class VehiclesPage extends StatelessWidget {
                                   ? 'Please upload at least one image'
                                   : null,
                             ),
+                            BlocBuilder<ImagePickerCubit, List<File>>(
+                              builder: (context, images) {
+                                return images.isNotEmpty
+                                    ? TextButton(
+                                        onPressed: () => context
+                                            .read<ImagePickerCubit>()
+                                            .clearImages(),
+                                        child: const Text('Clear'),
+                                      )
+                                    : const SizedBox.shrink();
+                              },
+                            ),
                           ],
                         ),
                       ),
+                    ),
+                  ),
+                  buildSection(
+                    title: "Privacy Policy",
+                    child: TermsAndConditionsScreen(
+                      focusNode: tAcFocusNode,
+                      onChanged: (value) {
+                        context
+                            .read<CheckBoxCubit>()
+                            .checkeBoxAvailable(value!); // Update CheckBoxCubit
+                        context.read<FormSubmissionBloc>().add(
+                              FormUpdateEvent(
+                                  'vehicle', 'privacyPolicy', value),
+                            );
+                      },
                     ),
                   ),
                   SizedBox(height: 50.h),
@@ -407,3 +449,4 @@ class VehiclesPage extends StatelessWidget {
     FocusScope.of(context).unfocus();
   }
 }
+// 450

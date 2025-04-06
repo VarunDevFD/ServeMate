@@ -3,9 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -28,6 +31,7 @@ class JewelryPage extends StatelessWidget {
   static final _rentalDurationFocusNode = FocusNode();
   static final _locationFocusNode = FocusNode();
   static final _phoneFocusNode = FocusNode();
+  static final tAcFocusNode = FocusNode();
 
   // Define form key
   final formKey = GlobalKey<FormState>();
@@ -35,16 +39,19 @@ class JewelryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormSubState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is FormSuccess) {
-          // Adjusted to use Success state
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Form submitted successfully!')),
+          await Future.delayed(const Duration(seconds: 5));
+          AppSnackBar.show(
+            context,
+            content: 'Jewelry form submitted successfully!',
+            backgroundColor: AppColors.green,
           );
-          _clearFocus(context); // Clear focus on success
         } else if (state is FormError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          AppSnackBar.show(
+            context,
+            content: state.message,
+            backgroundColor: AppColors.green,
           );
         }
       },
@@ -330,10 +337,16 @@ class JewelryPage extends StatelessWidget {
                   buildSection(
                     title: 'Terms and Conditions',
                     child: TermsAndConditionsScreen(
+                      focusNode: tAcFocusNode,
                       onChanged: (value) {
-                        bloc.add(
-                            FormUpdateEvent('jewelry', 'privacyPolicy', value));
+                        context
+                            .read<CheckBoxCubit>()
+                            .checkeBoxAvailable(value!); // Update CheckBoxCubit
+                        context.read<FormSubmissionBloc>().add(
+                              FormUpdateEvent('jewelry', 'privacyPolicy', value),
+                            );
                       },
+                       
                     ),
                   ),
                   SizedBox(height: 50.h),
@@ -394,3 +407,4 @@ class JewelryPage extends StatelessWidget {
     FocusScope.of(context).unfocus();
   }
 }
+// 410

@@ -4,5 +4,4 @@ class AvailableSwitchCubit extends Cubit<bool> {
   AvailableSwitchCubit() : super(false);
 
   void toggleAvailable(bool value) => emit(value);
-  void checkeBoxAvailable(bool value) => emit(value);
 }

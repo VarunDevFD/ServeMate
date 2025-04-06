@@ -1,12 +1,18 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
+import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -30,19 +36,24 @@ class VenuePage extends StatelessWidget {
   static final _sdFocusNode = FocusNode();
   static final _phoneFocusNode = FocusNode();
   static final _descriptionFocusNode = FocusNode();
+  static final tAcFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormSubState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is FormSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Venue form submitted successfully!')),
+          await Future.delayed(const Duration(seconds: 5));
+          AppSnackBar.show(
+            context,
+            content: 'Venue form submitted successfully!',
+            backgroundColor: AppColors.green,
           );
-          _clearFocus(context);
         } else if (state is FormError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          AppSnackBar.show(
+            context,
+            content: state.message,
+            backgroundColor: AppColors.green,
           );
         }
       },
@@ -50,7 +61,13 @@ class VenuePage extends StatelessWidget {
         final bloc = context.read<FormSubmissionBloc>();
 
         if (state is FormSuccess) {
-          log("Venue Animation true");
+          context.read<CheckBoxCubit>().checkeBoxAvailable(false);
+          context.read<AvailableSwitchCubit>().toggleAvailable(false);
+          context.read<ImagePickerCubit>().clearImages();
+          context.read<FilterChipCubit>().resetAll();
+          Future.delayed(const Duration(seconds: 3), () {
+            bloc.add(FormResetEvent());
+          });
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -102,8 +119,9 @@ class VenuePage extends StatelessWidget {
                       maxLength: 20,
                       keyboardType: TextInputType.text,
                       labelText: 'Enter Venue Name *',
-                      onChanged: (value) =>
-                          bloc.add(FormUpdateEvent(kName, Names.name, "My name")),
+                      onChanged: (value) {
+                        bloc.add(FormUpdateEvent(kName, 'name', value));
+                      },
                       validator: (value) => value == null || value.isEmpty
                           ? 'Please enter the Venue Name'
                           : null,
@@ -114,8 +132,7 @@ class VenuePage extends StatelessWidget {
                   buildSection(
                     title: 'Location',
                     child: LocationTextField(
-                      locationController:
-                          TextEditingController(text: initialState),
+                      locationController: TextEditingController(),
                       onFieldSubmitted: (value) {
                         bloc.add(FormUpdateEvent(kName, Names.location, value));
                         _moveFocus(context, _venueCapacityFocusNode);
@@ -250,8 +267,9 @@ class VenuePage extends StatelessWidget {
                         counterText: '',
                         alignLabelWithHint: true,
                       ),
-                      onChanged: (value) => bloc
-                          .add(FormUpdateEvent(kName, 'description', value)),
+                      onChanged: (value) {
+                        bloc.add(FormUpdateEvent(kName, 'description', value));
+                      },
                       onFieldSubmitted: (value) =>
                           _moveFocus(context, _phoneFocusNode),
                       validator: (value) => value == null || value.isEmpty
@@ -274,7 +292,8 @@ class VenuePage extends StatelessWidget {
                       ),
                       onChanged: (value) => bloc
                           .add(FormUpdateEvent(kName, 'phoneNumber', value)),
-                      onFieldSubmitted: (value) => _clearFocus(context),
+                      onFieldSubmitted: (value) =>
+                          _moveFocus(context, tAcFocusNode),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the Phone Number';
@@ -317,6 +336,18 @@ class VenuePage extends StatelessWidget {
                                   ? 'Please upload at least one image'
                                   : null,
                             ),
+                            BlocBuilder<ImagePickerCubit, List<File>>(
+                              builder: (context, images) {
+                                return images.isNotEmpty
+                                    ? TextButton(
+                                        onPressed: () => context
+                                            .read<ImagePickerCubit>()
+                                            .clearImages(),
+                                        child: const Text('Clear'),
+                                      )
+                                    : const SizedBox.shrink();
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -324,10 +355,27 @@ class VenuePage extends StatelessWidget {
                   ),
                   buildSection(
                     title: 'Terms and Conditions',
-                    child: TermsAndConditionsScreen(
-                      onChanged: (value) {
-                        bloc.add(
-                            FormUpdateEvent(kName, 'privacyPolicy', value));
+                    child: FormField(
+                      validator: (value) {
+                        final isChecked = context.read<CheckBoxCubit>().state;
+                        if (isChecked == false) {
+                          return 'You must accept the Terms and Conditions';
+                        }
+                        return null;
+                      },
+                      builder: (state) {
+                        return TermsAndConditionsScreen(
+                          focusNode: tAcFocusNode,
+                          onChanged: (value) {
+                            context.read<CheckBoxCubit>().checkeBoxAvailable(
+                                value!); // Update CheckBoxCubit
+                            context.read<FormSubmissionBloc>().add(
+                                  FormUpdateEvent(
+                                      kName, 'privacyPolicy', value),
+                                );
+                            _clearFocus(context);
+                          },
+                        );
                       },
                     ),
                   ),

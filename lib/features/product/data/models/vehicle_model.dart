@@ -18,6 +18,7 @@ class VehicleModel {
   final String date;
   final String color;
   final bool availability;
+  final bool privacyPolicy;
   final String? description;
 
   VehicleModel({
@@ -38,6 +39,7 @@ class VehicleModel {
     required this.date,
     required this.color,
     required this.availability,
+    required this.privacyPolicy,
     this.description,
   });
 
@@ -60,6 +62,7 @@ class VehicleModel {
     String? date,
     String? color,
     bool? availability,
+    bool? privacyPolicy,
     String? description,
   }) {
     return VehicleModel(
@@ -80,6 +83,7 @@ class VehicleModel {
       date: date ?? this.date,
       color: color ?? this.color,
       availability: availability ?? this.availability,
+      privacyPolicy: privacyPolicy ?? this.privacyPolicy,
       description: description ?? this.description,
     );
   }
@@ -104,6 +108,7 @@ class VehicleModel {
       'date': date,
       'color': color,
       'availability': availability,
+      'privacyPolicy': privacyPolicy,
       'description': description,
     };
   }
@@ -129,6 +134,7 @@ class VehicleModel {
       date: map['date'] ?? '',
       color: map['color'] ?? '',
       availability: map['availability'] ?? false,
+      privacyPolicy: map['privacyPolicy'] ?? false,
       description: map['description'],
     );
   }
@@ -153,6 +159,7 @@ class VehicleModel {
       date: entity.date,
       color: entity.color,
       availability: entity.availability,
+      privacyPolicy: entity.privacyPolicy,
       description: entity.description,
     );
   }
@@ -178,6 +185,7 @@ class VehicleModel {
       date: date,
       color: color,
       availability: availability,
+      privacyPolicy: privacyPolicy,
       description: description,
     );
   }

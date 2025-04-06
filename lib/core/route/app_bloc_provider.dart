@@ -17,6 +17,7 @@ import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_blo
 import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 
 class AppBlocProvider extends StatelessWidget {
   final Widget child;
@@ -42,6 +43,7 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => FormSubBloc()),
         BlocProvider(create: (_) => FormSubmissionBloc()),
         BlocProvider(create: (_) => AvailableSwitchCubit()),
+        BlocProvider(create: (_) => CheckBoxCubit()),
         BlocProvider(create: (_) => FilterChipCubit()),
         BlocProvider(create: (_) => ImagePickerCubit()),
       ],

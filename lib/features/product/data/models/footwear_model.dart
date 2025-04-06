@@ -12,7 +12,7 @@ class FootwearModel {
   final String size;
   final String color;
   final String category;
-  final bool isAvailable;
+  final bool available;
   final String date;
   FootwearModel({
     required this.name,
@@ -26,7 +26,7 @@ class FootwearModel {
     required this.size,
     required this.color,
     required this.category,
-    required this.isAvailable,
+    required this.available,
     required this.date,
   });
 
@@ -42,7 +42,7 @@ class FootwearModel {
     String? size,
     String? color,
     String? category,
-    bool? isAvailable,
+    bool? available,
     String? date,
   }) {
     return FootwearModel(
@@ -57,7 +57,7 @@ class FootwearModel {
       size: size ?? this.size,
       color: color ?? this.color,
       category: category ?? this.category,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       date: date ?? this.date,
     );
   }
@@ -75,7 +75,7 @@ class FootwearModel {
       'size': size,
       'color': color,
       'category': category,
-      'isAvailable': isAvailable,
+      'available': available,
       'date': date,
     };
   }
@@ -95,7 +95,7 @@ class FootwearModel {
       size: map['size'] as String,
       color: map['color'] as String,
       category: map['category'] as String,
-      isAvailable: map['isAvailable'] as bool,
+      available: map['available'] as bool,
       date: map['date'] as String,
     );
   }
@@ -113,7 +113,7 @@ class FootwearModel {
       size: footwear.size ?? '',
       color: footwear.color ?? '',
       category: footwear.category ?? '',
-      isAvailable: footwear.isAvailable ?? false,
+      available: footwear.available ?? false,
       date: footwear.date ?? '',
     );
   }
@@ -131,7 +131,7 @@ class FootwearModel {
       size: size,
       color: color,
       category: category,
-      isAvailable: isAvailable,
+      available: available,
       date: date,
     );
   }

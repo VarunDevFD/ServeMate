@@ -8,7 +8,7 @@ class Sound {
   final List<String>? location;
   final String? phoneNumber;
   final List<String>? images;
-  final bool? isAvailable;
+  final bool? available;
   final bool? privacyPolicy;
 
   Sound( {
@@ -21,7 +21,7 @@ class Sound {
     required this.location,
     required this.phoneNumber,
     required this.images,
-    required this.isAvailable,
+    required this.available,
     required this.privacyPolicy,
   });
 
@@ -35,7 +35,7 @@ class Sound {
     List<String>? location,
     String? phoneNumber,
     List<String>? images,
-    bool? isAvailable,
+    bool? available,
     bool? privacyPolicy,
   }) {
     return Sound(
@@ -48,7 +48,7 @@ class Sound {
       location: location ?? this.location,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
     );
   }
@@ -64,7 +64,7 @@ class Sound {
       location: [],
       phoneNumber: '',
       images: [],
-      isAvailable: false,
+      available: false,
       privacyPolicy: false,
     );
   }

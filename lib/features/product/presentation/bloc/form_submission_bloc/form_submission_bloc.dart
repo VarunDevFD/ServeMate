@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/utils/constants.dart';
@@ -26,37 +24,37 @@ import 'form_submission_state.dart';
 class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
   // Use case map
   final Map<String, dynamic> _useCases = {
-    'camera': serviceLocator<CameraUseCase>(),
-    'decoration': serviceLocator<DecorationUseCase>(),
-    'dress': serviceLocator<DressUseCase>(),
-    'footwear': serviceLocator<FootwearUseCase>(),
-    'jewelry': serviceLocator<JewelryUseCase>(),
-    'sound': serviceLocator<SoundUseCase>(),
-    'vehicle': serviceLocator<VehicleUseCase>(),
+    Names.camera: serviceLocator<CameraUseCase>(),
+    Names.decoration: serviceLocator<DecorationUseCase>(),
+    Names.dress: serviceLocator<DressUseCase>(),
+    Names.footwear: serviceLocator<FootwearUseCase>(),
+    Names.jewelry: serviceLocator<JewelryUseCase>(),
+    Names.sound: serviceLocator<SoundUseCase>(),
+    Names.vehicle: serviceLocator<VehicleUseCase>(),
     Names.venue: serviceLocator<VenueUseCase>(),
   };
 
   // Entity map
   final Map<String, dynamic> _entities = {
-    'camera': Camera.empty(),
-    'decoration': Decoration.empty(),
-    'dress': Dress.empty(),
-    'footwear': Footwear.empty(),
-    'jewelry': Jewelry.empty(),
-    'sound': Sound.empty(),
-    'vehicle': Vehicle.empty(),
+    Names.camera: Camera.empty(),
+    Names.decoration: Decoration.empty(),
+    Names.dress: Dress.empty(),
+    Names.footwear: Footwear.empty(),
+    Names.jewelry: Jewelry.empty(),
+    Names.sound: Sound.empty(),
+    Names.vehicle: Vehicle.empty(),
     Names.venue: Venue.empty(),
   };
 
   FormSubmissionBloc()
       : super(FormInitial({
-          'camera': Camera.empty(),
-          'decoration': Decoration.empty(),
-          'dress': Dress.empty(),
-          'footwear': Footwear.empty(),
-          'jewelry': Jewelry.empty(),
-          'sound': Sound.empty(),
-          'vehicle': Vehicle.empty(),
+          Names.camera: Camera.empty(),
+          Names.decoration: Decoration.empty(),
+          Names.dress: Dress.empty(),
+          Names.footwear: Footwear.empty(),
+          Names.jewelry: Jewelry.empty(),
+          Names.sound: Sound.empty(),
+          Names.vehicle: Vehicle.empty(),
           Names.venue: Venue.empty(),
         })) {
     on<FormUpdateEvent>(_onUpdateEvent);
@@ -66,11 +64,9 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
 
   void _onUpdateEvent(FormUpdateEvent event, Emitter<FormSubState> emit) {
     final entityType = event.entityType;
-    final entity = _entities[entityType];
+    var entity = _entities[entityType];
     final updatedEntity = _updateEntityField(entity, event.field, event.value);
-
     _entities[entityType] = updatedEntity;
-
     emit(FormInitial(Map.from(_entities)));
   }
 
@@ -79,13 +75,15 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
     final type = event.entityType;
     emit(FormLoading(type));
     try {
-      await Future.delayed(const Duration(seconds: 5)); // Simulate delay
       final entity = _entities[type];
-      log("data: ${entity.name ?? "no name here"}");
+      if (entity == null) {
+        emit(FormError('Invalid entity type: $type'));
+        return;
+      }
       await _useCases[type].execute(entity);
       _entities[type] = _resetEntity(type);
+      await Future.delayed(const Duration(seconds: 3));
       emit(FormSuccess(type, _entities[type]));
-      emit(FormInitial(Map.from(_entities))); // Return to initial state
     } catch (e) {
       emit(FormError('Submission failed: $e'));
     }
@@ -112,9 +110,9 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
       case 'price':
         return entity.copyWith(price: value);
       case 'sdPrice':
-        return entity.copyWith(sdPrice: value ?? entity.securityDeposit);
+        return entity.copyWith(sdPrice: value);
       case 'available':
-        return entity.copyWith(available: value ?? entity.isAvailable);
+        return entity.copyWith(available: value);
       case 'location':
         return entity.copyWith(location: value);
       case 'phoneNumber':
@@ -171,8 +169,6 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
         return entity.copyWith(venueType: value);
       case 'capacity':
         return entity.copyWith(capacity: value);
-      case 'isAvailable':
-        return entity.copyWith(isAvailable: value);
       default:
         return entity; // No update if field is unknown
     }
@@ -201,3 +197,4 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
     }
   }
 }
+// 200

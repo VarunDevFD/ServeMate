@@ -1,7 +1,7 @@
 class Venue {
   final String? name;
-  final int? rentalPrice;
-  final int? securityDeposit;
+  final int? price;
+  final int? sdPrice;
   final List<String>? location;
   final List<String>? images;
   final String? description;
@@ -11,30 +11,30 @@ class Venue {
   final String? phoneNumber;
   final String? date;
   final List<String>? facilities;
-  final bool? isAvailable;
+  final bool? available;
   final bool? privacyPolicy;
 
   Venue({
-     this.name,
-     this.rentalPrice,
-     this.securityDeposit,
-     this.location,
-     this.images,
-     this.description,
-     this.capacity,
-     this.duration,
-     this.venueType,
-     this.phoneNumber,
-     this.date,
-     this.facilities,
-     this.isAvailable,
-     this.privacyPolicy,
+    this.name,
+    this.price,
+    this.sdPrice,
+    this.location,
+    this.images,
+    this.description,
+    this.capacity,
+    this.duration,
+    this.venueType,
+    this.phoneNumber,
+    this.date,
+    this.facilities,
+    this.available,
+    this.privacyPolicy = false,
   });
 
   Venue copyWith({
     String? name,
-    int? rentalPrice,
-    int? securityDeposit,
+    int? price,
+    int? sdPrice,
     List<String>? location,
     List<String>? images,
     String? description,
@@ -45,13 +45,13 @@ class Venue {
     String? date,
     List<String>? facilities,
     List<String>? selectedFacilities,
-    bool? isAvailable,
+    bool? available,
     bool? privacyPolicy,
   }) {
     return Venue(
       name: name ?? this.name,
-      rentalPrice: rentalPrice ?? this.rentalPrice,
-      securityDeposit: securityDeposit ?? this.securityDeposit,
+      price: price ?? this.price,
+      sdPrice: sdPrice ?? this.sdPrice,
       location: location ?? this.location,
       images: images ?? this.images,
       description: description ?? this.description,
@@ -61,7 +61,7 @@ class Venue {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       date: date ?? this.date,
       facilities: facilities ?? this.facilities,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
     );
   }
@@ -69,8 +69,8 @@ class Venue {
   static empty() {
     return Venue(
       name: '',
-      rentalPrice: 0,
-      securityDeposit: 0,
+      price: 0,
+      sdPrice: 0,
       location: [],
       images: [],
       description: '',
@@ -80,7 +80,7 @@ class Venue {
       phoneNumber: '',
       date: '',
       facilities: [],
-      isAvailable: false,
+      available: false,
       privacyPolicy: false,
     );
   }

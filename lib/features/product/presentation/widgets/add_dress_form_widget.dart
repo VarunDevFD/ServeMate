@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +6,12 @@ import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/card_constant.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/gender_selector_widget.dart';
@@ -21,28 +22,34 @@ import 'package:serve_mate/features/product/presentation/widgets/widget_location
 import 'reusable_dropdown.dart';
 import '../bloc/form_submission_bloc/form_submission_event.dart';
 import '../bloc/form_submission_bloc/form_submission_state.dart';
+
 class DressesPage extends StatelessWidget {
   DressesPage({super.key});
+
+  static final tAcFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormSubState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is FormSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Form submitted successfully-------------')),
+          await Future.delayed(const Duration(seconds: 5));
+          AppSnackBar.show(
+            context,
+            content: 'Dress form submitted successfully!',
+            backgroundColor: AppColors.green,
           );
         } else if (state is FormError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          AppSnackBar.show(
+            context,
+            content: state.message,
+            backgroundColor: AppColors.green,
           );
         }
       },
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
         if (state is FormSuccess) {
-          log("FormSuccess animation");
           context.read<ImagePickerCubit>().clearImages();
           context.read<AvailableSwitchCubit>().toggleAvailable(false);
           context.read<FilterChipCubit>().resetAll();
@@ -423,12 +430,14 @@ class DressesPage extends StatelessWidget {
 
                   // Terms and Conditions
                   TermsAndConditionsScreen(
+                    focusNode: tAcFocusNode,
                     onChanged: (value) {
                       context
-                          .read<AvailableSwitchCubit>()
-                          .checkeBoxAvailable(value!);
-                      bloc.add(
-                          FormUpdateEvent('dress', 'privacyPolicy', value));
+                          .read<CheckBoxCubit>()
+                          .checkeBoxAvailable(value!); // Update CheckBoxCubit
+                      context.read<FormSubmissionBloc>().add(
+                            FormUpdateEvent('dress', 'privacyPolicy', value),
+                          );
                     },
                   ),
 
@@ -442,3 +451,4 @@ class DressesPage extends StatelessWidget {
     );
   }
 }
+// 460

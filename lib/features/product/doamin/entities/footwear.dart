@@ -10,7 +10,7 @@ class Footwear {
   final String? size;
   final String? color;
   final String? category;
-  final bool? isAvailable;
+  final bool? available;
   final String? date;
 
   Footwear({
@@ -25,7 +25,7 @@ class Footwear {
     required this.size,
     required this.color,
     required this.category,
-    required this.isAvailable,
+    required this.available,
     required this.date,
   });
 
@@ -41,7 +41,7 @@ class Footwear {
     String? size,
     String? color,
     String? category,
-    bool? isAvailable,
+    bool? available,
     String? date,
   }) {
     return Footwear(
@@ -56,7 +56,7 @@ class Footwear {
       size: size ?? this.size,
       color: color ?? this.color,
       category: category ?? this.category,
-      isAvailable: isAvailable ?? this.isAvailable,
+      available: available ?? this.available,
       date: date ?? this.date,
     );
   }
@@ -74,7 +74,7 @@ class Footwear {
       size: '',
       color: '',
       category: '',
-      isAvailable: false,
+      available: false,
       date: '',
     );
   }

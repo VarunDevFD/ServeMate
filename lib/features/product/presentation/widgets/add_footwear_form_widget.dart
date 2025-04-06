@@ -1,11 +1,13 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
@@ -27,35 +29,32 @@ class FootwearPage extends StatelessWidget {
   static final _quantityFocusNode = FocusNode();
   static final _locationFocusNode = FocusNode();
   static final _phoneFocusNode = FocusNode();
+  static final tAcFocusNode = FocusNode();
 
-  // Define controllers
-  final priceController = TextEditingController();
-  final sdController = TextEditingController();
-  final quantityController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final locationController = TextEditingController();
-  final phoneController = TextEditingController();
-
+ 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FormSubmissionBloc, FormSubState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is FormSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Form submitted successfully!')),
+          await Future.delayed(const Duration(seconds: 5));
+          AppSnackBar.show(
+            context,
+            content: 'Footwear form submitted successfully!',
+            backgroundColor: AppColors.green,
           );
-          _clearFocus(context);
         } else if (state is FormError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+          AppSnackBar.show(
+            context,
+            content: state.message,
+            backgroundColor: AppColors.green,
           );
         }
       },
       builder: (context, state) {
         final bloc = context.read<FormSubmissionBloc>();
 
-        if (state is FormSuccess) {
-          log("Footwear Animation true");
+        if (state is FormSuccess) { 
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -318,10 +317,16 @@ class FootwearPage extends StatelessWidget {
                   buildSection(
                     title: 'Terms and Conditions',
                     child: TermsAndConditionsScreen(
+                      focusNode: tAcFocusNode,
                       onChanged: (value) {
-                        bloc.add(FormUpdateEvent(
-                            'footwear', 'privacyPolicy', value));
+                        context
+                            .read<CheckBoxCubit>()
+                            .checkeBoxAvailable(value!); // Update CheckBoxCubit
+                        context.read<FormSubmissionBloc>().add(
+                              FormUpdateEvent('footwear', 'privacyPolicy', value),
+                            );
                       },
+                       
                     ),
                   ),
                   SizedBox(height: 50.h),

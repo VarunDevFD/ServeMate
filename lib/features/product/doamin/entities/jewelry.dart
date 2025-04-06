@@ -12,7 +12,7 @@ class Jewelry {
   final String? brand;
   final String? size;
   final String? color;
-  final bool? isAvailable;
+  final bool? available;
   final String? dateAdded;
 
   Jewelry({
@@ -29,7 +29,7 @@ class Jewelry {
     required this.brand,
     required this.size,
     required this.color,
-    required this.isAvailable,
+    required this.available,
     required this.dateAdded,
   });
 
@@ -47,7 +47,7 @@ class Jewelry {
     String? brand,
     String? size,
     String? color,
-    bool? isAvailable,
+    bool? available,
     String? dateAdded,
   }) {
     return Jewelry(
@@ -64,8 +64,8 @@ class Jewelry {
       brand: brand ?? this.brand,
       size: size ?? this.size,
       color: color ?? this.color,
-      isAvailable: isAvailable ?? this.isAvailable,
-      dateAdded: dateAdded ?? this.dateAdded,
+      available: available ?? available,
+      dateAdded: dateAdded ?? dateAdded,
     );
   }
 
@@ -84,7 +84,7 @@ class Jewelry {
       brand: '',
       size: '',
       color: '',
-      isAvailable: false,
+      available: false,
       dateAdded: '',
     );
   }

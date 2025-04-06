@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> category;
@@ -21,11 +22,10 @@ class ProductDetailPage extends StatelessWidget {
             icon: const Icon(Icons.edit),
             onPressed: () {
               // Action for editing the category
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Edit category tapped!')),
+              AppSnackBar.show(
+                context,
+                content: 'Edit category tapped!',
               );
-
-              
             },
           ),
           IconButton(
