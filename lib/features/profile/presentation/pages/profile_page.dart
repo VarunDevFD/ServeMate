@@ -17,16 +17,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Profile Page',
-      //     style: GoogleFonts.sora(
-      //       color: AppColors.white,
-      //       fontWeight: FontWeight.w600,
-      //     ),
-      //   ),
-      //   backgroundColor: AppColors.primary,
-      // ),
       body: Padding(
         padding: EdgeInsets.all(16.r),
         child: ListView(
