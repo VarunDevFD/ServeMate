@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/utils/constants.dart';
+import 'package:serve_mate/core/utils/image_handler.dart';
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
@@ -46,8 +47,11 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
     Names.venue: Venue.empty(),
   };
 
+  final ImageHandler _imageHandler;
+
   FormSubmissionBloc()
-      : super(FormInitial({
+      : _imageHandler = ImageHandler(),
+        super(FormInitial({
           Names.camera: Camera.empty(),
           Names.decoration: Decoration.empty(),
           Names.dress: Dress.empty(),
@@ -75,10 +79,19 @@ class FormSubmissionBloc extends Bloc<FormSubEvent, FormSubState> {
     final type = event.entityType;
     emit(FormLoading(type));
     try {
-      final entity = _entities[type];
+      var entity = _entities[type];
       if (entity == null) {
         emit(FormError('Invalid entity type: $type'));
         return;
+      }
+      // Process images if they exist
+      if (entity.images != null && entity.images.isNotEmpty) {
+        List<String> uploadedImageUrls =
+            await _imageHandler.processAndUploadImages(entity.images);
+
+        // Update entity with uploaded URLs
+        entity = entity.copyWith(images: uploadedImageUrls);
+        _entities[type] = entity; // Update the stored entity
       }
       await _useCases[type].execute(entity);
       _entities[type] = _resetEntity(type);

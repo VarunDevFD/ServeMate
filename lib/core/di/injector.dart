@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/data/local/preferences_data_source.dart';
@@ -46,8 +47,8 @@ import 'package:serve_mate/secrets/firebase_options.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
-  //--------------------Initialize Cloudinary-----------------------------------
-  // configureCloudinary();
+  //--------------------Initialize Env for Security-----------------------------------
+  await dotenv.load(fileName: ".env");
 
   //--------------------Initialize Firebase-------------------------------------
 

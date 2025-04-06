@@ -41,13 +41,15 @@ dependencies:
   carousel_slider: ^5.0.0
   cloud_firestore: ^5.5.1
   cloudinary_public: ^0.23.1
+  crypto: ^3.0.3
   curved_navigation_bar: ^1.0.3
-  dartz: ^0.10.0
+  dartz: ^0.10.0 
   firebase_auth: ^5.3.1
   firebase_core: ^3.6.0
   flutter_animate: ^4.5.0
   flutter_bloc: ^8.1.4
   flutter_colorpicker: ^1.1.0
+  flutter_dotenv: ^5.0.2
   flutter_screenutil: ^5.9.3
   flutter_toggle_tab: ^1.4.1
   geocoding: ^3.0.0
