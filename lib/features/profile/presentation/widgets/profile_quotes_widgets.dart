@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ProfileQuotesWidgets extends StatelessWidget {
-  const ProfileQuotesWidgets({super.key});
+  final String? quote;
+    ProfileQuotesWidgets({super.key, this.quote});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.format_quote),
-      title: const Text('Quotes'),
+      title:   Text(quote ??'Quotes'),
       onTap: () {
         
       },

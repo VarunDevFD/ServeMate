@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NameEmailProfile extends StatelessWidget {
-  const NameEmailProfile({super.key});
+  final String? name;
+  final String? email;
+  NameEmailProfile({
+    super.key,
+    required this.name,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -10,13 +16,13 @@ class NameEmailProfile extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Varun P C',
+            name ?? 'User',
             style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 4.h),
-          const Text(
-            'Varunrevathi6@gmail.com',
-            style: TextStyle(color: Colors.grey),
+          Text(
+            email ?? 'Varunrevathi6@gmail.com',
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),

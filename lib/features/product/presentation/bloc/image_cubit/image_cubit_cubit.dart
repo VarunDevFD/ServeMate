@@ -24,6 +24,19 @@ class ImagePickerCubit extends Cubit<List<File>> {
     }
   }
 
+  void imageOnce(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        final File newImage = File(pickedFile.path);
+        emit([...state, newImage]);
+      }
+    } catch (e) {
+      // Handle error (you might want to add error state)
+      log('Error picking image: $e');
+    }
+  }
+
   void removeImage(int index) {
     final currentImages = List<File>.from(state);
     currentImages.removeAt(index);

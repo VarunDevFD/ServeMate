@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/splash_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/animation_bloc/animation_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_c
 import 'package:serve_mate/features/authentication/presentation/bloc/forgot_pass_word_bloc/forgot_password_bloc_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
+import 'package:serve_mate/features/profile/presentation/bloc/profile_bloc/profile_bloc_bloc.dart';
 
 class AppBlocProvider extends StatelessWidget {
   final Widget child;
@@ -46,6 +48,9 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => CheckBoxCubit()),
         BlocProvider(create: (_) => FilterChipCubit()),
         BlocProvider(create: (_) => ImagePickerCubit()),
+        BlocProvider(
+          create: (_) => serviceLocator<ProfileBloc>(),
+        ),
       ],
       child: child,
     );

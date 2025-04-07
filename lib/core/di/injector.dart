@@ -34,6 +34,10 @@ import 'package:serve_mate/features/product/doamin/usecase/jewelry_use_case.dart
 import 'package:serve_mate/features/product/doamin/usecase/sound_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/vehicle_use_case.dart';
 import 'package:serve_mate/features/product/doamin/usecase/venue_use_case.dart';
+import 'package:serve_mate/features/profile/data/data_source/profile_remote_datasource.dart';
+import 'package:serve_mate/features/profile/data/repository/profile_repository_impl.dart';
+import 'package:serve_mate/features/profile/domain/usecase/get_user_details.dart';
+import 'package:serve_mate/features/profile/presentation/bloc/profile_bloc/profile_bloc_bloc.dart';
 import 'package:serve_mate/secrets/firebase_options.dart';
 
 // void configureCloudinary() {
@@ -172,7 +176,24 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<DecorationUseCase>(
       () => DecorationUseCase(serviceLocator<ProductRepository>()));
 
-//   // Cloudinary Usecase
-//  serviceLocator.registerLazySingleton<ImageRepository>(
-//       () => ImageRepository());
+  //--------------------Profile Data--------------------------------------------
+
+// DataSource
+  serviceLocator.registerLazySingleton<ProfileRemoteDataSourceImpl>(
+    () => ProfileRemoteDataSourceImpl(serviceLocator<FirebaseFirestore>()),
+  );
+
+// Repository
+  serviceLocator.registerLazySingleton<ProfileRepositoryImpl>(
+    () => ProfileRepositoryImpl(serviceLocator<ProfileRemoteDataSourceImpl>()),
+  );
+
+// UseCase
+  serviceLocator.registerLazySingleton<GetUserDetails>(
+    () => GetUserDetails(serviceLocator<ProfileRepositoryImpl>()),
+  );
+
+// Bloc
+  serviceLocator
+      .registerFactory(() => ProfileBloc(serviceLocator<GetUserDetails>()));
 }
