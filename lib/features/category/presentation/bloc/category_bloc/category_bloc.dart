@@ -25,7 +25,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
         if (response != null) {
           emit(CategoryLoaded(categoryName: response));
-          // log('Category saved successfully: $response');
+          
         } else {
           response = 'Invalid Category';
           emit(CategoryLoaded(categoryName: response));

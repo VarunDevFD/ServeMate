@@ -40,14 +40,6 @@ import 'package:serve_mate/features/profile/domain/usecase/get_user_details.dart
 import 'package:serve_mate/features/profile/presentation/bloc/profile_bloc/profile_bloc_bloc.dart';
 import 'package:serve_mate/secrets/firebase_options.dart';
 
-// void configureCloudinary() {
-//   CloudinaryContext.cloudinary = Cloudinary.fromCloudName(
-//     cloudName: 'your_cloud_name',
-//     apiKey: 'your_api_key',
-//     apiSecret: 'your_api_secret',
-//   );
-// }
-
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
