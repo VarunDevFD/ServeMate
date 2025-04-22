@@ -10,96 +10,76 @@ import 'package:serve_mate/features/authentication/presentation/widgets/loading_
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_event.dart';
+import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
 import 'package:serve_mate/features/category/presentation/widgets/category_item_widget.dart';
 
 class CategoryGrid extends StatelessWidget {
-  final PreferencesRepository pref = serviceLocator<PreferencesRepository>();
-  final List<Category> categories;
-
-  CategoryGrid({super.key, required this.categories});
+  const CategoryGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (categories.isEmpty) {
-      LoadingDialog.show(context);
-    }
-    return GridView.builder(
-      physics: const ClampingScrollPhysics(),
-      padding: EdgeInsets.all(10.r),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12.w,
-        mainAxisSpacing: 12.h,
-        childAspectRatio: ScreenUtil().screenWidth > 600 ? 4 / 3 : 3 / 2,
-      ),
-      itemCount: categories.length,
-      itemBuilder: (BuildContext context, int index) {
-        final category = categories[index];
-        return GestureDetector(
-          onTap: () => _handleCategorySelection(context, category.name),
-          child: CategoryItem(category: category),
-        );
+    return BlocConsumer<CategoryBloc, CategoryState>(
+      listener: (context, state) {
+        if (state is CategorySelected) {
+          context.go('/bottomNavBar');
+        }
+      },
+      builder: (context, state) {
+        if (state is CategoryLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is CategoryLoaded) {
+          return GridView.builder(
+            physics: const ClampingScrollPhysics(),
+            padding: EdgeInsets.all(10.r),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12.0,
+              mainAxisSpacing: 12.0,
+              childAspectRatio: 3 / 2,
+            ),
+            itemCount: state.categories.length,
+            itemBuilder: (BuildContext context, int index) {
+              final category = state.categories[index];
+              return GestureDetector(
+                onTap: () {
+                  _showConfirmationDialog(context, category);
+                },
+                child: CategoryItem(category: category),
+              );
+            },
+          );
+        }
+        return const SizedBox.shrink();
       },
     );
   }
 
-  void _handleCategorySelection(BuildContext context, String category) async {
-    final shouldNavigate = await _showConfirmationDialog(context, category);
-
-    if (shouldNavigate == true) {
-      context.read<CategoryBloc>().add(SelectCategoryEvent(category));
-      context.go('/bottomNavBar');
-      await pref.setHasSeenHome(true);
-      await pref.setHasSeenUserId([category]);
-    }
-  }
-
-  Future<bool?> _showConfirmationDialog(BuildContext context, String category) {
-    const TextStyle colorWhite = TextStyle(color: AppColors.white);
-    return showDialog<bool>(
+  /// Method to show a confirmation dialog
+  Future<void> _showConfirmationDialog(
+    BuildContext context,
+    Category category,
+  ) async {
+    final pref = serviceLocator<PreferencesRepository>();
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppColors.orange4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          title: const Text(
-            'Confirm Selection',
-            style: colorWhite,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Do you want to proceed with "$category"?\nIf you choose one category from here, only use that in this app.',
-                style: colorWhite,
-              ),
-            ],
-          ),
+          title: const Text('Confirm Selection'),
+          content: Text('Do you want to proceed with "${category.name}"?'),
           actions: [
             TextButton(
-              child: const Text('Cancel', style: colorWhite),
               onPressed: () {
-                context.pop(false); // Return false for cancel
+                Navigator.of(context).pop(false); // Cancel
               },
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                fixedSize: Size(50.w, 25.h),
-              ),
               onPressed: () async {
-                context.pop(true); // Return true for OK
-                context.read<CategoryBloc>().add(SelectCategoryEvent(category));
-                context.go('/bottomNavBar');
-
-                // Save Preferences
+                context
+                    .read<CategoryBloc>()
+                    .add(SelectCategoryEvent(category.name));
+                Navigator.of(context).pop(true); // Confirm
                 await pref.setHasSeenHome(true);
-                await pref.setHasSeenUserId([category]);
               },
               child: const Text('OK'),
             ),

@@ -3,49 +3,33 @@ import 'dart:developer';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
-import 'package:serve_mate/core/repositories/preferences_repository.dart';
-// import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
-import 'package:serve_mate/features/category/domain/usecases/get_categories.dart';
+import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
+import 'package:serve_mate/features/category/domain/usecases/save_category.dart';
 import 'category_event.dart';
 import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final categoryRepository = serviceLocator<GetCategories>();
   CategoryBloc() : super(CategoryInitial()) {
-    // Add Category
-    on<SelectCategoryEvent>((event, emit) async {
-      final pref = serviceLocator<PreferencesRepository>();
+    on<LoadCategoriesEvent>(_onLoadCategories);
+    on<SelectCategoryEvent>(_onCategorySelected);
+    add(LoadCategoriesEvent());
+  }
 
       emit(CategoryInitial());
 
-      try {
-        await pref.setDataFn(event.selectedCategory);
-    
-        String? response = await pref.getDataFn();
+  void _onCategorySelected(
+      SelectCategoryEvent event, Emitter<CategoryState> emit) async {
+    try {
+      emit(CategoryLoading());
+      final save = serviceLocator<SaveCategory>();
 
-        if (response != null) {
-          emit(CategoryLoaded(categoryName: response));
-          
-        } else {
-          response = 'Invalid Category';
-          emit(CategoryLoaded(categoryName: response));
-        }
-      } catch (e) {
-        // Handle any errors and emit the error state.
-        emit(CategoryError("Failed to save category: ${e.toString()}"));
-        log('Error: ${e.toString()}');
-      }
-    });
+      final selectedCategory = event.category;
+      await save.call(selectedCategory);
 
-    // Read Category
-    on<LoadCategoriesEvent>((event, emit) async {
-      emit(CategoryInitial());
-      try {
-        final categories = await categoryRepository.callCategory();
-        emit(CategoryLoaded(categories: categories));
-      } catch (e) {
-        emit(CategoryError("Failed to Fetch load categories"));
-      }
-    });
+      emit(CategorySelected());
+    } catch (e) {
+      emit(CategoryError('Failed to load category'));
+    }
   }
 }

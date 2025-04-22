@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/di/injector.dart';
-import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
@@ -86,16 +84,15 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       body: BlocListener<AuthBloc, AuthBlocState>(
         listener: (context, state) {
-          if (state is AuthSuccess) {
-            Future.delayed(
-              const Duration(milliseconds: 20),
-              () => LoadingDialog.show(context),
-            );
+          if (state is AuthLoading) {
+            LoadingDialog.show(context);
+            Future.delayed(const Duration(seconds: 5));
+          } else if (state is AuthCategoryState) {
+            context.go('/selectCategory'); // Navigate to category selection
+          } else if (state is Authenticated) {
+            context.go('/bottomNavBar'); // Navigate to home on success
           } else if (state is AuthError) {
-            Future.delayed(
-              const Duration(milliseconds: 100),
-              () => DialogUtils.showErrorMessage(context, state.message),
-            );
+            SnackBarUtils.showSnackBar(context, state.message);
           }
           LoadingDialog.hide(context);
         },

@@ -12,38 +12,24 @@ class PreferencesDataSource {
     await prefs.setBool(key, value);
   }
 
-  //-------------------------List-----------------------------------------------
 
-  Future<void> saveList(String key, List<String> value) async {
+  Future<String> getString(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(key, value);
+    return prefs.getString(key) ?? '';
   }
 
-  Future<List<String>> getList(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(key) ?? [];
-  }
-
-  //-------------------------String-----------------------------------------------
-
-  Future<void> saveData(String key, String value) async {
+  Future<void> setString(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, value);
   }
 
-  Future<String?> getData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(key);
-  }
-
-  Future<void> clearFromPreferences(String key) async {
+  Future<void> remove(String key) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
   }
 
-  //-------------------------Clear----------------------------------------------
-  Future<void> removeData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-  }
+  Future<void> clearPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
+}
 }

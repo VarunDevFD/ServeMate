@@ -24,6 +24,9 @@ class SignUpEvent extends AuthEvent {
   });
 }
 
+class CheckAuthStatusEvent extends AuthEvent {}
+
 class GoogleSignInEvent extends AuthEvent {}
 
 class SignOutEvent extends AuthEvent {}
+ 

@@ -5,10 +5,15 @@ abstract class CategoryState {}
 class CategoryInitial extends CategoryState {}
 
 class CategoryLoaded extends CategoryState {
-  final List<Category>? categories;
-  final String? categoryName;
+  final List<Category> categories;
 
-  CategoryLoaded({this.categories, this.categoryName});
+  CategoryLoaded(this.categories);
+}
+
+class CategorySelected extends CategoryState {
+  final String? selectedCategory;
+  CategorySelected({this.selectedCategory});
+  
 }
 
 class CategorySaved extends CategoryState {}

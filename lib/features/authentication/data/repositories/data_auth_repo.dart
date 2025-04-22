@@ -1,72 +1,72 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/error/failure.dart';
+import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/features/authentication/data/datasources/auth_remote_data_source.dart';
+import 'package:serve_mate/features/authentication/data/models/user_model.dart';
+import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final remoteDataSource = serviceLocator<AuthRemoteDataSource>();
-  final firestore = serviceLocator<FirebaseFirestore>();
+  final remoteDataSource = serviceLocator<AuthDataSource>();
 
   //-------Sign-Up--------------------------------------------------------------
   @override
-  Future<void> signUpWithEmailPassword(
-      String name, String email, String password) {
-    return remoteDataSource.signUpWithEmailPassword(
-      name,
-      email,
-      password,
-    );
+  Future<Either<String, AuthUser>> signUpWithEmailPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final userModel = await remoteDataSource.signUpWithEmailPassword(
+        UserModel(
+          id: '',
+          email: email,
+          name: name,
+          password: password,
+        ),
+      );
+      return Right(userModel!.toEntity());
+    } on AppException catch (e) {
+      return Left(e.alert);
+    } catch (e) {
+      return Left('Sign-up error: $e');
+    }
   }
 
   //-------Sign-In--------------------------------------------------------------
+
   @override
-  Future<bool> signInWithEmailPassword(
-    String email,
-    String password,
-    String role,
-  ) async {
-    // Delegate the sign-in process to the remote data source
-    return await remoteDataSource.signInWithEmailPassword(
-        email, password, role);
+  Future<Either<String, AuthUser>> signInWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final userModel =
+          await remoteDataSource.signInWithEmailPassword(email, password);
+      return Right(userModel.toEntity());
+    } on AppException catch (e) {
+      return Left(e.alert);
+    } catch (e) {
+      return Left('Sign-in error: $e');
+    }
   }
 
   //-------Sign-In-Google-------------------------------------------------------
 
   @override
-  Future<User?> signInWithGoogle() async {
-    // Trigger the authentication flow
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    if (googleUser != null) {
-      // Obtain the auth details from the Google sign-in request
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      // Create a credential from the Google sign-in token
-      AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Sign in to Firebase using the Google credential
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      return userCredential.user; // Return the signed-in user
+  Future<Either<String, AuthUser>> signInWithGoogle() async {
+    try {
+      final authUserModel = await remoteDataSource.signInWithGoogle();
+      return Right(authUserModel.toEntity());
+    } on AppException catch (e) {
+      return Left(e.alert);
+    } catch (e) {
+      return Left('Sign-in error: $e');
     }
-
-    return null; // Return null if the sign-in failed or was canceled
   }
 
-/*
-  @override
-  User? getCurrentUser() {
-    return remoteDataSource.getCurrentUser();
-  }
-  */
+  //-------Sign-Out--------------------------------------------------------
 
   @override
   Future<Either<Failure, void>> signOut() async {
@@ -83,7 +83,6 @@ class AuthRepositoryImpl implements AuthRepository {
     throw UnimplementedError();
   }
 
-  @override
   Future<void> clearAuthUser() {
     throw UnimplementedError();
   }

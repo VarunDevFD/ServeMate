@@ -11,14 +11,12 @@ import 'package:serve_mate/features/authentication/data/repositories/data_auth_r
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_email_password.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_google.dart';
-import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_up_with_email_password.dart';
-import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
-import 'package:serve_mate/features/category/data/datasource/category_remote_datasource_data.dart';
-import 'package:serve_mate/features/category/data/repositories/category_repository_impl_data.dart';
+import 'package:serve_mate/features/category/data/data_source/data_source_category.dart';
+import 'package:serve_mate/features/category/data/repositories/category_repository_impl.dart';
 import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
 import 'package:serve_mate/features/category/domain/usecases/get_categories.dart';
-import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
+import 'package:serve_mate/features/category/domain/usecases/save_category.dart';
 import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_repository_impl.dart';
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
@@ -81,30 +79,24 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);
 
-  //--------------------Auth Data Sources---------------------------------------
-  serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
+  //--------------------Authentication---------------------------------------
+  serviceLocator.registerLazySingleton<AuthDataSource>(
     () => AuthRemoteDataSource(),
   );
 
-  //--------------------Auth Repositories---------------------------------------
+  // Auth Repositories
   serviceLocator
       .registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
 
-  //--------------------Auth Use Cases------------------------------------------
+  // Auth Use Cases
   serviceLocator.registerLazySingleton<SignUpWithEmailPassword>(
       () => SignUpWithEmailPassword());
-  serviceLocator.registerLazySingleton<SignInEmailPasswordUseCase>(
-      () => SignInEmailPasswordUseCase());
+  serviceLocator.registerLazySingleton<SignInWithEmailPassword>(
+      () => SignInWithEmailPassword());
   serviceLocator
       .registerLazySingleton<SignInWithGoogle>(() => SignInWithGoogle());
 
-  //--------------------Auth Bloc-----------------------------------------------
-  serviceLocator
-      .registerLazySingleton(() => SignOut(serviceLocator<AuthRepository>()));
-
-  serviceLocator.registerLazySingleton(() => AuthBloc());
-
-  //--------------------Category------------------------------------------------
+  // Register CategoryRepository (data source) in service locator
   serviceLocator.registerLazySingleton<CategoryRepository>(
     () => CategoryRepositoryImpl(),
   );
@@ -117,75 +109,10 @@ Future<void> init() async {
     () => GetCategories(),
   );
 
-  // Register the CategoryBloc with the repository
-  serviceLocator.registerFactory<CategoryBloc>(
-    () => CategoryBloc(),
+  //------------------Category-----------------------------------------
+  serviceLocator.registerLazySingleton<DataSourceCategory>(
+    () => DataSourceRemoteCategory(),
   );
 
-  //--------------------Product-------------------------------------------------
-
-  //--------------------Data Sources--------------------
-  serviceLocator.registerLazySingleton<ProductRemoteDataSource>(
-    () => ProductRemoteDataSourceImpl(),
-  );
-
-  //--------------------Repository--------------------
-  serviceLocator.registerLazySingleton<ProductRepository>(
-    () => ProductRepositoryImpl(
-      remoteDataSource: serviceLocator<ProductRemoteDataSource>(),
-    ),
-  );
-
-  // Dress Usecase
-  serviceLocator.registerLazySingleton<DressUseCase>(
-      () => DressUseCase(serviceLocator<ProductRepository>()));
-
-  // FootWear Usecase
-  serviceLocator.registerLazySingleton<FootwearUseCase>(
-      () => FootwearUseCase(serviceLocator<ProductRepository>()));
-
-  // Jewelry Usecase
-  serviceLocator.registerLazySingleton<JewelryUseCase>(
-      () => JewelryUseCase(serviceLocator<ProductRepository>()));
-
-  // Sound Usecase
-  serviceLocator.registerLazySingleton<SoundUseCase>(
-      () => SoundUseCase(serviceLocator<ProductRepository>()));
-
-  // Venue Usecase
-  serviceLocator.registerLazySingleton<VenueUseCase>(
-      () => VenueUseCase(serviceLocator<ProductRepository>()));
-
-  // Vehicle Usecase
-  serviceLocator.registerLazySingleton<VehicleUseCase>(
-      () => VehicleUseCase(serviceLocator<ProductRepository>()));
-
-  // Camera Usecase
-  serviceLocator.registerLazySingleton<CameraUseCase>(
-      () => CameraUseCase(serviceLocator<ProductRepository>()));
-
-  // Decoration Usecase
-  serviceLocator.registerLazySingleton<DecorationUseCase>(
-      () => DecorationUseCase(serviceLocator<ProductRepository>()));
-
-  //--------------------Profile Data--------------------------------------------
-
-// DataSource
-  serviceLocator.registerLazySingleton<ProfileRemoteDataSourceImpl>(
-    () => ProfileRemoteDataSourceImpl(serviceLocator<FirebaseFirestore>()),
-  );
-
-// Repository
-  serviceLocator.registerLazySingleton<ProfileRepositoryImpl>(
-    () => ProfileRepositoryImpl(serviceLocator<ProfileRemoteDataSourceImpl>()),
-  );
-
-// UseCase
-  serviceLocator.registerLazySingleton<GetUserDetails>(
-    () => GetUserDetails(serviceLocator<ProfileRepositoryImpl>()),
-  );
-
-// Bloc
-  serviceLocator
-      .registerFactory(() => ProfileBloc(serviceLocator<GetUserDetails>()));
+  serviceLocator.registerLazySingleton<SaveCategory>(() => SaveCategory());
 }

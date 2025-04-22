@@ -14,13 +14,8 @@ class PreferencesRepository {
     return _preferencesDataSource.setBool('hasSeenOnboarding', value);
   }
 
-  //-----------After-Auth-Category-Selection------------------------------------
-  Future<bool> hasSeenCategory() async {
-    return _preferencesDataSource.getBool('hasSeenCategory');
-  }
-
-  Future<void> setHasSeenCategory(bool value) async {
-    return _preferencesDataSource.setBool('hasSeenCategory', value);
+  Future<void> removeHasSeenOnboarding() async {
+    return _preferencesDataSource.remove('hasSeenOnboarding');
   }
 
   //-----------Home-Screen------------------------------------------------------
@@ -32,40 +27,98 @@ class PreferencesRepository {
     return _preferencesDataSource.setBool('hasSeenHome', value);
   }
 
-  //-------------------------List-----------------------------------------------
-  Future<List<String>> saveSelectCategoryName() async {
-    return _preferencesDataSource.getList('selectUser');
+  Future<void> removeHasSeenHome() async {
+    return _preferencesDataSource.remove('hasSeenHome');
   }
 
-  Future<void> setHasSeenUserId(List<String> value) async {
-    /*
-    log("Start- shared");
-    if (value.isNotEmpty) {
-      for (int i = 0; i < value.length; i++) {
-        log(value[i]);
-      }
-    }
-    log("End- shared");
-    */
-
-    return _preferencesDataSource.saveList('selectUser', []);
+  //-----------Category-Screen--------------------------------------------------
+  Future<bool> getCategoryScreen() async {
+    return _preferencesDataSource.getBool('hasSeenCategory');
   }
 
-  //-------------------------String---------------------------------------------
-  Future<void> setDataFn(String value) async {
-    return _preferencesDataSource.saveData('categoryName', value);
+  Future<void> setCategoryScreen(bool value) async {
+    return _preferencesDataSource.setBool('hasSeenCategory', value);
   }
 
-  Future<String?> getDataFn() async {
-    return _preferencesDataSource.getData('categoryName');
+  Future<void> removeCategoryScreen() async {
+    return _preferencesDataSource.remove('hasSeenCategory');
   }
 
-  Future<void> clearCategoryName() async {
-    await _preferencesDataSource.clearFromPreferences('categoryName');
+  //-----------Auth-User-Properties------------------------------------------------------
+  Future<String> getUserId() async {
+    return _preferencesDataSource.getString('uId');
   }
 
-  //-------------------------Remove---------------------------------------------
-  Future<void> clearAllPref() async {
-    await _preferencesDataSource.removeData();
+  Future<void> setUSerId(String userId) async {
+    return _preferencesDataSource.setString('uId', userId);
+  }
+
+  Future<void> removeUserId() async {
+    return _preferencesDataSource.remove('uId');
+  }
+
+  // UserCategory
+  Future<String> getCategoryName() async {
+    return _preferencesDataSource.getString('categoryName');
+  }
+
+  Future<void> setCategoryName(String category) async {
+    return _preferencesDataSource.setString('categoryName', category);
+  }
+
+  Future<void> removeCategoryName() async {
+    return _preferencesDataSource.remove('categoryName');
+  }
+
+  // UserName
+  Future<String> getName() async {
+    return _preferencesDataSource.getString('uId');
+  }
+
+  Future<void> setName(String userId) async {
+    return _preferencesDataSource.setString('uId', userId);
+  }
+
+  Future<void> removeName() async {
+    return _preferencesDataSource.remove('uId');
+  }
+
+  // UserEmail
+  Future<String> getEmail() async {
+    return _preferencesDataSource.getString('email');
+  }
+
+  Future<void> setEmail(String email) async {
+    return _preferencesDataSource.setString('email', email);
+  }
+
+  Future<void> removeEmail() async {
+    return _preferencesDataSource.remove('email');
+  }
+
+  // UserPhotoUrl
+  Future<String> getPhotoUrl() async {
+    return _preferencesDataSource.getString('photoUrl');
+  }
+
+  Future<void> setPhotoUrl(String photoUrl) async {
+    return _preferencesDataSource.setString('photoUrl', photoUrl);
+  }
+
+  Future<void> removePhotoUrl() async {
+    return _preferencesDataSource.remove('photoUrl');
+  }
+
+  // UserSignIn
+  Future<bool> getSignIn() async {
+    return _preferencesDataSource.getBool('googleSignIn');
+  }
+
+  Future<void> setSignIn(bool value) async {
+    return _preferencesDataSource.setBool('googleSignIn', value);
+  }
+
+  Future<void> removeSignIn() async {
+    return _preferencesDataSource.remove('googleSignIn');
   }
 }

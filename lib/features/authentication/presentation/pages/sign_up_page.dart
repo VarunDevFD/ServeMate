@@ -27,50 +27,13 @@ class SignUpPage extends StatelessWidget {
 
   void submitCredentials(BuildContext context) {
     if (formKey.currentState?.validate() == true) {
-      final newPassword = newPasswordController.text;
-      final confirmPassword = confirmPasswordController.text;
-
-      if (newPassword.length < 6) {
-        FocusScope.of(context).unfocus();
-        // Show error if password is too short
-        DialogUtils.showErrorMessage(
-          context,
-          "Please ensure your password is at least 6 characters long. Thank you!",
-        );
-        return;
-      }
-
-      // Check if the password contains at least one letter and one number
-      final RegExp regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)');
-      if (!regex.hasMatch(newPassword)) {
-        FocusScope.of(context).unfocus();
-        // Show error if password doesn't contain both letters and numbers
-        DialogUtils.showErrorMessage(
-          context,
-          "Your password must contain at least one letter and one number.",
-        );
-        return;
-      }
-
-      if (newPassword != confirmPassword) {
-        FocusScope.of(context).unfocus();
-        // Show error if passwords do not match
-        DialogUtils.showErrorMessage(
-          context,
-          "Oops! Your passwords don't match. Please try again.",
-        );
-        return;
-      } else {
-        // If validation passes, proceed with sign-up event
-        BlocProvider.of<AuthBloc>(context).add(
-          SignUpEvent(
-            name: nameController.text,
-            email: emailController.text,
-            password: newPasswordController.text,
-          ),
-        );
-        context.go('/selectCategory'); // Navigate after success
-      }
+      BlocProvider.of<AuthBloc>(context).add(
+        SignUpEvent(
+          name: nameController.text,
+          email: emailController.text,
+          password: newPasswordController.text,
+        ),
+      );
     }
     FocusScope.of(context).unfocus();
   }
@@ -85,11 +48,11 @@ class SignUpPage extends StatelessWidget {
             listener: (context, state) {
               if (state is AuthLoading) {
                 LoadingDialog.show(context);
+                Future.delayed(const Duration(seconds: 5));
               } else if (state is Authenticated) {
-                LoadingDialog.hide(context);
+                context.go('/selectCategory');
               } else if (state is AuthError) {
-                LoadingDialog.hide(context);
-                DialogUtils.showErrorMessage(context, state.message);
+                SnackBarUtils.showSnackBar(context, state.message);
               }
             },
             builder: (context, state) {

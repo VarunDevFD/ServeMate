@@ -1,15 +1,20 @@
-import 'dart:developer';
-
-// import 'package:crypto/crypto.dart'; // For SHA-256 hashing (you can use other hashing methods like bcrypt)
-// import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
+import 'package:serve_mate/core/utils/app_exception.dart';
+import 'package:serve_mate/core/utils/helper/helper_auth_fn.dart';
+import 'package:serve_mate/features/authentication/data/models/user_model.dart';
 
-class AuthRemoteDataSource {
+abstract class AuthDataSource {
+  Future<UserModel> signInWithGoogle();
+  Future<UserModel> signInWithEmailPassword(String email, String password);
+  Future<UserModel?> signUpWithEmailPassword(UserModel user);
+  Future<void> signOut();
+}
+
+class AuthRemoteDataSource implements AuthDataSource {
   final firebaseAuth = serviceLocator<FirebaseAuth>();
   final googleSignIn = serviceLocator<GoogleSignIn>();
   final firestore = serviceLocator<FirebaseFirestore>();
@@ -17,160 +22,171 @@ class AuthRemoteDataSource {
 
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
-  Future<void> signUpWithEmailPassword(
-    String name,
-    String email,
-    String password,
-  ) async {
+  @override
+  Future<UserModel?> signUpWithEmailPassword(UserModel user) async {
     const String role = "ServiceProvider";
     try {
       // Check if the email exists in Firestore
       final querySnapshot = await firestore
           .collection('users')
-          .where('email', isEqualTo: email)
+          .doc(role)
+          .collection(role)
+          .where('email', isEqualTo: user.email)
+          .where('googleSignIn', isEqualTo: false)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Email already exists
-        final roles =
-            querySnapshot.docs.map((doc) => doc.data()['role']).toList();
-
-        if (roles.contains(role)) {
-          // Email exists with the same role
-          throw Exception(
-            'Sign-up failed: The email is already registered with the same role.',
-          );
-        } else {
-          // Add new role entry for the same email
-          await _addUserToFirestore(name, email, password, role, null);
-          log("Added new role for existing email: $email with role: $role");
-          return;
-        }
+        throw const AppException(
+          details: 'Email already exists',
+          alert: 'Sign-up failed: The email is already registered.',
+        );
       }
 
-      // Email does not exist create new Firebase account
-      UserCredential userCredential = await firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      if (user.password == null || user.password!.isEmpty) {
+        throw const AppException(
+          details: 'Password is empty',
+          alert: 'Sign-up failed: Password cannot be empty.',
+        );
+      }
+
+      final modEmail = Helpers.concatenateWithNewEmail(user.email);
+
+      // Email does not exist; create new Firebase account
+      UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+              email: modEmail, password: user.password!);
+
+      final firebaseUser = userCredential.user;
+      if (firebaseUser == null) {
+        throw const AppException(
+          details: 'User credential is null',
+          alert: 'Sign-up failed: User credential is null.',
+        );
+      }
+      final userModel = UserModel(
+        id: firebaseUser.uid,
+        email: modEmail,
+        name: user.name,
+        password: user.password,
+        role: user.role ?? role,
+        createdAt: DateTime.now(),
+        photoUrl: user.photoUrl,
+      );
 
       // Add user to Firestore with email and role
-      await _addUserToFirestore(
-        name,
-        email,
-        password,
-        role,
-        userCredential.user?.uid,
-      );
-      log("New user created with email: $email and role: $role");
+      await _addUserToFirestore(userModel);
+
+      return userModel;
     } on FirebaseAuthException catch (e) {
-      // Handle Firebase-specific exceptions
-      if (e.code == 'weak-password') {
-        log("Sign-up failed: Weak password.");
-        throw Exception("Password should be at least 6 characters.");
-      } else if (e.code == 'email-already-in-use') {
-        log("Sign-up failed: Email already in use.");
-        throw Exception("The email address is already in use.");
-      } else if (e.code == 'invalid-email') {
-        log("Sign-up failed: Invalid email address.");
-        throw Exception("The email address is not valid.");
-      } else {
-        log("Sign-up failed: ${e.message}");
-        throw Exception("Sign-up failed: ${e.message}");
-      }
+      throw AppException(
+        details: e.toString(),
+        alert: 'Sign-up failed: ${e.message}',
+      );
     } catch (e) {
-      // Handle any other exceptions
-      log("An unexpected error occurred: $e");
-      throw Exception("An unexpected error occurred: $e");
+      throw AppException(
+        details: e.toString(),
+        alert: 'An error occurred during sign-up.',
+      );
     }
   }
 
-  Future<void> _addUserToFirestore(
-    String name,
-    String email,
-    String password,
-    String role,
-    String? uid,
-  ) async {
-    final userId = uid ?? firebaseAuth.currentUser?.uid;
+  Future<void> _addUserToFirestore(UserModel user) async {
+    final userId = user.id;
 
     if (userId == null) {
-      throw Exception(
-          'User ID is null. Unable to store user details in Firestore.');
+      throw const AppException(
+        details: 'User ID is null',
+        alert: 'Sign-up failed: User ID is null.',
+      );
     }
 
-    // Add a new Firestore document with a unique ID for each role
-    await firestore.collection('users').doc('serivceProvider$userId').set({
+    await firestore
+        .collection('users')
+        .doc(user.role)
+        .collection(user.role!)
+        .doc(userId)
+        .set({
       'uid': userId,
-      'name': name,
-      'email': email,
-      'password': password,
-      'role': role,
-      'time': FieldValue.serverTimestamp(),
+      'photoUrl': user.photoUrl,
+      'email': user.email,
+      'name': user.name,
+      'password': user.password,
+      'categoryName': user.categoryName,
+      'categories': user.categorys,
+      'time': user.createdAt?.toIso8601String(),
+      'googleSignIn': user.googleSignIn ?? false,
     });
 
-    await pref.setHasSeenCategory(true); //
-    await pref.setHasSeenUserId([userId]);
-
-    log("User added to Firestore: $email with role $role");
+    await pref.setUSerId(userId);
+    await pref.setCategoryScreen(true);
   }
 
-  //--------------------------------Sign-In-------------------------------------
+  //--------------------------------Sin-In-Email-&-Password---------------------
 
-  Future<bool> signInWithEmailPassword(
+  @override
+  Future<UserModel> signInWithEmailPassword(
     String email,
     String password,
-    String role,
   ) async {
     try {
-      // Get all documents
-      final allDocsSnapshot = await firestore.collection('users').get();
-
-      // Indicate the matching document is found
-      bool isUserFound = false;
-
-      // Iterate over all documents to check for matching data
-      for (var doc in allDocsSnapshot.docs) {
-        final Map<String, dynamic> userData = doc.data(); // Convert doc -> Map
-
-        // Check if the document matches the criteria
-        if (userData['email'] == email &&
-            userData['password'] == password &&
-            userData['role'] == role) {
-          log("User Found: ${userData['name']}, Role: ${userData['role']}");
-          isUserFound = true;
-        }
+      const String role = "ServiceProvider";
+      final modEmail = Helpers.concatenateWithNewEmail(email);
+      UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(
+        email: modEmail,
+        password: password,
+      );
+      await pref.setUSerId(userCredential.user!.uid);
+      // await pref.setCategoryScreen(true);
+      final user = userCredential.user;
+      if (user == null) {
+        throw const AppException(
+          details: 'Sign-in failed',
+          alert: 'No user found for the provided credentials.',
+        );
       }
 
-      // No user
-      if (!isUserFound) {
-        log("No user found with the provided credentials.");
+      final doc = await firestore
+          .collection('users')
+          .doc(role)
+          .collection(role)
+          .doc(user.uid)
+          .get();
+
+      if (!doc.exists) {
+        throw const AppException(
+          details: 'User data not found',
+          alert: 'User data not found in Firestore. Please sign up first.',
+        );
       }
 
-      return isUserFound; // Return true if a match is found, otherwise false
+      final userModel = UserModel.fromFirestore(doc.data()!, user.uid);
+      return userModel;
+    } on FirebaseAuthException catch (e) {
+      throw AppException(
+        details: e.toString(),
+        alert: 'Sign-in failed: ${e.message}',
+      );
     } catch (e) {
-      throw Exception('Sign-in failed: $e');
+      throw AppException(
+        details: e.toString(),
+        alert: 'An error occurred during sign-in.',
+      );
     }
-  }
-
-  // /// Helper function to hash passwords
-  // String _hashPassword(String password) {
-  //   final bytes = utf8.encode(password); // Convert to UTF-8
-  //   final digest = sha256.convert(bytes); // Hash using SHA-256
-  //   return digest.toString(); // Return the hashed password
-  // }
-
-  //--------------------------SignUp --Get the User ----------------------------
-
-  User? getCurrentUser() {
-    return firebaseAuth.currentUser;
   }
 
   //---------------------------Sign-In-Google-----------------------------------
 
-  Future<User?> signInWithGoogle() async {
+  @override
+  Future<UserModel> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      const String role = "ServiceProvider";
+      final googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        throw Exception('Google sign in failed');
+        throw const AppException(
+          details: 'Google sign-in aborted',
+          alert: 'Google sign-in was cancelled.',
+        );
       }
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -179,13 +195,39 @@ class AuthRemoteDataSource {
       );
       final userCredential =
           await firebaseAuth.signInWithCredential(credential);
-      return userCredential.user;
+      final user = userCredential.user;
+
+      if (user != null) {
+        final UserModel userModel = UserModel(
+          id: user.uid,
+          email: user.email ?? googleUser.email,
+          name: user.displayName ?? googleUser.displayName ?? 'Anonymous',
+          photoUrl: user.photoURL ?? googleUser.photoUrl,
+          password: null,
+          categoryName: null,
+          categorys: null,
+          googleSignIn: true,
+          createdAt: DateTime.now(),
+          role: role,
+        );
+        await _addUserToFirestore(userModel);
+        return userModel;
+      } else {
+        throw const AppException(
+          details: 'Google sign-in failed',
+          alert: 'Failed to authenticate with Google.',
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      // Handle specific Firebase exceptions
-      throw Exception(
-          'AuthRemoteDataSource - Google sign in failed: ${e.message}');
+      throw AppException(
+        details: e.toString(),
+        alert: 'Google sign-in failed: ${e.message}',
+      );
     } catch (e) {
-      throw Exception('An unknown error occurred: $e');
+      throw AppException(
+        details: e.toString(),
+        alert: 'An error occurred during Google sign-in.',
+      );
     }
   }
 
@@ -201,10 +243,14 @@ class AuthRemoteDataSource {
 
   //-------------------------Sign-Out-------------------------------------------
 
+  @override
   Future<void> signOut() async {
     try {
       await firebaseAuth.signOut(); // Sign out from Firebase
       await googleSignIn.signOut(); // Sign out from Google
+      await pref.removeUserId(); // Remove user ID from preferences
+      await pref.removeHasSeenHome(); // Remove home preference
+      await pref.removeCategoryScreen(); // Remove category preference
     } catch (e) {
       throw Exception('AuthRemoteDataSource - Sign out failed: $e');
     }

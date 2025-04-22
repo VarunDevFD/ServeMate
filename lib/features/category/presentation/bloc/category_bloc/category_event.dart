@@ -5,7 +5,7 @@ class LoadCategoriesEvent extends CategoryEvent {}
 
 // Select a category save also
 class SelectCategoryEvent extends CategoryEvent {
-  final String selectedCategory;
+  final String category;
 
   SelectCategoryEvent(this.selectedCategory);
 }
