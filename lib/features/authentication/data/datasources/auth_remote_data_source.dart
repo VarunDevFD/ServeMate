@@ -1,13 +1,20 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
+import 'package:serve_mate/core/utils/app_exception.dart';
+import 'package:serve_mate/core/utils/helper/helper_auth_fn.dart';
+import 'package:serve_mate/features/authentication/data/models/user_model.dart';
 
-class AuthRemoteDataSource {
+abstract class AuthDataSource {
+  Future<UserModel> signInWithGoogle();
+  Future<UserModel> signInWithEmailPassword(String email, String password);
+  Future<UserModel?> signUpWithEmailPassword(UserModel user);
+  Future<void> signOut();
+}
+
+class AuthRemoteDataSource implements AuthDataSource {
   final firebaseAuth = serviceLocator<FirebaseAuth>();
   final googleSignIn = serviceLocator<GoogleSignIn>();
   final firestore = serviceLocator<FirebaseFirestore>();
@@ -15,124 +22,171 @@ class AuthRemoteDataSource {
 
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
-  Future<User?> signUpWithEmailPassword(String email, String password,) async {
+  @override
+  Future<UserModel?> signUpWithEmailPassword(UserModel user) async {
     const String role = "ServiceProvider";
     try {
       // Check if the email exists in Firestore
       final querySnapshot = await firestore
           .collection('users')
-          .where('email', isEqualTo: email)
+          .doc(role)
+          .collection(role)
+          .where('email', isEqualTo: user.email)
+          .where('googleSignIn', isEqualTo: false)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Email already exists
-        final roles =
-            querySnapshot.docs.map((doc) => doc.data()['role']).toList();
-
-        if (roles.contains(role)) {
-          // Email exists with the same role
-          throw Exception(
-              'Sign-up failed: The email is already registered with the same role.');
-        } else {
-          // Add new role entry for the same email
-          await _addUserToFirestore(email, role, null);
-          log("Added new role for existing email: $email with role: $role");
-          return null;
-        }
+        throw const AppException(
+          details: 'Email already exists',
+          alert: 'Sign-up failed: The email is already registered.',
+        );
       }
+
+      if (user.password == null || user.password!.isEmpty) {
+        throw const AppException(
+          details: 'Password is empty',
+          alert: 'Sign-up failed: Password cannot be empty.',
+        );
+      }
+
+      final modEmail = Helpers.concatenateWithNewEmail(user.email);
 
       // Email does not exist; create new Firebase account
-      UserCredential userCredential = await firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
-
-      // Add user to Firestore with email and role
-      await _addUserToFirestore(email, role, userCredential.user?.uid);
-      log("New user created with email: $email and role: $role");
-    } on FirebaseAuthException catch (e) {
-      throw Exception('Sign-up failed: ${e.message}');
-    } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
-    }
-    return null;
-  }
-
-  Future<void> _addUserToFirestore(
-      String email, String role, String? uid) async {
-    final userId = uid ?? firebaseAuth.currentUser?.uid;
-
-    if (userId == null) {
-      throw Exception(
-          'User ID is null. Unable to store user details in Firestore.');
-    }
-
-    // Add a new Firestore document with a unique ID for each role
-    await firestore.collection('users').doc().set({
-      'uid': userId,
-      'email': email,
-      'role': role,
-    });
-
-    await pref.setHasSeenCategory(true);
-
-    log("User added to Firestore: $email with role $role");
-  }
-
-  //--------------------------------Sign-In-------------------------------------
-
-  Future<AuthUser?> signInWithEmailPassword(
-      String email, String password) async {
-    const String role = "ServiceProvider";
-
-    try {
-      // Authenticate using Firebase Authentication
       UserCredential userCredential =
-          await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+          await firebaseAuth.createUserWithEmailAndPassword(
+              email: modEmail, password: user.password!);
+
+      final firebaseUser = userCredential.user;
+      if (firebaseUser == null) {
+        throw const AppException(
+          details: 'User credential is null',
+          alert: 'Sign-up failed: User credential is null.',
+        );
+      }
+      final userModel = UserModel(
+        id: firebaseUser.uid,
+        email: modEmail,
+        name: user.name,
+        password: user.password,
+        role: user.role ?? role,
+        createdAt: DateTime.now(),
+        photoUrl: user.photoUrl,
       );
 
-      // Query Firestore to check if email and role exist
-      final querySnapshot = await firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .where('role', isEqualTo: role)
-          .get();
+      // Add user to Firestore with email and role
+      await _addUserToFirestore(userModel);
 
-      if (querySnapshot.docs.isEmpty) {
-        throw Exception(
-            'Sign-in failed: No user found with the provided email and role.');
-      }
-
-      await pref.setHasSeenCategory(true);
-
-      // Return authenticated user if all checks pass
-      return userCredential.user != null
-          ? AuthUser(
-              id: userCredential.user!.uid,
-              email: userCredential.user!.email!,
-              role: role,
-            )
-          : null;
+      return userModel;
     } on FirebaseAuthException catch (e) {
-      throw Exception('Sign-in failed: ${e.message}');
+      throw AppException(
+        details: e.toString(),
+        alert: 'Sign-up failed: ${e.message}',
+      );
     } catch (e) {
-      throw Exception('An unknown error occurred: $e');
+      throw AppException(
+        details: e.toString(),
+        alert: 'An error occurred during sign-up.',
+      );
     }
   }
 
-  //--------------------------SignUp --Get the User ----------------------------
+  Future<void> _addUserToFirestore(UserModel user) async {
+    final userId = user.id;
 
-  User? getCurrentUser() {
-    return firebaseAuth.currentUser;
+    if (userId == null) {
+      throw const AppException(
+        details: 'User ID is null',
+        alert: 'Sign-up failed: User ID is null.',
+      );
+    }
+
+    await firestore
+        .collection('users')
+        .doc(user.role)
+        .collection(user.role!)
+        .doc(userId)
+        .set({
+      'uid': userId,
+      'photoUrl': user.photoUrl,
+      'email': user.email,
+      'name': user.name,
+      'password': user.password,
+      'categoryName': user.categoryName,
+      'categories': user.categorys,
+      'time': user.createdAt?.toIso8601String(),
+      'googleSignIn': user.googleSignIn ?? false,
+    });
+
+    await pref.setUSerId(userId);
+    await pref.setCategoryScreen(true);
+  }
+
+  //--------------------------------Sin-In-Email-&-Password---------------------
+
+  @override
+  Future<UserModel> signInWithEmailPassword(
+    String email,
+    String password,
+  ) async {
+    try {
+      const String role = "ServiceProvider";
+      final modEmail = Helpers.concatenateWithNewEmail(email);
+      UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(
+        email: modEmail,
+        password: password,
+      );
+      await pref.setUSerId(userCredential.user!.uid);
+      // await pref.setCategoryScreen(true);
+      final user = userCredential.user;
+      if (user == null) {
+        throw const AppException(
+          details: 'Sign-in failed',
+          alert: 'No user found for the provided credentials.',
+        );
+      }
+
+      final doc = await firestore
+          .collection('users')
+          .doc(role)
+          .collection(role)
+          .doc(user.uid)
+          .get();
+
+      if (!doc.exists) {
+        throw const AppException(
+          details: 'User data not found',
+          alert: 'User data not found in Firestore. Please sign up first.',
+        );
+      }
+
+      final userModel = UserModel.fromFirestore(doc.data()!, user.uid);
+      return userModel;
+    } on FirebaseAuthException catch (e) {
+      throw AppException(
+        details: e.toString(),
+        alert: 'Sign-in failed: ${e.message}',
+      );
+    } catch (e) {
+      throw AppException(
+        details: e.toString(),
+        alert: 'An error occurred during sign-in.',
+      );
+    }
   }
 
   //---------------------------Sign-In-Google-----------------------------------
 
-  Future<User?> signInWithGoogle() async {
+  @override
+  Future<UserModel> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      const String role = "ServiceProvider";
+      final googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        throw Exception('Google sign in failed');
+        throw const AppException(
+          details: 'Google sign-in aborted',
+          alert: 'Google sign-in was cancelled.',
+        );
       }
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -141,13 +195,39 @@ class AuthRemoteDataSource {
       );
       final userCredential =
           await firebaseAuth.signInWithCredential(credential);
-      return userCredential.user;
+      final user = userCredential.user;
+
+      if (user != null) {
+        final UserModel userModel = UserModel(
+          id: user.uid,
+          email: user.email ?? googleUser.email,
+          name: user.displayName ?? googleUser.displayName ?? 'Anonymous',
+          photoUrl: user.photoURL ?? googleUser.photoUrl,
+          password: null,
+          categoryName: null,
+          categorys: null,
+          googleSignIn: true,
+          createdAt: DateTime.now(),
+          role: role,
+        );
+        await _addUserToFirestore(userModel);
+        return userModel;
+      } else {
+        throw const AppException(
+          details: 'Google sign-in failed',
+          alert: 'Failed to authenticate with Google.',
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      // Handle specific Firebase exceptions
-      throw Exception(
-          'AuthRemoteDataSource - Google sign in failed: ${e.message}');
+      throw AppException(
+        details: e.toString(),
+        alert: 'Google sign-in failed: ${e.message}',
+      );
     } catch (e) {
-      throw Exception('An unknown error occurred: $e');
+      throw AppException(
+        details: e.toString(),
+        alert: 'An error occurred during Google sign-in.',
+      );
     }
   }
 
@@ -163,10 +243,14 @@ class AuthRemoteDataSource {
 
   //-------------------------Sign-Out-------------------------------------------
 
+  @override
   Future<void> signOut() async {
     try {
       await firebaseAuth.signOut(); // Sign out from Firebase
       await googleSignIn.signOut(); // Sign out from Google
+      await pref.removeUserId(); // Remove user ID from preferences
+      await pref.removeHasSeenHome(); // Remove home preference
+      await pref.removeCategoryScreen(); // Remove category preference
     } catch (e) {
       throw Exception('AuthRemoteDataSource - Sign out failed: $e');
     }

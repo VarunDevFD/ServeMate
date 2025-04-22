@@ -29,6 +29,7 @@ class SignUpPage extends StatelessWidget {
     if (formKey.currentState?.validate() == true) {
       BlocProvider.of<AuthBloc>(context).add(
         SignUpEvent(
+          name: nameController.text,
           email: emailController.text,
           password: newPasswordController.text,
         ),
@@ -47,11 +48,10 @@ class SignUpPage extends StatelessWidget {
             listener: (context, state) {
               if (state is AuthLoading) {
                 LoadingDialog.show(context);
+                Future.delayed(const Duration(seconds: 5));
               } else if (state is Authenticated) {
-                LoadingDialog.hide(context);
-                context.go('/selectCategory'); // Navigate after success
+                context.go('/selectCategory');
               } else if (state is AuthError) {
-                LoadingDialog.hide(context);
                 SnackBarUtils.showSnackBar(context, state.message);
               }
             },

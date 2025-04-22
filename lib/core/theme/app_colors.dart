@@ -20,7 +20,6 @@ class AppColors {
   // Error
   static const Color error = Color.fromARGB(255, 240, 13, 13);
 
-
   //------------------Shade-----------------------------------------------------
   // Black
   static Color balck1 = Colors.black.withOpacity(0.6);

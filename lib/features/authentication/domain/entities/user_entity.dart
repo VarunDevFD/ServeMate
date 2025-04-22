@@ -1,27 +1,28 @@
 class AuthUser {
-  final String id;
+  final String? id;
+  final String? name;
   final String email;
-  final String role;
+  final String? password;
+  final String? categoryName;
+  final List<String>? categorys;
+  final String? photoUrl;
+  final String? role;
+  final DateTime? createdAt;
+  final bool? googleSignIn;
 
   AuthUser({
-    required this.id,
+    this.id,
     required this.email,
-    required this.role,
+    this.name,
+    this.password,
+    this.categoryName,
+    this.categorys,
+    this.photoUrl,
+    this.role,
+    this.createdAt,
+    this.googleSignIn,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'uid': id,
-      'email': email,
-      'role': role,
-    };
-  }
-
-  factory AuthUser.fromMap(Map<String, dynamic> map) {
-    return AuthUser(
-      id: map['uid'] ?? '',
-      email: map['email'] ?? '',
-      role: map['role'] ?? '',
-    );
-  }
+  fold(Never Function(dynamic error) param0,
+      Future<Null> Function(dynamic user) param1) {}
 }

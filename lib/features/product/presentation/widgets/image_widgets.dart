@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
@@ -12,7 +11,7 @@ Widget buildImageGrid(BuildContext context, List<File> images) {
   if (images.isEmpty) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0.h),
-      child: Center(
+      child: const Center(
         child:
             Text('No images selected', style: TextStyle(color: AppColors.grey)),
       ),

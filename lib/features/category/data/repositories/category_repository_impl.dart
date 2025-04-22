@@ -1,9 +1,10 @@
-import 'dart:developer';
-
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/features/category/data/data_source/data_source_category.dart';
 import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
 import 'package:serve_mate/features/category/domain/entities/category.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
+  final remoteDataSource = serviceLocator<DataSourceCategory>();
   final List<Category> categories = [
     Category(name: 'Cameras', imageUrl: 'assets/images/category/cameras.jpg'),
     Category(
@@ -25,8 +26,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  void selectCategory(String categoryName) {
-    // Handle the logic for selecting the category
-    log('Selected category: $categoryName');
+  Future<void> selectCategory(String categoryName) async {
+    return remoteDataSource.updateCategoryName(categoryName);
   }
 }
+ 
+ 

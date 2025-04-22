@@ -171,17 +171,17 @@ class AddPage extends StatelessWidget {
             appBar: AppBar(title: const Text('Error')),
             body: Center(child: Text(state.message)),
           );
-        } else if (state is CategoryLoaded && state.selectedCategory != null) {
+        } else if (state is CategorySelected) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('${state.selectedCategory!.name} Rental Form'),
+              title: Text('${state.selectedCategory} Rental Form'),
               actions: [
                 // Icon button on the form confirmation
                 IconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
                     handleFormSubmission(
-                      categoryName: state.selectedCategory!.name,
+                      categoryName: state.selectedCategory!,
                       formKey: formKey,
                       context: context,
                       nameController: nameController,
@@ -218,7 +218,7 @@ class AddPage extends StatelessWidget {
             ),
             body: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              child: _getFormForCategory(state.selectedCategory!.name),
+              child: _getFormForCategory(state.selectedCategory),
             ).animate().fadeIn(duration: 500.ms).slideY(),
           );
         }

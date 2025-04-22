@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/snackbar_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
@@ -60,20 +59,13 @@ class SignInPage extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthLoading) {
             LoadingDialog.show(context);
+            Future.delayed(const Duration(seconds: 5));
+          } else if (state is AuthCategoryState) {
+            context.go('/selectCategory'); // Navigate to category selection
           } else if (state is Authenticated) {
-            LoadingDialog.hide(context);
-            Navigator.of(context)
-                .maybePop(); // Safer approach to remove the dialog
-
-            context.go('/selectCategory'); // Navigate to home on success
+            context.go('/bottomNavBar'); // Navigate to home on success
           } else if (state is AuthError) {
-            LoadingDialog.hide(context);
-            Navigator.of(context)
-                .maybePop(); // Remove loading indicator if open
-            Future.delayed(
-              const Duration(milliseconds: 200),
-              () => SnackBarUtils.showSnackBar(context, state.message),
-            );
+            SnackBarUtils.showSnackBar(context, state.message);
           }
         },
         child: GestureDetector(

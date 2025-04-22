@@ -25,7 +25,6 @@ class SplashScreen extends StatelessWidget {
           } else if (state is GoToWelcome) {
             context.go('/welcome');
           } else if (state is GoToOnboarding) {
-            // log("Navigating to Onboarding");
             context.go('/onboarding');
           }
         },

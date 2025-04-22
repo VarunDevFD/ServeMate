@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
+import 'package:serve_mate/features/category/domain/usecases/save_category.dart';
 import 'category_event.dart';
 import 'category_state.dart';
 
@@ -9,6 +10,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryInitial()) {
     on<LoadCategoriesEvent>(_onLoadCategories);
     on<SelectCategoryEvent>(_onCategorySelected);
+    add(LoadCategoriesEvent());
   }
 
   Future<void> _onLoadCategories(
@@ -24,13 +26,15 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   }
 
   void _onCategorySelected(
-      SelectCategoryEvent event, Emitter<CategoryState> emit) {
+      SelectCategoryEvent event, Emitter<CategoryState> emit) async {
     try {
       emit(CategoryLoading());
+      final save = serviceLocator<SaveCategory>();
 
       final selectedCategory = event.category;
+      await save.call(selectedCategory);
 
-      emit(CategoryLoaded([], selectedCategory));
+      emit(CategorySelected());
     } catch (e) {
       emit(CategoryError('Failed to load category'));
     }

@@ -11,15 +11,20 @@ class SignInEvent extends AuthEvent {
 }
 
 class SignUpEvent extends AuthEvent {
+  final String name;
   final String email;
   final String password;
 
   SignUpEvent({
+    required this.name,
     required this.email,
     required this.password,
   });
 }
 
+class CheckAuthStatusEvent extends AuthEvent {}
+
 class GoogleSignInEvent extends AuthEvent {}
 
 class SignOutEvent extends AuthEvent {}
+ 
