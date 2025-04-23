@@ -75,7 +75,7 @@ Future<void> init() async {
   //--------------------Firebase---------------------------------------
   serviceLocator
       .registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  serviceLocator.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
+  serviceLocator.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn()); 
   serviceLocator.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);
 

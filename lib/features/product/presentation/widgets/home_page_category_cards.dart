@@ -37,9 +37,9 @@ class CategoryCards extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
-              image: DecorationImage(
+              image: const DecorationImage(
                 image: CachedNetworkImageProvider(
-                  imageUrl ??
+              
                       'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/vehicle_img.jpg',
                 ),
                 fit: BoxFit.cover,
@@ -62,7 +62,7 @@ class CategoryCards extends StatelessWidget {
                   name,
                   style: GoogleFonts.sora(
                     color: Colors.white,
-                    fontSize: 20.sp,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
