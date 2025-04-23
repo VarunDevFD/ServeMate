@@ -48,10 +48,8 @@ class AuthRemoteDataSource implements AuthDataSource {
           alert: 'Sign-up failed: Password cannot be empty.',
         );
       }
-
       final modEmail = Helpers.concatenateWithNewEmail(user.email);
 
-      // Email does not exist; create new Firebase account
       UserCredential userCredential =
           await firebaseAuth.createUserWithEmailAndPassword(
               email: modEmail, password: user.password!);
@@ -72,7 +70,6 @@ class AuthRemoteDataSource implements AuthDataSource {
         createdAt: DateTime.now(),
         photoUrl: user.photoUrl,
       );
-
       // Add user to Firestore with email and role
       await _addUserToFirestore(userModel);
 
@@ -105,17 +102,19 @@ class AuthRemoteDataSource implements AuthDataSource {
         .doc(user.role)
         .collection(user.role!)
         .doc(userId)
-        .set({
-      'uid': userId,
-      'photoUrl': user.photoUrl,
-      'email': user.email,
-      'name': user.name,
-      'password': user.password,
-      'categoryName': user.categoryName,
-      'categories': user.categorys,
-      'time': user.createdAt?.toIso8601String(),
-      'googleSignIn': user.googleSignIn ?? false,
-    });
+        .set(
+      {
+        'uid': userId,
+        'photoUrl': user.photoUrl,
+        'email': user.email,
+        'name': user.name,
+        'password': user.password,
+        'categoryName': user.categoryName,
+        'categories': user.categorys,
+        'time': user.createdAt?.toIso8601String(),
+        'googleSignIn': user.googleSignIn ?? false,
+      },
+    );
 
     await pref.setUSerId(userId);
     await pref.setCategoryScreen(true);
@@ -136,6 +135,14 @@ class AuthRemoteDataSource implements AuthDataSource {
         email: modEmail,
         password: password,
       );
+
+      // Query Firestore to check if email and role exist
+      final querySnapshot = await firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .where('role', isEqualTo: role)
+          .get();
+
       await pref.setUSerId(userCredential.user!.uid);
       // await pref.setCategoryScreen(true);
       final user = userCredential.user;
@@ -188,6 +195,7 @@ class AuthRemoteDataSource implements AuthDataSource {
           alert: 'Google sign-in was cancelled.',
         );
       }
+
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -195,6 +203,7 @@ class AuthRemoteDataSource implements AuthDataSource {
       );
       final userCredential =
           await firebaseAuth.signInWithCredential(credential);
+
       final user = userCredential.user;
 
       if (user != null) {

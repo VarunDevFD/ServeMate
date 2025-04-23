@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/utils/dialog_utils.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
@@ -92,7 +94,8 @@ class SignInPage extends StatelessWidget {
           } else if (state is Authenticated) {
             context.go('/bottomNavBar'); // Navigate to home on success
           } else if (state is AuthError) {
-            SnackBarUtils.showSnackBar(context, state.message);
+            // SnackBarUtils.showSnackBar(context, state.message);
+            showErrorDialog(context, state.message);
           }
           LoadingDialog.hide(context);
         },

@@ -38,6 +38,11 @@ class SignUpPage extends StatelessWidget {
     FocusScope.of(context).unfocus();
   }
 
+  // Show error message
+  void showErrorDialog(BuildContext context, String message) {
+    DialogUtils.showErrorMessage(context, message);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +57,8 @@ class SignUpPage extends StatelessWidget {
               } else if (state is Authenticated) {
                 context.go('/selectCategory');
               } else if (state is AuthError) {
-                SnackBarUtils.showSnackBar(context, state.message);
+                // SnackBarUtils.showSnackBar(context, state.message);
+                showErrorDialog(context, state.message);
               }
             },
             builder: (context, state) {

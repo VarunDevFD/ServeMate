@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesDataSource {
-  //-------------------------Bool-----------------------------------------------
   Future<bool> getBool(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(key) ?? false;
@@ -11,7 +10,6 @@ class PreferencesDataSource {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(key, value);
   }
-
 
   Future<String> getString(String key) async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,7 +27,7 @@ class PreferencesDataSource {
   }
 
   Future<void> clearPreferences() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.clear();
-}
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
 }

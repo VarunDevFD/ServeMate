@@ -1,13 +1,12 @@
  
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/profile/data/data_source/profile_remote_datasource.dart';
 import 'package:serve_mate/features/profile/data/model/user_model.dart';
 import 'package:serve_mate/features/profile/domain/entities/user_entity.dart';
 import 'package:serve_mate/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
-  final ProfileRemoteDataSource remoteDataSource;
-
-  ProfileRepositoryImpl(this.remoteDataSource);
+  final  remoteDataSource = serviceLocator<ProfileRemoteDataSource>(); 
 
   @override
   Future<void> updateUser(UserEntity user) {

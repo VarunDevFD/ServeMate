@@ -68,7 +68,7 @@ class BottomNavigationBar extends StatelessWidget {
 
   Future<String> getCategoryName() async {
     final prefs = serviceLocator<PreferencesRepository>();
-    return await prefs.getDataFn() ?? ''; // Fetch categoryName from prefs
+    return await prefs.getCategoryName() ?? ''; // Fetch categoryName from prefs
   }
 }
 

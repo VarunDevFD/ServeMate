@@ -5,19 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/widgets/common_snackbar.dart';
+import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
-import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import '../cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
+import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart'; 
 
-// import 'package:cloudinary_url_gen/cloudinary.dart';
-
-// void testCloudinary() {
-//   final cloudinary = Cloudinary.fromCloudName(
-//       cloudName: 'dwnoatc3h', apiKey: '387979586456272');
-//   final url = cloudinary.image('sample').toString();
-//   log(url); // Should print a valid Cloudinary URL
-// }
+ 
 
 class BottomNavBar extends StatelessWidget {
   final String formName;

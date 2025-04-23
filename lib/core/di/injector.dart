@@ -15,7 +15,7 @@ import 'package:serve_mate/features/authentication/domain/usecases/sign_up_with_
 import 'package:serve_mate/features/category/data/data_source/data_source_category.dart';
 import 'package:serve_mate/features/category/data/repositories/category_repository_impl.dart';
 import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
-import 'package:serve_mate/features/category/domain/usecases/get_categories.dart';
+import 'package:serve_mate/features/category/domain/usecases/get_categorys_usecase.dart';
 import 'package:serve_mate/features/category/domain/usecases/save_category.dart';
 import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_repository_impl.dart';
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
@@ -101,12 +101,9 @@ Future<void> init() async {
     () => CategoryRepositoryImpl(),
   );
 
-  serviceLocator.registerLazySingleton<CategoryRemoteDataSource>(
-    () => CategoryRemoteDataSourceImpl(),
-  );
-
+// Register GetCategories use case
   serviceLocator.registerLazySingleton<GetCategories>(
-    () => GetCategories(),
+    () => GetCategories(serviceLocator<CategoryRepository>()),
   );
 
   //------------------Category-----------------------------------------
@@ -115,4 +112,72 @@ Future<void> init() async {
   );
 
   serviceLocator.registerLazySingleton<SaveCategory>(() => SaveCategory());
+
+  //--------------------Product-------------------------------------------------
+
+  //--------------------Data Sources--------------------
+  serviceLocator.registerLazySingleton<ProductRemoteDataSource>(
+    () => ProductRemoteDataSourceImpl(),
+  );
+
+  //--------------------Repository--------------------
+  serviceLocator.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(
+      remoteDataSource: serviceLocator<ProductRemoteDataSource>(),
+    ),
+  );
+
+  // Dress Usecase
+  serviceLocator.registerLazySingleton<DressUseCase>(
+      () => DressUseCase(serviceLocator<ProductRepository>()));
+
+  // Camera Usecase
+  serviceLocator.registerLazySingleton<CameraUseCase>(
+    () => CameraUseCase(),
+  );
+
+  // FootWear Usecase
+  serviceLocator.registerLazySingleton<FootwearUseCase>(
+      () => FootwearUseCase(serviceLocator<ProductRepository>()));
+
+  // Jewelry Usecase
+  serviceLocator.registerLazySingleton<JewelryUseCase>(
+      () => JewelryUseCase(serviceLocator<ProductRepository>()));
+
+  // Sound Usecase
+  serviceLocator.registerLazySingleton<SoundUseCase>(
+      () => SoundUseCase(serviceLocator<ProductRepository>()));
+
+  // Venue Usecase
+  serviceLocator.registerLazySingleton<VenueUseCase>(
+      () => VenueUseCase(serviceLocator<ProductRepository>()));
+
+  // Vehicle Usecase
+  serviceLocator.registerLazySingleton<VehicleUseCase>(
+      () => VehicleUseCase(serviceLocator<ProductRepository>()));
+
+  // Decoration Usecase
+  serviceLocator.registerLazySingleton<DecorationUseCase>(
+      () => DecorationUseCase(serviceLocator<ProductRepository>()));
+
+  //--------------------Profile Data--------------------------------------------
+
+// DataSource
+  serviceLocator.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(),
+  );
+
+// Repository
+  serviceLocator.registerLazySingleton<ProfileRepositoryImpl>(
+    () => ProfileRepositoryImpl(),
+  );
+
+// UseCase
+  serviceLocator.registerLazySingleton<GetUserDetails>(
+    () => GetUserDetails(serviceLocator<ProfileRepositoryImpl>()),
+  );
+
+// Bloc
+  serviceLocator
+      .registerFactory(() => ProfileBloc(serviceLocator<GetUserDetails>()));
 }

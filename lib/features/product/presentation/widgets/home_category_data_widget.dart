@@ -13,7 +13,7 @@ class HomeCategoryDataWidget extends StatelessWidget {
   // Fetch category from preferences
   Future<String?> _getCategoryFromPref() async {
     final prefs = serviceLocator<PreferencesRepository>();
-    return prefs.getDataFn();
+    return prefs.getCategoryName();
   }
 
   // Fetch category data from Firestore
