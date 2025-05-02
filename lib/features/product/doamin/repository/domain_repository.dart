@@ -18,13 +18,5 @@ abstract class ProductRepository {
   Future<Either<String, String>> addVenue(Venue venue);
   Future<Either<String, String>> addVehicle(Vehicle vehicle);
   Future<Either<String, String>> addFootwear(Footwear footwear);
-  // Fetch methods for each entity
-  Future<List<Camera>> fetchCameras();
-  Future<List<DecorationEntity>> fetchDecorationEntitys();
-  Future<List<Dress>> fetchDresses();
-  Future<List<Jewelry>> fetchJewelry();
-  Future<List<Sound>> fetchSound();
-  Future<List<Venue>> fetchVenues();
-  Future<List<Vehicle>> fetchVehicles();
-  Future<List<Footwear>> fetchFootwear();
+  
 }

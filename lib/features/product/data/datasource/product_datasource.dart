@@ -1,15 +1,14 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/features/product/data/models/camera_model.dart';
-import 'package:serve_mate/features/product/data/models/decoration_model.dart';
-import 'package:serve_mate/features/product/data/models/dress_model.dart';
-import 'package:serve_mate/features/product/data/models/footwear_model.dart';
-import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
-import 'package:serve_mate/features/product/data/models/sound_model.dart';
-import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
-import 'package:serve_mate/features/product/data/models/venues_model.dart';
+import 'package:serve_mate/core/models/camera_model.dart';
+import 'package:serve_mate/core/models/decoration_model.dart';
+import 'package:serve_mate/core/models/dress_model.dart';
+import 'package:serve_mate/core/models/footwear_model.dart';
+import 'package:serve_mate/core/models/jewelry_model.dart';
+import 'package:serve_mate/core/models/sound_model.dart';
+import 'package:serve_mate/core/models/vehicle_model.dart';
+import 'package:serve_mate/core/models/venues_model.dart';
 
 abstract class ProductRemoteDataSource {
   Future<void> addCamera(CameraModel camera);
@@ -20,16 +19,6 @@ abstract class ProductRemoteDataSource {
   Future<void> addSound(SoundModel sound);
   Future<void> addVehicle(VehicleModel vehicle);
   Future<void> addVenue(VenueModel venue);
-
-  // Fetch methods
-  Future<List<CameraModel>> fetchCameras();
-  Future<List<DecorationModel>> fetchDecorationEntitys();
-  Future<List<DressModel>> fetchDresses();
-  Future<List<JewelryModel>> fetchJewelry();
-  Future<List<SoundModel>> fetchSound();
-  Future<List<VehicleModel>> fetchVehicles();
-  Future<List<FootwearModel>> fetchFootwear();
-  Future<List<VenueModel>> fetchVenues();
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -179,70 +168,5 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     } catch (e) {
       throw Exception('Failed to fetch data from $collectionName: $e');
     }
-  }
-
-  // Fetch methods for different collections
-  @override
-  Future<List<CameraModel>> fetchCameras() async {
-    return await fetchFromFirestoore<CameraModel>(
-      collectionName: 'camera',
-      fromMap: (map) => CameraModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<DecorationModel>> fetchDecorationEntitys() async {
-    return await fetchFromFirestoore<DecorationModel>(
-      collectionName: 'DecorationEntity',
-      fromMap: (map) => DecorationModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<DressModel>> fetchDresses() async {
-    return await fetchFromFirestoore<DressModel>(
-      collectionName: 'dresses',
-      fromMap: (map) => DressModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<FootwearModel>> fetchFootwear() async {
-    return await fetchFromFirestoore<FootwearModel>(
-      collectionName: 'footwear',
-      fromMap: (map) => FootwearModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<JewelryModel>> fetchJewelry() async {
-    return await fetchFromFirestoore<JewelryModel>(
-      collectionName: 'jewelry',
-      fromMap: (map) => JewelryModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<SoundModel>> fetchSound() async {
-    return await fetchFromFirestoore<SoundModel>(
-      collectionName: 'sound',
-      fromMap: (map) => SoundModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<VenueModel>> fetchVenues() async {
-    return await fetchFromFirestoore<VenueModel>(
-      collectionName: 'venues',
-      fromMap: (map) => VenueModel.fromMap(map),
-    );
-  }
-
-  @override
-  Future<List<VehicleModel>> fetchVehicles() async {
-    return await fetchFromFirestoore<VehicleModel>(
-      collectionName: 'vehicle',
-      fromMap: (map) => VehicleModel.fromMap(map),
-    );
   }
 }
