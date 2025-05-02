@@ -11,7 +11,5 @@ class JewelryUseCase {
     return await repository.addJewelry(jewelry);
   }
 
-  Future<List<Jewelry>> fetchJewelry() async {
-    return await repository.fetchJewelry();
-  }
+ 
 }

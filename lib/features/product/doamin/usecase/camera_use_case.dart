@@ -9,8 +9,4 @@ class CameraUseCase {
   Future<Either<String, String>> execute(Camera camera) async {
     return await repository.addCamera(camera);
   }
-
-  Future<List<Camera>> fetchCameras() async {
-    return await repository.fetchCameras();
-  }
 }

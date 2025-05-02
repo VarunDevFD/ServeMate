@@ -2,14 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
-import 'package:serve_mate/features/product/data/models/camera_model.dart';
-import 'package:serve_mate/features/product/data/models/decoration_model.dart';
-import 'package:serve_mate/features/product/data/models/dress_model.dart';
-import 'package:serve_mate/features/product/data/models/footwear_model.dart';
-import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
-import 'package:serve_mate/features/product/data/models/sound_model.dart';
-import 'package:serve_mate/features/product/data/models/vehicle_model.dart';
-import 'package:serve_mate/features/product/data/models/venues_model.dart';
+import 'package:serve_mate/core/models/camera_model.dart';
+import 'package:serve_mate/core/models/decoration_model.dart';
+import 'package:serve_mate/core/models/dress_model.dart';
+import 'package:serve_mate/core/models/footwear_model.dart';
+import 'package:serve_mate/core/models/jewelry_model.dart';
+import 'package:serve_mate/core/models/sound_model.dart';
+import 'package:serve_mate/core/models/vehicle_model.dart';
+import 'package:serve_mate/core/models/venues_model.dart';
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
@@ -25,7 +25,6 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   Future<Either<String, String>> addCamera(Camera camera) async {
-
     try {
       await remoteDataSource.addCamera(CameraModel.fromEntity(camera));
       return const Right("Success");
@@ -119,106 +118,6 @@ class ProductRepositoryImpl implements ProductRepository {
       return Left(e.alert);
     } catch (e) {
       throw left('Failed to add vehicle: $e');
-    }
-  }
-
-  // Fetch methods for each entity
-  @override
-  Future<List<Camera>> fetchCameras() async {
-    try {
-      final cameras = await remoteDataSource.fetchCameras();
-      return cameras
-          .map((camera) =>
-              CameraModel.fromMap(camera as Map<String, dynamic>).toEntity())
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch cameras: $e');
-    }
-  }
-
-  @override
-  Future<List<DecorationEntity>> fetchDecorationEntitys() async {
-    try {
-      final decorations = await remoteDataSource.fetchDecorationEntitys();
-      return decorations
-          .map((decorationModel) =>
-              DecorationModel.fromMap(decorationModel as Map<String, dynamic>)
-                  .toEntity())
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch decorations: $e');
-    }
-  }
-
-  @override
-  Future<List<Dress>> fetchDresses() async {
-    try {
-      final dresses = await remoteDataSource.fetchDresses();
-      return dresses
-          .map((dressModel) =>
-              DressModel.fromMap(dressModel as Map<String, dynamic>).toEntity())
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch dresses: $e');
-    }
-  }
-
-  @override
-  Future<List<Footwear>> fetchFootwear() async {
-    try {
-      final footwear = await remoteDataSource.fetchFootwear();
-      return footwear
-          .map((footwearModel) =>
-              FootwearModel.fromMap(footwearModel as Map<String, dynamic>)
-                  .toEntity())
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch footwear: $e');
-    }
-  }
-
-  @override
-  Future<List<Jewelry>> fetchJewelry() async {
-    try {
-      final jewelry = await remoteDataSource.fetchJewelry();
-      return jewelry
-          .map((jewelryItem) =>
-              JewelryModel.fromMap(jewelryItem as Map<String, dynamic>)
-                  .toEntity())
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to fetch jewelry: $e');
-    }
-  }
-
-  @override
-  Future<List<Sound>> fetchSound() async {
-    try {
-      final soundModels = await remoteDataSource
-          .fetchSound(); // Returns Future<List<SoundModel>>
-      return soundModels.map((soundModel) => soundModel.toEntity()).toList();
-    } catch (e) {
-      throw Exception('Failed to fetch sound: $e');
-    }
-  }
-
-  @override
-  Future<List<Vehicle>> fetchVehicles() async {
-    try {
-      final vehicles = await remoteDataSource.fetchVehicles();
-      return vehicles.map((vehicle) => vehicle.toEntity()).toList();
-    } catch (e) {
-      throw Exception('Failed to fetch vehicles: $e');
-    }
-  }
-
-  @override
-  Future<List<Venue>> fetchVenues() async {
-    try {
-      final venues = await remoteDataSource.fetchVenues();
-      return venues.map((venue) => venue.toEntity()).toList();
-    } catch (e) {
-      throw Exception('Failed to fetch venues: $e');
     }
   }
 }

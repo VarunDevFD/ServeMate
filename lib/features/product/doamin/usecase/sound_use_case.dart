@@ -11,7 +11,5 @@ class SoundUseCase {
     return await repository.addSound(sound);
   }
 
-  Future<List<Sound>> fetchSound() async {
-    return await repository.fetchSound();
-  }
+   
 }

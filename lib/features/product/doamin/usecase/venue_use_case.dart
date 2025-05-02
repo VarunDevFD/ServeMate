@@ -6,12 +6,7 @@ import 'package:serve_mate/features/product/doamin/repository/domain_repository.
 class VenueUseCase {
   final repository = serviceLocator<ProductRepository>();
 
-
   Future<Either<String, String>> execute(Venue venue) async {
     return await repository.addVenue(venue);
-  }
-
-  Future<List<Venue>> fetchVenues() async {
-    return await repository.fetchVenues();
   }
 }
