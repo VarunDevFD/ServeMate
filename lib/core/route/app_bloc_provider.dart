@@ -7,7 +7,7 @@ import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/cale
 import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/product_bloc/product_bloc.dart';
@@ -42,12 +42,12 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => DateBloc()),
         BlocProvider(create: (_) => ProductBloc()),
         BlocProvider(create: (_) => SearchBarBloc()),
-        BlocProvider(create: (_) => FormSubBloc()),
-        BlocProvider(create: (_) => FormSubmissionBloc()),
+        BlocProvider(create: (_) => CommonBloc()),
+        BlocProvider(create: (_) => AddProductBloc()),
         BlocProvider(create: (_) => AvailableSwitchCubit()),
         BlocProvider(create: (_) => CheckBoxCubit()),
         BlocProvider(create: (_) => FilterChipCubit()),
-        BlocProvider(create: (_) => ImagePickerCubit()),
+        BlocProvider(create: (_) => ImagePickerBloc()),
         BlocProvider(
           create: (_) => serviceLocator<ProfileBloc>(),
         ),

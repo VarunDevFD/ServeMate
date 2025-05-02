@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/product/presentation/widgets/camera_videography_form.dart';
-import 'package:serve_mate/features/product/presentation/widgets/decoration_form.dart';
+import 'package:serve_mate/features/product/presentation/widgets/DecorationEntity_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/dress_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/footwear_form.dart';
 import 'package:serve_mate/features/product/presentation/widgets/form_submission_handler.dart';
@@ -335,8 +335,8 @@ class AddPage extends StatelessWidget {
           onToggleSelected: onToggleSelected,
           descriptionController: descriptionController,
         );
-      case 'Decoration':
-        return DecorationForm(
+      case 'DecorationEntity':
+        return DecorationEntityForm(
           formKey: formKey,
           nameController: nameController,
           selectedFacilitiesFIrst: onFacilitySelected,

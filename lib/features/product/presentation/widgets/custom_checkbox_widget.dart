@@ -6,19 +6,17 @@ import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
-  final void Function(bool?)? onChanged;
   final FocusNode focusNode;
 
   const TermsAndConditionsScreen({
     super.key,
-    required this.onChanged,
     required this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.r),
+      padding: EdgeInsets.all(8.r),
       child: BlocBuilder<CheckBoxCubit, bool>(
         builder: (context, state) {
           return Column(
@@ -62,7 +60,9 @@ class TermsAndConditionsScreen extends StatelessWidget {
                   Checkbox(
                     focusNode: focusNode,
                     value: state,
-                    onChanged: onChanged,
+                    onChanged: (value) {
+                      context.read<CheckBoxCubit>().checkeBoxAvailable(value!);
+                    },
                   ),
                 ],
               ),

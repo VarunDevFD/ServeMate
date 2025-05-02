@@ -12,54 +12,11 @@ class DressFormBloc extends Bloc<DressFormEvent, DressFormState> {
       );
     });
 
-    // Dress type 
-    on<DressTypeChanged>((event, emit) {
-      emit(
-        state.copyWith(selectedDressType: event.dressType),
-      );
-    });
-
-    // Dress Model 
-    on<DressModelChanged>((event, emit) {
-      emit(
-        state.copyWith(selectedDressModel: event.dressModel),
-      );
-    });
-
-    // Condition 
-    on<DressConditionChanged>((event, emit) {
-      emit(
-        state.copyWith(selectedCondition: event.condition),
-      );
-    });
-
-    // Size 
-    on<SizeChanged>((event, emit) {
-      emit(
-        state.copyWith(selectedSize: event.size),
-      );
-    });
-
-    // Color 
+    // Color
     on<ColorChanged>((event, emit) {
       emit(
         state.copyWith(selectedColor: event.color, colorName: event.colorName),
       );
-    });
-
-    // Rental Duration 
-    on<RentalDurationChanged>((event, emit) {
-      emit(state.copyWith(rentalDuration: event.duration));
-    });
-
-    // Security Deposit 
-    on<SecurityDepositChanged>((event, emit) {
-      emit(state.copyWith(securityDeposit: event.deposit));
-    });
-
-    // Damage Policy 
-    on<DamagePolicyChanged>((event, emit) {
-      emit(state.copyWith(damagePolicy: event.policy));
     });
   }
 }

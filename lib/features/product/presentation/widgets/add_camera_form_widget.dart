@@ -1,26 +1,28 @@
-import 'dart:io';
+ 
 
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/utils/constants.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
+import 'package:serve_mate/features/product/doamin/entities/camera.dart';
+import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
+import 'package:serve_mate/features/product/presentation/widgets/camera_card_1.dart';
+import 'package:serve_mate/features/product/presentation/widgets/camera_card_2.dart';
+import 'package:serve_mate/features/product/presentation/widgets/camera_card_3.dart';
+import 'package:serve_mate/features/product/presentation/widgets/camera_card_4.dart';
+import 'package:serve_mate/features/product/presentation/widgets/camera_card_5.dart';
+import 'package:serve_mate/features/product/presentation/widgets/submit_button_model.dart';
+import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/card_constant.dart';
-import 'package:serve_mate/core/utils/constants.dart';
-import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
-import 'package:serve_mate/core/widgets/common_snackbar.dart';
-import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
-import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
-import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
-import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
-import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
-import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
 
 import '../bloc/form_submission_bloc/form_submission_event.dart';
 import '../bloc/form_submission_bloc/form_submission_state.dart';
@@ -28,53 +30,59 @@ import '../bloc/form_submission_bloc/form_submission_state.dart';
 class Cameras extends StatelessWidget {
   Cameras({super.key});
 
-  static final tAcFocusNode =
+  final formKey = GlobalKey<FormState>();
+  // Controllers for form fields
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController modelController = TextEditingController();
+  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController brandController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController sdPriceController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController conditionController = TextEditingController();
+  final TextEditingController daysController = TextEditingController();
+  final TextEditingController latePolicyController = TextEditingController();
+
+  final tAcFocusNode =
       FocusNode(); // FocusNode for the Terms and Conditions checkbox
+
+  void _resetFormState(BuildContext context) {
+    formKey.currentState?.reset();
+    nameController.clear();
+    modelController.clear();
+    categoryController.clear();
+    brandController.clear();
+    descriptionController.clear();
+    priceController.clear();
+    sdPriceController.clear();
+    phoneController.clear();
+    conditionController.clear();
+    daysController.clear();
+    latePolicyController.clear();
+    context.read<AvailableSwitchCubit>().reset();
+    context.read<FilterChipCubit>().resetAll();
+    context.read<LocationBloc>().add(ResetLocationEvent());
+    context.read<CheckBoxCubit>().reset();
+    context.read<ImagePickerBloc>().add(ClearAllImages());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormSubState>(
-        listener: (context, state) async {
-        if (state is FormSuccess) {
-          await Future.delayed(const Duration(seconds: 5));
-          AppSnackBar.show(
-            context,
-            content: 'Decoration form submitted successfully!',
-            backgroundColor: AppColors.green,
+    final paddingEdges = AppPadding.paddingEdgesAll;
+    return BlocListener<AddProductBloc, AddProductState>(
+      listener: (context, state) {
+        if (state is AddSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
           );
-        } else if (state is FormError) {
-          AppSnackBar.show(
-            context,
-            content: state.message,
-            backgroundColor: AppColors.green,
+        } else if (state is AddFormError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
           );
         }
       },
-       builder: (context, state) {
-      final bloc = context.read<FormSubmissionBloc>();
-
-      if (state is FormSuccess) {
-        context.read<ImagePickerCubit>().clearImages();
-        context.read<AvailableSwitchCubit>().toggleAvailable(false);
-        context.read<FilterChipCubit>().resetAll();
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(),
-              SizedBox(height: 16.h),
-              const Text(
-                'Processing...',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        );
-      }
-      const initialState = Names.initialValue;
-      final paddingEdges = AppPadding.paddingEdgesAll;
-
-      return Form(
+      child: Form(
         key: formKey,
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -84,379 +92,163 @@ class Cameras extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Name, Brand, Model, Category and Description
-                Card(
-                  elevation: 2,
-                  shape: CardProperties.cardShape,
-                  child: Padding(
-                    padding: paddingEdges,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Title
-                        Row(
-                          children: [
-                            Icon(Icons.info_outline, color: AppColors.orange1),
-                            SizedBox(width: 8.w),
-                            Text(
-                              'Basic Information',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15.h),
-                        // Name
-                        TextFormField(
-                          initialValue: initialState,
-                          maxLength: 30,
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Name*',
-                            counterText:
-                                '', // Hide the maxLength count TextFormField
-                            prefixIcon: Icon(Icons.inventory_2_outlined),
-                          ),
-                          onChanged: (value) => bloc
-                              .add(FormUpdateEvent('camera', 'name', value)),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'Please enter the Name'
-                              : null,
-                        ),
-                        SizedBox(height: 10.h),
-                        // Model
-                        TextFormField(
-                          initialValue: initialState,
-                          maxLength: 30,
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            labelText: 'Model*',
-                            counterText: '',
-                            prefixIcon: Icon(Icons.category),
-                          ),
-                          onChanged: (value) => bloc
-                              .add(FormUpdateEvent('camera', 'model', value)),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'Please enter the Model'
-                              : null,
-                        ),
-                        SizedBox(height: 10.h),
-                        // Brand
-                        ReusableDropdown(
-                          labelText: 'Equipment Brand *',
-                          items: DropdownItems.brandsCamera,
-                          onFieldSubmitted: (value) {
-                            bloc.add(FormUpdateEvent('camera', 'brand', value));
-                          },
-                        ),
-                        SizedBox(height: 10.h),
-                        // Category
-                        ReusableDropdown(
-                          labelText: 'Category*',
-                          items: DropdownItems.categoriesCamera,
-                          onFieldSubmitted: (value) {
-                            bloc.add(
-                                FormUpdateEvent('camera', 'category', value));
-                          },
-                        ),
-                        SizedBox(height: 10.h),
-                        // Description
-                        TextFormField(
-                          initialValue: initialState,
-                          maxLength: 100,
-                          maxLines: 3,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
-                            labelText: 'Description',
-                            prefixIcon: Icon(Icons.description_outlined),
-                            alignLabelWithHint: true,
-                          ),
-                          onChanged: (value) => bloc.add(
-                              FormUpdateEvent('camera', 'description', value)),
-                        ),
-                      ],
-                    ),
-                  ),
+                SectionOneCameraCard(
+                  name: nameController,
+                  model: modelController,
+                  brand: brandController,
+                  category: categoryController,
+                  description: descriptionController,
                 ),
                 SizedBox(height: 16.h),
                 // Pricing and Availability Card
-                Card(
-                  elevation: 2,
-                  shape: CardProperties.cardShape,
-                  child: Padding(
-                    padding: paddingEdges,
-                    child: Column(
-                      children: [
-                        // Title
-                        Row(
-                          children: [
-                            Icon(Icons.attach_money, color: AppColors.orange1),
-                            SizedBox(width: 8.w),
-                            Text(
-                              'Pricing & Availability',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10.h),
-                        // Price
-                        TextFormField(
-                          initialValue: '',
-                          maxLength: 6,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Price*',
-                            counterText: '',
-                            prefixIcon: Icon(Icons.attach_money),
-                          ),
-                          onChanged: (value) => bloc.add(FormUpdateEvent(
-                              'camera', 'price', int.tryParse(value))),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter the Rental Price';
-                            }
-                            if (double.tryParse(value) == null) {
-                              return 'Please enter a valid number';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 10.h),
-                        // Security Deposit
-                        TextFormField(
-                          initialValue: '',
-                          maxLength: 6,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Security Deposit *',
-                            counterText: '',
-                            prefixIcon: Icon(Icons.security_outlined),
-                          ),
-                          onChanged: (value) => bloc.add(FormUpdateEvent(
-                              'camera', 'sdPrice', int.tryParse(value))),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter the Security Deposit';
-                            }
-                            if (double.tryParse(value) == null) {
-                              return 'Please enter a valid deposit';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 10.h),
-                        SwitchTileScreen(categoryName: 'camera', bloc: bloc),
-                      ],
-                    ),
-                  ),
+                SectionTwoCameraCard(
+                  price: priceController,
+                  securityPrice: sdPriceController,
                 ),
                 SizedBox(height: 16.h),
                 // Location and Contact Card
-                Card(
-                  shape: CardProperties.cardShape,
-                  child: Padding(
-                    padding: paddingEdges,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Location & Contact',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        SizedBox(height: 10.h),
-                        // Location
-                        LocationTextField(
-                          locationController:
-                              TextEditingController(text: initialState),
-                          onFieldSubmitted: (value) => bloc.add(
-                              FormUpdateEvent('camera', 'location', value)),
-                        ),
-                        SizedBox(height: 10.h),
-                        // Phone value),
-                        TextFormField(
-                          initialValue: initialState,
-                          maxLength: 10,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.phone,
-                          onChanged: (value) => bloc.add(
-                              FormUpdateEvent('camera', 'phoneNumber', value)),
-                          decoration: const InputDecoration(
-                            labelText: 'Phone Number',
-                            counterText: '',
-                            prefixIcon: Icon(Icons.phone_outlined),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter the Phone Number';
-                            }
-                            if (value.length != 10) {
-                              return 'Please enter a valid 10-digit number';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 16.h),
-                      ],
-                    ),
-                  ),
-                ),
+                SectionThreeCameraCard(phone: phoneController),
                 // Features & Specifications
-                Card(
-                  shape: CardProperties.cardShape,
-                  child: Padding(
-                    padding: paddingEdges,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Features & Specifications',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        SizedBox(height: 10.h),
-                        // Condition
-                        ReusableDropdown(
-                          items: DropdownItems.condition,
-                          labelText: 'Condition *',
-                          onFieldSubmitted: (value) => bloc.add(
-                              FormUpdateEvent('camera', 'condition', value)),
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          'Storage Options',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        SizedBox(height: 6.h),
-                        FilterChipScreen(
-                          keyName: 'camera',
-                          id: 'storage',
-                          categories: DropdownItems.storageOptionsCamera,
-                          bloc: bloc,
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          'Connectivity Options',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        SizedBox(height: 6.h),
-                        FilterChipScreen(
-                          keyName: 'camera',
-                          id: 'connectivity',
-                          categories: DropdownItems.connectivityOptionsCamera,
-                          bloc: bloc,
-                        ),
-                        SizedBox(height: 16.h),
-                        // Minimum Rental Duration
-                        TextFormField(
-                          initialValue: initialState,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Minimum Rental Duration (days)*',
-                          ),
-                          onChanged: (value) => bloc.add(
-                              FormUpdateEvent('camera', 'duration', value)),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter minimum rental duration';
-                            }
-                            final number = int.tryParse(value);
-                            if (number == null) {
-                              return 'Please enter a valid number';
-                            }
-                            if (number <= 0) {
-                              return 'Duration must be greater than 0';
-                            }
-                            if (number > 30) {
-                              return 'Duration cannot exceed 30 days or One Month';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 6.h),
-                        // Late Fee Policy
-                        TextFormField(
-                          initialValue: initialState,
-                          decoration: const InputDecoration(
-                            labelText: 'Late Fee Policy*',
-                          ),
-                          onChanged: (value) => bloc.add(
-                              FormUpdateEvent('camera', 'latePolicy', value)),
-                          validator: (value) => value!.isEmpty
-                              ? 'Accessories are required'
-                              : null,
-                        ),
-                        SizedBox(height: 6.h),
-                      ],
-                    ),
-                  ),
+                SectionFourCameraCard(
+                  condition: conditionController,
+                  days: daysController,
+                  latePolicy: latePolicyController,
                 ),
-
                 SizedBox(height: 6.h),
-
                 // Image Upload Section
-                Card(
-                  shape: CardProperties.cardShape,
-                  child: Padding(
-                    padding: paddingEdges,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.photo_library,
-                              color: AppColors.orange1,
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              'Product Images',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16.h),
-                        ImagePickerPage(
-                          categoryName: 'camera',
-                          bloc: bloc,
-                          validator: (images) => images.isEmpty
-                              ? 'Please upload at least one image'
-                              : null,
-                        ),
-                        BlocBuilder<ImagePickerCubit, List<File>>(
-                          builder: (context, images) {
-                            return images.isNotEmpty
-                                ? TextButton(
-                                    onPressed: () => context
-                                        .read<ImagePickerCubit>()
-                                        .clearImages(),
-                                    child: const Text('Clear'),
-                                  )
-                                : const SizedBox.shrink();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const SectionFiveCameraCard(),
                 // Terms and Conditions
                 TermsAndConditionsScreen(
                   focusNode: tAcFocusNode,
-                  onChanged: (value) {
-                    context
-                        .read<CheckBoxCubit>()
-                        .checkeBoxAvailable(value!); // Update CheckBoxCubit
-                    context.read<FormSubmissionBloc>().add(
-                          FormUpdateEvent('camera', 'privacyPolicy', value),
-                        );
-                  },
+                ),
+                ReusableButton(
+                  label: 'Camera Submit',
+                  onPressed: () => submitCameraData(context),
                 ),
                 SizedBox(height: 50.h),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> submitCameraData(BuildContext context) async {
+    if (!formKey.currentState!.validate()) {
+      AppSnackBar.show(
+        context,
+        content: 'Please fill in all required fields',
+        backgroundColor: AppColors.red,
       );
-    });
+      return;
+    }
+
+    final imagePickerBloc = context.read<ImagePickerBloc>();
+    final locationBloc = context.read<LocationBloc>();
+    final availableSwitchCubit = context.read<AvailableSwitchCubit>();
+    final privacyPolicyCubit = context.read<CheckBoxCubit>();
+    final cubit = context.read<FilterChipCubit>();
+    final selections = cubit.state.selections;
+    final storageOptions = selections['storage'] ?? [];
+    final connectivityOptions = selections['connectivity'] ?? [];
+
+    // Get current state
+    final currentImageState = imagePickerBloc.state;
+
+    if (currentImageState is ImageLoaded) {
+      final images = currentImageState.images; // Correct property access
+      if (images.isEmpty) {
+        AppSnackBar.show(
+          context,
+          content: 'Please upload at least one image',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
+
+      // show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(
+          child: LoadingAnimationWidget.discreteCircle(
+            color: AppColors.orange,
+            size: 50.r,
+            secondRingColor: AppColors.grey,
+            thirdRingColor: AppColors.white,
+          ),
+        ),
+      );
+
+      imagePickerBloc.add(UploadImagesToCloudinary());
+
+      final uploadedState = await imagePickerBloc.stream.firstWhere(
+        (state) => state is ImagesUploaded || state is ImageError,
+      );
+
+      // Close loading dialog
+      if (context.mounted) Navigator.of(context).pop();
+
+      if (uploadedState is ImagesUploaded) {
+        // SUCCESS - Proceed with the rest of data save
+        final imageUrls = uploadedState.imageUrls;
+        final locationState = locationBloc.state;
+
+        if (locationState is LocationLoaded) {
+          final location = locationState.location;
+          final isAvailable = availableSwitchCubit.state;
+          final isApproved = privacyPolicyCubit.state;
+
+          final camera = Camera(
+            name: nameController.text,
+            brand: brandController.text,
+            model: modelController.text,
+            description: descriptionController.text,
+            category: categoryController.text,
+            price: int.tryParse(priceController.text) ?? 0,
+            sdPrice: int.tryParse(sdPriceController.text) ?? 0,
+            available: isAvailable,
+            location: location,
+            phoneNumber: phoneController.text,
+            condition: conditionController.text,
+            storage: storageOptions,
+            connectivity: connectivityOptions,
+            duration: daysController.text,
+            latePolicy: latePolicyController.text,
+            images: imageUrls,
+            privacyPolicy: isApproved,
+          );
+
+          if (context.mounted) {
+            context.read<AddProductBloc>().add(CameraEvent(camera));
+
+            _resetFormState(context);
+          }
+        } else {
+          AppSnackBar.show(
+            context,
+            content: 'Please provide location information',
+            backgroundColor: AppColors.red,
+          );
+        }
+      } else if (uploadedState is ImageError) {
+        // ERROR
+        if (context.mounted) {
+          AppSnackBar.show(
+            context,
+            content: 'Image Upload Error: ${uploadedState.message}',
+            backgroundColor: AppColors.red,
+          );
+        }
+      }
+    } else {
+      AppSnackBar.show(
+        context,
+        content: 'Please upload images first',
+        backgroundColor: AppColors.red,
+      );
+    }
   }
 }
-// 465
+// 465 - 256

@@ -7,7 +7,7 @@
 
 // void submissionForm({
 //   final String? formName,
-//   required FormSubmissionBloc bloc,
+//   required AddProductBloc bloc,
 // }) {
 //   // Reset all controllers function
 //   void resetAllControllers() {
@@ -62,9 +62,9 @@
 //         break;
 //       }
 
-//     // case 'Decoration':
+//     // case 'DecorationEntity':
 //     //   {
-//     //     bloc.add(DecorationEvent());
+//     //     bloc.add(DecorationEntityEvent());
 //     //     resetAllControllers();
 //     //     break;
 //     //   }

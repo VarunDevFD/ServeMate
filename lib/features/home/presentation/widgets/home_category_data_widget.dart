@@ -1,10 +1,5 @@
-// import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/di/injector.dart';
-import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/product/presentation/widgets/home_page_category_cards.dart';
 
 class HomeCategoryDataWidget extends StatelessWidget {

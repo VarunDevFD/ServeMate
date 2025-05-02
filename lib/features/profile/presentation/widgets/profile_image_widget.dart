@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 
 class ImageProfile extends StatelessWidget {
   final String? imageUrl;
@@ -28,21 +27,32 @@ class ImageProfile extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.photo, color: AppColors.primary),
                   title: const Text('Gallery'),
-                  onTap: () {
+                  onTap: () async {
                     context.pop();
-                    context
-                        .read<ImagePickerCubit>()
-                        .imageOnce(ImageSource.gallery);
+                    final picker = ImagePicker();
+                    final pickedFiles = await picker.pickMedia();
+                    if (pickedFiles != null) {
+                      // Convert XFile to File
+                      context
+                          .read<ImagePickerBloc>()
+                          .add(PickImagesFromGallery());
+                    }
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.camera, color: AppColors.primary),
                   title: const Text('Camera'),
-                  onTap: () {
+                  onTap: () async {
                     context.pop();
-                    context
-                        .read<ImagePickerCubit>()
-                        .imageOnce(ImageSource.camera);
+                    final picker = ImagePicker();
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.camera);
+                    if (pickedFile != null) {
+                      // Convert XFile to File
+                      context
+                          .read<ImagePickerBloc>()
+                          .add(TakePhotoFromCamera());
+                    }
                   },
                 ),
               ],
@@ -62,18 +72,18 @@ class ImageProfile extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () => _showEditImageOptions(context),
-              child: BlocBuilder<ImagePickerCubit, List<File>>(
-                builder: (context, images) {
+              child: BlocBuilder<ImagePickerBloc, ImageState>(
+                builder: (context, state) {
                   return CircleAvatar(
                     radius: 50.r,
                     backgroundColor: Colors.grey.shade300,
-                    backgroundImage: imageUrl != null
-                        ? FileImage(File(imageUrl!))
-                        : (images.isNotEmpty
-                                ? FileImage(images.first)
-                                : const AssetImage(
-                                    'assets/images/profile_img.jpg'))
-                            as ImageProvider,
+                    // backgroundImage: imageUrl != null
+                    //     ? FileImage(File(imageUrl!))
+                    //     : (state.images.isNotEmpty
+                    //             ? FileImage(state.images.first)
+                    //             : const AssetImage(
+                    //                 'assets/images/profile_img.jpg'))
+                    //         as ImageProvider,
                     // images.isNotEmpty
                     //     ? FileImage(images.first)
                     //     : (imageUrl != null

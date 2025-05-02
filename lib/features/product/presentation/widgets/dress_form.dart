@@ -287,7 +287,7 @@
 //         builder: (context, state) {
 //           return TextField(
 //             cursorColor: AppColors.balck1,
-//             decoration: InputDecoration(
+//             DecorationEntity: InputDecorationEntity(
 //               // Display place name if available, otherwise show the default hint
 //               hintText: state.placeName!.isNotEmpty
 //                   ? state.placeName
@@ -340,9 +340,9 @@
 //                       Container(
 //                         width: 100, // Adjust width as per design
 //                         height: 100, // Adjust height as per design
-//                         decoration: BoxDecoration(
+//                         DecorationEntity: BoxDecorationEntity(
 //                           borderRadius: BorderRadius.circular(8),
-//                           image: DecorationImage(
+//                           image: DecorationEntityImage(
 //                             image: FileImage(images[index]),
 //                             fit: BoxFit.fill,
 //                           ),
@@ -418,7 +418,7 @@
 //                 context.read<DressFormBloc>().add(ColorChanged(color, text));
 //               }
 //             },
-//             decoration: InputDecorations.defaultDecoration(
+//             DecorationEntity: InputDecorationEntitys.defaultDecorationEntity(
 //               suffixIcon: Padding(
 //                 padding: EdgeInsets.all(8.0.r),
 //                 child:
@@ -433,11 +433,11 @@
 
 // TableCalendar(
 //           calendarStyle: CalendarStyle(
-//             todayDecoration: BoxDecoration(
+//             todayDecorationEntity: BoxDecorationEntity(
 //               color: Colors.blue,
 //               shape: BoxShape.circle,
 //             ),
-//             selectedDecoration: BoxDecoration(
+//             selectedDecorationEntity: BoxDecorationEntity(
 //               color: Colors.green,
 //               shape: BoxShape.circle,
 //             ),
@@ -475,7 +475,7 @@
 //                     child: Text(dressType),
 //                   ))
 //               .toList(),
-//           decoration: InputDecorations.defaultDecoration(),
+//           DecorationEntity: InputDecorationEntitys.defaultDecorationEntity(),
 //         );
 //       },
 //     );
@@ -534,7 +534,7 @@
 //                 child: Text(size),
 //               ))
 //           .toList(),
-//       decoration: InputDecorations.defaultDecoration(),
+//       DecorationEntity: InputDecorationEntitys.defaultDecorationEntity(),
 //     );
 //   }
 
@@ -543,7 +543,7 @@
 //     List<String> conditions = ['New', 'Like New', 'Good'];
 
 //     return DropdownButtonFormField<String>(
-//       decoration: InputDecorations.defaultDecoration(),
+//       DecorationEntity: InputDecorationEntitys.defaultDecorationEntity(),
 //       value: (selectedCondition.isNotEmpty &&
 //               conditions.contains(selectedCondition))
 //           ? selectedCondition

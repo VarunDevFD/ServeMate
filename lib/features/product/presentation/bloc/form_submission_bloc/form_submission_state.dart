@@ -1,30 +1,19 @@
-abstract class FormSubState {}
-
-class FormInitial extends FormSubState {
-  final Map<String, dynamic> entities;
-
-  FormInitial(this.entities);
-
-  FormInitial copyWith({Map<String, dynamic>? entities}) {
-    return FormInitial(entities ?? this.entities);
-  }
+abstract class AddProductState {
+  const AddProductState();
 }
 
-class FormLoading extends FormSubState {
-  final String categoryType;
+class AddIntialState extends AddProductState {}
 
-  FormLoading(this.categoryType);
-}
+class AddLoadingState extends AddProductState {}
 
-class FormSuccess extends FormSubState {
-  final String entityType;
-  final dynamic data;
-
-  FormSuccess(this.entityType, this.data);
-}
-
-class FormError extends FormSubState {
+class AddSuccessState extends AddProductState {
   final String message;
 
-  FormError(this.message);
+  AddSuccessState(this.message);
+}
+
+class AddFormError extends AddProductState {
+  final String message;
+
+  AddFormError(this.message);
 }

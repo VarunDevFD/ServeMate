@@ -1,4 +1,5 @@
 class Footwear {
+  final String? userId;
   final String? name;
   final int? price;
   final int? sdPrice;
@@ -7,13 +8,18 @@ class Footwear {
   final String? description;
   final String? brand;
   final String? condition;
-  final String? size;
+  final List<String>? size;
   final String? color;
   final String? category;
   final bool? available;
-  final String? date;
+  final String? date; 
+  final String? time = DateTime.now().toString();
+  final String? phoneNumber;
+  final bool? privacyPolicy;
+  
 
   Footwear({
+    this.userId,
     required this.name,
     required this.price,
     required this.sdPrice,
@@ -26,10 +32,13 @@ class Footwear {
     required this.color,
     required this.category,
     required this.available,
-    required this.date,
+    required this.date, 
+    required this.phoneNumber,
+    required this.privacyPolicy,
   });
 
   Footwear copyWith({
+    String? userId,
     String? name,
     int? price,
     int? sdPrice,
@@ -38,13 +47,17 @@ class Footwear {
     String? description,
     String? brand,
     String? condition,
-    String? size,
+    List<String>? size,
     String? color,
     String? category,
     bool? available,
     String? date,
+    String? time,
+    String? phoneNumber,
+    bool? privacyPolicy,
   }) {
     return Footwear(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
       sdPrice: sdPrice ?? this.sdPrice,
@@ -57,12 +70,16 @@ class Footwear {
       color: color ?? this.color,
       category: category ?? this.category,
       available: available ?? this.available,
-      date: date ?? this.date,
+      date: date ?? this.date, 
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+
     );
   }
 
   static empty() {
     return Footwear(
+      userId: '',
       name: '',
       price: 0,
       sdPrice: 0,
@@ -71,11 +88,13 @@ class Footwear {
       description: '',
       brand: '',
       condition: '',
-      size: '',
+      size: [],
       color: '',
       category: '',
       available: false,
-      date: '',
+      date: '', 
+      phoneNumber: '',
+      privacyPolicy: false,
     );
   }
 }

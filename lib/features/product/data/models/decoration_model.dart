@@ -1,6 +1,8 @@
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 
 class DecorationModel {
+  final String userId;
+  final String time = DateTime.now().toString();
   final String name;
   final List<String> decorCategory;
   final List<String> decorStyles;
@@ -14,21 +16,25 @@ class DecorationModel {
   final List<String> images;
   final bool privacyPolicy;
 
-  DecorationModel(
-      {required this.name,
-      required this.decorCategory,
-      required this.decorStyles,
-      required this.description,
-      required this.price,
-      required this.sdPrice,
-      required this.available,
-      required this.duration,
-      required this.location,
-      required this.phoneNumber,
-      required this.images,
-      required this.privacyPolicy});
+  DecorationModel({
+    this.userId = '',
+    required this.name,
+    required this.decorCategory,
+    required this.decorStyles,
+    required this.description,
+    required this.price,
+    required this.sdPrice,
+    required this.available,
+    required this.duration,
+    required this.location,
+    required this.phoneNumber,
+    required this.images,
+    required this.privacyPolicy,
+  });
 
   DecorationModel copyWith({
+    String? userId,
+    String? time,
     String? name,
     List<String>? decorCategory,
     List<String>? decorStyles,
@@ -43,6 +49,7 @@ class DecorationModel {
     bool? privacyPolicy,
   }) {
     return DecorationModel(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       decorCategory: decorCategory ?? this.decorCategory,
       decorStyles: decorStyles ?? this.decorStyles,
@@ -60,7 +67,9 @@ class DecorationModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'name': name,
+      'time': time,
       'decorCategory': decorCategory,
       'decorStyles': decorStyles,
       'description': description,
@@ -77,6 +86,7 @@ class DecorationModel {
 
   factory DecorationModel.fromMap(Map<String, dynamic> map) {
     return DecorationModel(
+      userId: map['userId'] ?? '',
       name: map['name'],
       decorCategory: List<String>.from(map['decorCategory']),
       decorStyles: List<String>.from(map['decorStyles']),
@@ -92,8 +102,9 @@ class DecorationModel {
     );
   }
 
-  factory DecorationModel.fromEntity(Decoration entity) {
+  factory DecorationModel.fromEntity(DecorationEntity entity) {
     return DecorationModel(
+      userId: entity.userId ?? '',
       name: entity.name ?? '',
       decorCategory: entity.decorCategory ?? [''],
       decorStyles: entity.decorStyles ?? [],
@@ -109,8 +120,10 @@ class DecorationModel {
     );
   }
 
-  Decoration toEntity() {
-    return Decoration(
+  DecorationEntity toEntity() {
+    return DecorationEntity(
+      userId: userId,
+      time: time,
       name: name,
       decorCategory: decorCategory,
       decorStyles: decorStyles,

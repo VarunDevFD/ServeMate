@@ -24,5 +24,5 @@ class AuthUser {
   });
 
   fold(Never Function(dynamic error) param0,
-      Future<Null> Function(dynamic user) param1) {}
+      Future<void> Function(dynamic user) param1) {}
 }

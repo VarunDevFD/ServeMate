@@ -1,15 +1,15 @@
-class FormSubState {
-  final String gender;
+abstract class CommonState {}
 
-  FormSubState({
-    this.gender = 'Male',
-  });
+class InitialState extends CommonState {}
 
-  FormSubState copyWith({
-    String? gender,
-  }) {
-    return FormSubState(
-      gender: gender ?? this.gender,
-    );
-  }
+class LoadingState extends CommonState {}
+
+class SuccessState extends CommonState {
+  final String type;
+  SuccessState(this.type);
+}
+
+class ErrorState extends CommonState {
+  final String type;
+  ErrorState(this.type);
 }

@@ -1,5 +1,7 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
 import 'package:serve_mate/features/product/data/models/dress_model.dart';
@@ -11,7 +13,7 @@ import 'package:serve_mate/features/product/data/models/venues_model.dart';
 
 abstract class ProductRemoteDataSource {
   Future<void> addCamera(CameraModel camera);
-  Future<void> addDecoration(DecorationModel decoration);
+  Future<void> addDecorationEntity(DecorationModel decoration);
   Future<void> addDress(DressModel dress);
   Future<void> addFootwear(FootwearModel footwear);
   Future<void> addJewelry(JewelryModel jewelry);
@@ -21,7 +23,7 @@ abstract class ProductRemoteDataSource {
 
   // Fetch methods
   Future<List<CameraModel>> fetchCameras();
-  Future<List<DecorationModel>> fetchDecorations();
+  Future<List<DecorationModel>> fetchDecorationEntitys();
   Future<List<DressModel>> fetchDresses();
   Future<List<JewelryModel>> fetchJewelry();
   Future<List<SoundModel>> fetchSound();
@@ -32,6 +34,12 @@ abstract class ProductRemoteDataSource {
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   final _firebaseFirestore = serviceLocator<FirebaseFirestore>();
+  final pref = serviceLocator<PreferencesRepository>();
+
+  // Current user ID
+  Future<String> currentUserId() {
+    return pref.getUserId();
+  }
 
   // Function to add data to Firestore
   Future<void> _addToFirestore<T>({
@@ -48,6 +56,12 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<void> addCamera(CameraModel camera) async {
+    // Get the current user ID and set it in the camera model
+    final userId = await currentUserId();
+    camera = camera.copyWith(
+      userId: userId,
+    );
+
     await _addToFirestore(
       collectionName: 'camera',
       model: camera,
@@ -56,9 +70,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<void> addDecoration(DecorationModel decoration) async {
+  Future<void> addDecorationEntity(DecorationModel decoration) async {
+    // Get the current user ID and set it in the DecorationEntity model
+    final userId = await currentUserId();
+    decoration = decoration.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
-      collectionName: 'decoration',
+      collectionName: 'Decoration',
       model: decoration,
       toMap: (model) => model.toMap(),
     );
@@ -66,6 +85,11 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<void> addDress(DressModel dress) async {
+    // Get the current user ID and set it in the dress model
+    final userId = await currentUserId();
+    dress = dress.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
       collectionName: 'dress',
       model: dress,
@@ -75,6 +99,11 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<void> addFootwear(FootwearModel footwear) async {
+    // Get the current user ID and set it in the footwear model
+    final userId = await currentUserId();
+    footwear = footwear.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
       collectionName: 'footwear',
       model: footwear,
@@ -84,6 +113,11 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<void> addJewelry(JewelryModel jewelry) async {
+    // Get the current user ID and set it in the jewelry model
+    final userId = await currentUserId();
+    jewelry = jewelry.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
       collectionName: 'jewelry',
       model: jewelry,
@@ -93,6 +127,11 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<void> addSound(SoundModel sound) async {
+    // Get the current user ID and set it in the sound model
+    final userId = await currentUserId();
+    sound = sound.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
       collectionName: 'sound',
       model: sound,
@@ -100,18 +139,27 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     );
   }
 
-
   @override
   Future<void> addVehicle(VehicleModel vehicle) async {
+    // Get the current user ID and set it in the vehicle model
+    final userId = await currentUserId();
+    vehicle = vehicle.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
       collectionName: 'Vehicles',
       model: vehicle,
       toMap: (model) => model.toMap(),
     );
   }
-  
+
   @override
   Future<void> addVenue(VenueModel venue) async {
+    // Get the current user ID and set it in the venue model
+    final userId = await currentUserId();
+    venue = venue.copyWith(
+      userId: userId,
+    );
     await _addToFirestore(
       collectionName: 'venues',
       model: venue,
@@ -143,9 +191,9 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<List<DecorationModel>> fetchDecorations() async {
+  Future<List<DecorationModel>> fetchDecorationEntitys() async {
     return await fetchFromFirestoore<DecorationModel>(
-      collectionName: 'decoration',
+      collectionName: 'DecorationEntity',
       fromMap: (map) => DecorationModel.fromMap(map),
     );
   }

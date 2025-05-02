@@ -1,8 +1,8 @@
 class Dress {
+  final String? userId;
   final String? name;
   final String? gender;
   final String? type;
-  final String? model;
   final String? size;
   final String? color;
   final String? material;
@@ -15,14 +15,15 @@ class Dress {
   final List<String>? location;
   final String? phoneNumber;
   final List<String>? images;
-  final String? privacyPolicy;
+  final bool? available;
+  final bool? privacyPolicy;
   final String? description;
 
   Dress({
+    this.userId,
     required this.name,
     required this.gender,
     required this.type,
-    required this.model,
     required this.size,
     required this.color,
     required this.material,
@@ -35,11 +36,13 @@ class Dress {
     required this.location,
     required this.phoneNumber,
     required this.images,
+    required this.available,
     required this.privacyPolicy,
     required this.description,
   });
 
   Dress copyWith({
+    String? userId,
     String? name,
     String? gender,
     String? type,
@@ -56,14 +59,15 @@ class Dress {
     List<String>? location,
     String? phoneNumber,
     List<String>? images,
-    String? privacyPolicy,
+    bool? available,
+    bool? privacyPolicy,
     String? description,
   }) {
     return Dress(
-      name: name ?? this.name, 
-      gender: gender ?? this.gender, 
+      userId: userId ?? this.userId,
+      name: name ?? this.name,
+      gender: gender ?? this.gender,
       type: type ?? this.type,
-      model: model ?? this.model,
       size: size ?? this.size,
       color: color ?? this.color,
       material: material ?? this.material,
@@ -76,6 +80,7 @@ class Dress {
       location: location ?? this.location,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
+      available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
       description: description ?? this.description,
     );
@@ -83,10 +88,10 @@ class Dress {
 
   static Dress empty() {
     return Dress(
+      userId: '',
       name: '',
       gender: '',
       type: '',
-      model: '',
       size: '',
       color: '',
       material: '',
@@ -99,7 +104,8 @@ class Dress {
       location: [],
       phoneNumber: '',
       images: [],
-      privacyPolicy: '',
+      available: false,
+      privacyPolicy: false,
       description: '',
     );
   }

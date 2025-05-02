@@ -6,19 +6,21 @@ import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
 import 'package:serve_mate/features/product/doamin/entities/venue.dart';
+import 'package:dartz/dartz.dart';
 
 abstract class ProductRepository {
-  Future<void> addCamera(Camera camera);
-  Future<void> addDecoration(Decoration decoration);
-  Future<void> addDress(Dress dress);
-  Future<void> addJewelry(Jewelry jewelry);
-  Future<void> addSound(Sound sound);
-  Future<void> addVenue(Venue venue);
-  Future<void> addVehicle(Vehicle vehicle);
-  Future<void> addFootwear(Footwear footwear);
+  Future<Either<String, String>> addCamera(Camera camera);
+  Future<Either<String, String>> addDecorationEntity(
+      DecorationEntity decoration);
+  Future<Either<String, String>> addDress(Dress dress);
+  Future<Either<String, String>> addJewelry(Jewelry jewelry);
+  Future<Either<String, String>> addSound(Sound sound);
+  Future<Either<String, String>> addVenue(Venue venue);
+  Future<Either<String, String>> addVehicle(Vehicle vehicle);
+  Future<Either<String, String>> addFootwear(Footwear footwear);
   // Fetch methods for each entity
   Future<List<Camera>> fetchCameras();
-  Future<List<Decoration>> fetchDecorations();
+  Future<List<DecorationEntity>> fetchDecorationEntitys();
   Future<List<Dress>> fetchDresses();
   Future<List<Jewelry>> fetchJewelry();
   Future<List<Sound>> fetchSound();

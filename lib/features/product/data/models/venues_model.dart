@@ -1,7 +1,9 @@
 import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 
 class VenueModel {
+  final String userId;
   final String name;
+  final String time = DateTime.now().toString();
   final int price;
   final int sdPrice;
   final List<String> location;
@@ -11,12 +13,12 @@ class VenueModel {
   final String duration;
   final String venueType;
   final String phoneNumber;
-  final String date;
   final List<String> facilities;
   final bool available;
   final bool privacyPolicy;
 
   VenueModel({
+    required this.userId,
     required this.name,
     required this.price,
     required this.sdPrice,
@@ -27,7 +29,6 @@ class VenueModel {
     required this.duration,
     required this.venueType,
     required this.phoneNumber,
-    required this.date,
     required this.facilities,
     required this.available,
     required this.privacyPolicy,
@@ -35,6 +36,7 @@ class VenueModel {
 
   // copyWith method
   VenueModel copyWith({
+    String? userId,
     String? name,
     int? price,
     int? sdPrice,
@@ -45,12 +47,13 @@ class VenueModel {
     String? duration,
     String? venueType,
     String? phoneNumber,
-    String? date,
+    String? time,
     List<String>? facilities,
     bool? available,
     bool? privacyPolicy,
   }) {
     return VenueModel(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
       sdPrice: sdPrice ?? this.sdPrice,
@@ -61,7 +64,6 @@ class VenueModel {
       duration: duration ?? this.duration,
       venueType: venueType ?? this.venueType,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      date: date ?? this.date,
       facilities: facilities ?? this.facilities,
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
@@ -71,6 +73,7 @@ class VenueModel {
   // toMap method
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'name': name,
       'price': price,
       'sdPrice;': sdPrice,
@@ -81,7 +84,7 @@ class VenueModel {
       'duration': duration,
       'venueType': venueType,
       'phoneNumber': phoneNumber,
-      'date': date,
+      'time': time,
       'facilities': facilities,
       'available': available,
       'privacyPolicy': privacyPolicy,
@@ -91,6 +94,7 @@ class VenueModel {
   // fromMap method
   factory VenueModel.fromMap(Map<String, dynamic> map) {
     return VenueModel(
+      userId: map['userId'] ?? '',
       name: map['name'] ?? '',
       price: map['price'] ?? 0,
       sdPrice: map['sdPrice'] ?? 0,
@@ -101,7 +105,6 @@ class VenueModel {
       duration: map['duration'] ?? '',
       venueType: map['venueType'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
-      date: map['date'] ?? '',
       facilities: List<String>.from(map['facilities'] ?? []),
       available: map['available'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
@@ -111,6 +114,7 @@ class VenueModel {
   // fromEntity method
   factory VenueModel.fromEntity(Venue entity) {
     return VenueModel(
+      userId: entity.userId ?? '',
       name: entity.name ?? '',
       price: entity.price ?? 0,
       sdPrice: entity.sdPrice ?? 0,
@@ -121,7 +125,6 @@ class VenueModel {
       duration: entity.duration ?? '',
       venueType: entity.venueType ?? '',
       phoneNumber: entity.phoneNumber ?? '',
-      date: entity.date ?? '',
       facilities: entity.facilities ?? [],
       available: entity.available ?? false,
       privacyPolicy: entity.privacyPolicy ?? false,
@@ -141,7 +144,6 @@ class VenueModel {
       duration: duration,
       venueType: venueType,
       phoneNumber: phoneNumber,
-      date: date,
       facilities: facilities,
       available: available,
       privacyPolicy: privacyPolicy,

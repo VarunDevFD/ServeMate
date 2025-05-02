@@ -11,16 +11,15 @@ import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_s
 import 'color_picker_widget.dart';
 
 class TextFieldWithColorPicker extends StatelessWidget {
-  final ValueChanged<TextEditingController?> onColorSelected;
-
-  const TextFieldWithColorPicker({super.key, required this.onColorSelected});
+  TextFieldWithColorPicker({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DressFormBloc, DressFormState>(
       builder: (context, state) {
-        final controller = TextEditingController(text: state.colorName);
+        final  controller = TextEditingController(text: state.colorName);
         final color = getColorByName(controller.text);
+         
 
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 8.0.h),
@@ -51,8 +50,6 @@ class TextFieldWithColorPicker extends StatelessWidget {
               }
               if (color == null) {
                 return "Please enter the valid Color Name";
-              } else {
-                onColorSelected(controller);
               }
               return null;
             },

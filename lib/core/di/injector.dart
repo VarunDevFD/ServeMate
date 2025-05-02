@@ -75,7 +75,7 @@ Future<void> init() async {
   //--------------------Firebase---------------------------------------
   serviceLocator
       .registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  serviceLocator.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn()); 
+  serviceLocator.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
   serviceLocator.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);
 
@@ -122,14 +122,11 @@ Future<void> init() async {
 
   //--------------------Repository--------------------
   serviceLocator.registerLazySingleton<ProductRepository>(
-    () => ProductRepositoryImpl(
-      remoteDataSource: serviceLocator<ProductRemoteDataSource>(),
-    ),
+    () => ProductRepositoryImpl(),
   );
 
   // Dress Usecase
-  serviceLocator.registerLazySingleton<DressUseCase>(
-      () => DressUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<DressUseCase>(() => DressUseCase());
 
   // Camera Usecase
   serviceLocator.registerLazySingleton<CameraUseCase>(
@@ -137,28 +134,24 @@ Future<void> init() async {
   );
 
   // FootWear Usecase
-  serviceLocator.registerLazySingleton<FootwearUseCase>(
-      () => FootwearUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator
+      .registerLazySingleton<FootwearUseCase>(() => FootwearUseCase());
 
   // Jewelry Usecase
-  serviceLocator.registerLazySingleton<JewelryUseCase>(
-      () => JewelryUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<JewelryUseCase>(() => JewelryUseCase());
 
   // Sound Usecase
-  serviceLocator.registerLazySingleton<SoundUseCase>(
-      () => SoundUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<SoundUseCase>(() => SoundUseCase());
 
   // Venue Usecase
-  serviceLocator.registerLazySingleton<VenueUseCase>(
-      () => VenueUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<VenueUseCase>(() => VenueUseCase());
 
   // Vehicle Usecase
-  serviceLocator.registerLazySingleton<VehicleUseCase>(
-      () => VehicleUseCase(serviceLocator<ProductRepository>()));
+  serviceLocator.registerLazySingleton<VehicleUseCase>(() => VehicleUseCase());
 
-  // Decoration Usecase
-  serviceLocator.registerLazySingleton<DecorationUseCase>(
-      () => DecorationUseCase(serviceLocator<ProductRepository>()));
+  // DecorationEntity Usecase
+  serviceLocator
+      .registerLazySingleton<DecorationUseCase>(() => DecorationUseCase());
 
   //--------------------Profile Data--------------------------------------------
 

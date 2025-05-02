@@ -1,7 +1,8 @@
 class Sound {
+  final String? userId;
   final String? name;
   final String? category;
-  final List<String> equipmentTypes;
+  final List<String>? equipmentTypes;
   final String? description;
   final int? price;
   final int? securityDeposit;
@@ -11,7 +12,8 @@ class Sound {
   final bool? available;
   final bool? privacyPolicy;
 
-  Sound( {
+  Sound({
+    this.userId,
     required this.name,
     required this.category,
     required this.equipmentTypes,
@@ -26,6 +28,7 @@ class Sound {
   });
 
   Sound copyWith({
+    String? userId,
     String? name,
     String? category,
     List<String>? equipmentTypes,
@@ -39,6 +42,7 @@ class Sound {
     bool? privacyPolicy,
   }) {
     return Sound(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       category: category ?? this.category,
       equipmentTypes: equipmentTypes ?? this.equipmentTypes,
@@ -55,6 +59,7 @@ class Sound {
 
   static empty() {
     return Sound(
+      userId: '',
       name: '',
       category: '',
       equipmentTypes: [],

@@ -1,12 +1,13 @@
+import 'package:dartz/dartz.dart';
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class VehicleUseCase {
-  final ProductRepository repository;
+  final repository = serviceLocator<ProductRepository>();
 
-  VehicleUseCase(this.repository);
 
-  Future<void> execute(Vehicle vehicle) async {
+  Future<Either<String, String>> execute(Vehicle vehicle) async {
     return await repository.addVehicle(vehicle);
   }
 

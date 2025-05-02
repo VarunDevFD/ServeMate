@@ -1,4 +1,5 @@
 class Venue {
+  final String? userId;
   final String? name;
   final int? price;
   final int? sdPrice;
@@ -9,12 +10,13 @@ class Venue {
   final String? duration;
   final String? venueType;
   final String? phoneNumber;
-  final String? date;
+  final String? time = DateTime.now().toString();
   final List<String>? facilities;
   final bool? available;
   final bool? privacyPolicy;
 
   Venue({
+    this.userId,
     this.name,
     this.price,
     this.sdPrice,
@@ -25,13 +27,13 @@ class Venue {
     this.duration,
     this.venueType,
     this.phoneNumber,
-    this.date,
     this.facilities,
     this.available,
     this.privacyPolicy = false,
   });
 
   Venue copyWith({
+    String? userId,
     String? name,
     int? price,
     int? sdPrice,
@@ -42,13 +44,13 @@ class Venue {
     String? duration,
     String? venueType,
     String? phoneNumber,
-    String? date,
     List<String>? facilities,
     List<String>? selectedFacilities,
     bool? available,
     bool? privacyPolicy,
   }) {
     return Venue(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
       sdPrice: sdPrice ?? this.sdPrice,
@@ -59,7 +61,6 @@ class Venue {
       duration: duration ?? this.duration,
       venueType: venueType ?? this.venueType,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      date: date ?? this.date,
       facilities: facilities ?? this.facilities,
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
@@ -68,6 +69,7 @@ class Venue {
 
   static empty() {
     return Venue(
+      userId: '',
       name: '',
       price: 0,
       sdPrice: 0,
@@ -78,7 +80,6 @@ class Venue {
       duration: '',
       venueType: '',
       phoneNumber: '',
-      date: '',
       facilities: [],
       available: false,
       privacyPolicy: false,

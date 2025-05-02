@@ -1,12 +1,13 @@
+import 'package:dartz/dartz.dart';
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class VenueUseCase {
-  final ProductRepository repository;
+  final repository = serviceLocator<ProductRepository>();
 
-  VenueUseCase(this.repository);
 
-  Future<void> execute(Venue venue) async {
+  Future<Either<String, String>> execute(Venue venue) async {
     return await repository.addVenue(venue);
   }
 

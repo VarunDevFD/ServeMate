@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/features/product/data/datasource/product_datasource.dart';
 import 'package:serve_mate/features/product/data/models/camera_model.dart';
 import 'package:serve_mate/features/product/data/models/decoration_model.dart';
@@ -18,80 +21,104 @@ import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-  final ProductRemoteDataSource remoteDataSource;
-
-  ProductRepositoryImpl({required this.remoteDataSource});
+  final remoteDataSource = serviceLocator<ProductRemoteDataSource>();
 
   @override
-  Future<void> addCamera(Camera camera) async {
+  Future<Either<String, String>> addCamera(Camera camera) async {
+
     try {
       await remoteDataSource.addCamera(CameraModel.fromEntity(camera));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add camera: $e');
+      throw left('Failed to add camera: $e');
     }
   }
 
   @override
-  Future<void> addDecoration(Decoration decoration) async {
+  Future<Either<String, String>> addDecorationEntity(
+      DecorationEntity decoration) async {
     try {
       await remoteDataSource
-          .addDecoration(DecorationModel.fromEntity(decoration));
+          .addDecorationEntity(DecorationModel.fromEntity(decoration));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add decoration: $e');
+      throw left('Failed to add decoration: $e');
     }
   }
 
   @override
-  Future<void> addDress(Dress dress) async {
+  Future<Either<String, String>> addDress(Dress dress) async {
     try {
       await remoteDataSource.addDress(DressModel.fromEntity(dress));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add dress: $e');
+      throw left('Failed to add dress: $e');
     }
   }
 
   @override
-  Future<void> addFootwear(Footwear footwear) async {
+  Future<Either<String, String>> addFootwear(Footwear footwear) async {
     try {
       await remoteDataSource.addFootwear(FootwearModel.fromEntity(footwear));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add footwear: $e');
+      throw left('Failed to add footwear: $e');
     }
   }
 
   @override
-  Future<void> addJewelry(Jewelry jewelry) async {
+  Future<Either<String, String>> addJewelry(Jewelry jewelry) async {
     try {
       await remoteDataSource.addJewelry(JewelryModel.fromEntity(jewelry));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add jewelry: $e');
+      throw left('Failed to add jewelry: $e');
     }
   }
 
   @override
-  Future<void> addSound(Sound sound) async {
+  Future<Either<String, String>> addSound(Sound sound) async {
     try {
       await remoteDataSource.addSound(SoundModel.fromEntity(sound));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add sound: $e');
+      throw left('Failed to add sound: $e');
     }
   }
 
   @override
-  Future<void> addVenue(Venue venue) async {
+  Future<Either<String, String>> addVenue(Venue venue) async {
     try {
       await remoteDataSource.addVenue(VenueModel.fromEntity(venue));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add venue: $e');
+      throw left('Failed to add venue: $e');
     }
   }
 
   @override
-  Future<void> addVehicle(Vehicle vehicle) async {
+  Future<Either<String, String>> addVehicle(Vehicle vehicle) async {
     try {
       await remoteDataSource.addVehicle(VehicleModel.fromEntity(vehicle));
+      return const Right("Success");
+    } on AppException catch (e) {
+      return Left(e.alert);
     } catch (e) {
-      throw Exception('Failed to add vehicle: $e');
+      throw left('Failed to add vehicle: $e');
     }
   }
 
@@ -110,9 +137,9 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<List<Decoration>> fetchDecorations() async {
+  Future<List<DecorationEntity>> fetchDecorationEntitys() async {
     try {
-      final decorations = await remoteDataSource.fetchDecorations();
+      final decorations = await remoteDataSource.fetchDecorationEntitys();
       return decorations
           .map((decorationModel) =>
               DecorationModel.fromMap(decorationModel as Map<String, dynamic>)

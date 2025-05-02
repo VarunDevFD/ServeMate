@@ -1,4 +1,6 @@
-class Decoration {
+class DecorationEntity {
+  final String? userId;
+  final String? time;
   final String? name;
   final List<String>? decorCategory;
   final List<String>? decorStyles;
@@ -12,7 +14,9 @@ class Decoration {
   final List<String>? images;
   final bool? privacyPolicy;
 
-  Decoration({
+  DecorationEntity({
+    this.userId,
+    this.time,
     this.name,
     this.decorCategory,
     this.decorStyles,
@@ -26,8 +30,9 @@ class Decoration {
     this.images,
     this.privacyPolicy,
   });
-  Decoration copyWith({
+  DecorationEntity copyWith({
     String? name,
+    String? time,
     List<String>? decorCategory,
     List<String>? decorStyles,
     String? description,
@@ -40,8 +45,10 @@ class Decoration {
     List<String>? images,
     bool? privacyPolicy,
   }) {
-    return Decoration(
+    return DecorationEntity(
+      userId: userId,
       name: name ?? this.name,
+      time: time ?? this.time,
       decorCategory: decorCategory ?? this.decorCategory,
       decorStyles: decorStyles ?? this.decorStyles,
       description: description ?? this.description,
@@ -56,9 +63,11 @@ class Decoration {
     );
   }
 
-  static Decoration empty() {
-    return Decoration(
+  static DecorationEntity empty() {
+    return DecorationEntity(
+      userId: '',
       name: '',
+      time: '',
       decorCategory: [''],
       decorStyles: [],
       description: '',

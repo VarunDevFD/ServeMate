@@ -7,6 +7,7 @@ import 'location_state.dart';
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocation>(_getLocation);
+    on<ResetLocationEvent>(_resetLocation);
   }
 
   Future<void> _getLocation(
@@ -33,7 +34,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       // Use new settings parameter
       Position position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high, // Set accuracy level
+          accuracy: LocationAccuracy.best, // Set accuracy level
         ),
       );
 
@@ -42,14 +43,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String address =
           "${placemarks.first.thoroughfare}, ${placemarks.first.subLocality}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea}, ${placemarks.first.postalCode}, ${placemarks.first.country}";
 
-      LocationLoaded locationLoaded = LocationLoaded();
-      locationLoaded.location[0] = address;
-      locationLoaded.location[1] = position.latitude.toString();
-      locationLoaded.location[2] = position.longitude.toString();
+      List<String> location = List.filled(3, '');
 
-      emit(locationLoaded);
+      location[0] = address;
+      location[1] = position.latitude.toString();
+      location[2] = position.longitude.toString();
+
+      emit(LocationLoaded(location));
     } catch (e) {
       emit(LocationError("Failed to get location"));
     }
+  }
+
+  Future<void> _resetLocation(
+      ResetLocationEvent event, Emitter<LocationState> emit) async {
+    emit(LocationInitial());
   }
 }

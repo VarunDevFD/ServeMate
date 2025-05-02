@@ -50,7 +50,7 @@ class BottomNavigationBar extends StatelessWidget {
                     context.read<BottomNavCubit>().updateIndex(index),
                 children: [
                   const HomePage(),
-                  const ListPage(),
+                  ListPage(),
                   AddPage(categoryName: formName),
                   const NotificationsPage(),
                   const ProfilePage(),
@@ -74,11 +74,13 @@ class BottomNavigationBar extends StatelessWidget {
 
 // Individual pages
 class ListPage extends StatelessWidget {
-  const ListPage({super.key});
+  ListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Search Page'));
+    return const Column(children: [
+      Center(child: Text('ListView Page')),
+    ]);
   }
 }
 

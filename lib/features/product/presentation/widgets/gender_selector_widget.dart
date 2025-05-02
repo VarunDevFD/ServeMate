@@ -7,17 +7,24 @@ import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_eve
 import 'package:serve_mate/features/product/presentation/bloc/item_bloc/item_state.dart';
 
 class GenderSelectionWidget extends StatelessWidget {
-  final  Function(String? value) onValue;
-  const GenderSelectionWidget({
-    Key? key,
-    required this.onValue,
-  }) : super(key: key);
+  const GenderSelectionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FormSubBloc, FormSubState>(
+    return BlocBuilder<CommonBloc, CommonState>(
       builder: (context, state) {
-        final bloc = context.read<FormSubBloc>();
+        final bloc = context.read<CommonBloc>();
+        final String gender;
+        if (state is InitialState) {
+          gender = '';
+        } else if (state is SuccessState) {
+          gender = state.type;
+        } else if (state is ErrorState) {
+          gender = '';
+        } else {
+          gender = '';
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,34 +40,25 @@ class GenderSelectionWidget extends StatelessWidget {
               children: [
                 Radio<String>(
                   value: 'Male',
-                  groupValue: state.gender,
+                  groupValue: gender,
                   activeColor: Colors.orange[800],
-                  onChanged: (String? value) {
-                    onValue(value);
-                    bloc.add(GenderChanged(value!));
-                  },
+                  onChanged: (String? value) => bloc.add(GenderChanged(value!)),
                 ),
                 const Text('Male'),
                 SizedBox(width: 16.w),
                 Radio<String>(
                   value: 'Female',
-                  groupValue: state.gender,
+                  groupValue: gender,
                   activeColor: Colors.orange[800],
-                  onChanged: (String? value) {
-                    onValue(value);
-                    bloc.add(GenderChanged(value!));
-                  },
+                  onChanged: (String? value) => bloc.add(GenderChanged(value!)),
                 ),
                 const Text('Female'),
                 SizedBox(width: 16.w),
                 Radio<String>(
                   value: 'Unisex',
-                  groupValue: state.gender,
+                  groupValue: gender,
                   activeColor: Colors.orange[800],
-                  onChanged: (String? value) {
-                    onValue(value);
-                    bloc.add(GenderChanged(value!));
-                  },
+                  onChanged: (String? value) => bloc.add(GenderChanged(value!)),
                 ),
                 const Text('Unisex'),
               ],

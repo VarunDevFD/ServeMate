@@ -1,16 +1,17 @@
+import 'package:dartz/dartz.dart';
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class DecorationUseCase {
-  final ProductRepository repository;
+    final repository = serviceLocator<ProductRepository>();
 
-  DecorationUseCase(this.repository);
 
-  Future<void> execute(Decoration decorationEntity) async {
-    return await repository.addDecoration(decorationEntity);
+  Future<Either<String, String>> execute(DecorationEntity decoration) async {
+    return await repository.addDecorationEntity(decoration);
   }
 
-  Future<List<Decoration>> fetchDecorations() async {
-    return await repository.fetchDecorations();
+  Future<List<DecorationEntity>> fetchDecorationEntitys() async {
+    return await repository.fetchDecorationEntitys();
   }
 }

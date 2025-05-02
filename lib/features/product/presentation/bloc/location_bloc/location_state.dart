@@ -7,8 +7,7 @@ class LocationLoading extends LocationState {}
 class LocationLoaded extends LocationState {
   final List<String> location;
 
-  LocationLoaded()
-      : location = List.filled(3, ''); // Fixed-length list with 3 empty strings
+  LocationLoaded(this.location);
 }
 
 class LocationError extends LocationState {

@@ -19,7 +19,7 @@
 //           padding: EdgeInsets.all(8.r),
 //           height: 40.h,
 //           width: 400.w,
-//           decoration: BoxDecoration(
+//           DecorationEntity: BoxDecorationEntity(
 //             color: AppColors.transparent,
 //             border: Border.all(width: 0.5.w, color: AppColors.grey),
 //             borderRadius: BorderRadius.circular(4.r),

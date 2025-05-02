@@ -1,10 +1,11 @@
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 
 class DressModel {
+  final String userId;
   final String name;
+  final String time = DateTime.now().toString();
   final String gender;
   final String type;
-  final String model;
   final String size;
   final String color;
   final String material;
@@ -17,14 +18,15 @@ class DressModel {
   final List<String> location;
   final String phoneNumber;
   final List<String> images;
-  final String privacyPolicy;
+  final bool available;
+  final bool privacyPolicy;
   final String description;
 
   DressModel({
+    required this.userId,
     required this.name,
     required this.gender,
     required this.type,
-    required this.model,
     required this.size,
     required this.color,
     required this.material,
@@ -37,15 +39,16 @@ class DressModel {
     required this.location,
     required this.phoneNumber,
     required this.images,
+    required this.available,
     required this.privacyPolicy,
     required this.description,
   });
 
   DressModel copyWith({
+    String? userId,
     String? name,
     String? gender,
     String? type,
-    String? model,
     String? size,
     String? color,
     String? material,
@@ -58,14 +61,15 @@ class DressModel {
     List<String>? location,
     String? phoneNumber,
     List<String>? images,
-    String? privacyPolicy,
+    bool? privacyPolicy,
+    bool? available,
     String? description,
   }) {
     return DressModel(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       gender: gender ?? this.gender,
       type: type ?? this.type,
-      model: model ?? this.model,
       size: size ?? this.size,
       color: color ?? this.color,
       material: material ?? this.material,
@@ -78,6 +82,7 @@ class DressModel {
       location: location ?? this.location,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
+      available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
       description: description ?? this.description,
     );
@@ -85,10 +90,10 @@ class DressModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'name': name,
       'gender': gender,
       'type': type,
-      'model': model,
       'size': size,
       'color': color,
       'material': material,
@@ -101,6 +106,7 @@ class DressModel {
       'location': location,
       'phoneNumber': phoneNumber,
       'images': images,
+      'available': available,
       'privacyPolicy': privacyPolicy,
       'description': description,
     };
@@ -108,10 +114,10 @@ class DressModel {
 
   factory DressModel.fromMap(Map<String, dynamic> map) {
     return DressModel(
+      userId: map['userId'],
       name: map['name'],
       gender: map['gender'],
       type: map['type'],
-      model: map['model'],
       size: map['size'],
       color: map['color'],
       material: map['material'],
@@ -124,6 +130,7 @@ class DressModel {
       location: map['location'],
       phoneNumber: map['phoneNumber'],
       images: map['images'],
+      available: map['available'],
       privacyPolicy: map['privacyPolicy'],
       description: map['description'],
     );
@@ -131,10 +138,10 @@ class DressModel {
 
   factory DressModel.fromEntity(Dress dress) {
     return DressModel(
+      userId: dress.userId ?? '',
       name: dress.name ?? '',
       gender: dress.gender ?? '',
       type: dress.type ?? '',
-      model: dress.model ?? '',
       size: dress.size ?? '',
       color: dress.color ?? '',
       material: dress.material ?? '',
@@ -147,17 +154,18 @@ class DressModel {
       location: dress.location ?? [],
       phoneNumber: dress.phoneNumber ?? '',
       images: dress.images ?? [],
-      privacyPolicy: dress.privacyPolicy ?? '',
+      available: dress.available ?? false,
+      privacyPolicy: dress.privacyPolicy ?? false,
       description: dress.description ?? '',
     );
   }
 
   Dress toEntity() {
     return Dress(
+      userId: userId,
       name: name,
       gender: gender,
-      type: type,
-      model: model,
+      type: type, 
       size: size,
       color: color,
       material: material,
@@ -170,6 +178,7 @@ class DressModel {
       location: location,
       phoneNumber: phoneNumber,
       images: images,
+      available: available,
       privacyPolicy: privacyPolicy,
       description: description,
     );

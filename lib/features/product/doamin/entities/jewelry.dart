@@ -1,4 +1,5 @@
 class Jewelry {
+  final String? userId;
   final String? name;
   final int? price;
   final int? securityDeposit;
@@ -10,12 +11,12 @@ class Jewelry {
   final String? quantity;
   final String? condition;
   final String? brand;
-  final String? size;
-  final String? color;
-  final bool? available;
-  final String? dateAdded;
+  final bool? available; 
+  final String? phoneNumber;
+  final bool? privacyPolicy;
 
   Jewelry({
+    this.userId,
     required this.name,
     required this.price,
     required this.securityDeposit,
@@ -27,10 +28,9 @@ class Jewelry {
     required this.quantity,
     required this.condition,
     required this.brand,
-    required this.size,
-    required this.color,
-    required this.available,
-    required this.dateAdded,
+    required this.available, 
+    required this.phoneNumber,
+    required this.privacyPolicy,
   });
 
   Jewelry copyWith({
@@ -45,10 +45,9 @@ class Jewelry {
     String? quantity,
     String? condition,
     String? brand,
-    String? size,
-    String? color,
-    bool? available,
-    String? dateAdded,
+    bool? available, 
+    String? phoneNumber,
+    bool? privacyPolicy,
   }) {
     return Jewelry(
       name: name ?? this.name,
@@ -62,10 +61,9 @@ class Jewelry {
       quantity: quantity ?? this.quantity,
       condition: condition ?? this.condition,
       brand: brand ?? this.brand,
-      size: size ?? this.size,
-      color: color ?? this.color,
-      available: available ?? available,
-      dateAdded: dateAdded ?? dateAdded,
+      available: available ?? available, 
+      phoneNumber: phoneNumber ?? phoneNumber,
+      privacyPolicy: privacyPolicy ?? privacyPolicy,
     );
   }
 
@@ -82,10 +80,9 @@ class Jewelry {
       quantity: '',
       condition: '',
       brand: '',
-      size: '',
-      color: '',
-      available: false,
-      dateAdded: '',
+      available: false, 
+      phoneNumber: '',
+      privacyPolicy: false,
     );
   }
 }

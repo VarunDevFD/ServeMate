@@ -1,10 +1,10 @@
 class Vehicle {
+  final String? userId;
   final String name;
   final String model;
   final String brand;
+  final String vehicleType; 
   final int price;
-  final String vehicleType;
-  final int rentalPrice;
   final int securityDeposit;
   final List<String> location;
   final List<String> images;
@@ -20,12 +20,12 @@ class Vehicle {
   final String? description;
 
   Vehicle({
+     this.userId,
     required this.name,
     required this.model,
     required this.brand,
     required this.price,
     required this.vehicleType,
-    required this.rentalPrice,
     required this.securityDeposit,
     required this.location,
     required this.images,
@@ -42,12 +42,12 @@ class Vehicle {
   });
 
   Vehicle copyWith({
+    String? userId,
     String? name,
     String? model,
     String? brand,
     int? price,
     String? vehicleType,
-    int? rentalPrice,
     int? securityDeposit,
     List<String>? location,
     List<String>? images,
@@ -63,12 +63,12 @@ class Vehicle {
     String? description,
   }) {
     return Vehicle(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       model: model ?? this.model,
       brand: brand ?? this.brand,
       price: price ?? this.price,
       vehicleType: vehicleType ?? this.vehicleType,
-      rentalPrice: rentalPrice ?? this.rentalPrice,
       securityDeposit: securityDeposit ?? this.securityDeposit,
       location: location ?? this.location,
       images: images ?? this.images,
@@ -87,12 +87,12 @@ class Vehicle {
 
   static empty() {
     return Vehicle(
+      userId: ' ',
       name: '',
       model: '',
       brand: '',
       price: 0,
       vehicleType: '',
-      rentalPrice: 0,
       securityDeposit: 0,
       location: [],
       images: [],

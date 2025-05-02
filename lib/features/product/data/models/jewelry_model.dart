@@ -1,8 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 
 class JewelryModel {
+  final String? userId;
   final String? name;
+  final String time = DateTime.now().toString();
   final int? price;
   final int? securityDeposit;
   final List<String>? location;
@@ -13,11 +14,13 @@ class JewelryModel {
   final String? quantity;
   final String? condition;
   final String? brand;
-  final String? size;
-  final String? color;
   final bool? available;
-  final String? dateAdded;
+  final String? phoneNumber;
+  final bool? privacyPolicy;
+  String? dateAdded = DateTime.now().toString();
+
   JewelryModel({
+    this.userId,
     this.name,
     this.price,
     this.securityDeposit,
@@ -29,14 +32,15 @@ class JewelryModel {
     this.quantity,
     this.condition,
     this.brand,
-    this.size,
-    this.color,
     this.available,
+    this.phoneNumber,
+    this.privacyPolicy,
     this.dateAdded,
   });
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'name': name,
       'price': price,
       'securityDeposit': securityDeposit,
@@ -48,15 +52,16 @@ class JewelryModel {
       'quantity': quantity,
       'condition': condition,
       'brand': brand,
-      'size': size,
-      'color': color,
       'available': available,
+      'phoneNumber': phoneNumber,
+      'privacyPolicy': privacyPolicy,
       'dateAdded': dateAdded,
     };
   }
 
   factory JewelryModel.fromMap(Map<String, dynamic> map) {
     return JewelryModel(
+      userId: map['userId'],
       name: map['name'],
       price: map['price'],
       securityDeposit: map['securityDeposit'].toDouble(),
@@ -69,15 +74,16 @@ class JewelryModel {
       quantity: map['quantity'],
       condition: map['condition'],
       brand: map['brand'],
-      size: map['size'],
-      color: map['color'],
       available: map['available'],
+      phoneNumber: map['phoneNumber'],
+      privacyPolicy: map['privacyPolicy'],
       dateAdded: map['dateAdded'],
     );
   }
 
   factory JewelryModel.fromEntity(Jewelry jewelry) {
     return JewelryModel(
+      userId: jewelry.userId,
       name: jewelry.name,
       price: jewelry.price,
       securityDeposit: jewelry.securityDeposit,
@@ -89,15 +95,16 @@ class JewelryModel {
       quantity: jewelry.quantity,
       condition: jewelry.condition,
       brand: jewelry.brand,
-      size: jewelry.size,
-      color: jewelry.color,
       available: jewelry.available,
-      dateAdded: jewelry.dateAdded,
+      phoneNumber: jewelry.phoneNumber,
+      privacyPolicy: jewelry.privacyPolicy,
+      dateAdded: DateTime.now().toString(),
     );
   }
 
   Jewelry toEntity() {
     return Jewelry(
+      userId: userId,
       name: name,
       price: price,
       securityDeposit: securityDeposit,
@@ -109,14 +116,14 @@ class JewelryModel {
       quantity: quantity,
       condition: condition,
       brand: brand,
-      size: size,
-      color: color,
       available: available,
-      dateAdded: dateAdded,
+      phoneNumber: phoneNumber,
+      privacyPolicy: privacyPolicy,
     );
   }
 
   JewelryModel copyWith({
+    String? userId,
     String? name,
     int? price,
     int? securityDeposit,
@@ -129,11 +136,13 @@ class JewelryModel {
     String? condition,
     String? brand,
     String? size,
-    String? color,
     bool? available,
     String? dateAdded,
+    String? phoneNumber,
+    bool? privacyPolicy,
   }) {
     return JewelryModel(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
       securityDeposit: securityDeposit ?? this.securityDeposit,
@@ -145,11 +154,9 @@ class JewelryModel {
       quantity: quantity ?? this.quantity,
       condition: condition ?? this.condition,
       brand: brand ?? this.brand,
-      size: size ?? this.size,
-      color: color ?? this.color,
       available: available ?? this.available,
-      dateAdded: dateAdded ?? this.dateAdded,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      privacyPolicy: privacyPolicy ?? this.privacyPolicy,
     );
   }
 }
-

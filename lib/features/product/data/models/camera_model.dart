@@ -1,6 +1,8 @@
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 
 class CameraModel {
+  final String userId;
+  final String time = DateTime.now().toString();
   final String name;
   final String brand;
   final String model;
@@ -20,6 +22,7 @@ class CameraModel {
   final bool privacyPolicy;
 
   CameraModel({
+    required this.userId, 
     required this.name,
     required this.brand,
     required this.model,
@@ -40,6 +43,8 @@ class CameraModel {
   });
 
   CameraModel copyWith({
+    String? userId,
+    String? time,
     String? name,
     String? model,
     String? brand,
@@ -59,6 +64,7 @@ class CameraModel {
     bool? privacyPolicy,
   }) {
     return CameraModel(
+      userId: userId ?? this.userId, 
       name: name ?? this.name,
       brand: brand ?? this.brand,
       model: model ?? this.model,
@@ -81,19 +87,21 @@ class CameraModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
+      'time' : time,
       'name': name,
       'brand': brand,
       'model': model,
       'description': description,
       'category': category,
-      'price': price,
+      'price': price, 
       'sdPrice': sdPrice,
       'available': available,
       'location': location,
       'phoneNumber': phoneNumber,
       'condition': condition,
-      'storageOption': storage, // Adjusted key to match Firestore
-      'connectivityOptions': connectivity, // Adjusted key to match Firestore
+      'storageOption': storage,  
+      'connectivityOptions': connectivity,  
       'duration': duration,
       'latePolicy': latePolicy,
       'images': images,
@@ -103,6 +111,8 @@ class CameraModel {
 
   factory CameraModel.fromMap(Map<String, dynamic> map) {
     return CameraModel(
+
+      userId: map['userId'] as String? ?? '', 
       name: map['name'] as String? ?? '',
       brand: map['brand'] as String? ?? '',
       model: map['model'] as String? ?? '',
@@ -126,6 +136,7 @@ class CameraModel {
   // New factory method to convert from Camera entity
   factory CameraModel.fromEntity(Camera camera) {
     return CameraModel(
+      userId: camera.userId ?? '', 
       name: camera.name ?? '',
       brand: camera.brand ?? '',
       model: camera.model ?? '',
@@ -148,6 +159,8 @@ class CameraModel {
 
   Camera toEntity() {
     return Camera(
+      userId: userId,
+      time: time,
       name: name,
       brand: brand,
       model: model,

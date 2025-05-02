@@ -5,8 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
-import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/features/authentication/presentation/widgets/loading_animation_widget.dart';
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_event.dart';

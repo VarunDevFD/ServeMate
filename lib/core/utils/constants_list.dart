@@ -1,10 +1,10 @@
 final List<String> appBarTitles = [
-    "SERVEMATE",
-    "List",
-    "Add List",
-    "Notifications",
-    "Profile"
-  ];
+  "SERVEMATE",
+  "List",
+  "Add List",
+  "Notifications",
+  "Profile"
+];
 
 const List<String> facilitiesVenue = [
   "Parking",
@@ -13,11 +13,11 @@ const List<String> facilitiesVenue = [
   "Decoration",
   "Air Conditioning",
   "Conference",
-  "WiFi",
+  "Free WiFi",
   "Sound System",
   "Projector",
   "Lighting",
-  "Security",
+  "24/7 Security",
   "Changing Rooms",
   "Restrooms",
   "Outdoor Space",
@@ -30,11 +30,11 @@ const List<String> facilitiesVenue = [
   "Gym Access",
   "Play Area for Kids",
   "Valet Parking",
-  "Power Backup",
+  "Backup Power",
   "AV Equipment",
-  "Podium",
+  "Custom Package",
   "Table and Chair Setup",
-  "Photo Booth",
+  "CCTV Surveillance",
   "Green Rooms",
   "Special Effects",
   "Private Entry",
@@ -59,7 +59,9 @@ const List<String> facilitiesVenue = [
   "Rehearsal Space",
   "Beverage Services",
   "Food Counters",
-  "Self-Service Counters"
+  "Self-Service Counters",
+  "Non-AC Rooms",
+  "AC Rooms"
 ];
 const List<String> facilitiesVehicle = [
   // General Vehicle Facilities (Applicable to all types)
@@ -145,4 +147,17 @@ const List<String> decorationCategory = [
   "Floral",
   "Lounge",
   "All in All",
+];
+
+const List<String> sizeOfFootwear = [
+  "below 6",
+  "6",
+  "7",
+  "7.5",
+  "8",
+  "9",
+  "9.5",
+  "10",
+  "11",
+  "Above 11"
 ];

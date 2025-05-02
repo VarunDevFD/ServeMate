@@ -6,7 +6,7 @@ import 'package:serve_mate/core/theme/input_decoration.dart';
 class ReusableDropdown extends StatelessWidget {
   final List<String> items;
   final String labelText;
-  final dynamic onFieldSubmitted;
+  final ValueChanged<String>? onFieldSubmitted;
   final FormFieldValidator<String>? validator;
 
   const ReusableDropdown({
@@ -24,7 +24,11 @@ class ReusableDropdown extends StatelessWidget {
       iconDisabledColor: AppColors.orange,
       alignment: Alignment.centerLeft,
       menuMaxHeight: 200,
-      onChanged: onFieldSubmitted,
+      onChanged: (value) {
+        if (onFieldSubmitted != null) {
+          onFieldSubmitted!(value ?? 'Empty');
+        }
+      },
       items: items.map((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -32,7 +36,7 @@ class ReusableDropdown extends StatelessWidget {
         );
       }).toList(),
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if (value == null || value.isEmpty || value == 'Empty') {
           return 'Please select an option';
         }
         return null;

@@ -1,395 +1,229 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
-import 'package:serve_mate/core/utils/card_constant.dart';
-import 'package:serve_mate/core/utils/constants.dart';
-import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
+import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
+import 'package:serve_mate/features/product/presentation/widgets/decoration_card_1.dart';
+import 'package:serve_mate/features/product/presentation/widgets/decoration_card_2.dart';
+import 'package:serve_mate/features/product/presentation/widgets/decoration_card_3.dart';
+import 'package:serve_mate/features/product/presentation/widgets/decoration_card_4.dart';
+import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_bloc.dart';
-import 'package:serve_mate/features/product/presentation/bloc/image_cubit/image_cubit_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_event.dart';
+import 'package:serve_mate/features/product/presentation/bloc/form_submission_bloc/form_submission_state.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/tab_toggle_button.dart/bloc.dart';
-import 'package:serve_mate/features/product/presentation/controllers/form_controller.dart';
-import 'package:serve_mate/features/product/presentation/widgets/custom_checkbox_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
-import 'package:serve_mate/features/product/presentation/widgets/switch_custom_button_widget.dart';
-import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
-import '../bloc/form_submission_bloc/form_submission_event.dart';
-import '../bloc/form_submission_bloc/form_submission_state.dart';
+
+import 'submit_button_model.dart';
 
 class DecorationPage extends StatelessWidget {
   DecorationPage({super.key});
 
+  final _formKey = GlobalKey<FormState>();
+  // Controllers for form fields
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController sdPriceController = TextEditingController();
+  final TextEditingController durationController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
   static final tAcFocusNode =
       FocusNode(); // FocusNode for the Terms and Conditions checkbox
 
+  void _resetFormState(BuildContext context) {
+    _formKey.currentState?.reset();
+    nameController.clear();
+    descriptionController.clear();
+    priceController.clear();
+    sdPriceController.clear();
+    durationController.clear();
+    phoneController.clear();
+    context.read<AvailableSwitchCubit>().reset();
+    context.read<FilterChipCubit>().resetAll();
+    context.read<LocationBloc>().add(ResetLocationEvent());
+    context.read<CheckBoxCubit>().reset();
+    context.read<ImagePickerBloc>().add(ClearAllImages());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FormSubmissionBloc, FormSubState>(
-      listener: (context, state) async {
-        if (state is FormSuccess) {
-          await Future.delayed(const Duration(seconds: 5));
-          AppSnackBar.show(
-            context,
-            content: 'Decoration form submitted successfully!',
-            backgroundColor: AppColors.green,
+    return BlocListener<AddProductBloc, AddProductState>(
+      listener: (context, state) {
+        if (state is AddSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
           );
-        } else if (state is FormError) {
-          AppSnackBar.show(
-            context,
-            content: state.message,
-            backgroundColor: AppColors.green,
+        } else if (state is AddFormError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
           );
         }
       },
-      builder: (context, state) {
-        final bloc = context.read<FormSubmissionBloc>();
-        if (state is FormSuccess) {
-          log("DecorationSuccess animation");
-          return Center(
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(14.r),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircularProgressIndicator(),
-                SizedBox(height: 16.h),
-                Text(
-                  'Processing...',
-                  style:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                // Basic Information Card
+                SectionOneDecorationCard(
+                  name: nameController,
+                  description: descriptionController,
                 ),
+                SizedBox(height: 16.h),
+                // Pricing and Availability Card
+                SectionTwoDecorationCard(
+                  price: priceController,
+                  sdPrice: sdPriceController,
+                  duration: durationController,
+                ),
+                SizedBox(height: 16.h),
+                // Location and Contact Card
+                SectionThreeDecorationCard(
+                  phone: phoneController,
+                ),
+                SizedBox(height: 6.h),
+                // Image Upload Section
+                const SectionFourDecorationCard(),
+                // Terms and Conditions
+                TermsAndConditionsScreen(
+                  focusNode: tAcFocusNode,
+                ),
+                ReusableButton(
+                  label: 'Camera Submit',
+                  onPressed: () {
+                    submitDecorationData(context);
+                  },
+                ),
+                SizedBox(height: 50.h),
               ],
             ),
-          );
-        } else if (state is FormSuccess) {
-          log("DecorationSuccess without animation");
-          // Reset cubits here to prepare for form rebuild
-          context.read<ImagePickerCubit>().clearImages();
-          context.read<AvailableSwitchCubit>().toggleAvailable(false);
-          context.read<FilterChipCubit>().resetAll();
-        }
-        if (state is FormSuccess) log('Success State State');
-        return Form(
-          key: formKey,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(14.r),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Basic Information Card
-                  Card(
-                    elevation: 2,
-                    shape: CardProperties.cardShape,
-                    child: Padding(
-                      padding: AppPadding.paddingEdgesAll,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.info_outline,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Basic Information',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 6.h),
-                          // Name
-                          TextFormField(
-                            initialValue: Names.initialValue,
-                            maxLength: 30,
-                            keyboardType: TextInputType.text,
-                            decoration: const InputDecoration(
-                              labelText: 'Name*',
-                              counterText:
-                                  '', // Hide the maxLength count TextFormField
-                              prefixIcon: Icon(Icons.inventory_2_outlined),
-                            ),
-                            onChanged: (value) => bloc.add(
-                                FormUpdateEvent('decoration', 'name', value)),
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Please enter the Decoration Name'
-                                : null,
-                          ),
-                          SizedBox(height: 15.h),
-                          // Category
-                          Text(
-                            'Category',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          SizedBox(height: 6.h),
-                          FilterChipScreen(
-                            keyName: 'decoration',
-                            id: 'decorCategory',
-                            categories: decorationCategory,
-                            bloc: bloc,
-                          ),
-                          SizedBox(height: 10.h),
-                          // DecorStyle
-                          Text(
-                            'Facilities',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          SizedBox(height: 6.h),
-                          FilterChipScreen(
-                            keyName: 'decoration',
-                            id: 'decorStyles',
-                            categories: decorThemes,
-                          ),
-                          SizedBox(height: 6.h),
-                          // Description
-                          TextFormField(
-                            initialValue: Names.initialValue,
-                            maxLength: 100,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            maxLines: 3,
-                            decoration: const InputDecoration(
-                              labelText: 'Description',
-                              prefixIcon: Icon(Icons.description_outlined),
-                              alignLabelWithHint: true,
-                            ),
-                            onChanged: (value) => bloc.add(FormUpdateEvent(
-                                'decoration', 'description', value)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  // Pricing and Availability Card
-                  Card(
-                    elevation: 2,
-                    shape: CardProperties.cardShape,
-                    child: Padding(
-                      padding: AppPadding.paddingEdgesAll,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.attach_money,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Pricing & Availability',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16.h),
-                          // Price
-                          TextFormField(
-                            initialValue: Names.initialValue,
-                            maxLength: 6,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Price*',
-                              counterText: '',
-                              prefixIcon: Icon(Icons.attach_money),
-                            ),
-                            onChanged: (value) => bloc.add(FormUpdateEvent(
-                                'decoration', 'price', int.tryParse(value))),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Rental Price';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'Please enter a valid number';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 16.h),
-                          // Security Deposit
-                          TextFormField(
-                            initialValue: Names.initialValue,
-                            maxLength: 6,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Security Deposit *',
-                              counterText: '',
-                              prefixIcon: Icon(Icons.security_outlined),
-                            ),
-                            onChanged: (value) => bloc.add(FormUpdateEvent(
-                                'decoration', 'sdPrice', int.tryParse(value))),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Security Deposit';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'Please enter a valid deposit';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 16.h),
-                          // Minimum Rental Duration
-                          TextFormField(
-                            initialValue: Names.initialValue,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Minimum Rental Duration (days)*',
-                            ),
-                            onChanged: (value) => bloc.add(FormUpdateEvent(
-                                'decoration', 'duration', value)),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter minimum rental duration';
-                              }
-                              final number = int.tryParse(value);
-                              if (number == null) {
-                                return 'Please enter a valid number';
-                              }
-                              if (number <= 0) {
-                                return 'Duration must be greater than 0';
-                              }
-                              if (number > 30) {
-                                return 'Duration cannot exceed 30 days or One Month';
-                              }
-
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 16.h),
-                          SwitchTileScreen(
-                              categoryName: 'decoration', bloc: bloc),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 16.h),
-                  // Location and Contact Card
-                  Card(
-                    shape: CardProperties.cardShape,
-                    child: Padding(
-                      padding: AppPadding.paddingEdgesAll,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Location & Contact',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          SizedBox(height: 16.h),
-                          // Location
-                          LocationTextField(
-                            locationController:
-                                TextEditingController(text: Names.initialValue),
-                            onFieldSubmitted: (value) => bloc.add(
-                                FormUpdateEvent(
-                                    'decoration', 'location', value)),
-                          ),
-                          SizedBox(height: 16.h),
-                          // Phone Number
-                          TextFormField(
-                            initialValue: Names.initialValue,
-                            maxLength: 10,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.phone,
-                            decoration: const InputDecoration(
-                              labelText: 'Phone Number',
-                              prefixIcon: Icon(Icons.phone_outlined),
-                            ),
-                            onChanged: (value) => bloc.add(FormUpdateEvent(
-                                'decoration', 'phoneNumber', value)),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the Phone Number';
-                              }
-                              if (value.length != 10) {
-                                return 'Please enter a valid 10-digit number';
-                              }
-
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 6.h),
-                  // Image Upload Section
-                  Card(
-                    shape: CardProperties.cardShape,
-                    child: Padding(
-                      padding: AppPadding.paddingEdgesAll,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.photo_library,
-                                color: AppColors.orange1,
-                              ),
-                              SizedBox(width: 8.w),
-                              Text(
-                                'Product Images',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16.h),
-                          ImagePickerPage(
-                            categoryName: 'decoration',
-                            bloc: bloc,
-                            validator: (images) => images.isEmpty
-                                ? 'Please upload at least one image'
-                                : null,
-                          ),
-                          BlocBuilder<ImagePickerCubit, List<File>>(
-                            builder: (context, images) {
-                              return images.isNotEmpty
-                                  ? TextButton(
-                                      onPressed: () => context
-                                          .read<ImagePickerCubit>()
-                                          .clearImages(),
-                                      child: const Text('Clear'),
-                                    )
-                                  : const SizedBox.shrink();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  // Terms and Conditions
-                  TermsAndConditionsScreen(
-                    focusNode: tAcFocusNode,
-                    onChanged: (value) {
-                      context
-                          .read<CheckBoxCubit>()
-                          .checkeBoxAvailable(value!); // Update CheckBoxCubit
-                      context.read<FormSubmissionBloc>().add(
-                            FormUpdateEvent(
-                                'decoration', 'privacyPolicy', value),
-                          );
-                    },
-                  ),
-                  SizedBox(height: 50.h),
-                ],
-              ),
-            ),
           ),
-        );
-      },
+        ),
+      ),
     );
+  }
+
+  Future<void> submitDecorationData(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) {
+      AppSnackBar.show(
+        context,
+        content: 'Please fill in all required fields',
+        backgroundColor: AppColors.red,
+      );
+      return;
+    }
+    final imagePickerBloc = context.read<ImagePickerBloc>();
+    final locationBloc = context.read<LocationBloc>();
+    final availableSwitchCubit = context.read<AvailableSwitchCubit>();
+    final privacyPolicyCubit = context.read<CheckBoxCubit>();
+    final cubit = context.read<FilterChipCubit>();
+    final selections = cubit.state.selections;
+    final decorCategory = selections['decorCategory'] ?? [];
+    final decorStyles = selections['decorStyles'] ?? [];
+
+    // Get current state
+    final currentImageState = imagePickerBloc.state;
+
+    if (currentImageState is ImageLoaded) {
+      final images = currentImageState.images; // Correct property access
+      if (images.isEmpty) {
+        AppSnackBar.show(
+          context,
+          content: 'Please upload at least one image',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
+
+      // show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(
+          child: LoadingAnimationWidget.discreteCircle(
+            color: AppColors.orange,
+            size: 50.r,
+            secondRingColor: AppColors.grey,
+            thirdRingColor: AppColors.white,
+          ),
+        ),
+      );
+
+      imagePickerBloc.add(UploadImagesToCloudinary());
+
+      final uploadedState = await imagePickerBloc.stream.firstWhere(
+        (state) => state is ImagesUploaded || state is ImageError,
+      );
+
+      // Close loading dialog
+      if (context.mounted) context.pop();
+
+      if (uploadedState is ImagesUploaded) {
+        // SUCCESS - Proceed with the rest of data save
+        final imageUrls = uploadedState.imageUrls;
+        final locationState = locationBloc.state;
+
+        if (locationState is LocationLoaded) {
+          final location = locationState.location;
+          final isAvailable = availableSwitchCubit.state;
+          final isApproved = privacyPolicyCubit.state;
+
+          final decoration = DecorationEntity(
+            name: nameController.text,
+            decorCategory: decorCategory,
+            decorStyles: decorStyles,
+            description: descriptionController.text,
+            price: int.tryParse(priceController.text) ?? 0,
+            sdPrice: int.tryParse(sdPriceController.text) ?? 0,
+            available: isAvailable,
+            location: location,
+            phoneNumber: phoneController.text,
+            duration: durationController.text,
+            images: imageUrls,
+            privacyPolicy: isApproved,
+          );
+
+          if (context.mounted) {
+            context.read<AddProductBloc>().add(DecorationEvent(decoration));
+
+            _resetFormState(context);
+          }
+        } else {
+          AppSnackBar.show(
+            context,
+            content: 'Please provide location information',
+            backgroundColor: AppColors.red,
+          );
+        }
+      } else if (uploadedState is ImageError) {
+        // ERROR
+        if (context.mounted) {
+          AppSnackBar.show(
+            context,
+            content: 'Image Upload Error: ${uploadedState.message}',
+            backgroundColor: AppColors.red,
+          );
+        }
+      }
+    } else {
+      AppSnackBar.show(
+        context,
+        content: 'Please upload images first',
+        backgroundColor: AppColors.red,
+      );
+    }
   }
 }
 // 316

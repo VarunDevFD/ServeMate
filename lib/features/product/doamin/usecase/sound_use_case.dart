@@ -1,12 +1,13 @@
+import 'package:dartz/dartz.dart';
+import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 import 'package:serve_mate/features/product/doamin/repository/domain_repository.dart';
 
 class SoundUseCase {
-  final ProductRepository repository;
+  final repository = serviceLocator<ProductRepository>();
 
-  SoundUseCase(this.repository);
 
-  Future<void> execute(Sound sound) async {
+  Future<Either<String, String>> execute(Sound sound) async {
     return await repository.addSound(sound);
   }
 

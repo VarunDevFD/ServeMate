@@ -1,8 +1,6 @@
-abstract class FormSubEvent {
-  const FormSubEvent();
-}
+abstract class CommonEvent {}
 
-class GenderChanged extends FormSubEvent {
-  final String gender;
-  const GenderChanged(this.gender);
+class GenderChanged extends CommonEvent {
+  final String type;
+  GenderChanged(this.type);
 }

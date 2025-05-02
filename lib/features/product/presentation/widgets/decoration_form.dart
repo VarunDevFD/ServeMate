@@ -10,7 +10,7 @@
 // import 'package:serve_mate/features/product/presentation/widgets/side_head_text.dart';
 // import 'package:serve_mate/features/product/presentation/widgets/venue_facilities_widget.dart';
 
-// class DecorationForm extends StatelessWidget {
+// class DecorationEntityForm extends StatelessWidget {
 //   final GlobalKey<FormState> formKey;
 
 //   final TextEditingController nameController;
@@ -23,7 +23,7 @@
 //   final Function(String?) dateController;
 //   final TextEditingController descriptionController;
 
-//   const DecorationForm({
+//   const DecorationEntityForm({
 //     super.key,
 //     required this.formKey,
 //     required this.nameController,
@@ -46,14 +46,14 @@
 //         children: [
 //           // Name
 //           _buildSection(
-//             title: 'Decoration Name',
+//             title: 'DecorationEntity Name',
 //             child: CustomTextField(
-//               hint: 'Enter Decoration Name',
+//               hint: 'Enter DecorationEntity Name',
 //               numberLimit: 20,
 //               controller: nameController,
 //               keyboardType: TextInputType.text,
 //               validator: (value) => value == null || value.isEmpty
-//                   ? 'Please enter the Decoration Name'
+//                   ? 'Please enter the DecorationEntity Name'
 //                   : null,
 //             ),
 //           ),
@@ -61,7 +61,7 @@
 //           _buildSection(
 //             title: 'Category',
 //             child: VenueFacilitiesWidget(
-//               facilities: facilitiesDecorationCategory,
+//               facilities: facilitiesDecorationEntityCategory,
 //               selectedFacilities: selectedFacilitiesFIrst,
 //             ),
 //           ),
@@ -125,7 +125,7 @@
 //           _buildSection(
 //             title: 'Facilities Available',
 //             child: VenueFacilitiesWidget(
-//                 facilities: facilitiesDecorationStyle,
+//                 facilities: facilitiesDecorationEntityStyle,
 //                 selectedFacilities: selectedFacilitiesSecond),
 //           ),
 //           // Date

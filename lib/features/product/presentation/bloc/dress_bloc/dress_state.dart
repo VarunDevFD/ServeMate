@@ -3,57 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 
 class DressFormState {
-  final String selectedGender;
-  final String selectedDressType;
-  final String selectedDressModel;
-  final String selectedCondition;
-  final String selectedSize;
+  final String selectedGender;  
   final Color selectedColor;
-  final String colorName;
-  final String rentalDuration;
-  final double securityDeposit;
-  final String damagePolicy;
+  final String colorName;  
   final DateTimeRange? selectedDateRange;
 
   DressFormState({
-    this.selectedGender = 'Men',
-    this.selectedDressType = '',
-    this.selectedDressModel = '',
-    this.selectedCondition = '',
-    this.selectedSize = '',
+    this.selectedGender = 'Men',  
     this.selectedColor = AppColors.white,
-    this.colorName = "Choose the Color",
-    this.rentalDuration = '',
-    this.securityDeposit = 0.0,
-    this.damagePolicy = '',
+    this.colorName = "Choose the Color",  
     this.selectedDateRange,
   });
 
   DressFormState copyWith({
-    String? selectedGender,
-    String? selectedDressType,
-    String? selectedDressModel,
-    String? selectedCondition,
-    String? selectedSize,
+    String? selectedGender, 
     Color? selectedColor,
-    String? colorName,
-    String? rentalDuration,
-    double? securityDeposit,
-    String? damagePolicy,
+    String? colorName,  
     DateTimeRange? selectedDateRange,
   }) {
     return DressFormState(
-      selectedGender: selectedGender ?? this.selectedGender,
-      selectedDressType: selectedDressType ?? this.selectedDressType,
-      selectedDressModel: selectedDressModel ?? this.selectedDressModel,
-      selectedCondition: selectedCondition ?? this.selectedCondition,
-      selectedSize: selectedSize ?? this.selectedSize,
+      selectedGender: selectedGender ?? this.selectedGender,  
       selectedColor: selectedColor ?? this.selectedColor,
-      colorName: colorName ?? this.colorName,
-      rentalDuration:
-          rentalDuration ?? this.rentalDuration,
-      securityDeposit: securityDeposit ?? this.securityDeposit,
-      damagePolicy: damagePolicy ?? this.damagePolicy,
+      colorName: colorName ?? this.colorName,  
       selectedDateRange: selectedDateRange ?? this.selectedDateRange,
     );
   }

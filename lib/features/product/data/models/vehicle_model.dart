@@ -1,12 +1,13 @@
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
 
 class VehicleModel {
+  final String userId;
   final String name;
+  final String time = DateTime.now().toString();
   final String model;
   final String brand;
   final int price;
   final String vehicleType;
-  final int rentalPrice;
   final int securityDeposit;
   final List<String> location;
   final List<String> images;
@@ -22,12 +23,12 @@ class VehicleModel {
   final String? description;
 
   VehicleModel({
+    required this.userId,
     required this.name,
     required this.model,
     required this.brand,
     required this.price,
     required this.vehicleType,
-    required this.rentalPrice,
     required this.securityDeposit,
     required this.location,
     required this.images,
@@ -45,12 +46,12 @@ class VehicleModel {
 
   // copyWith method
   VehicleModel copyWith({
+    String? userId,
     String? name,
     String? model,
     String? brand,
     int? price,
     String? vehicleType,
-    int? rentalPrice,
     int? securityDeposit,
     List<String>? location,
     List<String>? images,
@@ -66,12 +67,12 @@ class VehicleModel {
     String? description,
   }) {
     return VehicleModel(
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       model: model ?? this.model,
       brand: brand ?? this.brand,
       price: price ?? this.price,
       vehicleType: vehicleType ?? this.vehicleType,
-      rentalPrice: rentalPrice ?? this.rentalPrice,
       securityDeposit: securityDeposit ?? this.securityDeposit,
       location: location ?? this.location,
       images: images ?? this.images,
@@ -91,12 +92,12 @@ class VehicleModel {
   // toMap method
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'name': name,
       'model': model,
       'brand': brand,
       'price': price,
       'vehicleType': vehicleType,
-      'rentalPrice': rentalPrice,
       'securityDeposit': securityDeposit,
       'location': location,
       'images': images,
@@ -113,16 +114,15 @@ class VehicleModel {
     };
   }
 
-
   // fromMap method
   factory VehicleModel.fromMap(Map<String, dynamic> map) {
     return VehicleModel(
+      userId: map['userId'] ?? '',
       name: map['name'] ?? '',
       model: map['model'] ?? '',
       brand: map['brand'] ?? '',
       price: map['price'] ?? 0,
       vehicleType: map['vehicleType'] ?? '',
-      rentalPrice: map['rentalPrice'] ?? 0,
       securityDeposit: map['securityDeposit'] ?? 0,
       location: map['location'] ?? [],
       images: List<String>.from(map['images'] ?? []),
@@ -142,12 +142,12 @@ class VehicleModel {
   // fromEntity method
   factory VehicleModel.fromEntity(Vehicle entity) {
     return VehicleModel(
+      userId: entity.userId ??  '',
       name: entity.name,
       model: entity.model,
       brand: entity.brand,
       price: entity.price,
       vehicleType: entity.vehicleType,
-      rentalPrice: entity.rentalPrice,
       securityDeposit: entity.securityDeposit,
       location: entity.location,
       images: entity.images,
@@ -164,16 +164,15 @@ class VehicleModel {
     );
   }
 
-
   // toEntity method
   Vehicle toEntity() {
     return Vehicle(
+      userId: userId,
       name: name,
       model: model,
       brand: brand,
       price: price,
       vehicleType: vehicleType,
-      rentalPrice: rentalPrice,
       securityDeposit: securityDeposit,
       location: location,
       images: images,

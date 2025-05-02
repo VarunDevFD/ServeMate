@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:serve_mate/core/theme/input_decoration.dart';
+// import 'package:serve_mate/core/theme/input_DecorationEntity.dart';
 // import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_bloc.dart';
 // import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_event.dart';
 // import 'package:serve_mate/features/product/presentation/bloc/dress_bloc/dress_state.dart';
@@ -32,7 +32,7 @@
 //                   ? '${state.selectedDateRange!.start} - ${state.selectedDateRange!.end}'
 //                   : 'Select rental duration',
 //             ),
-//             decoration: InputDecorations.defaultDecoration(
+//             DecorationEntity: InputDecorationEntitys.defaultDecorationEntity(
 //                 hintText: 'Select rental duration'),
 //           ),
 //         );

@@ -7,7 +7,7 @@
 // import 'package:loading_animation_widget/loading_animation_widget.dart';
 // import 'package:serve_mate/core/services/image_upload_service.dart';
 // import 'package:serve_mate/core/theme/app_colors.dart'; 
-// import 'package:serve_mate/features/product/data/models/decoration_model.dart';
+// import 'package:serve_mate/features/product/data/models/DecorationEntity_model.dart';
 // import 'package:serve_mate/features/product/data/models/dress_model.dart';
 // import 'package:serve_mate/features/product/data/models/footwear_model.dart';
 // import 'package:serve_mate/features/product/data/models/jewelry_model.dart';
@@ -197,8 +197,8 @@
 
 //         break;
 
-//       case 'Decoration':
-//         final decorationItem = DecorationModel(
+//       case 'DecorationEntity':
+//         final DecorationEntityItem = DecorationEntityModel(
 //           name: nameController?.text ?? '',
 //           selectedFacilitiesFirst:
 //               facilitiesVenue?.map((controller) => controller.text).toList() ??
@@ -215,7 +215,7 @@
 //           location: locationController?.text ?? '',
 //           description: descriptionController?.text ?? '',
 //         );
-//         showSuccessDialogDecoration(context, onFormReset, decorationItem);
+//         showSuccessDialogDecorationEntity(context, onFormReset, DecorationEntityItem);
 //         break;
 
 //       case 'Jewelry':
@@ -419,22 +419,22 @@
 //   );
 // }
 
-// void showSuccessDialogDecoration(
+// void showSuccessDialogDecorationEntity(
 //   BuildContext context,
 //   VoidCallback onFormReset,
-//   DecorationModel decoration,
+//   DecorationEntityModel DecorationEntity,
 // ) {
 //   showDialog(
 //     context: context,
 //     builder: (context) {
 //       return AlertDialog(
-//         title: const Text('Decoration form submitted successfully!'),
+//         title: const Text('DecorationEntity form submitted successfully!'),
 //         actions: [
 //           TextButton(
 //             onPressed: () {
 //               context
 //                   .read<ProductBloc>()
-//                   .add(SubmitDecorationEvent(decoration));
+//                   .add(SubmitDecorationEntityEvent(DecorationEntity));
 //               context.pop();
 //               onFormReset();
 //             },
@@ -527,12 +527,12 @@
 // // ) =>
 // //     _showSuccessDialogVehicle(context, onFormReset, vehicle);
 
-// // void _submitDecorationForm(
-// //   DecorationModel decorationItem,
+// // void _submitDecorationEntityForm(
+// //   DecorationEntityModel DecorationEntityItem,
 // //   BuildContext context,
 // //   VoidCallback onFormReset,
 // // ) =>
-// //     _showSuccessDialogDecoration(context, onFormReset, decorationItem);
+// //     _showSuccessDialogDecorationEntity(context, onFormReset, DecorationEntityItem);
 
 // // void _submitJewelryForm(
 // //   JewelryModel jewelryItem,

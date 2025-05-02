@@ -43,26 +43,26 @@ class DropdownItems {
   //   "Outdoor",
   // ];
   static const List<String> decorationCategories = [
-    "Stage Decoration",
+    "Stage DecorationEntity",
     "Floral Arrangements",
     "Lighting and Effects",
     "Centerpieces",
     "Backdrops",
-    "Table Decorations",
+    "Table DecorationEntitys",
     "Ceiling Hangings",
     "Entrance Arch",
     "Aisle Decor",
     "Chair Covers and Sashes",
-    "Mandap Decoration",
+    "Mandap DecorationEntity",
     "Wall Hangings",
     "Thematic Sets",
-    "Balloon Decorations",
+    "Balloon DecorationEntitys",
     "Custom Props",
     "Candles and Lanterns",
     "Signages and Boards",
     "Artificial Flower Garlands",
     "Fresh Flower Garlands",
-    "Car Decoration Kits"
+    "Car DecorationEntity Kits"
   ];
   // Camera Form
   static const List<String> brandsCamera = [

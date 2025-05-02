@@ -2,7 +2,7 @@
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:serve_mate/core/theme/app_colors.dart';
-// import 'package:serve_mate/core/theme/input_decoration.dart';
+// import 'package:serve_mate/core/theme/input_DecorationEntity.dart';
 // import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 // import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_event.dart';
 // import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
@@ -25,7 +25,7 @@
 //         return TextFormField(
 //           controller: controller,
 //           cursorColor: AppColors.balck1,
-//           decoration: InputDecorations.defaultDecoration(
+//           DecorationEntity: InputDecorationEntitys.defaultDecorationEntity(
 //             hintText: hint,
 //             suffixIcon: IconButton(
 //               icon: const Icon(Icons.location_on),

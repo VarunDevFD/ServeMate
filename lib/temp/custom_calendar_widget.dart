@@ -16,11 +16,11 @@
 //     return BlocBuilder<DateBloc, DateState>(builder: (context, state) {
 //       return TableCalendar(
 //         calendarStyle: CalendarStyle(
-//           todayDecoration: BoxDecoration(
+//           todayDecorationEntity: BoxDecorationEntity(
 //             color: AppColors.orange,
 //             shape: BoxShape.circle,
 //           ),
-//           selectedDecoration: BoxDecoration(
+//           selectedDecorationEntity: BoxDecorationEntity(
 //             color: AppColors.green,
 //             shape: BoxShape.circle,
 //           ),
@@ -60,7 +60,7 @@
 //   required TextEditingController dateAddedController,
 // }) async {
 //   await showModalBottomSheet(
-    
+
 //     context: context,
 //     isScrollControlled: true,
 //     builder: (context) => DraggableScrollableSheet(
@@ -91,11 +91,11 @@
 //                   lastDay: kLastDay,
 //                   focusedDay: kToday,
 //                   calendarStyle: CalendarStyle(
-//                     todayDecoration: BoxDecoration(
+//                     todayDecorationEntity: BoxDecorationEntity(
 //                       color: AppColors.orange,
 //                       shape: BoxShape.circle,
 //                     ),
-//                     selectedDecoration: BoxDecoration(
+//                     selectedDecorationEntity: BoxDecorationEntity(
 //                       color: AppColors.orange1,
 //                       shape: BoxShape.circle,
 //                     ),

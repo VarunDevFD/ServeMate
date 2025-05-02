@@ -1,4 +1,6 @@
 class Camera {
+  final String? userId;
+  final String? time;
   final String? name;
   final String? brand;
   final String? model;
@@ -18,25 +20,29 @@ class Camera {
   final bool? privacyPolicy;
 
   Camera(
-      {  this.name,
-        this.brand,
-        this.model,
-        this.category,
-        this.description,
-        this.price,
-        this.sdPrice,
-        this.available,
-        this.location,
-        this.phoneNumber,
-        this.condition,
-        this.storage,
-        this.connectivity,
-        this.duration,
-        this.latePolicy,
-        this.images,
-        this.privacyPolicy});
+      {this.userId,
+      this.time,
+      this.name,
+      this.brand,
+      this.model,
+      this.category,
+      this.description,
+      this.price,
+      this.sdPrice,
+      this.available,
+      this.location,
+      this.phoneNumber,
+      this.condition,
+      this.storage,
+      this.connectivity,
+      this.duration,
+      this.latePolicy,
+      this.images,
+      this.privacyPolicy});
 
   Camera copyWith({
+    String? userId,
+    String? time,
     String? name,
     String? model,
     String? brand,
@@ -56,6 +62,8 @@ class Camera {
     bool? privacyPolicy,
   }) {
     return Camera(
+      userId: userId ?? this.userId,
+      time: time ?? this.time,
       name: name ?? this.name,
       brand: brand ?? this.brand,
       model: model ?? this.model,
@@ -78,6 +86,8 @@ class Camera {
 
   static Camera empty() {
     return Camera(
+      userId: '',
+      time: '',
       name: '',
       brand: '',
       model: '',
