@@ -18,6 +18,7 @@ class JewelryModel {
   final String? phoneNumber;
   final bool? privacyPolicy;
   String? dateAdded = DateTime.now().toString();
+  final String? permission;
 
   JewelryModel({
     this.userId,
@@ -36,6 +37,7 @@ class JewelryModel {
     this.phoneNumber,
     this.privacyPolicy,
     this.dateAdded,
+    this.permission,
   });
 
   Map<String, dynamic> toMap() {
@@ -56,6 +58,7 @@ class JewelryModel {
       'phoneNumber': phoneNumber,
       'privacyPolicy': privacyPolicy,
       'dateAdded': dateAdded,
+      'permission': permission,
     };
   }
 
@@ -78,6 +81,7 @@ class JewelryModel {
       phoneNumber: map['phoneNumber'],
       privacyPolicy: map['privacyPolicy'],
       dateAdded: map['dateAdded'],
+      permission: map['permission'],
     );
   }
 
@@ -99,6 +103,7 @@ class JewelryModel {
       phoneNumber: jewelry.phoneNumber,
       privacyPolicy: jewelry.privacyPolicy,
       dateAdded: DateTime.now().toString(),
+      permission: jewelry.permission,
     );
   }
 
@@ -119,6 +124,7 @@ class JewelryModel {
       available: available,
       phoneNumber: phoneNumber,
       privacyPolicy: privacyPolicy,
+      permission: permission,
     );
   }
 
@@ -140,6 +146,7 @@ class JewelryModel {
     String? dateAdded,
     String? phoneNumber,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return JewelryModel(
       userId: userId ?? this.userId,
@@ -157,6 +164,8 @@ class JewelryModel {
       available: available ?? this.available,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      dateAdded: dateAdded ?? this.dateAdded,
+      permission: permission ?? this.permission,
     );
   }
 }

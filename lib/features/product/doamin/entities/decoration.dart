@@ -13,7 +13,7 @@ class DecorationEntity {
   final String? phoneNumber;
   final List<String>? images;
   final bool? privacyPolicy;
-
+  final String? permission;
   DecorationEntity({
     this.userId,
     this.time,
@@ -29,6 +29,7 @@ class DecorationEntity {
     this.phoneNumber,
     this.images,
     this.privacyPolicy,
+    this.permission,
   });
   DecorationEntity copyWith({
     String? name,
@@ -60,6 +61,7 @@ class DecorationEntity {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? permission,
     );
   }
 
@@ -79,6 +81,7 @@ class DecorationEntity {
       phoneNumber: '',
       images: [],
       privacyPolicy: false,
+      permission: '',
     );
   }
 }

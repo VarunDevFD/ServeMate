@@ -20,6 +20,7 @@ class CameraModel {
   final String latePolicy;
   final List<String> images;
   final bool privacyPolicy;
+  final String? permission;
 
   CameraModel({
     required this.userId, 
@@ -40,6 +41,7 @@ class CameraModel {
     required this.latePolicy,
     required this.images,
     required this.privacyPolicy,
+    required this.permission,
   });
 
   CameraModel copyWith({
@@ -62,6 +64,7 @@ class CameraModel {
     String? latePolicy,
     List<String>? images,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return CameraModel(
       userId: userId ?? this.userId, 
@@ -82,6 +85,7 @@ class CameraModel {
       latePolicy: latePolicy ?? this.latePolicy,
       images: images ?? this.images,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -106,6 +110,7 @@ class CameraModel {
       'latePolicy': latePolicy,
       'images': images,
       'privacyPolicy': privacyPolicy,
+      'permission': permission,
     };
   }
 
@@ -130,6 +135,7 @@ class CameraModel {
       latePolicy: map['latePolicy'] as String? ?? '',
       images: List<String>.from(map['images'] ?? []),
       privacyPolicy: map['privacyPolicy'] as bool? ?? false,
+      permission: map['permission'] as String? ?? '',
     );
   }
 
@@ -154,6 +160,7 @@ class CameraModel {
       latePolicy: camera.latePolicy ?? '',
       images: camera.images ?? [],
       privacyPolicy: camera.privacyPolicy ?? false,
+      permission: camera.permission ?? '',
     );
   }
 
@@ -178,6 +185,7 @@ class CameraModel {
       latePolicy: latePolicy,
       images: images,
       privacyPolicy: privacyPolicy,
+      permission: permission,
     );
   }
 }

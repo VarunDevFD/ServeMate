@@ -140,6 +140,7 @@ class JewelryPage extends StatelessWidget {
             phoneNumber: phone.text,
             images: imageUrls,
             privacyPolicy: isApproved,
+            permission: 'pending',
           );
           if (context.mounted) {
             context.read<AddProductBloc>().add(JewelryEvent(jewelry));

@@ -14,6 +14,7 @@ class SoundModel {
   final List<String> images;
   final bool available;
   final bool privacyPolicy; 
+  final String? permission;
 
   SoundModel({
     required this.userId,
@@ -28,6 +29,7 @@ class SoundModel {
     required this.images,
     required this.available,
     required this.privacyPolicy,
+    required this.permission,
   });
 
   SoundModel copyWith({
@@ -43,6 +45,7 @@ class SoundModel {
     List<String>? images,
     bool? available,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return SoundModel(
       userId: userId ?? this.userId,
@@ -57,6 +60,7 @@ class SoundModel {
       images: images ?? this.images,
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -74,6 +78,7 @@ class SoundModel {
       'images': images,
       'available': available,
       'privacyPolicy': privacyPolicy,
+      'permission': permission,
     };
   }
 
@@ -91,6 +96,7 @@ class SoundModel {
       images: List<String>.from(map['images']),
       available: map['available'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
+      permission: map['permission'] ?? '',
     );
   }
 
@@ -108,6 +114,7 @@ class SoundModel {
       images: sound.images ?? [],
       available: sound.available ?? false,
       privacyPolicy: sound.privacyPolicy ?? false,
+      permission: sound.permission ?? '',
     );
   }
 
@@ -125,6 +132,7 @@ class SoundModel {
       images: images,
       available: available,
       privacyPolicy: privacyPolicy,
+      permission: permission,
     );
   }
 }

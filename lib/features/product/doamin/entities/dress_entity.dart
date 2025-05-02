@@ -18,6 +18,7 @@ class Dress {
   final bool? available;
   final bool? privacyPolicy;
   final String? description;
+  final String? permission;
 
   Dress({
     this.userId,
@@ -39,6 +40,7 @@ class Dress {
     required this.available,
     required this.privacyPolicy,
     required this.description,
+    required this.permission,
   });
 
   Dress copyWith({
@@ -62,6 +64,7 @@ class Dress {
     bool? available,
     bool? privacyPolicy,
     String? description,
+    String? permission,
   }) {
     return Dress(
       userId: userId ?? this.userId,
@@ -83,6 +86,7 @@ class Dress {
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
       description: description ?? this.description,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -107,6 +111,7 @@ class Dress {
       available: false,
       privacyPolicy: false,
       description: '',
+      permission: '',
     );
   }
 }

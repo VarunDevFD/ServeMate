@@ -18,6 +18,8 @@ class FootwearModel {
   final String time = DateTime.now().toString();
   final String? phoneNumber;
   final bool? privacyPolicy;
+  final String? permission;
+
   FootwearModel({
     required this.userId,
     required this.name,
@@ -34,7 +36,8 @@ class FootwearModel {
     required this.available,
     required this.date, 
     required this.phoneNumber,
-    required this.privacyPolicy, 
+    required this.privacyPolicy,  
+    required this.permission,
   });
 
   FootwearModel copyWith({
@@ -55,6 +58,7 @@ class FootwearModel {
     String? time,
     String? phoneNumber,
     bool? privacyPolicy,
+    String? permission,
 
 
   }) {
@@ -75,6 +79,7 @@ class FootwearModel {
       date: date ?? this.date,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -96,6 +101,7 @@ class FootwearModel {
       'date': date,
       'phoneNumber': phoneNumber,
       'privacyPolicy': privacyPolicy,
+      'permission': permission,
     };
   }
 
@@ -120,6 +126,7 @@ class FootwearModel {
       date: map['date'] as String,
       phoneNumber: map['phoneNumber'] as String,
       privacyPolicy: map['privacyPolicy'] as bool,
+      permission: map['permission'] as String,
     );
   }
 
@@ -141,6 +148,7 @@ class FootwearModel {
       date: footwear.date ?? '',
       phoneNumber: footwear.phoneNumber ?? '',
       privacyPolicy: footwear.privacyPolicy ?? false,
+      permission: footwear.permission ?? '',
     );
   }
 
@@ -162,6 +170,7 @@ class FootwearModel {
       date: date,
       phoneNumber: phoneNumber,
       privacyPolicy: privacyPolicy,
+      permission: permission,
     );
   }
 }

@@ -18,27 +18,30 @@ class Camera {
   final String? latePolicy;
   final List<String>? images;
   final bool? privacyPolicy;
+  final String? permission;
 
-  Camera(
-      {this.userId,
-      this.time,
-      this.name,
-      this.brand,
-      this.model,
-      this.category,
-      this.description,
-      this.price,
-      this.sdPrice,
-      this.available,
-      this.location,
-      this.phoneNumber,
-      this.condition,
-      this.storage,
-      this.connectivity,
-      this.duration,
-      this.latePolicy,
-      this.images,
-      this.privacyPolicy});
+  Camera({
+    this.userId,
+    this.time,
+    this.name,
+    this.brand,
+    this.model,
+    this.category,
+    this.description,
+    this.price,
+    this.sdPrice,
+    this.available,
+    this.location,
+    this.phoneNumber,
+    this.condition,
+    this.storage,
+    this.connectivity,
+    this.duration,
+    this.latePolicy,
+    this.images,
+    this.privacyPolicy,
+    this.permission,
+  });
 
   Camera copyWith({
     String? userId,

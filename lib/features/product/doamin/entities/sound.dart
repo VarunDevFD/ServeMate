@@ -11,6 +11,7 @@ class Sound {
   final List<String>? images;
   final bool? available;
   final bool? privacyPolicy;
+  final String? permission;
 
   Sound({
     this.userId,
@@ -25,6 +26,7 @@ class Sound {
     required this.images,
     required this.available,
     required this.privacyPolicy,
+    required this.permission,
   });
 
   Sound copyWith({
@@ -40,6 +42,7 @@ class Sound {
     List<String>? images,
     bool? available,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return Sound(
       userId: userId ?? this.userId,
@@ -54,6 +57,7 @@ class Sound {
       images: images ?? this.images,
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -71,6 +75,7 @@ class Sound {
       images: [],
       available: false,
       privacyPolicy: false,
+      permission: '',
     );
   }
 }

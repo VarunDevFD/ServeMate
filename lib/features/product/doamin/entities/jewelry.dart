@@ -14,6 +14,7 @@ class Jewelry {
   final bool? available; 
   final String? phoneNumber;
   final bool? privacyPolicy;
+  final String? permission;
 
   Jewelry({
     this.userId,
@@ -31,6 +32,7 @@ class Jewelry {
     required this.available, 
     required this.phoneNumber,
     required this.privacyPolicy,
+    required this.permission,
   });
 
   Jewelry copyWith({
@@ -48,6 +50,7 @@ class Jewelry {
     bool? available, 
     String? phoneNumber,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return Jewelry(
       name: name ?? this.name,
@@ -64,6 +67,7 @@ class Jewelry {
       available: available ?? available, 
       phoneNumber: phoneNumber ?? phoneNumber,
       privacyPolicy: privacyPolicy ?? privacyPolicy,
+      permission: permission ?? permission,
     );
   }
 
@@ -83,6 +87,7 @@ class Jewelry {
       available: false, 
       phoneNumber: '',
       privacyPolicy: false,
+      permission: '',
     );
   }
 }

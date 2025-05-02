@@ -165,6 +165,7 @@ class VehiclesPage extends StatelessWidget {
             description: description.text,
             facilities: facilities,
             privacyPolicy: isApproved,
+            permission: 'pending',
           );
           if (context.mounted) {
             context.read<AddProductBloc>().add(VehicleEvent(vehicle));

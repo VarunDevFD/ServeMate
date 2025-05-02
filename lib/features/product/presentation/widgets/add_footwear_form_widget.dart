@@ -143,9 +143,7 @@ class FootwearPage extends StatelessWidget {
                     labelText: 'Category*',
                     items: DropdownItems.footwearTypes,
                     onFieldSubmitted: (value) {
-                      if (value != null) {
-                        category.text = value;
-                      }
+                      category.text = value;
                     },
                   ),
                 ),
@@ -468,6 +466,7 @@ class FootwearPage extends StatelessWidget {
             category: category.text,
             phoneNumber: phone.text,
             privacyPolicy: isApproved,
+            permission: 'pending',
           );
           if (context.mounted) {
             context.read<AddProductBloc>().add(FootwearEvent(footwear));

@@ -21,6 +21,7 @@ class VehicleModel {
   final bool availability;
   final bool privacyPolicy;
   final String? description;
+  final String? permission;
 
   VehicleModel({
     required this.userId,
@@ -41,6 +42,7 @@ class VehicleModel {
     required this.color,
     required this.availability,
     required this.privacyPolicy,
+    required this.permission,
     this.description,
   });
 
@@ -65,6 +67,7 @@ class VehicleModel {
     bool? availability,
     bool? privacyPolicy,
     String? description,
+    String? permission,
   }) {
     return VehicleModel(
       userId: userId ?? this.userId,
@@ -86,6 +89,7 @@ class VehicleModel {
       availability: availability ?? this.availability,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
       description: description ?? this.description,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -111,6 +115,7 @@ class VehicleModel {
       'availability': availability,
       'privacyPolicy': privacyPolicy,
       'description': description,
+      'permission': permission,
     };
   }
 
@@ -136,6 +141,7 @@ class VehicleModel {
       availability: map['availability'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
       description: map['description'],
+      permission: map['permission'] ?? '',
     );
   }
 
@@ -161,6 +167,7 @@ class VehicleModel {
       availability: entity.availability,
       privacyPolicy: entity.privacyPolicy,
       description: entity.description,
+      permission: entity.permission,
     );
   }
 
@@ -186,6 +193,7 @@ class VehicleModel {
       availability: availability,
       privacyPolicy: privacyPolicy,
       description: description,
+      permission: permission,
     );
   }
 }

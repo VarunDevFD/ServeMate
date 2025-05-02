@@ -16,6 +16,7 @@ class Footwear {
   final String? time = DateTime.now().toString();
   final String? phoneNumber;
   final bool? privacyPolicy;
+  final String? permission;
   
 
   Footwear({
@@ -35,6 +36,7 @@ class Footwear {
     required this.date, 
     required this.phoneNumber,
     required this.privacyPolicy,
+    required this.permission,
   });
 
   Footwear copyWith({
@@ -55,6 +57,8 @@ class Footwear {
     String? time,
     String? phoneNumber,
     bool? privacyPolicy,
+    String? permission,
+
   }) {
     return Footwear(
       userId: userId ?? this.userId,
@@ -73,6 +77,7 @@ class Footwear {
       date: date ?? this.date, 
       phoneNumber: phoneNumber ?? this.phoneNumber,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
 
     );
   }
@@ -95,6 +100,7 @@ class Footwear {
       date: '', 
       phoneNumber: '',
       privacyPolicy: false,
+      permission: '',
     );
   }
 }

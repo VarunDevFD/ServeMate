@@ -15,6 +15,7 @@ class DecorationModel {
   final String phoneNumber;
   final List<String> images;
   final bool privacyPolicy;
+  final String? permission;
 
   DecorationModel({
     this.userId = '',
@@ -30,6 +31,7 @@ class DecorationModel {
     required this.phoneNumber,
     required this.images,
     required this.privacyPolicy,
+   required this.permission,
   });
 
   DecorationModel copyWith({
@@ -47,6 +49,7 @@ class DecorationModel {
     String? phoneNumber,
     List<String>? images,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return DecorationModel(
       userId: userId ?? this.userId,
@@ -62,6 +65,7 @@ class DecorationModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -81,6 +85,7 @@ class DecorationModel {
       'phoneNumber': phoneNumber,
       'images': images,
       'privacyPolicy': privacyPolicy,
+      'permission': permission,
     };
   }
 
@@ -99,6 +104,7 @@ class DecorationModel {
       phoneNumber: map['phoneNumber'],
       images: List<String>.from(map['images']),
       privacyPolicy: map['privacyPolicy'],
+      permission: map['permission'],
     );
   }
 
@@ -117,6 +123,7 @@ class DecorationModel {
       phoneNumber: entity.phoneNumber ?? '',
       images: entity.images ?? [],
       privacyPolicy: entity.privacyPolicy ?? false,
+      permission: entity.permission ?? '',
     );
   }
 
@@ -136,6 +143,7 @@ class DecorationModel {
       phoneNumber: phoneNumber,
       images: images,
       privacyPolicy: privacyPolicy,
+      permission: permission,
     );
   }
 }

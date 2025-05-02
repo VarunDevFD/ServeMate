@@ -18,6 +18,7 @@ class Vehicle {
   final bool availability;
   final bool privacyPolicy;
   final String? description;
+  final String? permission;
 
   Vehicle({
      this.userId,
@@ -38,6 +39,7 @@ class Vehicle {
     required this.availability,
     required this.privacyPolicy,
     required this.color,
+    required this.permission,
     this.description,
   });
 
@@ -61,6 +63,7 @@ class Vehicle {
     bool? privacyPolicy,
     String? color,
     String? description,
+    String? permission,
   }) {
     return Vehicle(
       userId: userId ?? this.userId,
@@ -82,6 +85,7 @@ class Vehicle {
        privacyPolicy:  privacyPolicy ?? this. privacyPolicy,
       color: color ?? this.color,
       description: description ?? this.description,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -106,6 +110,7 @@ class Vehicle {
       privacyPolicy: false,
       color: '',
       description: '',
+      permission: '',
     );
   }
 }

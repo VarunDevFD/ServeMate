@@ -14,6 +14,7 @@ class Venue {
   final List<String>? facilities;
   final bool? available;
   final bool? privacyPolicy;
+  final String? permission;
 
   Venue({
     this.userId,
@@ -30,6 +31,7 @@ class Venue {
     this.facilities,
     this.available,
     this.privacyPolicy = false,
+    this.permission,
   });
 
   Venue copyWith({
@@ -48,6 +50,7 @@ class Venue {
     List<String>? selectedFacilities,
     bool? available,
     bool? privacyPolicy,
+    String? permission,
   }) {
     return Venue(
       userId: userId ?? this.userId,
@@ -64,6 +67,7 @@ class Venue {
       facilities: facilities ?? this.facilities,
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
@@ -83,6 +87,7 @@ class Venue {
       facilities: [],
       available: false,
       privacyPolicy: false,
+      permission: '',
     );
   }
 }

@@ -218,6 +218,7 @@ class DressesPage extends StatelessWidget {
               available: isAvailable,
               privacyPolicy: isApproved,
               description: descriptionController.text,
+              permission: 'pending',
             );
             if (context.mounted) {
               context.read<AddProductBloc>().add(DressEvent(dress));
