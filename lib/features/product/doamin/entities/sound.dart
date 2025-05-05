@@ -1,4 +1,5 @@
 class Sound {
+  final String? id;
   final String? userId;
   final String? name;
   final String? category;
@@ -14,6 +15,7 @@ class Sound {
   final String? permission;
 
   Sound({
+    this.id,
     this.userId,
     required this.name,
     required this.category,
@@ -30,6 +32,7 @@ class Sound {
   });
 
   Sound copyWith({
+    String? id,
     String? userId,
     String? name,
     String? category,
@@ -45,6 +48,7 @@ class Sound {
     String? permission,
   }) {
     return Sound(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       category: category ?? this.category,
@@ -61,8 +65,10 @@ class Sound {
     );
   }
 
-  static empty() {
+  static empty() 
+  {
     return Sound(
+      id: '',
       userId: '',
       name: '',
       category: '',

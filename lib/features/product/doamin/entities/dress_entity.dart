@@ -1,4 +1,5 @@
 class Dress {
+  final String? id;
   final String? userId;
   final String? name;
   final String? gender;
@@ -21,6 +22,7 @@ class Dress {
   final String? permission;
 
   Dress({
+    this.id,
     this.userId,
     required this.name,
     required this.gender,
@@ -44,6 +46,7 @@ class Dress {
   });
 
   Dress copyWith({
+    String? id,
     String? userId,
     String? name,
     String? gender,
@@ -67,6 +70,7 @@ class Dress {
     String? permission,
   }) {
     return Dress(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       gender: gender ?? this.gender,
@@ -92,6 +96,7 @@ class Dress {
 
   static Dress empty() {
     return Dress(
+      id: '',
       userId: '',
       name: '',
       gender: '',

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/common/screens/product_details_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/forgot_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_up_page.dart';
@@ -6,7 +7,6 @@ import 'package:serve_mate/features/naviaton/presentation/pages/bottom_nav_bar_p
 import 'package:serve_mate/features/category/presentation/pages/category_select_page.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/on_boarding_page/sn_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/presentation/page/splas_page/sn_splash.dart';
-import 'package:serve_mate/features/product/presentation/pages/product_detail_page.dart';
 import 'package:serve_mate/features/welcome/presentation/page/s_welcome.dart';
 
 class AppRouter {
@@ -45,12 +45,16 @@ class AppRouter {
         builder: (context, state) => BottomNavigationBar(),
       ),
       GoRoute(
-        path: '/productDetail',
-        builder: (context, state) {
-          final category = state.extra as Map<String, dynamic>?;
-          return ProductDetailPage(category: category as Map<String, dynamic>);
-        },
+        path: '/detailsPage',
+        builder: (context, state) => const CategoryDetailsScreen(),
       ),
+      // GoRoute(
+      //   path: '/productDetail',
+      //   builder: (context, state) {
+      //     final category = state.extra as Map<String, dynamic>?;
+      //     return ProductDetailPage(category: category as Map<String, dynamic>);
+      //   },
+      // ),
     ],
     errorBuilder: (context, state) {
       return const WelcomeScreen(); // Redirect to a default screen (e.g., WelcomeScreen)

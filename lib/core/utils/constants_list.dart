@@ -1,6 +1,6 @@
 final List<String> appBarTitles = [
   "SERVEMATE",
-  "List",
+  "Category List",
   "Add List",
   "Notifications",
   "Profile"

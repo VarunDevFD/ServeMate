@@ -1,4 +1,5 @@
 class Venue {
+  final String? id;
   final String? userId;
   final String? name;
   final int? price;
@@ -17,6 +18,7 @@ class Venue {
   final String? permission;
 
   Venue({
+    this.id,
     this.userId,
     this.name,
     this.price,
@@ -35,6 +37,7 @@ class Venue {
   });
 
   Venue copyWith({
+    String? id,
     String? userId,
     String? name,
     int? price,
@@ -53,6 +56,7 @@ class Venue {
     String? permission,
   }) {
     return Venue(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
@@ -73,6 +77,7 @@ class Venue {
 
   static empty() {
     return Venue(
+      id: '',
       userId: '',
       name: '',
       price: 0,

@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/footwear.dart';
 
 class FootwearModel {
+  final String? id;
   final String userId;
   final String name;
   final int price;
@@ -21,6 +22,7 @@ class FootwearModel {
   final String? permission;
 
   FootwearModel({
+    this.id,
     required this.userId,
     required this.name,
     required this.price,
@@ -41,6 +43,7 @@ class FootwearModel {
   });
 
   FootwearModel copyWith({
+    String? id,
     String? userId,
     String? name,
     int? price,
@@ -63,6 +66,7 @@ class FootwearModel {
 
   }) {
     return FootwearModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
@@ -85,6 +89,7 @@ class FootwearModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'userId': userId,
       'name': name,
       'price': price,
@@ -105,8 +110,9 @@ class FootwearModel {
     };
   }
 
-  factory FootwearModel.fromMap(Map<String, dynamic> map) {
+  factory FootwearModel.fromMap(Map<String, dynamic> map, String docId) {
     return FootwearModel(
+      id: docId,
       userId: map['userId'] as String,
       name: map['name'] as String,
       price: map['price'] as int,
@@ -132,6 +138,7 @@ class FootwearModel {
 
   factory FootwearModel.fromEntity(Footwear footwear) {
     return FootwearModel(
+      id: footwear.id ?? '',
       userId: footwear.userId ?? '',
       name: footwear.name ?? '',
       price: footwear.price ?? 0,
@@ -154,6 +161,7 @@ class FootwearModel {
 
   Footwear toEntity() {
     return Footwear(
+      id: id,
       userId: userId,
       name: name,
       price: price,

@@ -1,4 +1,5 @@
 class Footwear {
+  final String? id;
   final String? userId;
   final String? name;
   final int? price;
@@ -20,6 +21,7 @@ class Footwear {
   
 
   Footwear({
+    this.id,
     this.userId,
     required this.name,
     required this.price,
@@ -40,6 +42,7 @@ class Footwear {
   });
 
   Footwear copyWith({
+    String? id,
     String? userId,
     String? name,
     int? price,
@@ -60,7 +63,9 @@ class Footwear {
     String? permission,
 
   }) {
+
     return Footwear(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
@@ -84,6 +89,7 @@ class Footwear {
 
   static empty() {
     return Footwear(
+      id: '',
       userId: '',
       name: '',
       price: 0,

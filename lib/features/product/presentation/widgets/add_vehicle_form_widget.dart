@@ -228,7 +228,7 @@ class VehiclesPage extends StatelessWidget {
                     labelText: 'Vehicle Type *',
                     items: DropdownItems.vehicleTypeItems,
                     onFieldSubmitted: (value) {
-                      type.text = value!;
+                      type.text = value;
                       _moveFocus(context, _brandFocusNode);
                     },
                   ),
@@ -254,7 +254,7 @@ class VehiclesPage extends StatelessWidget {
                     labelText: 'Model Year *',
                     items: DropdownItems.vehicleModelItems,
                     onFieldSubmitted: (value) {
-                      model.text = value!;
+                      model.text = value;
                       _moveFocus(context, _capacityFocusNode);
                     },
                   ),
@@ -290,7 +290,7 @@ class VehiclesPage extends StatelessWidget {
                     labelText: 'Fuel Type *',
                     items: DropdownItems.vehicleFuelItems,
                     onFieldSubmitted: (value) {
-                      fuelType.text = value!;
+                      fuelType.text = value;
                       _moveFocus(context, _transmissionFocusNode);
                     },
                   ),
@@ -301,7 +301,7 @@ class VehiclesPage extends StatelessWidget {
                     labelText: 'Transmission Type *',
                     items: DropdownItems.vehicleTransmissionItems,
                     onFieldSubmitted: (value) {
-                      vehicleType.text = value!;
+                      vehicleType.text = value;
                       _moveFocus(context, _regNumberFocusNode);
                     },
                   ),

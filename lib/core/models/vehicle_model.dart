@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/vehicle.dart';
 
 class VehicleModel {
+  final String? id;
   final String userId;
   final String name;
   final String time = DateTime.now().toString();
@@ -24,6 +25,7 @@ class VehicleModel {
   final String? permission;
 
   VehicleModel({
+    this.id,
     required this.userId,
     required this.name,
     required this.model,
@@ -48,6 +50,7 @@ class VehicleModel {
 
   // copyWith method
   VehicleModel copyWith({
+    String? id,
     String? userId,
     String? name,
     String? model,
@@ -70,6 +73,7 @@ class VehicleModel {
     String? permission,
   }) {
     return VehicleModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       model: model ?? this.model,
@@ -96,6 +100,7 @@ class VehicleModel {
   // toMap method
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'name': name,
       'model': model,
@@ -120,8 +125,9 @@ class VehicleModel {
   }
 
   // fromMap method
-  factory VehicleModel.fromMap(Map<String, dynamic> map) {
+  factory VehicleModel.fromMap(Map<String, dynamic> map, String docId) {
     return VehicleModel(
+      id: docId,
       userId: map['userId'] ?? '',
       name: map['name'] ?? '',
       model: map['model'] ?? '',
@@ -148,6 +154,7 @@ class VehicleModel {
   // fromEntity method
   factory VehicleModel.fromEntity(Vehicle entity) {
     return VehicleModel(
+      id: entity.id ?? '',
       userId: entity.userId ??  '',
       name: entity.name,
       model: entity.model,
@@ -174,6 +181,7 @@ class VehicleModel {
   // toEntity method
   Vehicle toEntity() {
     return Vehicle(
+      id: id,
       userId: userId,
       name: name,
       model: model,

@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/camera.dart';
 
 class CameraModel {
+  final String id;
   final String userId;
   final String time = DateTime.now().toString();
   final String name;
@@ -23,7 +24,8 @@ class CameraModel {
   final String? permission;
 
   CameraModel({
-    required this.userId, 
+    required this.id,
+    required this.userId,
     required this.name,
     required this.brand,
     required this.model,
@@ -45,6 +47,7 @@ class CameraModel {
   });
 
   CameraModel copyWith({
+    String? id,
     String? userId,
     String? time,
     String? name,
@@ -67,7 +70,8 @@ class CameraModel {
     String? permission,
   }) {
     return CameraModel(
-      userId: userId ?? this.userId, 
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       brand: brand ?? this.brand,
       model: model ?? this.model,
@@ -91,21 +95,22 @@ class CameraModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
-      'time' : time,
+      'time': time,
       'name': name,
       'brand': brand,
       'model': model,
       'description': description,
       'category': category,
-      'price': price, 
+      'price': price,
       'sdPrice': sdPrice,
       'available': available,
       'location': location,
       'phoneNumber': phoneNumber,
       'condition': condition,
-      'storageOption': storage,  
-      'connectivityOptions': connectivity,  
+      'storageOption': storage,
+      'connectivityOptions': connectivity,
       'duration': duration,
       'latePolicy': latePolicy,
       'images': images,
@@ -114,10 +119,10 @@ class CameraModel {
     };
   }
 
-  factory CameraModel.fromMap(Map<String, dynamic> map) {
+  factory CameraModel.fromMap(Map<String, dynamic> map, String uId) {
     return CameraModel(
-
-      userId: map['userId'] as String? ?? '', 
+      id:  uId,
+      userId: map['userId'] as String? ?? '',
       name: map['name'] as String? ?? '',
       brand: map['brand'] as String? ?? '',
       model: map['model'] as String? ?? '',
@@ -142,7 +147,8 @@ class CameraModel {
   // New factory method to convert from Camera entity
   factory CameraModel.fromEntity(Camera camera) {
     return CameraModel(
-      userId: camera.userId ?? '', 
+      id: camera.id ?? '',
+      userId: camera.userId ?? '',
       name: camera.name ?? '',
       brand: camera.brand ?? '',
       model: camera.model ?? '',
@@ -166,6 +172,7 @@ class CameraModel {
 
   Camera toEntity() {
     return Camera(
+      id: id,
       userId: userId,
       time: time,
       name: name,

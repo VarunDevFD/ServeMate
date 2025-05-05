@@ -77,9 +77,7 @@ class SectionOneDressCard extends StatelessWidget {
             ReusableDropdown(
               labelText: 'Category*',
               onFieldSubmitted: (value) {
-                if (value != null) {
-                  type.text = value;
-                }
+                type.text = value;
               },
               items: DropdownItems.categoriesDress,
             ),

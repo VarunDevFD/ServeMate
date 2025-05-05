@@ -193,9 +193,7 @@ class SoundDJPage extends StatelessWidget {
                     labelText: 'Category*',
                     items: DropdownItems.soundCategorys,
                     onFieldSubmitted: (value) {
-                      if (value != null) {
-                        category.text = value;
-                      }
+                      category.text = value;
                     },
                   ),
                 ),

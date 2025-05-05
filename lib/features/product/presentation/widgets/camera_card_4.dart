@@ -10,7 +10,7 @@ class SectionFourCameraCard extends StatelessWidget {
   final TextEditingController condition;
   final TextEditingController days;
   final TextEditingController latePolicy;
-  
+
   SectionFourCameraCard({
     super.key,
     required this.condition,
@@ -19,7 +19,7 @@ class SectionFourCameraCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     final paddingEdges = AppPadding.paddingEdgesAll;
     return Card(
       shape: CardProperties.cardShape,
@@ -38,9 +38,7 @@ class SectionFourCameraCard extends StatelessWidget {
               items: DropdownItems.condition,
               labelText: 'Condition *',
               onFieldSubmitted: (value) {
-                if (value != null) {
-                  condition.text = value;
-                }
+                condition.text = value;
               },
             ),
             SizedBox(height: 6.h),
@@ -65,7 +63,7 @@ class SectionFourCameraCard extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             // Minimum Rental Duration
-            TextFormField( 
+            TextFormField(
               controller: days,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
@@ -91,12 +89,11 @@ class SectionFourCameraCard extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             // Late Fee Policy
-            TextFormField( 
+            TextFormField(
               controller: latePolicy,
               decoration: const InputDecoration(
                 labelText: 'Late Fee Policy*',
               ),
-              
               validator: (value) =>
                   value!.isEmpty ? 'Accessories are required' : null,
             ),

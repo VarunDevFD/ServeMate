@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/sound.dart';
 
 class SoundModel {
+  final String? id;
   final String userId;
   final String name;
   final String time = DateTime.now().toString();
@@ -17,6 +18,7 @@ class SoundModel {
   final String? permission;
 
   SoundModel({
+    this.id,
     required this.userId,
     required this.name,
     required this.category,
@@ -33,6 +35,7 @@ class SoundModel {
   });
 
   SoundModel copyWith({
+    String? id,
     String? userId,
     String? name,
     String? category,
@@ -48,6 +51,7 @@ class SoundModel {
     String? permission,
   }) {
     return SoundModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       category: category ?? this.category,
@@ -66,6 +70,7 @@ class SoundModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'name': name,
       'category': category,
@@ -82,8 +87,9 @@ class SoundModel {
     };
   }
 
-  factory SoundModel.fromMap(Map<String, dynamic> map) {
+  factory SoundModel.fromMap(Map<String, dynamic> map, String docId) {
     return SoundModel(
+      id:docId,
       userId: map['userId'] as String,
       name: map['name'] as String,
       category: map['category'] as String,
@@ -102,6 +108,7 @@ class SoundModel {
 
   factory SoundModel.fromEntity(Sound sound) {
     return SoundModel(
+      id: sound.id ?? '',
       userId: sound.userId ?? '',
       name: sound.name ?? '',
       category: sound.category ?? '',
@@ -120,6 +127,7 @@ class SoundModel {
 
   Sound toEntity() {
     return Sound(
+      id: id,
       userId: userId,
       name: name,
       category: category,

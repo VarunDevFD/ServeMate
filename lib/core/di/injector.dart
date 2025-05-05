@@ -17,6 +17,19 @@ import 'package:serve_mate/features/category/data/repositories/category_reposito
 import 'package:serve_mate/features/category/domain/repositories/category_repository.dart';
 import 'package:serve_mate/features/category/domain/usecases/get_categorys_usecase.dart';
 import 'package:serve_mate/features/category/domain/usecases/save_category.dart';
+import 'package:serve_mate/features/category_list/data/datasources/category_remote_data_source.dart';
+import 'package:serve_mate/features/category_list/data/datasources/category_remote_data_source_impl.dart';
+import 'package:serve_mate/features/category_list/data/repository/data_repo_category.dart';
+import 'package:serve_mate/features/category_list/domain/repository/repo_category.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/delete_category_items.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_cameras_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_decoration_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_dress_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_footwears_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_jewelrys_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_sound_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_vehicles_usecase.dart';
+import 'package:serve_mate/features/category_list/domain/usecase/get_venues_usecase.dart';
 import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_repository_impl.dart';
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
@@ -173,4 +186,35 @@ Future<void> init() async {
 // Bloc
   serviceLocator
       .registerFactory(() => ProfileBloc(serviceLocator<GetUserDetails>()));
+
+// Fetch categorys
+// DataSource
+  serviceLocator.registerLazySingleton<H2CategoryRemoteDataSource>(
+    () => H2CategoryRemoteDataSourceImpl(),
+  );
+
+// Register the repository
+  serviceLocator.registerLazySingleton<H2CategoryRepository>(
+    () =>
+        H2CategoryRepositoryImpl(serviceLocator<H2CategoryRemoteDataSource>()),
+  );
+// Usecases
+  serviceLocator
+      .registerLazySingleton<GetCamerasUseCase>(() => GetCamerasUseCase());
+  serviceLocator.registerLazySingleton<GetDecorationUsecase>(
+      () => GetDecorationUsecase());
+  serviceLocator
+      .registerLazySingleton<GetDressUsecase>(() => GetDressUsecase());
+  serviceLocator
+      .registerLazySingleton<GetFootwearsUsecase>(() => GetFootwearsUsecase());
+  serviceLocator
+      .registerLazySingleton<GetJewelrysUsecase>(() => GetJewelrysUsecase());
+  serviceLocator
+      .registerLazySingleton<GetSoundUsecase>(() => GetSoundUsecase());
+  serviceLocator
+      .registerLazySingleton<GetVehiclesUsecase>(() => GetVehiclesUsecase());
+  serviceLocator
+      .registerLazySingleton<GetVenuesUseCase>(() => GetVenuesUseCase());
+  serviceLocator
+      .registerLazySingleton<DeleteCategoryItems>(() => DeleteCategoryItems());
 }

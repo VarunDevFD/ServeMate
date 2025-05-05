@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/jewelry.dart';
 
 class JewelryModel {
+  final String? id;
   final String? userId;
   final String? name;
   final String time = DateTime.now().toString();
@@ -21,6 +22,7 @@ class JewelryModel {
   final String? permission;
 
   JewelryModel({
+    this.id,
     this.userId,
     this.name,
     this.price,
@@ -42,6 +44,7 @@ class JewelryModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'name': name,
       'price': price,
@@ -62,8 +65,9 @@ class JewelryModel {
     };
   }
 
-  factory JewelryModel.fromMap(Map<String, dynamic> map) {
+  factory JewelryModel.fromMap(Map<String, dynamic> map, String docId) {
     return JewelryModel(
+      id: docId,
       userId: map['userId'],
       name: map['name'],
       price: map['price'],
@@ -87,6 +91,7 @@ class JewelryModel {
 
   factory JewelryModel.fromEntity(Jewelry jewelry) {
     return JewelryModel(
+      id: jewelry.id,
       userId: jewelry.userId,
       name: jewelry.name,
       price: jewelry.price,
@@ -109,6 +114,7 @@ class JewelryModel {
 
   Jewelry toEntity() {
     return Jewelry(
+      id: id,
       userId: userId,
       name: name,
       price: price,
@@ -129,6 +135,7 @@ class JewelryModel {
   }
 
   JewelryModel copyWith({
+    String? id,
     String? userId,
     String? name,
     int? price,
@@ -149,6 +156,7 @@ class JewelryModel {
     String? permission,
   }) {
     return JewelryModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,

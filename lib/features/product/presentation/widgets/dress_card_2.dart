@@ -52,10 +52,8 @@ class SectionTwoDressCard extends StatelessWidget {
               labelText: 'Size*',
               items: DropdownItems.sizes,
               onFieldSubmitted: (value) {
-                if (value != null) {
-                  size.text = value;
-                }
-              },
+                size.text = value;
+                            },
             ),
             SizedBox(height: 6.h),
             // Dress Condition
@@ -63,10 +61,8 @@ class SectionTwoDressCard extends StatelessWidget {
               labelText: 'condition *',
               items: DropdownItems.condition,
               onFieldSubmitted: (value) {
-                if (value != null) {
-                  condition.text = value;
-                }
-              },
+                condition.text = value;
+                            },
             ),
             SizedBox(height: 6.h),
             // Dress Color

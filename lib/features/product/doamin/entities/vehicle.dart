@@ -1,4 +1,5 @@
 class Vehicle {
+  final String? id;
   final String? userId;
   final String name;
   final String model;
@@ -21,6 +22,7 @@ class Vehicle {
   final String? permission;
 
   Vehicle({
+    this.id,
      this.userId,
     required this.name,
     required this.model,
@@ -44,6 +46,7 @@ class Vehicle {
   });
 
   Vehicle copyWith({
+    String? id,
     String? userId,
     String? name,
     String? model,
@@ -66,6 +69,7 @@ class Vehicle {
     String? permission,
   }) {
     return Vehicle(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       model: model ?? this.model,
@@ -91,6 +95,7 @@ class Vehicle {
 
   static empty() {
     return Vehicle(
+      id: '',
       userId: ' ',
       name: '',
       model: '',

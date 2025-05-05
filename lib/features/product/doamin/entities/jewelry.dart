@@ -1,4 +1,5 @@
 class Jewelry {
+  final String? id;
   final String? userId;
   final String? name;
   final int? price;
@@ -17,6 +18,7 @@ class Jewelry {
   final String? permission;
 
   Jewelry({
+    this.id,
     this.userId,
     required this.name,
     required this.price,
@@ -36,6 +38,8 @@ class Jewelry {
   });
 
   Jewelry copyWith({
+    String? id,
+    String? userId,
     String? name,
     int? price,
     int? securityDeposit,
@@ -53,6 +57,8 @@ class Jewelry {
     String? permission,
   }) {
     return Jewelry(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
       securityDeposit: securityDeposit ?? this.securityDeposit,
@@ -73,6 +79,8 @@ class Jewelry {
 
   static empty() {
     return Jewelry(
+      id: '',
+      userId: '',
       name: '',
       price: 0,
       securityDeposit: 0,

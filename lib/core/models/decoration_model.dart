@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/decoration.dart';
 
 class DecorationModel {
+  final String id;
   final String userId;
   final String time = DateTime.now().toString();
   final String name;
@@ -18,7 +19,8 @@ class DecorationModel {
   final String? permission;
 
   DecorationModel({
-    this.userId = '',
+    required this.userId,
+    required this.id,
     required this.name,
     required this.decorCategory,
     required this.decorStyles,
@@ -35,6 +37,7 @@ class DecorationModel {
   });
 
   DecorationModel copyWith({
+    String? id,
     String? userId,
     String? time,
     String? name,
@@ -52,6 +55,7 @@ class DecorationModel {
     String? permission,
   }) {
     return DecorationModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       decorCategory: decorCategory ?? this.decorCategory,
@@ -71,6 +75,7 @@ class DecorationModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'name': name,
       'time': time,
@@ -89,8 +94,9 @@ class DecorationModel {
     };
   }
 
-  factory DecorationModel.fromMap(Map<String, dynamic> map) {
+  factory DecorationModel.fromMap(Map<String, dynamic> map, String docId) {
     return DecorationModel(
+      id: docId,
       userId: map['userId'] ?? '',
       name: map['name'],
       decorCategory: List<String>.from(map['decorCategory']),
@@ -110,6 +116,7 @@ class DecorationModel {
 
   factory DecorationModel.fromEntity(DecorationEntity entity) {
     return DecorationModel(
+      id: entity.id ?? '',
       userId: entity.userId ?? '',
       name: entity.name ?? '',
       decorCategory: entity.decorCategory ?? [''],
@@ -129,6 +136,7 @@ class DecorationModel {
 
   DecorationEntity toEntity() {
     return DecorationEntity(
+      id: id,
       userId: userId,
       time: time,
       name: name,

@@ -1,4 +1,5 @@
 class Camera {
+  final String? id;
   final String? userId;
   final String? time;
   final String? name;
@@ -21,6 +22,7 @@ class Camera {
   final String? permission;
 
   Camera({
+    this.id,
     this.userId,
     this.time,
     this.name,
@@ -44,6 +46,7 @@ class Camera {
   });
 
   Camera copyWith({
+    String? id,
     String? userId,
     String? time,
     String? name,
@@ -65,6 +68,7 @@ class Camera {
     bool? privacyPolicy,
   }) {
     return Camera(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       time: time ?? this.time,
       name: name ?? this.name,
@@ -89,6 +93,7 @@ class Camera {
 
   static Camera empty() {
     return Camera(
+      id: '',
       userId: '',
       time: '',
       name: '',

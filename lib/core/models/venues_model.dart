@@ -1,9 +1,10 @@
 import 'package:serve_mate/features/product/doamin/entities/venue.dart';
 
 class VenueModel {
+  final String? id;
   final String userId;
   final String name;
-  final String time = DateTime.now().toString();
+  String time = DateTime.now().toString();
   final int price;
   final int sdPrice;
   final List<String> location;
@@ -18,6 +19,7 @@ class VenueModel {
   final bool privacyPolicy;
 
   VenueModel({
+    this.id,
     required this.userId,
     required this.name,
     required this.price,
@@ -32,10 +34,12 @@ class VenueModel {
     required this.facilities,
     required this.available,
     required this.privacyPolicy,
+    required this.time,
   });
 
   // copyWith method
   VenueModel copyWith({
+    String? id,
     String? userId,
     String? name,
     int? price,
@@ -53,6 +57,7 @@ class VenueModel {
     bool? privacyPolicy,
   }) {
     return VenueModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       price: price ?? this.price,
@@ -67,12 +72,14 @@ class VenueModel {
       facilities: facilities ?? this.facilities,
       available: available ?? this.available,
       privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      time: time ?? this.time,
     );
   }
 
   // toMap method
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'name': name,
       'price': price,
@@ -92,8 +99,9 @@ class VenueModel {
   }
 
   // fromMap method
-  factory VenueModel.fromMap(Map<String, dynamic> map) {
+  factory VenueModel.fromMap(Map<String, dynamic> map, String docId) {
     return VenueModel(
+      id: docId,
       userId: map['userId'] ?? '',
       name: map['name'] ?? '',
       price: map['price'] ?? 0,
@@ -108,12 +116,14 @@ class VenueModel {
       facilities: List<String>.from(map['facilities'] ?? []),
       available: map['available'] ?? false,
       privacyPolicy: map['privacyPolicy'] ?? false,
+      time: map['time'] ?? '',
     );
   }
 
   // fromEntity method
   factory VenueModel.fromEntity(Venue entity) {
     return VenueModel(
+      id: entity.id ?? '',
       userId: entity.userId ?? '',
       name: entity.name ?? '',
       price: entity.price ?? 0,
@@ -128,12 +138,15 @@ class VenueModel {
       facilities: entity.facilities ?? [],
       available: entity.available ?? false,
       privacyPolicy: entity.privacyPolicy ?? false,
+      time: entity.time ?? '',
     );
   }
 
   // toEntity method
   Venue toEntity() {
     return Venue(
+      id: id,
+      userId: userId,
       name: name,
       price: price,
       sdPrice: sdPrice,

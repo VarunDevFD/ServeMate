@@ -83,9 +83,7 @@ class SectionOneCameraCard extends StatelessWidget {
               labelText: 'Equipment Brand *',
               items: DropdownItems.brandsCamera,
               onFieldSubmitted: (value) {
-                if (value != null) {
-                  brand.text = value;
-                }
+                brand.text = value;
               },
             ),
             SizedBox(height: 10.h),
@@ -94,9 +92,7 @@ class SectionOneCameraCard extends StatelessWidget {
               labelText: 'Category*',
               items: DropdownItems.categoriesCamera,
               onFieldSubmitted: (value) {
-                if (value != null) {
-                  category.text = value;
-                }
+                category.text = value;
               },
             ),
             SizedBox(height: 10.h),

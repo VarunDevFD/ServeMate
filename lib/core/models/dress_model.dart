@@ -1,6 +1,7 @@
 import 'package:serve_mate/features/product/doamin/entities/dress_entity.dart';
 
 class DressModel {
+  final String id;
   final String userId;
   final String name;
   final String time = DateTime.now().toString();
@@ -24,6 +25,7 @@ class DressModel {
   final String? permission;
 
   DressModel({
+    this.id = '',
     required this.userId,
     required this.name,
     required this.gender,
@@ -47,6 +49,7 @@ class DressModel {
   });
 
   DressModel copyWith({
+    String? id,
     String? userId,
     String? name,
     String? gender,
@@ -69,6 +72,7 @@ class DressModel {
     String? permission,
   }) {
     return DressModel(
+      id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
       gender: gender ?? this.gender,
@@ -94,6 +98,7 @@ class DressModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'userId': userId,
       'name': name,
       'gender': gender,
@@ -117,8 +122,9 @@ class DressModel {
     };
   }
 
-  factory DressModel.fromMap(Map<String, dynamic> map) {
+  factory DressModel.fromMap(Map<String, dynamic> map, String docId) {
     return DressModel(
+      id: docId,
       userId: map['userId'],
       name: map['name'],
       gender: map['gender'],
@@ -144,6 +150,7 @@ class DressModel {
 
   factory DressModel.fromEntity(Dress dress) {
     return DressModel(
+      id: dress.id ?? '',
       userId: dress.userId ?? '',
       name: dress.name ?? '',
       gender: dress.gender ?? '',
@@ -169,6 +176,7 @@ class DressModel {
 
   Dress toEntity() {
     return Dress(
+      id: id,
       userId: userId,
       name: name,
       gender: gender,
