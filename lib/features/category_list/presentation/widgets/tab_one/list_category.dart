@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/widgets/common_snackbar.dart';
+import 'package:serve_mate/core/widgets/custom_loading_animation.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_state.dart';
 import '../../bloc/category_home_two/h2_category_bloc.dart';
@@ -13,10 +17,20 @@ class CategroyAddedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<H2CategoryBloc, H2CategoryState>(
+    return BlocConsumer<H2CategoryBloc, H2CategoryState>(
+      listener: (context, state) {
+        if (state is H2CategoryUpdated) {
+          AppSnackBar.show(
+            context,
+            content: "Updated Successfully",
+            backgroundColor: AppColors.green,
+          );
+        }
+      },
       builder: (context, state) {
+        log(state.toString());
         if (state is H2CategoryLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const CustomLoading();
         } else if (state is H2CategoryError) {
           return Center(
               child: Text(
@@ -40,7 +54,7 @@ class CategroyAddedScreen extends StatelessWidget {
         } else if (state is VenuesCategoryLoaded) {
           return _buildList(state.categories);
         } else {
-          return const Center(child: Text('Select a category'));
+          return const CustomLoading();
         }
       },
     );
@@ -72,7 +86,7 @@ class CategroyAddedScreen extends StatelessWidget {
                 text: 'Name: ',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: Colors.black,
+                  color: AppColors.black,
                 ),
                 children: [
                   TextSpan(
@@ -80,7 +94,7 @@ class CategroyAddedScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                   ),
                 ],
@@ -180,7 +194,12 @@ class CategroyAddedScreen extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.edit),
-                  onPressed: () {},
+                  onPressed: () {
+                    context
+                        .read<H2CategoryBloc>()
+                        .add(UpdateModelFinderEvent(item));
+                    context.push('/editCategoryPage');
+                  },
                 ),
               ],
             ),
@@ -195,3 +214,7 @@ class CategroyAddedScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+// 218

@@ -68,6 +68,16 @@ class VenuesCategoryLoaded extends H2CategoryState {
   VenuesCategoryLoaded(this.categories, {this.selectedItem});
 }
 
+class UpdateScreen  extends H2CategoryState {
+  final String? name;
+  final dynamic item;
+
+  UpdateScreen({this.name, this.item});
+
+}
+
+class H2CategoryUpdated extends H2CategoryState {}
+
 class H2CategoryError extends H2CategoryState {
   final String message;
 

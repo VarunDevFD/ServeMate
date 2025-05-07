@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/widgets/custom_elevated_button.dart';
+import 'package:serve_mate/core/widgets/custom_loading_animation.dart';
 import 'package:serve_mate/core/widgets/custom_text.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/onboarding_bloc/onboarding_state.dart';
@@ -20,7 +21,7 @@ class OnBoardingScreen extends StatelessWidget {
       body: BlocBuilder<OnboardingCubit, OnboardingState>(
         builder: (context, state) {
           if (state.isLoading) {
-            const Center(child: CircularProgressIndicator());
+            const CustomLoading();
           }
           if (state.error != null) {
             return Center(child: Text(state.error!));

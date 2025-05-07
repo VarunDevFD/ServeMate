@@ -8,4 +8,8 @@ class GetVenuesUseCase {
   Future<List<VenueModel>> call() async {
     return await repository.getVenues();
   }
+
+  Future<void> update(String dId, VenueModel model) async {
+    return await repository.updateVenue(dId, model);
+  }
 }

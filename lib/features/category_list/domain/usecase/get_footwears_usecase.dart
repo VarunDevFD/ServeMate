@@ -8,4 +8,8 @@ class GetFootwearsUsecase {
   Future<List<FootwearModel>> call() async {
     return await repository.getFootwear();
   }
+
+  Future<void> update(String dId, FootwearModel model) async {
+    return await repository.updateFootwear(dId, model);
+  }
 }

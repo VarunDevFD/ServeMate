@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
+import 'package:serve_mate/core/widgets/custom_loading_animation.dart';
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_event.dart';
@@ -24,7 +25,7 @@ class CategoryGrid extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is CategoryLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return  const CustomLoading();
         } else if (state is CategoryLoaded) {
           return GridView.builder(
             physics: const ClampingScrollPhysics(),

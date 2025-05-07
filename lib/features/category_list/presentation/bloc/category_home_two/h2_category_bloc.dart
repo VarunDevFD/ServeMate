@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
@@ -28,12 +30,19 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
   final prefs = serviceLocator<PreferencesRepository>();
 
   H2CategoryBloc() : super(H2CategoryInitial()) {
+    on<UpdateModelFinderEvent>((event, emit) async {
+      String userCategory = await prefs.getCategoryName();
+      log(userCategory);
+
+      emit(UpdateScreen(name: userCategory, item: event.item));
+    });
+
     on<H2LoadCategories>((event, emit) async {
-      String userCategory = await prefs.getCategoryName(); 
+      String userCategory = await prefs.getCategoryName();
       emit(H2CategoryLoading());
       try {
         switch (userCategory.toLowerCase()) {
-          case 'camera':
+          case 'cameras':
             final cameras = await getCamerasUseCase.call();
             emit(CameraCategoryLoaded(cameras));
             break;
@@ -41,7 +50,7 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
             final decorations = await getDecorationUsecase.call();
             emit(DecorationCategoryLoaded(decorations));
             break;
-          case 'dress':
+          case 'dresses':
             final dresses = await getDressUsecase.call();
             emit(DressCategoryLoaded(dresses));
             break;
@@ -53,7 +62,7 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
             final jewelrys = await getJewelrysUsecase.call();
             emit(JewelryCategoryLoaded(jewelrys));
             break;
-          case 'sound':
+          case 'sound & DJ Systems':
             final sounds = await getSoundUsecase.call();
             emit(SoundCategoryLoaded(sounds));
             break;
@@ -118,6 +127,97 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
       }
     });
 
+    // Update
+    on<UpdateCategoryItemEvent>((event, emit) async {
+      emit(H2CategoryLoading());
+      try {
+        String userCategory = await prefs.getCategoryName();
+        switch (userCategory.toLowerCase()) {
+          case 'cameras':
+            await getCamerasUseCase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final cameras = await getCamerasUseCase.call();
+              emit(CameraCategoryLoaded(cameras));
+            });
+
+            break;
+          case 'decoration':
+            await getDecorationUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final decorations = await getDecorationUsecase.call();
+              emit(DecorationCategoryLoaded(decorations));
+            });
+
+            break;
+          case 'dresses':
+            await getDressUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+
+              final dresses = await getDressUsecase.call();
+              emit(DressCategoryLoaded(dresses));
+            });
+
+            break;
+          case 'footwear':
+            await getFootwearsUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final footwears = await getFootwearsUsecase.call();
+              emit(FootwearCategoryLoaded(footwears));
+            });
+            break;
+          case 'jewelry':
+            await getJewelrysUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final jewelrys = await getJewelrysUsecase.call();
+              emit(JewelryCategoryLoaded(jewelrys));
+            });
+            break;
+          case 'sound & DJ Systems':
+            await getSoundUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final sounds = await getSoundUsecase.call();
+              emit(SoundCategoryLoaded(sounds));
+            });
+
+            break;
+          case 'vehicles':
+            await getVehiclesUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final vehicles = await getVehiclesUsecase.call();
+              emit(VehiclesCategoryLoaded(vehicles));
+            });
+            break;
+          case 'venue':
+            await getVenuesUseCase.update(event.uid, event.item);
+            emit(H2CategoryUpdated());
+            await Future.delayed(const Duration(seconds: 3), () async {
+              emit(H2CategoryLoading());
+              final venues = await getVenuesUseCase.call();
+              emit(VenuesCategoryLoaded(venues));
+            });
+            break;
+          default:
+            emit(H2CategoryError('Invalid category name'));
+        }
+      } catch (e) {
+        emit(H2CategoryError('Failed to update item: $e'));
+      }
+    });
+    // Delete
     on<DeleteCategoryEvent>((event, emit) async {
       try {
         String userCategory = await prefs.getCategoryName();
@@ -146,7 +246,7 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
             final jewelrys = await getJewelrysUsecase.call();
             emit(JewelryCategoryLoaded(jewelrys));
             break;
-          case 'sound':
+          case 'sound & DJ Systems':
             final sounds = await getSoundUsecase.call();
             emit(SoundCategoryLoaded(sounds));
             break;
@@ -165,7 +265,5 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
         emit(H2CategoryError('Failed to delete item: $e'));
       }
     });
-
-    
   }
 }

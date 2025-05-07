@@ -8,4 +8,8 @@ class GetDressUsecase {
   Future<List<DressModel>> call() async {
     return await repository.getDresses();
   }
+
+  Future< void> update(String dId, DressModel model) async {
+    return await repository.updateDress(dId, model);
+  }
 }

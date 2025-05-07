@@ -71,10 +71,10 @@ class JewelryModel {
       userId: map['userId'],
       name: map['name'],
       price: map['price'],
-      securityDeposit: map['securityDeposit'].toDouble(),
-      location: map['location'],
+      securityDeposit: map['securityDeposit'],
+      location: List<String>.from(map['location']),
       images: List<String>.from(
-          map['images']), // Corrected to fetch 'images' from map
+          map['images']),  
       description: map['description'],
       type: map['type'],
       material: map['material'],

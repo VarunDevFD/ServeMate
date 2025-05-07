@@ -37,6 +37,39 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
     }
   }
 
+  Future<void> _updateInFirestore<T>({
+    required String collectionName,
+    required String dId,
+    required Map<String, dynamic> data,
+    // required T Function(Map<String, dynamic>, String) fromMap,
+  }) async {
+    try {
+      final userId = await currentUserId();
+      final docRef = _firebaseFirestore.collection(collectionName).doc(dId);
+
+      // Verify the document exists and belongs to the user
+      final docSnapshot = await docRef.get();
+      if (!docSnapshot.exists) {
+        throw Exception('Document $dId does not exist in $collectionName');
+      }
+      final docData = docSnapshot.data() as Map<String, dynamic>;
+      if (docData['userId'] != userId) {
+        throw Exception(
+            'User does not have permission to update this document');
+      }
+
+      // Update the document
+      await docRef.update(data);
+
+      // // Fetch the updated document to return the updated model
+      // final updatedSnapshot = await docRef.get();
+
+      // return fromMap(updatedSnapshot.data() as Map<String, dynamic>, dId);
+    } catch (e) {
+      throw Exception('Failed to update data in $collectionName: $e');
+    }
+  }
+
   @override
   Future<List<CameraModel>> fetchCameras() async {
     return _fetchFromFirestore(
@@ -125,5 +158,93 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
     } catch (e) {
       throw Exception('Failed to delete document from $collectionName: $e');
     }
+  }
+
+  @override
+  Future<void> updateCamera(
+      String documentId, CameraModel updatedCamera) async {
+    await _updateInFirestore(
+      collectionName: 'camera',
+      dId: documentId,
+      data: updatedCamera.toMap(),
+      // fromMap: (data, docId) => CameraModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateDecoration(
+      String documentId, DecorationModel updatedDecoration) async {
+    await _updateInFirestore(
+      collectionName: 'Decoration',
+      dId: documentId,
+      data: updatedDecoration.toMap(),
+      // fromMap: (data, docId) => DecorationModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateDress(
+      String documentId, DressModel updatedDress) async {
+    await _updateInFirestore(
+      collectionName: 'dress',
+      dId: documentId,
+      data: updatedDress.toMap(),
+      // fromMap: (data, docId) => DressModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateFootwear(
+      String documentId, FootwearModel updatedFootwear) async {
+    await _updateInFirestore(
+      collectionName: 'footwear',
+      dId: documentId,
+      data: updatedFootwear.toMap(),
+      // fromMap: (data, docId) => FootwearModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateJewelry(
+      String documentId, JewelryModel updatedJewelry) async {
+    await _updateInFirestore(
+      collectionName: 'jewelry',
+      dId: documentId,
+      data: updatedJewelry.toMap(),
+      // fromMap: (data, docId) => JewelryModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateSound(
+      String documentId, SoundModel updatedSound) async {
+    await _updateInFirestore(
+      collectionName: 'sound',
+      dId: documentId,
+      data: updatedSound.toMap(),
+      // fromMap: (data, docId) => SoundModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateVehicle(
+      String documentId, VehicleModel updatedVehicle) async {
+    await _updateInFirestore(
+      collectionName: 'Vehicles',
+      dId: documentId,
+      data: updatedVehicle.toMap(),
+      // fromMap: (data, docId) => VehicleModel.fromMap(data, docId),
+    );
+  }
+
+  @override
+  Future<void> updateVenue(
+      String documentId, VenueModel updatedVenue) async {
+    await _updateInFirestore(
+      collectionName: 'venues',
+      dId: documentId,
+      data: updatedVenue.toMap(),
+      // fromMap: (data, docId) => VenueModel.fromMap(data, docId),
+    );
   }
 }

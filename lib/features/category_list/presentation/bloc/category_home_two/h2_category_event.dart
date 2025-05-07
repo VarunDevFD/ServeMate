@@ -12,11 +12,16 @@ class DeleteCategoryEvent extends H2CategoryEvent {
   DeleteCategoryEvent(this.id);
 }
 
-
-class UpdateCategoryEvent extends H2CategoryEvent {
+class UpdateCategoryItemEvent extends H2CategoryEvent {
   final dynamic item;
-  UpdateCategoryEvent(this.item);
+  final String uid;
+  UpdateCategoryItemEvent(this.item, this.uid);
 }
 
+class UpdateModelFinderEvent extends H2CategoryEvent {
+  final dynamic item;
+  UpdateModelFinderEvent(this.item);
+}
 
+ 
 

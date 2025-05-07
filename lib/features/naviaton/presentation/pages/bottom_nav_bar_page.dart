@@ -6,6 +6,7 @@ import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
+import 'package:serve_mate/core/widgets/custom_loading_animation.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
 import 'package:serve_mate/features/category_list/presentation/pages/main_screen.dart';
@@ -24,7 +25,7 @@ class BottomNavigationBar extends StatelessWidget {
         future: getCategoryName(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const CustomLoading();
           }
 
           if (snapshot.hasError) {

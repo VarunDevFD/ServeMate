@@ -135,7 +135,7 @@ class VehicleModel {
       price: map['price'] ?? 0,
       vehicleType: map['vehicleType'] ?? '',
       securityDeposit: map['securityDeposit'] ?? 0,
-      location: map['location'] ?? [],
+      location: List<String>.from(map['location']),
       images: List<String>.from(map['images'] ?? []),
       seatCapacity: map['seatCapacity'] ?? 0,
       registrationNumber: map['registrationNumber'] ?? '',
@@ -155,7 +155,7 @@ class VehicleModel {
   factory VehicleModel.fromEntity(Vehicle entity) {
     return VehicleModel(
       id: entity.id ?? '',
-      userId: entity.userId ??  '',
+      userId: entity.userId ?? '',
       name: entity.name,
       model: entity.model,
       brand: entity.brand,

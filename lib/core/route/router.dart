@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/common/screens/product_details_page.dart';
+import 'package:serve_mate/core/common/screens/update_screen.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/forgot_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:serve_mate/features/authentication/presentation/pages/sign_up_page.dart';
@@ -47,6 +48,10 @@ class AppRouter {
       GoRoute(
         path: '/detailsPage',
         builder: (context, state) => const CategoryDetailsScreen(),
+      ),
+      GoRoute(
+        path: '/editCategoryPage',
+        builder: (context, state) => const UpdatePage(),
       ),
       // GoRoute(
       //   path: '/productDetail',

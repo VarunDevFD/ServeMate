@@ -8,4 +8,8 @@ class GetSoundUsecase {
   Future<List<SoundModel>> call() async {
     return await repository.getSounds();
   }
+
+  Future<void> update(String dId, SoundModel model) async {
+    return await repository.updateSound(dId, model);
+  }
 }

@@ -33,13 +33,11 @@ class DecorationModel {
     required this.phoneNumber,
     required this.images,
     required this.privacyPolicy,
-   required this.permission,
+    required this.permission,
   });
 
   DecorationModel copyWith({
-    String? id,
     String? userId,
-    String? time,
     String? name,
     List<String>? decorCategory,
     List<String>? decorStyles,
@@ -51,12 +49,11 @@ class DecorationModel {
     List<String>? location,
     String? phoneNumber,
     List<String>? images,
-    bool? privacyPolicy,
     String? permission,
   }) {
     return DecorationModel(
-      id: id ?? this.id,
       userId: userId ?? this.userId,
+      id: id,
       name: name ?? this.name,
       decorCategory: decorCategory ?? this.decorCategory,
       decorStyles: decorStyles ?? this.decorStyles,
@@ -68,8 +65,8 @@ class DecorationModel {
       location: location ?? this.location,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       images: images ?? this.images,
-      privacyPolicy: privacyPolicy ?? this.privacyPolicy,
       permission: permission ?? this.permission,
+      privacyPolicy: privacyPolicy,
     );
   }
 

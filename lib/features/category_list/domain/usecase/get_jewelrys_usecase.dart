@@ -8,4 +8,8 @@ class GetJewelrysUsecase {
   Future<List<JewelryModel>> call() async {
     return await repository.getJewelry();
   }
+
+  Future<void> update(String dId, JewelryModel model) async {
+    return await repository.updateJewelry(dId, model);
+  }
 }

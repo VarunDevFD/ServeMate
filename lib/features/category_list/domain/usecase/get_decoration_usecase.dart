@@ -8,4 +8,8 @@ class GetDecorationUsecase {
   Future<List<DecorationModel>> call() async {
     return await repository.getDecorations();
   }
+
+  Future<void> update(String dId, DecorationModel model) async {
+    return await repository.updateDecoration(dId, model);
+  }
 }

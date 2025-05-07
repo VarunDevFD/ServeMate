@@ -1,0 +1,287 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
+import 'package:serve_mate/core/utils/constants_list.dart';
+import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
+import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
+import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
+import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
+import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
+import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
+import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
+import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
+import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
+
+class VehicleUpdatePage extends StatelessWidget {
+  final dynamic item;
+  final TextEditingController nameController;
+  final TextEditingController modelController;
+  final TextEditingController brandController;
+  final TextEditingController typeController;
+  final TextEditingController priceController;
+  final TextEditingController vehicleTypeController;
+  final TextEditingController securityDepositController;
+  final TextEditingController seatCapacityController;
+  final TextEditingController registrationNumberController;
+  final TextEditingController fuelTypeController;
+  final TextEditingController transmissionController;
+  final TextEditingController dateController;
+  final TextEditingController colorController;
+  final TextEditingController descriptionController;
+
+  VehicleUpdatePage({super.key, required this.item})
+      : nameController = TextEditingController(text: item?.name ?? ''),
+        modelController = TextEditingController(text: item?.model ?? ''),
+        brandController = TextEditingController(text: item?.brand ?? ''),
+        typeController = TextEditingController(),
+        priceController =
+            TextEditingController(text: item?.price?.toString() ?? ''),
+        vehicleTypeController =
+            TextEditingController(text: item?.vehicleType ?? ''),
+        securityDepositController = TextEditingController(
+            text: item?.securityDeposit?.toString() ?? ''),
+        seatCapacityController =
+            TextEditingController(text: item?.seatCapacity?.toString() ?? ''),
+        registrationNumberController =
+            TextEditingController(text: item?.registrationNumber ?? ''),
+        fuelTypeController = TextEditingController(text: item?.fuelType ?? ''),
+        transmissionController =
+            TextEditingController(text: item?.transmission ?? ''),
+        dateController = TextEditingController(text: item?.date ?? ''),
+        colorController = TextEditingController(text: item?.color ?? ''),
+        descriptionController =
+            TextEditingController(text: item?.description ?? '');
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Vehicle Update'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.read<H2CategoryBloc>().add(H2LoadCategories());
+            context.pop();
+          },
+        ),
+      ),
+      body: _buildForm(context),
+      floatingActionButton: SizedBox(
+        width: 60.w,
+        height: 60.h,
+        child: FloatingActionButton(
+          onPressed: () => _saveChanges(context),
+          elevation: 0,
+          highlightElevation: 0,
+          mini: false,
+          materialTapTargetSize: MaterialTapTargetSize.padded,
+          shape: const CircleBorder(),
+          heroTag: 'vehicleUpdateFab',
+          child: Icon(
+            Icons.save,
+            size: 26.sp,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  Widget _buildForm(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildTextField(nameController, 'Name'),
+          SizedBox(height: 16.h),
+          _buildTextField(modelController, 'Model'),
+          SizedBox(height: 16.h),
+          _buildTextField(brandController, 'Brand'),
+          SizedBox(height: 16.h),
+          _buildTextField(priceController, 'Price'),
+          SizedBox(height: 16.h),
+          _buildTextField(vehicleTypeController, 'Vehicle Type'),
+          SizedBox(height: 16.h),
+          _buildTextField(securityDepositController, 'Security Deposit'),
+          SizedBox(height: 16.h),
+          _buildTextField(seatCapacityController, 'Seat Capacity'),
+          SizedBox(height: 16.h),
+          _buildTextField(registrationNumberController, 'Registration Number'),
+          SizedBox(height: 16.h),
+          _buildTextField(fuelTypeController, 'Fuel Type'),
+          SizedBox(height: 16.h),
+          _buildTextField(transmissionController, 'Transmission'),
+          SizedBox(height: 16.h),
+          _buildTextField(dateController, 'Date'),
+          SizedBox(height: 16.h),
+          _buildTextField(colorController, 'Color'),
+          SizedBox(height: 16.h),
+          _buildTextField(descriptionController, 'Description'),
+          SizedBox(height: 24.h),
+          _buildLocationSection(),
+          SizedBox(height: 24.h),
+          ReusableDropdown(
+            labelText: item.type ?? 'Vehicle Type *',
+            items: DropdownItems.vehicleTypeItems,
+            onFieldSubmitted: (value) {
+              typeController.text = value;
+            },
+          ),
+          SizedBox(height: 24.h),
+          ReusableDropdown(
+            labelText: item.fuelType ?? 'Fuel Type *',
+            items: DropdownItems.vehicleFuelItems,
+            onFieldSubmitted: (value) {
+              fuelTypeController.text = value;
+            },
+          ),
+          SizedBox(height: 24.h),
+          ReusableDropdown(
+            labelText: item.transmission ?? 'Transmission Type *',
+            items: DropdownItems.vehicleTransmissionItems,
+            onFieldSubmitted: (value) {
+              vehicleTypeController.text = value;
+            },
+          ),
+          SizedBox(height: 24.h),
+          _buildFacilitiesSection(),
+          SizedBox(height: 24.h),
+          _buildImageSection(),
+          SizedBox(height: 60.h),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(labelText: label),
+    );
+  }
+
+  Widget _buildLocationSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Vehicle Location',
+          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'Previous Data: ${item.location[0] ?? 'No Location'}',
+          style: TextStyle(fontSize: 14.sp),
+        ),
+        SizedBox(height: 8.h),
+        LocationTextField(),
+      ],
+    );
+  }
+
+  Widget _buildFacilitiesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Facilities',
+          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'Previous Data:\n${item.facilities?.join('\n') ?? 'No Facilities'}',
+          style: TextStyle(fontSize: 14.sp),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'Choose the Data to Update',
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(height: 8.h),
+        FilterChipScreen(
+          id: 'facilities',
+          categories: facilitiesVehicle,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Vehicle Images',
+          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'Previous Data: Images',
+          style: TextStyle(fontSize: 14.sp),
+        ),
+        SizedBox(height: 8.h),
+        const ImagePickerPage(),
+      ],
+    );
+  }
+
+  void _saveChanges(BuildContext context) {
+    final imagePickerBloc = context.read<ImagePickerBloc>();
+    final locationBloc = context.read<LocationBloc>();
+    final availableSwitchCubit = context.read<AvailableSwitchCubit>();
+    final cubit = context.read<FilterChipCubit>();
+    final selections = cubit.state.selections;
+
+    final vehicleType = selections['vehicleType'] ?? [item.vehicleType];
+    final fuelType = selections['fuelType'] ?? [item.fuelType];
+    final transmission = selections['transmission'] ?? [item.transmission];
+    final facilities = selections['facilities'] ?? item.facilities;
+    final currentImageState = imagePickerBloc.state;
+    final isAvailable = availableSwitchCubit.state ?? item.availability;
+
+    List<String> images = item.images;
+    // if (currentImageState is ImageLoaded) {
+    //   images = currentImageState.images;
+    // }
+
+    List<String> location = item.location;
+    final locationState = locationBloc.state;
+    if (locationState is LocationLoaded) {
+      location = locationState.location;
+    }
+
+    final updatedItem = item.copyWith(
+      name: nameController.text,
+      model: modelController.text,
+      brand: brandController.text,
+      price: int.tryParse(priceController.text) ?? item.price,
+      vehicleType: vehicleType.isNotEmpty ? vehicleType[0] : item.vehicleType,
+      securityDeposit:
+          int.tryParse(securityDepositController.text) ?? item.securityDeposit,
+      seatCapacity:
+          int.tryParse(seatCapacityController.text) ?? item.seatCapacity,
+      registrationNumber: registrationNumberController.text,
+      fuelType: fuelType.isNotEmpty ? fuelType[0] : item.fuelType,
+      transmission:
+          transmission.isNotEmpty ? transmission[0] : item.transmission,
+      facilities: facilities,
+      date: dateController.text,
+      color: colorController.text,
+      description: descriptionController.text,
+      images: images,
+      location: location,
+      availability: isAvailable,
+    );
+
+    context
+        .read<H2CategoryBloc>()
+        .add(UpdateCategoryItemEvent(updatedItem, item.id));
+
+    context.pop();
+  }
+}
