@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 
-class CategoryApprovedScreen extends StatelessWidget {
-  const CategoryApprovedScreen({super.key});
+class CategroyAddedScreen extends StatelessWidget {
+  const CategroyAddedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,12 +85,12 @@ class CategoryApprovedScreen extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    Icons.turned_in_rounded,
-                    color: AppColors.green,
+                    Icons.av_timer_outlined,
+                    color: AppColors.yellow,
                   ),
-                  Text('Approved',
+                  Text('Pending...',
                       style: TextStyle(
-                        color: AppColors.green,
+                        color: AppColors.yellow,
                         fontWeight: FontWeight.bold,
                       )),
                 ],
@@ -118,8 +118,4 @@ class CategoryApprovedScreen extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> da7540b6fe015c2e30fe6801e13ffa3fa9821d0e
