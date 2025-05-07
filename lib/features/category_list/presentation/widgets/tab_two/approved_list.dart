@@ -118,8 +118,4 @@ class CategoryApprovedScreen extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> da7540b6fe015c2e30fe6801e13ffa3fa9821d0e
