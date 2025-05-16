@@ -1,16 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:serve_mate/core/utils/constants_list.dart';
+import 'package:go_router/go_router.dart'; 
+import 'package:serve_mate/core/utils/helper/image_concatinate.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
 import 'package:serve_mate/features/product/presentation/bloc/image_bloc/image_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
-import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart';
-import 'package:serve_mate/features/product/presentation/widgets/filter_chip_widget.dart';
+import 'package:serve_mate/features/product/presentation/bloc/switch_cubit/cubit/available_switch_cubit.dart'; 
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 
@@ -182,6 +182,8 @@ class SoundUpdatePage extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
+    final imageUrls = ImageConcatinate.concatinateImage(item.images);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -194,13 +196,40 @@ class SoundUpdatePage extends StatelessWidget {
           'Previous Data: Images',
           style: TextStyle(fontSize: 14.sp),
         ),
+        SizedBox(
+          height: 180.h,
+          width: 300.w,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: imageUrls.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.all(8.w),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrls[index],
+                    width: 150.w,
+                    height: 180.h,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         SizedBox(height: 8.h),
         const ImagePickerPage(),
       ],
     );
   }
 
-  void _saveChanges(BuildContext context) {
+  void _saveChanges(BuildContext context) async {
     final imagePickerBloc = context.read<ImagePickerBloc>();
     final locationBloc = context.read<LocationBloc>();
     final availableSwitchCubit = context.read<AvailableSwitchCubit>();
@@ -209,13 +238,7 @@ class SoundUpdatePage extends StatelessWidget {
 
     final equipmentTypes = selections['equipmentTypes'] ?? item.equipmentTypes;
     final category = selections['category'] ?? [item.category];
-    final currentImageState = imagePickerBloc.state;
     final isAvailable = availableSwitchCubit.state ?? item.available;
-
-    List<String> images = item.images;
-    // if (currentImageState is ImageLoaded) {
-    //   images = currentImageState.images;
-    // }
 
     List<String> location = item.location;
     final locationState = locationBloc.state;
@@ -223,24 +246,34 @@ class SoundUpdatePage extends StatelessWidget {
       location = locationState.location;
     }
 
-    final updatedItem = item.copyWith(
-      name: nameController.text,
-      category: category.isNotEmpty ? category[0] : item.category,
-      equipmentTypes: equipmentTypes,
-      description: descriptionController.text,
-      price: int.tryParse(priceController.text) ?? item.price,
-      securityDeposit:
-          int.tryParse(securityDepositController.text) ?? item.securityDeposit,
-      phoneNumber: phoneNumberController.text,
-      images: images,
-      location: location,
-      available: isAvailable,
-    );
+    imagePickerBloc.add(UploadImagesToCloudinary());
+    final stateImage = await imagePickerBloc.stream
+        .firstWhere((state) => state is ImagesUploaded || state is ImageError);
 
-    context
-        .read<H2CategoryBloc>()
-        .add(UpdateCategoryItemEvent(updatedItem, item.id));
+    if (stateImage is ImagesUploaded) {
+      final imageUrls = stateImage.imageUrls;
+      imageUrls.removeAt(0);
 
-    context.pop();
+      final updatedItem = item.copyWith(
+        name: nameController.text,
+        category: category.isNotEmpty ? category[0] : item.category,
+        equipmentTypes: equipmentTypes,
+        description: descriptionController.text,
+        price: int.tryParse(priceController.text) ?? item.price,
+        securityDeposit: int.tryParse(securityDepositController.text) ??
+            item.securityDeposit,
+        phoneNumber: phoneNumberController.text,
+                images: [...item.images,...imageUrls],
+
+        location: location,
+        available: isAvailable,
+      );
+
+      context
+          .read<H2CategoryBloc>()
+          .add(UpdateCategoryItemEvent(updatedItem, item.id));
+
+      context.pop();
+    }
   }
 }

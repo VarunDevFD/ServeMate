@@ -20,6 +20,7 @@ class AppColors {
   static Color background = const Color(0xFFEDF4F5);
   static Color dimBlack = const Color.fromARGB(255, 213, 212, 212);
   static Color dimOrange = const Color.fromARGB(255, 255, 248, 244);
+  static Color dimGreen = const Color.fromARGB(255, 244, 255, 244);
   static const Color cardBackground = Color(0xFFFFFBFA);
   static const Color border = Color(0xFFEEEEEE);
   static const Color imageBr = Color(0xFFEEEEEE);

@@ -9,6 +9,11 @@ class SuccessState extends CommonState {
   SuccessState(this.type);
 }
 
+class AccessState extends CommonState {
+  bool btn = true;
+  AccessState(this.btn);
+}
+
 class ErrorState extends CommonState {
   final String type;
   ErrorState(this.type);

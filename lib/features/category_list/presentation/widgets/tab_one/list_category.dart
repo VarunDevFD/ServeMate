@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +26,6 @@ class CategroyAddedScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        log(state.toString());
         if (state is H2CategoryLoading) {
           return const CustomLoading();
         } else if (state is H2CategoryError) {
