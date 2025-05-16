@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/models/decoration_model.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
+import 'package:serve_mate/core/utils/helper/image_concatinate.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
 import 'package:serve_mate/features/product/presentation/bloc/filter_chip_cubit/filter_chip_cubit.dart';
@@ -15,7 +18,7 @@ import 'package:serve_mate/features/product/presentation/widgets/image_widgets.d
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 
 class DecorationUpdatePage extends StatelessWidget {
-  final dynamic item;
+  final DecorationModel item;
   final TextEditingController nameController;
   final TextEditingController priceController;
   final TextEditingController sdPriceController;
@@ -24,16 +27,13 @@ class DecorationUpdatePage extends StatelessWidget {
   final TextEditingController descriptionController;
 
   DecorationUpdatePage({super.key, required this.item})
-      : nameController = TextEditingController(text: item?.name ?? ''),
-        priceController =
-            TextEditingController(text: item?.price?.toString() ?? ''),
+      : nameController = TextEditingController(text: item.name),
+        priceController = TextEditingController(text: item.price.toString()),
         sdPriceController =
-            TextEditingController(text: item?.sdPrice?.toString() ?? ''),
-        durationController = TextEditingController(text: item?.duration ?? ''),
-        phoneNumberController =
-            TextEditingController(text: item?.phoneNumber ?? ''),
-        descriptionController =
-            TextEditingController(text: item?.description ?? '');
+            TextEditingController(text: item.sdPrice.toString()),
+        durationController = TextEditingController(text: item.duration),
+        phoneNumberController = TextEditingController(text: item.phoneNumber),
+        descriptionController = TextEditingController(text: item.description);
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +167,7 @@ class DecorationUpdatePage extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         Text(
-          'Previous Data: ${item.location[0] ?? 'No Location'}',
+          'Previous Data: ${item.location[0]}',
           style: TextStyle(fontSize: 14.sp),
         ),
         SizedBox(height: 8.h),
@@ -177,6 +177,8 @@ class DecorationUpdatePage extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
+    final imageUrls = ImageConcatinate.concatinateImage(item.images);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -189,13 +191,40 @@ class DecorationUpdatePage extends StatelessWidget {
           'Previous Data: Images',
           style: TextStyle(fontSize: 14.sp),
         ),
+        SizedBox(
+          height: 180.h,
+          width: 300.w,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: imageUrls.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.all(8.w),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrls[index],
+                    width: 150.w,
+                    height: 180.h,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         SizedBox(height: 8.h),
         const ImagePickerPage(),
       ],
     );
   }
 
-  void _saveChanges(BuildContext context) {
+  void _saveChanges(BuildContext context) async {
     final imagePickerBloc = context.read<ImagePickerBloc>();
     final locationBloc = context.read<LocationBloc>();
     final availableSwitchCubit = context.read<AvailableSwitchCubit>();
@@ -204,13 +233,11 @@ class DecorationUpdatePage extends StatelessWidget {
 
     final decorCategory = selections['decorCategory'] ?? item.decorCategory;
     final decorStyles = selections['decorStyles'] ?? item.decorStyles;
-    final currentImageState = imagePickerBloc.state;
     final isAvailable = availableSwitchCubit.state ?? item.available;
 
-    List<String> images = item.images;
-    // if (currentImageState is ImageLoaded) {
-    //   images = currentImageState.images;
-    // }
+    imagePickerBloc.add(UploadImagesToCloudinary());
+    final stateImage = await imagePickerBloc.stream
+        .firstWhere((state) => state is ImagesUploaded || state is ImageError);
 
     List<String> location = item.location;
     final locationState = locationBloc.state;
@@ -218,24 +245,29 @@ class DecorationUpdatePage extends StatelessWidget {
       location = locationState.location;
     }
 
-    final updatedItem = item.copyWith(
-      name: nameController.text,
-      price: int.tryParse(priceController.text) ?? item.price,
-      sdPrice: int.tryParse(sdPriceController.text) ?? item.sdPrice,
-      duration: durationController.text,
-      phoneNumber: phoneNumberController.text,
-      description: descriptionController.text,
-      decorCategory: decorCategory,
-      decorStyles: decorStyles,
-      images: images,
-      location: location,
-      available: isAvailable,
-    );
+    if (stateImage is ImagesUploaded) {
+      final imageUrls = stateImage.imageUrls;
+      imageUrls.removeAt(0);
 
-    context
-        .read<H2CategoryBloc>()
-        .add(UpdateCategoryItemEvent(updatedItem, item.id));
+      final updatedItem = item.copyWith(
+        name: nameController.text,
+        price: int.tryParse(priceController.text) ?? item.price,
+        sdPrice: int.tryParse(sdPriceController.text) ?? item.sdPrice,
+        duration: durationController.text,
+        phoneNumber: phoneNumberController.text,
+        description: descriptionController.text,
+        decorCategory: decorCategory,
+        decorStyles: decorStyles,
+        images: [...item.images, ...imageUrls],
+        location: location,
+        available: isAvailable,
+      );
 
-    context.pop();
+      context
+          .read<H2CategoryBloc>()
+          .add(UpdateCategoryItemEvent(updatedItem, item.id));
+
+      context.pop();
+    }
   }
 }
