@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +10,7 @@ import 'package:serve_mate/features/category/presentation/bloc/category_bloc/cat
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_event.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
 import 'package:serve_mate/features/category/presentation/widgets/category_item_widget.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bloc/home_session_bloc_bloc.dart';
 
 class CategoryGrid extends StatelessWidget {
   const CategoryGrid({super.key});
@@ -25,7 +25,7 @@ class CategoryGrid extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is CategoryLoading) {
-          return  const CustomLoading();
+          return const CustomLoading();
         } else if (state is CategoryLoaded) {
           return GridView.builder(
             physics: const ClampingScrollPhysics(),
@@ -59,6 +59,8 @@ class CategoryGrid extends StatelessWidget {
     Category category,
   ) async {
     final pref = serviceLocator<PreferencesRepository>();
+    final sessionBloc = context.read<SessionCategoryBloc>();
+    final categoryBloc = context.read<CategoryBloc>();
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -74,9 +76,10 @@ class CategoryGrid extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                context
-                    .read<CategoryBloc>()
-                    .add(SelectCategoryEvent(category.name));
+                categoryBloc.add(SelectCategoryEvent(category.name));
+                final uid = await pref.getUserId();
+                sessionBloc.add(LoadSessionCategoryEvent(uid: uid));
+
                 Navigator.of(context).pop(true); // Confirm
                 await pref.setHasSeenHome(true);
               },

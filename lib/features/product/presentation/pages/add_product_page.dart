@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:serve_mate/core/utils/constants.dart'; 
 import 'package:serve_mate/features/product/presentation/widgets/add_camera_form_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/add_decoration_form_widget.dart';
 import 'package:serve_mate/features/product/presentation/widgets/add_dress_form_widget.dart';
@@ -19,21 +20,21 @@ class AddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (categoryName) {
-      case 'Cameras':
+      case Names.camera:
         return Cameras();
-      case 'Decoration':
+      case Names.decoration:
         return DecorationPage();
-      case 'Dresses':
+      case  Names.dress:
         return DressesPage();
-      case 'Footwear':
+      case  Names.footwear:
         return FootwearPage();
-      case 'Jewelry':
+      case  Names.jewelry:
         return JewelryPage();
-      case 'Sound & DJ Systems':
+      case  Names.sound:
         return SoundDJPage();
-      case 'Vehicles':
+      case  Names.vehicle:
         return VehiclesPage();
-      case 'Venue':
+      case  Names.venue:
         return VenuePage();
       default:
         return const Center(child: Text('Invalid Category'));

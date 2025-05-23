@@ -32,7 +32,7 @@ class BottomNavigationBar extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          final formName = snapshot.data ?? "Invalid Category";
+          final formName = snapshot.data ?? "Not Found";
           return BlocListener<BottomNavCubit, int>(
             listener: (context, index) {
               if (index == 1) {
@@ -63,7 +63,7 @@ class BottomNavigationBar extends StatelessWidget {
                   onPageChanged: (index) =>
                       context.read<BottomNavCubit>().updateIndex(index),
                   children: [
-                    const HomePage(),
+                    HomePage(),
                     ListPage(type: formName),
                     AddPage(categoryName: formName),
                     const NotificationsPage(),
@@ -83,7 +83,7 @@ class BottomNavigationBar extends StatelessWidget {
 
   Future<String> getCategoryName() async {
     final prefs = serviceLocator<PreferencesRepository>();
-    return await prefs.getCategoryName() ?? ''; // Fetch categoryName from prefs
+    return await prefs.getCategoryName(); // Fetch categoryName from prefs
   }
 }
 

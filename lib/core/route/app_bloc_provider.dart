@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bloc/home_session_bloc_bloc.dart';
 import 'package:serve_mate/features/on_boarding/presentation/bloc/splash_bloc/splash_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/animation_bloc/animation_bloc.dart';
 import 'package:serve_mate/features/product/presentation/bloc/calender_bloc/calender_bloc.dart';
@@ -51,6 +52,7 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => ImagePickerBloc()),
         BlocProvider(create: (_) => serviceLocator<ProfileBloc>()),
         BlocProvider(create: (_) => H2CategoryBloc()),
+        BlocProvider(create: (_) => SessionCategoryBloc()),
       ],
       child: child,
     );

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/utils/app_exception.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 abstract class DataSourceCategory {
@@ -22,49 +23,49 @@ class DataSourceRemoteCategory implements DataSourceCategory {
     try {
       return [
         const Category(
-          name: 'Cameras',
+          name: Names.camera,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/cameras.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Decoration',
+          name: Names.decoration,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/decoration.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Dresses',
+          name: Names.dress,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/dresses.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Footwear',
+          name: Names.footwear,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/footwear.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Jewelry',
+          name: Names.jewelry,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/jewelry.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Sound & DJ Systems',
+          name: Names.sound,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/sound&dj.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Vehicles',
+          name: Names.vehicle,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/vehicles.jpg',
           userId: null,
         ),
         const Category(
-          name: 'Venue',
+          name: Names.venue,
           imageUrl:
               'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/venues.jpg',
           userId: null,

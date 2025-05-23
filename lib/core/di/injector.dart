@@ -30,6 +30,19 @@ import 'package:serve_mate/features/category_list/domain/usecase/get_jewelrys_us
 import 'package:serve_mate/features/category_list/domain/usecase/get_sound_usecase.dart';
 import 'package:serve_mate/features/category_list/domain/usecase/get_vehicles_usecase.dart';
 import 'package:serve_mate/features/category_list/domain/usecase/get_venues_usecase.dart';
+import 'package:serve_mate/features/home/data/datasource/datasource_home.dart';
+import 'package:serve_mate/features/home/data/datasource/datasource_impl_home.dart';
+import 'package:serve_mate/features/home/data/repository/data_repository_home_catrgeory.dart';
+import 'package:serve_mate/features/home/domain/repository/domain_home_category_repository.dart';
+import 'package:serve_mate/features/home/domain/usecase/camera_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/decoration_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/dress_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/footwear_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/get_user_categorys_list_usecase.dart';
+import 'package:serve_mate/features/home/domain/usecase/jewelry_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/sound_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/vehicle_usecase_home.dart';
+import 'package:serve_mate/features/home/domain/usecase/venues_usecase_home.dart';
 import 'package:serve_mate/features/on_boarding/data/repositories/on_boarding_repository_impl.dart';
 import 'package:serve_mate/features/on_boarding/domain/repositories/repo_onboarding.dart';
 import 'package:serve_mate/features/on_boarding/domain/usecases/complete_onboarding_usecase.dart';
@@ -201,20 +214,44 @@ Future<void> init() async {
 // Usecases
   serviceLocator
       .registerLazySingleton<GetCamerasUseCase>(() => GetCamerasUseCase());
+  serviceLocator
+      .registerLazySingleton<CameraUsecaseHome>(() => CameraUsecaseHome());
   serviceLocator.registerLazySingleton<GetDecorationUsecase>(
       () => GetDecorationUsecase());
+  serviceLocator.registerLazySingleton<DecorationUsecaseHome>(
+      () => DecorationUsecaseHome());
   serviceLocator
       .registerLazySingleton<GetDressUsecase>(() => GetDressUsecase());
   serviceLocator
+      .registerLazySingleton<DressUsecaseHome>(() => DressUsecaseHome());
+  serviceLocator
       .registerLazySingleton<GetFootwearsUsecase>(() => GetFootwearsUsecase());
+  serviceLocator
+      .registerLazySingleton<FootwearUsecaseHome>(() => FootwearUsecaseHome());
   serviceLocator
       .registerLazySingleton<GetJewelrysUsecase>(() => GetJewelrysUsecase());
   serviceLocator
+      .registerLazySingleton<JewelryUsecaseHome>(() => JewelryUsecaseHome());
+  serviceLocator
       .registerLazySingleton<GetSoundUsecase>(() => GetSoundUsecase());
+  serviceLocator
+      .registerLazySingleton<SoundUsecaseHome>(() => SoundUsecaseHome());
   serviceLocator
       .registerLazySingleton<GetVehiclesUsecase>(() => GetVehiclesUsecase());
   serviceLocator
+      .registerLazySingleton<VehicleUsecaseHome>(() => VehicleUsecaseHome());
+  serviceLocator
       .registerLazySingleton<GetVenuesUseCase>(() => GetVenuesUseCase());
   serviceLocator
+      .registerLazySingleton<VenuesUsecaseHome>(() => VenuesUsecaseHome());
+  serviceLocator
       .registerLazySingleton<DeleteCategoryItems>(() => DeleteCategoryItems());
+  serviceLocator.registerLazySingleton<GetUserCategorysListUsecase>(
+      () => GetUserCategorysListUsecase());
+  serviceLocator.registerLazySingleton<HomeCategoryRepository>(
+    () => HomeDataCategoryRepo(),
+  );
+  serviceLocator.registerLazySingleton<DatasourceHome>(
+    () => DatasourceHomeImpl(),
+  );
 }

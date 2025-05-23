@@ -21,7 +21,8 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     bool hasSeenOnboarding = await preferencesRepository.hasSeenOnboarding();
     bool categoryScreen = await preferencesRepository.getCategoryScreen();
     String userCategory = await preferencesRepository.getCategoryName();
-    log("-----$userCategory");
+    String uid = await preferencesRepository.getUserId();
+    log("-----$userCategory --$uid--");
 
     if (hasSeenHome == true && userCategory.isNotEmpty) {
       emit(GoToHome());

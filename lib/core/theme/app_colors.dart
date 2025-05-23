@@ -24,6 +24,8 @@ class AppColors {
   static const Color cardBackground = Color(0xFFFFFBFA);
   static const Color border = Color(0xFFEEEEEE);
   static const Color imageBr = Color(0xFFEEEEEE);
+  static const Color purpleAccent = Colors.purpleAccent;
+  static const Color pinkAccent = Colors.pinkAccent;
 
   // Error
   static const Color error = Color.fromARGB(255, 240, 13, 13);
@@ -36,6 +38,8 @@ class AppColors {
   static Color balck4 = Colors.black.withAlpha((0.5 * 255).toInt());
 
   // White
+  static Color white0 =
+      const Color.fromARGB(255, 255, 237, 237).withAlpha((0.2 * 255).toInt());
   static Color white1 = Colors.white.withAlpha((0.2 * 255).toInt());
   static Color white2 =
       const Color.fromARGB(255, 255, 188, 149).withAlpha((0.2 * 255).toInt());
@@ -64,4 +68,6 @@ class AppColors {
   static const Color gradient1 = Color.fromRGBO(246, 159, 39, 1);
   static const Color gradient2 = Color.fromRGBO(228, 131, 70, 1);
   static const Color gradient3 = Color.fromRGBO(255, 153, 116, 1);
+
+  static Color geryOp5 = Colors.grey.withOpacity(0.5);
 }

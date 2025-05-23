@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/di/injector.dart';
+import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/theme/app_text_style.dart';
 import 'package:serve_mate/core/widgets/custom_elevated_button.dart';
@@ -9,6 +11,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pref = serviceLocator<PreferencesRepository>();
     return Scaffold(
         body: SizedBox(
       width: double.infinity,
@@ -44,11 +47,14 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CustomElevatedButton(
-                      text: 'Sign In',
-                      onPressed: () => context.go('/sign-in'),
-                      //----------Temp--------
-                      onLongPress: () => context.go('/selectCategory'),
-                    ),
+                        text: 'Sign In',
+                        onPressed: () => context.go('/sign-in'),
+                        //----------Temp--------
+                        onLongPress: () async {
+                          // await pref.setUSerId('vnqRS2iM2gXgc4MSuR4jlGAIkex2');
+                          await pref.setUSerId('dZ67hc6Jd8PWC2mpSrqYiULYfeE3');
+                          context.go('/selectCategory');
+                        }),
                   ),
                   const SizedBox(width: 20),
                   Expanded(

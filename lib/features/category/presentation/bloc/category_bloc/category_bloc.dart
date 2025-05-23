@@ -32,6 +32,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       final save = serviceLocator<SaveCategory>();
 
       final selectedCategory = event.category;
+      
       await save.call(selectedCategory);
 
       emit(CategorySelected());

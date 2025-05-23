@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/common/screens/venue_update_screen.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_state.dart';
 
@@ -28,21 +29,21 @@ class UpdatePage extends StatelessWidget {
         }
 
         switch (state.name) {
-          case 'Cameras':
+          case Names.camera:
             return CameraUpdatePage(item: state.item);
-          case 'Decoration':
+          case Names.decoration:
             return DecorationUpdatePage(item: state.item);
-          case 'Dresses':
+          case Names.dress:
             return DressUpdatePage(item: state.item);
-          case 'Footwear':
+          case Names.footwear:
             return FootwearUpdatePage(item: state.item);
-          case 'Jewelry':
+          case Names.jewelry:
             return JewelryUpdatePage(item: state.item);
-          case 'Sound & DJ Systems':
+          case Names.sound:
             return SoundUpdatePage(item: state.item);
-          case 'Vehicles':
+          case Names.vehicle:
             return VehicleUpdatePage(item: state.item);
-          case 'Venue':
+          case Names.venue:
             return VenueUpdatePage(item: state.item);
           default: 
             return Scaffold(
