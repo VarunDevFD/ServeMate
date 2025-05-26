@@ -43,6 +43,7 @@ class BottomNavigationBar extends StatelessWidget {
             child: BlocBuilder<BottomNavCubit, int>(builder: (context, index) {
               final pageController = PageController(initialPage: index);
               return Scaffold(
+                backgroundColor: AppColors.white,
                 appBar: AppBar(
                   title: Text(
                     index == 2 ? "$formName Form" : appBarTitles[index],

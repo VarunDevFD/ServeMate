@@ -14,6 +14,7 @@ class AppColors {
   static Color blue = Colors.blue;
   static Color transparent = Colors.transparent;
   static Color primary = const Color(0xFFD59C71);
+  static const primaryC = Color(0xFFD59C71);
   static const Color secondary = Color(0xFFFFE0B2);
   static const Color textPrimary = Color(0xFF424242);
   static const Color textSecondary = Color(0xFF757575);
@@ -26,6 +27,9 @@ class AppColors {
   static const Color imageBr = Color(0xFFEEEEEE);
   static const Color purpleAccent = Colors.purpleAccent;
   static const Color pinkAccent = Colors.pinkAccent;
+
+  // BackgroundColors
+  static Color backgroundOrange1 = Colors.orange.shade50;
 
   // Error
   static const Color error = Color.fromARGB(255, 240, 13, 13);
@@ -70,4 +74,7 @@ class AppColors {
   static const Color gradient3 = Color.fromRGBO(255, 153, 116, 1);
 
   static Color geryOp5 = Colors.grey.withOpacity(0.5);
+
+  // Gradiant Colors
+  static final blackWithAlpha = Colors.black.withAlpha(18);
 }

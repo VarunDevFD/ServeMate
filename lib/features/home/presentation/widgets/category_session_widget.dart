@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:serve_mate/core/widgets/demo_card.dart';
-import 'package:serve_mate/features/home/presentation/bloc/bloc/home_session_bloc_bloc.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bloc_home/home_session_bloc_bloc.dart';
 import 'package:serve_mate/features/home/presentation/widgets/horizontal_scroll_widget.dart';
 
 class SessionCategorys extends StatelessWidget {
@@ -27,7 +27,6 @@ class SessionCategorys extends StatelessWidget {
           );
         }
         if (state is SessionBlocInitial) {
-          
           final dynamic category = state.categoryName;
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -36,13 +35,38 @@ class SessionCategorys extends StatelessWidget {
             ],
           );
         }
+        if (state is SessionBlocLoaded) {
+          return
+              //  IntrinsicHeight(
+              ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 260.h,
+              maxHeight: 2500.h,
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: state.data.length,
+              itemBuilder: (context, index) {
+                return SizedBox(
+                  height: 300.h,
+                  width: double.infinity,
+                  child: CustomHorizontalListWidget(
+                    dataName: state.data.keys.elementAt(index),
+                    dataValue: state.data[state.data.keys.elementAt(index)],
+                  ),
+                );
+              },
+            ),
+          );
+        }
         log(state.toString());
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomHorizontalListWidget(
-              title: "state.categoryName",
-            ),
+                dataName: "state.categoryName", dataValue: const [10, 12]),
           ],
         );
       },

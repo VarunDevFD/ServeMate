@@ -51,8 +51,10 @@ class WelcomeScreen extends StatelessWidget {
                         onPressed: () => context.go('/sign-in'),
                         //----------Temp--------
                         onLongPress: () async {
-                          // await pref.setUSerId('vnqRS2iM2gXgc4MSuR4jlGAIkex2');
-                          await pref.setUSerId('dZ67hc6Jd8PWC2mpSrqYiULYfeE3');
+                          await pref.setUSerId('vnqRS2iM2gXgc4MSuR4jlGAIkex2');
+                          // await pref.setUSerId('dZ67hc6Jd8PWC2mpSrqYiULYfeE2');
+
+                          // await pref.setUSerId('dZ67hc6Jd8PWC2mpSrqYiULYfeE3');
                           context.go('/selectCategory');
                         }),
                   ),

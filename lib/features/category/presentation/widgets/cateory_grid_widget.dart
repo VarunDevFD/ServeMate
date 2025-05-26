@@ -10,7 +10,7 @@ import 'package:serve_mate/features/category/presentation/bloc/category_bloc/cat
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_event.dart';
 import 'package:serve_mate/features/category/presentation/bloc/category_bloc/category_state.dart';
 import 'package:serve_mate/features/category/presentation/widgets/category_item_widget.dart';
-import 'package:serve_mate/features/home/presentation/bloc/bloc/home_session_bloc_bloc.dart';
+import 'package:serve_mate/features/home/presentation/bloc/bloc_home/home_session_bloc_bloc.dart';
 
 class CategoryGrid extends StatelessWidget {
   const CategoryGrid({super.key});
