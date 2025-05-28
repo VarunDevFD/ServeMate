@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
  
 class MoreVenuesButton extends StatelessWidget {
+  final String title;
   const MoreVenuesButton({
     Key? key,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class MoreVenuesButton extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              'View All Venues',
+              'View All $title',
               style: TextStyle(
                 fontSize: 16.sp,
                 color: AppColors.orange,

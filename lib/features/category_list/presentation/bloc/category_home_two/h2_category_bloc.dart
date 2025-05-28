@@ -16,6 +16,7 @@ import 'package:serve_mate/features/category_list/domain/usecase/get_venues_usec
 import 'h2_category_event.dart';
 import 'h2_category_state.dart';
 
+/*
 class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
   final getCamerasUseCase = serviceLocator<GetCamerasUseCase>();
   final getDecorationUsecase = serviceLocator<GetDecorationUsecase>();
@@ -31,6 +32,7 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
   final prefs = serviceLocator<PreferencesRepository>();
 
   H2CategoryBloc() : super(H2CategoryInitial()) {
+    log(state.toString());
     on<UpdateModelFinderEvent>((event, emit) async {
       String userCategory = await prefs.getCategoryName();
       log(userCategory);
@@ -125,6 +127,47 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
           (state as VenuesCategoryLoaded).categories,
           selectedItem: event.item,
         ));
+      }
+    });
+
+    on<CategoryDetailState>((event, emit) {
+      log('CategoryDetailState: ${event.itemName} - ${event.itemValue}');
+      switch (event.itemName) {
+        case 'cameras':
+          if (state is CameraCategoryLoaded) {
+            emit(CameraCategoryLoaded(
+              [...event.itemValue],
+              selectedItem: event.itemValue,
+            ));
+          } else {
+            emit(H2CategoryError(
+                'Invalid state: expected CameraCategoryLoaded'));
+          }
+          break;
+
+        case Names.decoration:
+          emit(DecorationCategoryLoaded(event.itemValue));
+          break;
+        case Names.dress:
+          emit(DressCategoryLoaded(event.itemValue));
+          break;
+        case Names.footwear:
+          emit(FootwearCategoryLoaded(event.itemValue));
+          break;
+        case Names.jewelry:
+          emit(JewelryCategoryLoaded(event.itemValue));
+          break;
+        case Names.sound:
+          emit(SoundCategoryLoaded(event.itemValue));
+          break;
+        case Names.vehicle:
+          emit(VehiclesCategoryLoaded(event.itemValue));
+          break;
+        case Names.venue:
+          emit(VenuesCategoryLoaded(event.itemValue));
+          break;
+        default:
+          emit(H2CategoryError('Invalid category name'));
       }
     });
 
@@ -264,6 +307,68 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
         }
       } catch (e) {
         emit(H2CategoryError('Failed to delete item: $e'));
+      }
+    });
+  }
+}
+*/
+
+class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
+  final GetCamerasUseCase getCamerasUseCase =
+      serviceLocator<GetCamerasUseCase>();
+  final GetDecorationUsecase getDecorationUsecase =
+      serviceLocator<GetDecorationUsecase>();
+  final GetDressUsecase getDressUsecase = serviceLocator<GetDressUsecase>();
+  final GetFootwearsUsecase getFootwearsUsecase =
+      serviceLocator<GetFootwearsUsecase>();
+  final GetJewelrysUsecase getJewelrysUsecase =
+      serviceLocator<GetJewelrysUsecase>();
+  final GetSoundUsecase getSoundUsecase = serviceLocator<GetSoundUsecase>();
+  final GetVehiclesUsecase getVehiclesUsecase =
+      serviceLocator<GetVehiclesUsecase>();
+  final GetVenuesUseCase getVenuesUseCase = serviceLocator<GetVenuesUseCase>();
+
+  H2CategoryBloc() : super(H2CategoryInitial()) {
+    log(state.toString());
+    on<DetailsEvent>((event, emit) {
+      emit(DetailsState(event.itemName, event.itemValue, fromMain:event.fromMain));
+    });
+
+    on<InitialStageEvent>((event, emit) async {
+      emit(LoadingState());
+      log("InitialStageEvent triggered");
+      final pref = serviceLocator<PreferencesRepository>();
+      log("vannu---------da");
+
+      final userItemName = await pref.getCategoryName();
+      log("vannu");
+
+      final Map<String, Future<dynamic>> data = {
+        Names.camera: getCamerasUseCase.call(),
+        Names.decoration: getDecorationUsecase.call(),
+        Names.dress: getDressUsecase.call(),
+        Names.footwear: getFootwearsUsecase.call(),
+        Names.jewelry: getJewelrysUsecase.call(),
+        Names.sound: getSoundUsecase.call(),
+        Names.vehicle: getVehiclesUsecase.call(),
+        Names.venue: getVenuesUseCase.call(),
+      };
+
+      if (!data.containsKey(userItemName)) {
+        log("keri-1");
+        emit(ErrorState("No category found or unsupported category."));
+        return;
+      }
+      log("keri-3");
+
+      try {
+        final getData = await data[userItemName];
+        log("keri-2");
+
+        emit(LoadedState(getData));
+      } catch (e) {
+        emit(ErrorState(
+            "Failed to load data for category: $userItemName\nError: $e"));
       }
     });
   }

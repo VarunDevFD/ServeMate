@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/utils/helper/helper_auth_fn.dart';
 import 'package:serve_mate/core/widgets/demo_card.dart';
 import 'package:serve_mate/features/home/presentation/bloc/bloc_home/home_session_bloc_bloc.dart';
+import 'package:serve_mate/features/home/presentation/widgets/button_venues_more.dart';
 import 'package:serve_mate/features/home/presentation/widgets/horizontal_scroll_widget.dart';
 
 class SessionCategorys extends StatelessWidget {
@@ -35,29 +37,40 @@ class SessionCategorys extends StatelessWidget {
             ],
           );
         }
-        if (state is SessionBlocLoaded) {
-          return
-              //  IntrinsicHeight(
-              ConstrainedBox(
+        if (state is SessionBlocLoaded) { 
+          return ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: 260.h,
-              maxHeight: 2500.h,
+              minHeight: state.minHeight ?? 280.h,
+              maxHeight: state.maxHeight ?? 1560.h,
             ),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: state.data.length,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  height: 300.h,
-                  width: double.infinity,
-                  child: CustomHorizontalListWidget(
-                    dataName: state.data.keys.elementAt(index),
-                    dataValue: state.data[state.data.keys.elementAt(index)],
-                  ),
-                );
-              },
+            child: Padding(
+              padding: EdgeInsets.only(left: 12.w, right: 8.w),
+              child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: state.data.length,
+                separatorBuilder: (context, index) {
+                  String title = Helpers.capitalizeFirstLetter(
+                      state.data.keys.elementAt(index));
+                  return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
+                      child:
+                          (state.data[state.data.keys.elementAt(index)].length >
+                                  1)
+                              ? MoreVenuesButton(title: title)
+                              : SizedBox(height: 5.h));
+                },
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    height: state.minHeight,
+                    child: CustomHorizontalListWidget(
+                      dataName: state.data.keys.elementAt(index),
+                      dataValue: state.data[state.data.keys.elementAt(index)],
+                    ),
+                  );
+                },
+              ),
             ),
           );
         }
@@ -73,36 +86,3 @@ class SessionCategorys extends StatelessWidget {
     );
   }
 }
-
-
-/*
- return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CustomHorizontalListWidget(
-              title: categoryName,
-            ), 
-            CustomHorizontalListWidget(
-              title: "Dresses",
-            ),
-            CustomHorizontalListWidget(
-              title: "Decorations",
-            ),
-            CustomHorizontalListWidget(
-              title: "Footwear",
-            ),
-            CustomHorizontalListWidget(
-              title: "Jewelry",
-            ),
-            CustomHorizontalListWidget(
-              title: "Sounds",
-            ),
-            CustomHorizontalListWidget(
-              title: "Vehicles",
-            ),
-            CustomHorizontalListWidget(
-              title: "Venues",
-            ),
-          ],
-        );
-        */

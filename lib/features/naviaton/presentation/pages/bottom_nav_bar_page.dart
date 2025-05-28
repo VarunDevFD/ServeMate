@@ -37,7 +37,8 @@ class BottomNavigationBar extends StatelessWidget {
             listener: (context, index) {
               if (index == 1) {
                 // Trigger H2LoadCategories event when index is 1
-                context.read<H2CategoryBloc>().add(H2LoadCategories());
+                // context.read<H2CategoryBloc>().add(H2LoadCategories());
+                context.read<H2CategoryBloc>().add(InitialStageEvent());
               }
             },
             child: BlocBuilder<BottomNavCubit, int>(builder: (context, index) {

@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/utils/constants.dart';
+import 'package:serve_mate/core/utils/helper/size_helper_functions.dart';
 import 'package:serve_mate/features/home/domain/usecase/camera_usecase_home.dart';
 import 'package:serve_mate/features/home/domain/usecase/decoration_usecase_home.dart';
 import 'package:serve_mate/features/home/domain/usecase/dress_usecase_home.dart';
@@ -94,10 +96,12 @@ class SessionCategoryBloc
 
       emit(SessionBlocInitial(categoryName));
     } else {
-      emit(SessionBlocLoaded(data: loadedData));
+      double maxH = Size().availableSize(loadedData.keys.length);
+      emit(SessionBlocLoaded(
+        data: loadedData,
+        minHeight: 250.h,
+        maxHeight: maxH,
+      ));
     }
-
-    // Debug log
-    log("✅ True Keys: $trueList");
   }
 }

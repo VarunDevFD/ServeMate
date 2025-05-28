@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/utils/helper/helper_auth_fn.dart';
 import 'package:serve_mate/core/utils/helper/image_concatinate.dart';
-import 'package:serve_mate/features/home/presentation/widgets/button_venues_more.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
+import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
 
 class CustomHorizontalListWidget extends StatelessWidget {
   final String dataName;
@@ -16,13 +19,14 @@ class CustomHorizontalListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = Helpers.capitalizeFirstLetter(dataName);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            dataName,
+            title,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.w600,
@@ -30,20 +34,23 @@ class CustomHorizontalListWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10.h),
-
-          SizedBox(
-            height: 260.h,
+          Expanded(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: dataValue.length ?? 1,
+              itemCount: dataValue.length,
               itemBuilder: (context, index) {
                 final item = dataValue[index];
                 final imageUrl = ImageConcatinate.concatinateImage(item.images);
-
                 return Padding(
                   padding: EdgeInsets.only(right: 15.w),
-                  child: SizedBox(
-                    width: 200.w,
+                  child: GestureDetector(
+                    onTap: () {
+                      context
+                          .read<H2CategoryBloc>()
+                          .add(DetailsEvent(dataName, item, false));
+
+                      context.push('/detailsPage');
+                    },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -56,8 +63,9 @@ class CustomHorizontalListWidget extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(8.w),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: 8.w, top: 8.w, right: 8.w),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -81,6 +89,7 @@ class CustomHorizontalListWidget extends StatelessWidget {
                                       TextSpan(
                                         text: '₹',
                                         style: TextStyle(
+                                          height: 1.3.h,
                                           fontSize: 14.sp,
                                           color: AppColors.orange,
                                         ),
@@ -114,10 +123,6 @@ class CustomHorizontalListWidget extends StatelessWidget {
               },
             ),
           ),
-
-          SizedBox(height: 5.h),
-          if (dataName.toLowerCase() == "venues")
-            const MoreVenuesButton(), // Only for "Venues"
         ],
       ),
     );

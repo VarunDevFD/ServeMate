@@ -68,12 +68,11 @@ class VenuesCategoryLoaded extends H2CategoryState {
   VenuesCategoryLoaded(this.categories, {this.selectedItem});
 }
 
-class UpdateScreen  extends H2CategoryState {
+class UpdateScreen extends H2CategoryState {
   final String? name;
   final dynamic item;
 
   UpdateScreen({this.name, this.item});
-
 }
 
 class H2CategoryUpdated extends H2CategoryState {}
@@ -82,4 +81,26 @@ class H2CategoryError extends H2CategoryState {
   final String message;
 
   H2CategoryError(this.message);
+}
+
+// ---------------- New Category Types ----------------
+class LoadingState extends H2CategoryState {}
+
+class DetailsState extends H2CategoryState {
+  final String itemName;
+  final dynamic itemValue;
+  final bool fromMain;
+
+  DetailsState(this.itemName, this.itemValue,{ this.fromMain = false});
+}
+
+class LoadedState extends H2CategoryState {
+  final List<dynamic> items;
+  final dynamic model;
+  LoadedState(this.items, {this.model});
+}
+
+class ErrorState extends H2CategoryState {
+  final String message;
+  ErrorState(this.message);
 }

@@ -12,9 +12,13 @@ class SessionBlocLoading extends SessionCategoryState {}
 
 class SessionBlocLoaded extends SessionCategoryState {
   final Map<String, dynamic> data;
+  double? minHeight;
+  double? maxHeight;
 
   SessionBlocLoaded({
     required this.data,
+    this.minHeight,
+    this.maxHeight,
   });
 }
 

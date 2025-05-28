@@ -50,7 +50,7 @@ class SearchPage extends StatelessWidget {
                           onPressed: () {
                             context
                                 .read<SearchBloc>()
-                                .add(SearchClearPressed());
+                                .add(const SearchClearPressed());
                           },
                         )
                       : null,
@@ -62,28 +62,39 @@ class SearchPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(20.r),
-        child: BlocBuilder<SearchBloc, SearchState>(
-          builder: (context, state) {
-            return Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: state.filteredSuggestions.map((item) {
-                return GestureDetector(
-                  onTap: () {
-                    context
-                        .read<SearchBloc>()
-                        .add(SearchTextChanged(item['label']));
-                  },
-                  child: Chip(
-                    avatar: Icon(item['icon'],
-                        size: 18.sp, color: AppColors.orange),
-                    label: Text(item['label']),
-                    backgroundColor: AppColors.backgroundOrange1,
-                  ),
+        child: Column(
+          children: [
+            BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                return Wrap(
+                  spacing: 6,
+                  runSpacing: 15,
+                  children: state.filteredSuggestions.map((item) {
+                    return GestureDetector(
+                      onTap: () {
+                        context
+                            .read<SearchBloc>()
+                            .add(SearchTextChanged(item['label']));
+                      },
+                      child: Chip(
+                        avatar: Icon(item['icon'],
+                            size: 18.sp, color: AppColors.orange),
+                        label: Text(item['label']),
+                        backgroundColor: AppColors.backgroundOrange1,
+                      ),
+                    );
+                  }).toList(),
                 );
-              }).toList(),
-            );
-          },
+              },
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            Expanded(
+                child: Container(
+              color: AppColors.red,
+            ))
+          ],
         ),
       ),
     );

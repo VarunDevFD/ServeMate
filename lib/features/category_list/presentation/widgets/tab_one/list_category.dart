@@ -26,7 +26,8 @@ class CategroyAddedScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        if (state is H2CategoryLoading) {
+        // if (state is H2CategoryLoading) {
+        if (state is LoadingState) {
           return const CustomLoading();
         } else if (state is H2CategoryError) {
           return Center(
@@ -34,23 +35,27 @@ class CategroyAddedScreen extends StatelessWidget {
             state.message,
             style: TextStyle(color: AppColors.red),
           ));
-        } else if (state is CameraCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is DecorationCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is DressCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is FootwearCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is JewelryCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is SoundCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is VehiclesCategoryLoaded) {
-          return _buildList(state.categories);
-        } else if (state is VenuesCategoryLoaded) {
-          return _buildList(state.categories);
-        } else {
+        } else if (state is LoadedState) {
+          return _buildList(state.items);
+        }
+        //  else if (state is CameraCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is DecorationCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is DressCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is FootwearCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is JewelryCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is SoundCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is VehiclesCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // } else if (state is VenuesCategoryLoaded) {
+        //   return _buildList(state.categories);
+        // }
+        else {
           return const CustomLoading();
         }
       },
@@ -202,8 +207,10 @@ class CategroyAddedScreen extends StatelessWidget {
             ),
             isThreeLine: true,
             onTap: () {
-              context.read<H2CategoryBloc>().add(SelectCategoryItemEvent(item));
-              context.push('/detailsPage');
+              context
+                  .read<H2CategoryBloc>()
+                  .add(DetailsEvent(categoryName!, item, true));
+              context.pushReplacement('/detailsPage');
             },
           );
         },
