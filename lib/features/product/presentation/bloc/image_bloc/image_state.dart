@@ -19,7 +19,6 @@ class ImageLoading extends ImageState {
 class ImageLoaded extends ImageState {
   final List<File> images;
   const ImageLoaded(this.images);
-
 }
 
 class ImagesUploaded extends ImageState {
@@ -32,3 +31,8 @@ class ImageError extends ImageState {
   final List<File>? previousImages;
   const ImageError(this.message, {this.previousImages});
 }
+
+class ReadyToSave extends ImageState {
+  const ReadyToSave();
+}
+

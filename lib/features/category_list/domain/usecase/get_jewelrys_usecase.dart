@@ -9,7 +9,7 @@ class GetJewelrysUsecase {
     return await repository.getJewelry();
   }
 
-  Future<void> update(String dId, JewelryModel model) async {
+  Future<bool> update(String dId, JewelryModel model) async {
     return await repository.updateJewelry(dId, model);
   }
 }

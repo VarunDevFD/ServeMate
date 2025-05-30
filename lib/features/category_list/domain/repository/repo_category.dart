@@ -21,12 +21,12 @@ abstract class H2CategoryRepository {
     required String documentId,
   });
   // Update methods
-  Future<void> updateCamera(String dId, CameraModel model);
-  Future<void> updateDecoration(String dId, DecorationModel model);
-  Future<void> updateDress(String dId, DressModel model);
-  Future<void> updateFootwear(String dId, FootwearModel model);
-  Future<void> updateJewelry(String dId, JewelryModel model);
-  Future<void> updateSound(String dId, SoundModel model);
-  Future<void> updateVehicle(String dId, VehicleModel model);
-  Future<void> updateVenue(String dId, VenueModel model);
+  Future<bool> updateCamera(String dId, CameraModel model);
+  Future<bool> updateDecoration(String dId, DecorationModel model);
+  Future<bool> updateDress(String dId, DressModel model);
+  Future<bool> updateFootwear(String dId, FootwearModel model);
+  Future<bool> updateJewelry(String dId, JewelryModel model);
+  Future<bool> updateSound(String dId, SoundModel model);
+  Future<bool> updateVehicle(String dId, VehicleModel model);
+  Future<bool> updateVenue(String dId, VenueModel model);
 }

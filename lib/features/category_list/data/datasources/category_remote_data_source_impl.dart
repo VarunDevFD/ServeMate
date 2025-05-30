@@ -37,7 +37,7 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
     }
   }
 
-  Future<void> _updateInFirestore<T>({
+  Future<bool> _updateInFirestore<T>({
     required String collectionName,
     required String dId,
     required Map<String, dynamic> data,
@@ -46,6 +46,7 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
     try {
       final userId = await currentUserId();
       final docRef = _firebaseFirestore.collection(collectionName).doc(dId);
+      bool success = false;
 
       // Verify the document exists and belongs to the user
       final docSnapshot = await docRef.get();
@@ -60,11 +61,8 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
 
       // Update the document
       await docRef.update(data);
-
-      // // Fetch the updated document to return the updated model
-      // final updatedSnapshot = await docRef.get();
-
-      // return fromMap(updatedSnapshot.data() as Map<String, dynamic>, dId);
+      success = true;
+      return success;
     } catch (e) {
       throw Exception('Failed to update data in $collectionName: $e');
     }
@@ -161,9 +159,9 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateCamera(
+  Future<bool> updateCamera(
       String documentId, CameraModel updatedCamera) async {
-    await _updateInFirestore(
+    return await _updateInFirestore(
       collectionName: 'camera',
       dId: documentId,
       data: updatedCamera.toMap(),
@@ -172,9 +170,9 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateDecoration(
+  Future<bool> updateDecoration(
       String documentId, DecorationModel updatedDecoration) async {
-    await _updateInFirestore(
+    return await _updateInFirestore(
       collectionName: 'Decoration',
       dId: documentId,
       data: updatedDecoration.toMap(),
@@ -183,9 +181,8 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateDress(
-      String documentId, DressModel updatedDress) async {
-    await _updateInFirestore(
+  Future<bool> updateDress(String documentId, DressModel updatedDress) async {
+    return await _updateInFirestore(
       collectionName: 'dress',
       dId: documentId,
       data: updatedDress.toMap(),
@@ -194,9 +191,9 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateFootwear(
+  Future<bool> updateFootwear(
       String documentId, FootwearModel updatedFootwear) async {
-    await _updateInFirestore(
+    return await _updateInFirestore(
       collectionName: 'footwear',
       dId: documentId,
       data: updatedFootwear.toMap(),
@@ -205,9 +202,9 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateJewelry(
+  Future<bool> updateJewelry(
       String documentId, JewelryModel updatedJewelry) async {
-    await _updateInFirestore(
+    return await _updateInFirestore(
       collectionName: 'jewelry',
       dId: documentId,
       data: updatedJewelry.toMap(),
@@ -216,9 +213,8 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateSound(
-      String documentId, SoundModel updatedSound) async {
-    await _updateInFirestore(
+  Future<bool> updateSound(String documentId, SoundModel updatedSound) async {
+    return await _updateInFirestore(
       collectionName: 'sound',
       dId: documentId,
       data: updatedSound.toMap(),
@@ -227,9 +223,9 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateVehicle(
+  Future<bool> updateVehicle(
       String documentId, VehicleModel updatedVehicle) async {
-    await _updateInFirestore(
+    return await _updateInFirestore(
       collectionName: 'Vehicles',
       dId: documentId,
       data: updatedVehicle.toMap(),
@@ -238,9 +234,8 @@ class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
   }
 
   @override
-  Future<void> updateVenue(
-      String documentId, VenueModel updatedVenue) async {
-    await _updateInFirestore(
+  Future<bool> updateVenue(String documentId, VenueModel updatedVenue) async {
+    return await _updateInFirestore(
       collectionName: 'venues',
       dId: documentId,
       data: updatedVenue.toMap(),

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +15,14 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
     on<RemoveImage>(_onRemoveImage);
     on<ClearAllImages>(_onClearAllImages);
     on<UploadImagesToCloudinary>(_onUploadImagesToCloudinary);
+    on<ReadyToSaveEvent>(_onReadyToSave);
+  }
+
+  Future<void> _onReadyToSave(
+    ReadyToSaveEvent event,
+    Emitter<ImageState> emit,
+  ) async {
+    emit(const ReadyToSave());
   }
 
   Future<void> _onUploadImagesToCloudinary(
@@ -31,7 +38,6 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
     try {
       emit(UploadingImages());
       List<String> imageUrls = currentImages.map((file) => file.path).toList();
-      log(imageUrls.toString());
 
       final imagePath = await ImageHandler().processAndUploadImages(imageUrls);
 
@@ -123,5 +129,6 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
         ImageError(previousImages: final previousImages) =>
           previousImages ?? [],
         ImagesUploaded() => const [], // Return empty list after upload
+        ReadyToSave() => const [],
       };
 }

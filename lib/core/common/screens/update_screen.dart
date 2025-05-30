@@ -1,7 +1,8 @@
- 
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/common/screens/venue_update_screen.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
@@ -20,13 +21,20 @@ class UpdatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<H2CategoryBloc, H2CategoryState>(
+    return BlocConsumer<H2CategoryBloc, H2CategoryState>(
+      listener: (context, state) {
+        if (state is LoadedState) {
+          context.pop();
+        }
+      },
       builder: (context, state) {
-        if (state is! UpdateScreen) {
+        if (state is! UpdateState) {
           return const Scaffold(
             body: Center(child: Text('No item selected')),
           );
         }
+
+        log('Selected category: ${state.name}');
 
         switch (state.name) {
           case Names.camera:
@@ -44,8 +52,11 @@ class UpdatePage extends StatelessWidget {
           case Names.vehicle:
             return VehicleUpdatePage(item: state.item);
           case Names.venue:
-            return VenueUpdatePage(item: state.item);
-          default: 
+            {
+              return VenueUpdatePage(item: state.item);
+            }
+
+          default:
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
               body: const Center(child: Text('Invalid category')),

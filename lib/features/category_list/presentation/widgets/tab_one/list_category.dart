@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/widgets/common_snackbar.dart';
 import 'package:serve_mate/core/widgets/custom_loading_animation.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
@@ -23,10 +25,11 @@ class CategroyAddedScreen extends StatelessWidget {
             content: "Updated Successfully",
             backgroundColor: AppColors.green,
           );
+        } else if (state is UpdateState) {
+          context.push('/editCategoryPage');
         }
       },
       builder: (context, state) {
-        // if (state is H2CategoryLoading) {
         if (state is LoadingState) {
           return const CustomLoading();
         } else if (state is H2CategoryError) {
@@ -37,25 +40,7 @@ class CategroyAddedScreen extends StatelessWidget {
           ));
         } else if (state is LoadedState) {
           return _buildList(state.items);
-        }
-        //  else if (state is CameraCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is DecorationCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is DressCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is FootwearCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is JewelryCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is SoundCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is VehiclesCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // } else if (state is VenuesCategoryLoaded) {
-        //   return _buildList(state.categories);
-        // }
-        else {
+        } else {
           return const CustomLoading();
         }
       },
@@ -69,7 +54,7 @@ class CategroyAddedScreen extends StatelessWidget {
         itemCount: categories.length,
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
-          final item = categories[index];
+          final item = categories[index]; 
 
           final images = item.images[0] + item.images[1];
           final location = item.location[0];
@@ -182,9 +167,9 @@ class CategroyAddedScreen extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () {
-                              context
-                                  .read<H2CategoryBloc>()
-                                  .add(DeleteCategoryEvent(item.id));
+                              context.read<H2CategoryBloc>().add(
+                                  DeleteCategoryEvent(
+                                      categoryName ?? Names.empty, item.id));
                               Navigator.of(context).pop(true);
                             },
                             child: const Text('Delete'),
@@ -199,8 +184,7 @@ class CategroyAddedScreen extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<H2CategoryBloc>()
-                        .add(UpdateModelFinderEvent(item));
-                    context.push('/editCategoryPage');
+                        .add(UpdateStage(categoryName ?? Names.empty, item));
                   },
                 ),
               ],
@@ -209,7 +193,7 @@ class CategroyAddedScreen extends StatelessWidget {
             onTap: () {
               context
                   .read<H2CategoryBloc>()
-                  .add(DetailsEvent(categoryName!, item, true));
+                  .add(DetailsEvent(categoryName ?? Names.empty, item, true));
               context.pushReplacement('/detailsPage');
             },
           );

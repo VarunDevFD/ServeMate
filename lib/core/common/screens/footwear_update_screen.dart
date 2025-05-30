@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
 import 'package:serve_mate/core/utils/constants_list.dart';
 import 'package:serve_mate/core/utils/helper/image_concatinate.dart';
@@ -287,14 +288,14 @@ class FootwearUpdatePage extends StatelessWidget {
         // category: category.isNotEmpty ? category[0] : item.category,
         date: dateController.text,
         phoneNumber: phoneNumberController.text,
-        images: [...item.images,...imageUrls],
+        images: [...item.images, ...imageUrls],
         location: location,
         available: isAvailable,
       );
 
       context
           .read<H2CategoryBloc>()
-          .add(UpdateCategoryItemEvent(updatedItem, item.id));
+          .add(UpdateCategoryItemEvent(updatedItem, item.id, Names.footwear));
 
       context.pop();
     }

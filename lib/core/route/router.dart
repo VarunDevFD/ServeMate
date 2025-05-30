@@ -60,14 +60,6 @@ class AppRouter {
         pageBuilder: (context, state) =>
             fadeTransitionPage(  SearchPage(), state),
       ),
-
-      // GoRoute(
-      //   path: '/productDetail',
-      //   builder: (context, state) {
-      //     final category = state.extra as Map<String, dynamic>?;
-      //     return ProductDetailPage(category: category as Map<String, dynamic>);
-      //   },
-      // ),
     ],
     errorBuilder: (context, state) {
       return const WelcomeScreen(); // Redirect to a default screen (e.g., WelcomeScreen)

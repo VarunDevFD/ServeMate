@@ -9,7 +9,7 @@ class GetDecorationUsecase {
     return await repository.getDecorations();
   }
 
-  Future<void> update(String dId, DecorationModel model) async {
+  Future<bool> update(String dId, DecorationModel model) async {
     return await repository.updateDecoration(dId, model);
   }
 }

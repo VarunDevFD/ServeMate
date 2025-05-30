@@ -77,7 +77,7 @@ class CategoryDetailsScreen extends StatelessWidget {
         Widget content;
         String titleLarge;
         bool keyPop;
-        content = const Center(child: Text('No item selected'));
+        content = emptyBuild();
         titleLarge = 'Error';
         keyPop = false;
 
@@ -107,39 +107,6 @@ class CategoryDetailsScreen extends StatelessWidget {
           }
         }
 
-        // if (state is CameraCategoryLoaded && state.selectedItem != null) {
-        //   content = CameraDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else if (state is DecorationCategoryLoaded &&
-        //     state.selectedItem != null) {
-        //   content = DecorationDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else if (state is DressCategoryLoaded && state.selectedItem != null) {
-        //   content = DressDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else if (state is FootwearCategoryLoaded &&
-        //     state.selectedItem != null) {
-        //   content = FootwearDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else if (state is JewelryCategoryLoaded &&
-        //     state.selectedItem != null) {
-        //   content = JewelryDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name!;
-        // } else if (state is SoundCategoryLoaded && state.selectedItem != null) {
-        //   content = SoundDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else if (state is VehiclesCategoryLoaded &&
-        //     state.selectedItem != null) {
-        //   content = VehicleDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else if (state is VenuesCategoryLoaded &&
-        //     state.selectedItem != null) {
-        //   content = VenueDetails(item: state.selectedItem!);
-        //   titleLarge = state.selectedItem!.name;
-        // } else {
-
-        // }
-
         return Scaffold(
           appBar: AppBar(
             title: Text(titleLarge),
@@ -158,6 +125,31 @@ class CategoryDetailsScreen extends StatelessWidget {
           body: content,
         );
       },
+    );
+  }
+
+  Widget emptyBuild() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.network(
+            'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/empty_list_img.jpg',
+            height: 200,
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            "No categories found!",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "Check back later or try refreshing the page.",
+            style: TextStyle(fontSize: 14, color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

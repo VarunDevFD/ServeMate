@@ -27,6 +27,7 @@ class ImagePickerPage extends StatelessWidget {
           ImagesUploaded() => [],
           ImageError(previousImages: final previousImages) =>
             previousImages ?? const [],
+          ReadyToSave() => [],
         };
 
         return Column(

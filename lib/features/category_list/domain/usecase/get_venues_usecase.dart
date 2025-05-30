@@ -9,7 +9,7 @@ class GetVenuesUseCase {
     return await repository.getVenues();
   }
 
-  Future<void> update(String dId, VenueModel model) async {
+  Future<bool> update(String dId, VenueModel model) async {
     return await repository.updateVenue(dId, model);
   }
 }

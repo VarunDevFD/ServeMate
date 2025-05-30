@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart'; 
 import 'package:serve_mate/core/utils/helper/image_concatinate.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
@@ -236,7 +237,7 @@ class JewelryUpdatePage extends StatelessWidget {
 
       context
           .read<H2CategoryBloc>()
-          .add(UpdateCategoryItemEvent(updatedItem, item.id));
+          .add(UpdateCategoryItemEvent(updatedItem, item.id, Names.jewelry));
 
       context.pop();
     }

@@ -14,14 +14,17 @@ class CategoryDetailState extends H2CategoryEvent {
 }
 
 class DeleteCategoryEvent extends H2CategoryEvent {
+  final String name;
   final String id;
-  DeleteCategoryEvent(this.id);
+  DeleteCategoryEvent(this.name, this.id);
 }
 
 class UpdateCategoryItemEvent extends H2CategoryEvent {
   final dynamic item;
   final String uid;
-  UpdateCategoryItemEvent(this.item, this.uid);
+  final String? name;
+
+  UpdateCategoryItemEvent(this.item, this.uid, this.name);
 }
 
 class UpdateModelFinderEvent extends H2CategoryEvent {
@@ -38,3 +41,10 @@ class DetailsEvent extends H2CategoryEvent {
 }
 
 class InitialStageEvent extends H2CategoryEvent {}
+
+class UpdateStage extends H2CategoryEvent {
+  final String? name;
+
+  final dynamic item;
+  UpdateStage(this.name, this.item);
+}

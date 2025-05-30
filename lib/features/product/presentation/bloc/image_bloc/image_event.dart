@@ -19,7 +19,11 @@ class TakePhotoFromCamera extends ImageEvent {
 }
 
 class UploadImagesToCloudinary extends ImageEvent {
-   UploadImagesToCloudinary();
+  UploadImagesToCloudinary();
+}
+
+class ReadyToSaveEvent extends ImageEvent {
+  ReadyToSaveEvent();
 }
 
 class RemoveImage extends ImageEvent {

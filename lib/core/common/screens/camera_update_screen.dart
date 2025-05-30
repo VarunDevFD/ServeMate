@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/models/camera_model.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 
 // Project imports
 import 'package:serve_mate/core/utils/constants_dropdown_name.dart';
@@ -19,7 +20,6 @@ import 'package:serve_mate/features/product/presentation/widgets/filter_chip_wid
 import 'package:serve_mate/features/product/presentation/widgets/image_widgets.dart';
 import 'package:serve_mate/features/product/presentation/widgets/reusable_dropdown.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
-
 
 class CameraUpdatePage extends StatelessWidget {
   final CameraModel item;
@@ -68,7 +68,7 @@ class CameraUpdatePage extends StatelessWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          context.read<H2CategoryBloc>().add(H2LoadCategories());
+          context.read<H2CategoryBloc>().add(InitialStageEvent());
           context.pop();
         },
       ),
@@ -412,7 +412,7 @@ class CameraUpdatePage extends StatelessWidget {
       // Update item and navigate back
       context
           .read<H2CategoryBloc>()
-          .add(UpdateCategoryItemEvent(updatedItem, item.id));
+          .add(UpdateCategoryItemEvent(updatedItem, item.id, Names.camera));
       context.pop();
     }
   }

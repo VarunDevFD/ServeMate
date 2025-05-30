@@ -9,7 +9,7 @@ class GetVehiclesUsecase {
     return await repository.getVehicles();
   }
 
-  Future<void> update(String dId, VehicleModel model) async {
+  Future<bool> update(String dId, VehicleModel model) async {
     return await repository.updateVehicle(dId, model);
   }
 }

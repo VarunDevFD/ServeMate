@@ -9,7 +9,7 @@ class GetDressUsecase {
     return await repository.getDresses();
   }
 
-  Future< void> update(String dId, DressModel model) async {
+  Future< bool> update(String dId, DressModel model) async {
     return await repository.updateDress(dId, model);
   }
 }

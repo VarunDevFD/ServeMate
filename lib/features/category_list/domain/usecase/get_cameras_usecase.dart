@@ -9,7 +9,7 @@ class GetCamerasUseCase {
     return await repository.getCameras();
   }
 
-  Future<void> update(String dId, CameraModel model) async {
+  Future<bool> update(String dId, CameraModel model) async {
       return await repository.updateCamera(dId, model);
   }
 } 

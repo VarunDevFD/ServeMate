@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 
 class DialogUtils {
@@ -73,6 +74,48 @@ class DialogUtils {
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(12.h),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
+    );
+  }
+
+  // AlertBox
+  static void showStepDialog({
+    required BuildContext context,
+    required String mainTitle,
+    required String mainContent,
+    required VoidCallback onConfirmed,
+    VoidCallback? onSkip,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(mainTitle),
+        content: Text(mainContent),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (onSkip != null) {
+                onSkip();
+              } else {
+                context.pop();
+              }
+            },
+            child: const Text(
+              'Skip',
+              style: TextStyle(color: AppColors.black54),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirmed();
+            },
+            child: Text(
+              'Allow',
+              style: TextStyle(color: AppColors.green),
+            ),
+          ),
+        ],
       ),
     );
   }

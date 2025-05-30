@@ -48,34 +48,42 @@ class H2CategoryRepositoryImpl implements H2CategoryRepository {
 
   // Update Methods
   @override
-  Future<void> updateCamera(String dId, CameraModel model) =>
-      _dataSource.updateCamera(dId, model);
+  Future<bool> updateCamera(String dId, CameraModel model) {
+    return _dataSource.updateCamera(dId, model);
+  }
 
   @override
-  Future<void> updateDecoration(String dId, DecorationModel model) =>
-      _dataSource.updateDecoration(dId, model);
+  Future<bool> updateDecoration(String dId, DecorationModel model) {
+    return _dataSource.updateDecoration(dId, model);
+  }
 
   @override
-  Future<void> updateDress(String dId, DressModel model) =>
-      _dataSource.updateDress(dId, model);
+  Future<bool> updateDress(String dId, DressModel model) {
+    return _dataSource.updateDress(dId, model);
+  }
 
   @override
-  Future<void> updateFootwear(String dId, FootwearModel model) =>
-      _dataSource.updateFootwear(dId, model);
+  Future<bool> updateFootwear(String dId, FootwearModel model) {
+    return _dataSource.updateFootwear(dId, model);
+  }
 
   @override
-  Future<void> updateJewelry(String dId, JewelryModel model) =>
-      _dataSource.updateJewelry(dId, model);
+  Future<bool> updateJewelry(String dId, JewelryModel model) {
+    return _dataSource.updateJewelry(dId, model);
+  }
 
   @override
-  Future<void> updateSound(String dId, SoundModel model) =>
-      _dataSource.updateSound(dId, model);
+  Future<bool> updateSound(String dId, SoundModel model) {
+    return _dataSource.updateSound(dId, model);
+  }
 
   @override
-  Future<void> updateVehicle(String dId, VehicleModel model) =>
-      _dataSource.updateVehicle(dId, model);
+  Future<bool> updateVehicle(String dId, VehicleModel model) {
+    return _dataSource.updateVehicle(dId, model);
+  }
 
   @override
-  Future<void> updateVenue(String dId, VenueModel model) =>
-      _dataSource.updateVenue(dId, model);
+  Future<bool> updateVenue(String dId, VenueModel model) {
+    return _dataSource.updateVenue(dId, model);
+  }
 }

@@ -331,17 +331,14 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
   H2CategoryBloc() : super(H2CategoryInitial()) {
     log(state.toString());
     on<DetailsEvent>((event, emit) {
-      emit(DetailsState(event.itemName, event.itemValue, fromMain:event.fromMain));
+      emit(DetailsState(event.itemName, event.itemValue,
+          fromMain: event.fromMain));
     });
 
     on<InitialStageEvent>((event, emit) async {
       emit(LoadingState());
-      log("InitialStageEvent triggered");
       final pref = serviceLocator<PreferencesRepository>();
-      log("vannu---------da");
-
       final userItemName = await pref.getCategoryName();
-      log("vannu");
 
       final Map<String, Future<dynamic>> data = {
         Names.camera: getCamerasUseCase.call(),
@@ -355,20 +352,149 @@ class H2CategoryBloc extends Bloc<H2CategoryEvent, H2CategoryState> {
       };
 
       if (!data.containsKey(userItemName)) {
-        log("keri-1");
         emit(ErrorState("No category found or unsupported category."));
         return;
       }
-      log("keri-3");
 
       try {
         final getData = await data[userItemName];
-        log("keri-2");
 
         emit(LoadedState(getData));
       } catch (e) {
         emit(ErrorState(
             "Failed to load data for category: $userItemName\nError: $e"));
+      }
+    });
+
+    on<DeleteCategoryEvent>((event, emit) async {
+      final delete = serviceLocator<DeleteCategoryItems>();
+
+      emit(H2CategoryLoading());
+      log(event.name);
+      await delete.call(event.name, event.id);
+
+      final Map<String, Future<dynamic>> data = {
+        Names.camera: getCamerasUseCase.call(),
+        Names.decoration: getDecorationUsecase.call(),
+        Names.dress: getDressUsecase.call(),
+        Names.footwear: getFootwearsUsecase.call(),
+        Names.jewelry: getJewelrysUsecase.call(),
+        Names.sound: getSoundUsecase.call(),
+        Names.vehicle: getVehiclesUsecase.call(),
+        Names.venue: getVenuesUseCase.call(),
+      };
+
+      if (!data.containsKey(event.name)) {
+        emit(ErrorState("No category found or unsupported category."));
+        return;
+      }
+
+      try {
+        final getData = await data[event.name];
+
+        emit(LoadedState(getData));
+      } catch (e) {
+        emit(ErrorState(
+            "Failed to load data for category: ${event.name}\nError: $e"));
+      }
+    });
+
+    // Update
+
+    on<UpdateStage>((event, emit) async {
+      emit(UpdateState(event.name, event.item));
+    });
+    on<UpdateCategoryItemEvent>((event, emit) async {
+      emit(H2CategoryLoading());
+      try {
+        final pref = serviceLocator<PreferencesRepository>();
+        final category = event.name ?? await pref.getCategoryName();
+        // final category = await pref.getCategoryName();
+
+        final categoryMap = {
+          Names.camera: () async {
+            final updated =
+                await getCamerasUseCase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getCamerasUseCase.call();
+            emit(CameraCategoryLoaded(list));
+          },
+          Names.decoration: () async {
+            final updated =
+                await getDecorationUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getDecorationUsecase.call();
+            emit(DecorationCategoryLoaded(list));
+          },
+          Names.dress: () async {
+            final updated = await getDressUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getDressUsecase.call();
+            emit(DressCategoryLoaded(list));
+          },
+          Names.footwear: () async {
+            final updated =
+                await getFootwearsUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getFootwearsUsecase.call();
+            emit(FootwearCategoryLoaded(list));
+          },
+          Names.jewelry: () async {
+            final updated =
+                await getJewelrysUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getJewelrysUsecase.call();
+            emit(JewelryCategoryLoaded(list));
+          },
+          Names.sound: () async {
+            final updated = await getSoundUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getSoundUsecase.call();
+            emit(SoundCategoryLoaded(list));
+          },
+          Names.vehicle: () async {
+            final updated =
+                await getVehiclesUsecase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+
+            emit(H2CategoryLoading());
+            final list = await getVehiclesUsecase.call();
+            emit(VehiclesCategoryLoaded(list));
+          },
+          Names.venue: () async {
+            log("kerinu");
+            final updated =
+                await getVenuesUseCase.update(event.uid, event.item);
+            emit(H2CategoryUpdated(updated));
+            log("updated done");
+            emit(H2CategoryLoading());
+            final list = await getVenuesUseCase.call();
+            log("again loading done");
+
+            emit(LoadedState(list));
+            log("loaded category");
+          },
+        };
+
+        if (categoryMap.containsKey(category)) {
+          await categoryMap[category]!();
+        } else {
+          emit(H2CategoryError('Invalid category name'));
+        }
+      } catch (e) {
+        emit(H2CategoryError('Failed to update item: $e'));
       }
     });
   }
