@@ -1,9 +1,12 @@
-// import 'dart:developer'; 
+// import 'dart:developer';
 class ImageConcatinate {
   static List<String> concatinateImage(List<String> images) {
     List<String> imageList = [];
 
-    if (images.isEmpty) return imageList;
+    if (images.isEmpty) {
+      imageList.add('https://picsum.photos/200');
+      return imageList;
+    }
 
     String baseUrl = images[0];
 
@@ -20,8 +23,5 @@ class ImageConcatinate {
 
     // log('Concatenated Image List: $imageList');
     return imageList;
-     
   }
-
- 
 }

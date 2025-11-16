@@ -28,6 +28,7 @@ class ImagePickerPage extends StatelessWidget {
           ImageError(previousImages: final previousImages) =>
             previousImages ?? const [],
           ReadyToSave() => [],
+          WithoutImages() => [],
         };
 
         return Column(
@@ -125,7 +126,6 @@ class ImagePickerPage extends StatelessWidget {
                       Text('Clear All', style: TextStyle(color: AppColors.red)),
                 ),
               ),
-             
             ],
           ],
         );

@@ -41,6 +41,7 @@ class CustomHorizontalListWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = dataValue[index];
                 final imageUrl = ImageConcatinate.concatinateImage(item.images);
+
                 return Padding(
                   padding: EdgeInsets.only(right: 15.w),
                   child: GestureDetector(

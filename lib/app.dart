@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBlocProvider(
+    return AppBlocProvider( 
       // Import the Global MultiBlocProvider
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

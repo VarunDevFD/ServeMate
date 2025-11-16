@@ -33,6 +33,8 @@ class ImageError extends ImageState {
 }
 
 class ReadyToSave extends ImageState {
-  const ReadyToSave();
+  final List<String> images;
+  const ReadyToSave(this.images);
 }
 
+class WithoutImages extends ImageState {}

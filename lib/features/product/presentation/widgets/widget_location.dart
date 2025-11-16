@@ -7,7 +7,11 @@ import 'package:serve_mate/features/product/presentation/bloc/location_bloc/loca
 import 'package:serve_mate/features/product/presentation/bloc/location_bloc/location_state.dart';
 
 class LocationTextField extends StatelessWidget {
-  LocationTextField({super.key});
+  final String locationLabel;
+
+  const LocationTextField(
+      [this.locationLabel = 'Choose the location', Key? key])
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class LocationTextField extends StatelessWidget {
         final TextEditingController currentLocation = TextEditingController();
 
         if (state is LocationInitial) {
-          currentLocation.text = "Choose the location";
+          currentLocation.text = locationLabel;
         } else if (state is LocationLoaded) {
           currentLocation.text = state.location[0];
         } else if (state is LocationError) {

@@ -9,6 +9,7 @@ import 'package:serve_mate/core/common/screens/jewelry_details.dart';
 import 'package:serve_mate/core/common/screens/sound_details.dart';
 import 'package:serve_mate/core/common/screens/vehicle_details.dart';
 import 'package:serve_mate/core/common/screens/venue_details.dart';
+import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_event.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_state.dart';
@@ -84,25 +85,25 @@ class CategoryDetailsScreen extends StatelessWidget {
         if (state is DetailsState) {
           titleLarge = state.itemName;
           keyPop = state.fromMain;
-          if (titleLarge == 'cameras') {
+          if (titleLarge == Names.camera) {
             content = CameraDetails(item: state.itemValue);
-          } else if (titleLarge == 'decorations') {
+          } else if (titleLarge == Names.decoration) {
             content = DecorationDetails(item: state.itemValue);
-          } else if (titleLarge == 'dresses') {
+          } else if (titleLarge == Names.dress) {
             content = DressDetails(item: state.itemValue);
-          } else if (titleLarge == 'footwears') {
+          } else if (titleLarge == Names.footwear) {
             content = FootwearDetails(item: state.itemValue);
-          } else if (titleLarge == 'jewelrys') {
+          } else if (titleLarge == Names.jewelry) {
             content = JewelryDetails(item: state.itemValue);
-          } else if (titleLarge == 'sounds') {
+          } else if (titleLarge == Names.sound) {
             content = SoundDetails(item: state.itemValue);
-          } else if (titleLarge == 'vehicles') {
+          } else if (titleLarge == Names.vehicle) {
             content = VehicleDetails(item: state.itemValue);
-          } else if (titleLarge == 'venues') {
+          } else if (titleLarge == Names.venue) {
             content = VenueDetails(item: state.itemValue);
           } else {
             content = const Center(child: Text('No item selected'));
-            titleLarge = 'Error';
+            titleLarge = Names.empty;
             keyPop = false;
           }
         }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart'; // For encryption
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:serve_mate/core/utils/helper/internet_checker.dart';
 
 class ImageHandler {
   final CloudinaryPublic cloudinary = CloudinaryPublic(
@@ -19,6 +20,8 @@ class ImageHandler {
 
   // Process and upload multiple images
   Future<List<String>> processAndUploadImages(List<String> imagePaths) async {
+    checkConnection();
+
     String cloudInitiUrl =
         'https://res.cloudinary.com/${dotenv.env['CLOUDINARY_CLOUD_NAME']}/image/upload/';
     List<String> urls = [cloudInitiUrl];
@@ -41,9 +44,10 @@ class ImageHandler {
   Future<String> _uploadToCloudinary(String imagePath) async {
     File imageFile = File(imagePath);
     final filename = _generateUniqueFilename(imagePath);
+    checkConnection();
 
     try {
-      CloudinaryResponse response = await cloudinary.uploadFile(
+      final response = await cloudinary.uploadFile(
         CloudinaryFile.fromFile(
           imageFile.path,
           resourceType: CloudinaryResourceType.Image,

@@ -72,8 +72,8 @@ Page<dynamic> fadeTransitionPage(Widget child, GoRouterState state) {
     key: state.pageKey,
     child: child,
     transitionDuration: const Duration(milliseconds: 400),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      // Animate fade out of the old screen and fade in of the new screen simultaneously
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Animate fade out of the old screen and fade in of the new screen simultaneously
       return FadeTransition(
         opacity: animation,
         child: FadeTransition(

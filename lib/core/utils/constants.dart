@@ -13,6 +13,7 @@ class AppPadding {
 }
 
 class Names {
+  // Commonly used strings
   static const initialValue = '';
   static const camera = 'camera';
   static const decoration = 'Decoration';
@@ -22,9 +23,56 @@ class Names {
   static const sound = 'sound';
   static const vehicle = 'Vehicles';
   static const venue = 'venues';
-  static const name = 'name';
+  static const name = 'Name';
   static const location = 'location';
   static const empty = 'Not Found';
+  static const color = 'Color';
+  static const preData = 'Previous Data';
+  static const locationEmpty = 'No Location';
+  static const category = 'Category';
+
+  // properties for other fields
+  static const price = 'Price';
+  static const securityDeposit = 'SecurityDeposit';
+  static const description = 'Description';
+  static const capacity = 'Capacity';
+  static const duration = 'Duration';
+  static const venueType = 'VenueType';
+  static const phoneNumber = 'PhoneNumber';
+  static const seatCapacity = 'SeatCapacity';
+  static const images = 'Images';
+  static const gender = 'Gender';
+  static const date = 'Date';
+  static const time = 'Time';
+  static const type = 'Type';
+  static const size = 'Size';
+  static const material = 'Material';
+  static const brand = 'Brand';
+
+  // Vehicle & Sound
+  static const vehicleN = 'Vehicle';
+  static const soundN = 'Sound';
+  static const model = 'Model';
+  static const vehicleType = 'VehicleType';
+  static const vehicleRegNumber = 'Registration Number';
+  static const vehiclefuelType = 'Fuel Type';
+  static const vehicleTransmission = 'Transmission';
+  static const vehicleLocation = '$vehicleN $location';
+  static const soundLocation = '$soundN System $location';
+  static const soundEquipmentTypes = 'Equipment Types';
+  static const soundEquipmentId = 'sound equipment';
+
+  // Jewelry
+  static const quantity = 'Quantity';
+  static const condition = 'Condition';
+
+  // FootWear
+  static const footWearN = 'Footwear';
+  static const footWearCategory = '$footWearN $category';
+
+  // Dress
+  static const dressN = 'Dress';
+  static const dressType = '$dressN type';
 
   static List<String> categoryNamesList = [
     Names.camera,

@@ -83,7 +83,7 @@ class H2CategoryRepositoryImpl implements H2CategoryRepository {
   }
 
   @override
-  Future<bool> updateVenue(String dId, VenueModel model) {
+  Future<bool> updateVenue(String dId, VenueModel model) { 
     return _dataSource.updateVenue(dId, model);
   }
 }

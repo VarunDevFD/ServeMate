@@ -52,9 +52,7 @@ class UpdatePage extends StatelessWidget {
           case Names.vehicle:
             return VehicleUpdatePage(item: state.item);
           case Names.venue:
-            {
-              return VenueUpdatePage(item: state.item);
-            }
+            return VenueUpdatePage(item: state.item);
 
           default:
             return Scaffold(

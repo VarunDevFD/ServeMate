@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,15 +53,17 @@ class CategroyAddedScreen extends StatelessWidget {
         itemCount: categories.length,
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
-          final item = categories[index]; 
-
-          final images = item.images[0] + item.images[1];
+          final item = categories[index];
+          String images = 'https://picsum.photos/200';
+          if (item.images.isNotEmpty) {
+            images = item.images[0] + item.images[1];
+          }
           final location = item.location[0];
           return ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                images ?? 'https://via.placeholder.com/50',
+                images,
                 width: 50.w,
                 height: 60.h,
                 fit: BoxFit.cover,
@@ -77,7 +78,7 @@ class CategroyAddedScreen extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: item.name ?? 'N/A', // Use actual name from model
+                    text: item.name ?? Names.name,
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,

@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:serve_mate/core/utils/helper/image_helper.dart';
 import 'package:serve_mate/core/utils/image_handler.dart';
 
 part 'image_event.dart';
@@ -15,14 +17,22 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
     on<RemoveImage>(_onRemoveImage);
     on<ClearAllImages>(_onClearAllImages);
     on<UploadImagesToCloudinary>(_onUploadImagesToCloudinary);
-    on<ReadyToSaveEvent>(_onReadyToSave);
+    on<ImagesUploadedSucceess>(_onReadyToSave);
+    on<SaveToCloudinary>(updateImageCloud);
   }
 
+  // update function
   Future<void> _onReadyToSave(
-    ReadyToSaveEvent event,
-    Emitter<ImageState> emit,
-  ) async {
-    emit(const ReadyToSave());
+      ImagesUploadedSucceess event, Emitter<ImageState> emit) async {
+    final currentImages = _getCurrentImages(state);
+
+    if (event.images != null || currentImages.isNotEmpty) {
+      final imageUrls = ImageHelper.fileToString(currentImages);
+      final imagePath = await ImageHandler().processAndUploadImages(imageUrls);
+      emit(ReadyToSave(imagePath));
+      log(currentImages.toString());
+    }
+    emit(WithoutImages());
   }
 
   Future<void> _onUploadImagesToCloudinary(
@@ -40,7 +50,6 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
       List<String> imageUrls = currentImages.map((file) => file.path).toList();
 
       final imagePath = await ImageHandler().processAndUploadImages(imageUrls);
-
       emit(ImagesUploaded(imagePath));
     } catch (e) {
       emit(ImageError(
@@ -48,6 +57,21 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
         previousImages: currentImages,
       ));
     }
+  }
+
+  // update image add on
+  void updateImageCloud(
+      SaveToCloudinary event, Emitter<ImageState> emit) async {
+    final images = _getCurrentImages(state);
+    if (images.isEmpty) {
+      emit(ImageError(previousImages: images, "No images to upload"));
+    }
+    emit(UploadingImages());
+
+    List<String> imageUrls = images.map((file) => file.path).toList(); 
+    final imagePath = await ImageHandler().processAndUploadImages(imageUrls);
+
+    emit(ImagesUploaded(imagePath));
   }
 
   Future<void> _onPickImagesFromGallery(
@@ -130,5 +154,6 @@ class ImagePickerBloc extends Bloc<ImageEvent, ImageState> {
           previousImages ?? [],
         ImagesUploaded() => const [], // Return empty list after upload
         ReadyToSave() => const [],
+        WithoutImages() => const [],
       };
 }

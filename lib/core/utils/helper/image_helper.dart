@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImageHelper {
@@ -28,6 +29,17 @@ class ImageHelper {
       return [];
     }
     return files.map((file) => file.path).toList();
+  }
 
+  static List<String> splitImg(List<String> images) {
+    String baseUrl =
+        'https://res.cloudinary.com/${dotenv.env['CLOUDINARY_CLOUD_NAME']}/image/upload/';
+    List<String> img = [baseUrl];
+
+    for (String path in images) {
+      String outPut = path.replaceAll(baseUrl, '');
+      img.add(outPut);
+    }
+    return img;
   }
 }

@@ -83,7 +83,7 @@ class VenueModel {
       'userId': userId,
       'name': name,
       'price': price,
-      'sdPrice;': sdPrice,
+      'sdPrice': sdPrice,
       'location': location,
       'images': images,
       'description': description,

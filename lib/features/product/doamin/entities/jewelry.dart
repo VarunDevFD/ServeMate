@@ -70,10 +70,10 @@ class Jewelry {
       quantity: quantity ?? this.quantity,
       condition: condition ?? this.condition,
       brand: brand ?? this.brand,
-      available: available ?? available, 
-      phoneNumber: phoneNumber ?? phoneNumber,
-      privacyPolicy: privacyPolicy ?? privacyPolicy,
-      permission: permission ?? permission,
+      available: available ?? this.available, 
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      privacyPolicy: privacyPolicy ?? this.privacyPolicy,
+      permission: permission ?? this.permission,
     );
   }
 
