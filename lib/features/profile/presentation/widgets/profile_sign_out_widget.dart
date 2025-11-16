@@ -4,7 +4,10 @@ import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart'; 
+import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_bloc.dart';
+import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_event.dart';
+import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_state.dart';
+import 'package:serve_mate/features/naviaton/presentation/cubit/bottom_nav_bar_cubit/bottom_nav_bar_cubit.dart';
 
 class ProfileSignOutWidget extends StatelessWidget {
   const ProfileSignOutWidget({super.key});
@@ -30,7 +33,9 @@ class ProfileSignOutWidget extends StatelessWidget {
                 pref.setHasSeenHome(false);
                 context.read<BottomNavCubit>().updateIndex(0);
                 context.pop();
-                context.go('/sign-in');
+                context.read<AuthBloc>().add(SignOutEvent());
+
+                // context.go('/sign-in');
               },
               child: Text(
                 'Confirm',
@@ -47,10 +52,15 @@ class ProfileSignOutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.logout, color: AppColors.red),
-      title: const Text('Sign Out'),
-      onTap: () => _showSignOutDialog(context),
+    return BlocListener<AuthBloc, AuthBlocState>(
+      listener: (context, state) {
+        if (state is SignOutSuccessState) context.go('/sign-in');
+      },
+      child: ListTile(
+        leading: Icon(Icons.logout, color: AppColors.red),
+        title: const Text('Sign Out'),
+        onTap: () => _showSignOutDialog(context),
+      ),
     );
   }
 }

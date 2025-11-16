@@ -1,7 +1,6 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:serve_mate/core/di/injector.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/core/utils/constants.dart';
@@ -14,9 +13,11 @@ abstract class DataSourceCategory {
 }
 
 class DataSourceRemoteCategory implements DataSourceCategory {
-  final firestore = serviceLocator<FirebaseFirestore>();
-  final pref = serviceLocator<PreferencesRepository>();
+  final firestore = FirebaseFirestore.instance;
+  final pref = PreferencesRepository();
   final role = 'ServiceProvider';
+
+  DataSourceRemoteCategory();
 
   @override
   Future<List<Category>> fetchCategories() async {

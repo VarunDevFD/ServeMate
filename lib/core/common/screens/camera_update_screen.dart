@@ -1,4 +1,4 @@
-import 'dart:developer';
+ 
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -259,17 +259,17 @@ class CameraUpdatePage extends StatelessWidget {
         SizedBox(height: 10.h),
         UpTextField(ctr: phoneNumberController, label: Names.phoneNumber),
         CustomDropdownBuilder.build(
-          labelText: item.brand ?? '${Names.brand} *',
+          labelText: item.brand  ,
           items: DropdownItems.brandsCamera,
           controller: brandController,
         ),
         CustomDropdownBuilder.build(
-          labelText: item.category ?? '${Names.category} *',
+          labelText: item.category ,
           items: DropdownItems.categoriesCamera,
           controller: categoryController,
         ),
         CustomDropdownBuilder.build(
-          labelText: item.condition ?? '${Names.condition} *',
+          labelText: item.condition ,
           items: DropdownItems.condition,
           controller: conditionController,
         ),

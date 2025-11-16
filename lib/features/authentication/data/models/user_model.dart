@@ -10,7 +10,8 @@ class UserModel {
   final List<String>? categorys;
   final String? photoUrl;
   final String? role;
-  final DateTime? createdAt;
+  final DateTime? creationTime;
+  final DateTime? lastSignInTime;
   final bool? googleSignIn;
 
   UserModel({
@@ -22,7 +23,8 @@ class UserModel {
     this.categorys,
     this.photoUrl,
     this.role,
-    this.createdAt,
+    this.creationTime,
+    this.lastSignInTime,
     this.googleSignIn,
   });
 
@@ -33,10 +35,13 @@ class UserModel {
       name: data['name'] as String?,
       password: data['password'] as String?,
       categoryName: data['categoryName'] as String?,
-      categorys: (data['categorys'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      categorys: (data['categorys'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       photoUrl: data['photoUrl'] as String?,
       role: data['role'] as String?,
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+      creationTime: (data['createdAt'] as Timestamp?)?.toDate(),
+      lastSignInTime: (data['lastSignInTime'] as Timestamp?)?.toDate(),
       googleSignIn: data['googleSignIn'] as bool?,
     );
   }
@@ -51,7 +56,8 @@ class UserModel {
       categorys: categorys,
       photoUrl: photoUrl,
       role: role,
-      createdAt: createdAt,
+      creationTime: creationTime,
+      lastSignInTime: lastSignInTime,
       googleSignIn: googleSignIn,
     );
   }
@@ -66,7 +72,8 @@ class UserModel {
       categorys: user.categorys,
       photoUrl: user.photoUrl,
       role: user.role,
-      createdAt: user.createdAt,
+      creationTime: user.creationTime,
+      lastSignInTime: user.lastSignInTime,
       googleSignIn: user.googleSignIn,
     );
   }

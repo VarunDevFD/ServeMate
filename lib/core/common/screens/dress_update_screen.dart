@@ -215,7 +215,7 @@ class DressUpdatePage extends StatelessWidget {
           SizedBox(height: 10.h),
           LocationTextField(item.location[0]),
           CustomDropdownBuilder.build(
-            labelText: item.type ?? '${Names.dressType} *',
+            labelText: item.type,
             items: DropdownItems.categoriesDress,
             controller: type,
           ),

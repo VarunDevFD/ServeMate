@@ -7,7 +7,8 @@ class AuthUser {
   final List<String>? categorys;
   final String? photoUrl;
   final String? role;
-  final DateTime? createdAt;
+  final DateTime? creationTime;
+  final DateTime? lastSignInTime;
   final bool? googleSignIn;
 
   AuthUser({
@@ -19,7 +20,8 @@ class AuthUser {
     this.categorys,
     this.photoUrl,
     this.role,
-    this.createdAt,
+    this.creationTime,
+    this.lastSignInTime,
     this.googleSignIn,
   });
 

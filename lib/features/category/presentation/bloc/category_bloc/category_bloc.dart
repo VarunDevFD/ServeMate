@@ -17,8 +17,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       LoadCategoriesEvent event, Emitter<CategoryState> emit) async {
     emit(CategoryLoading());
     try {
-      final categories = await categoryRepository
-          .getCategories(); // Fetch categories from repository
+      final categories =
+          await categoryRepository.getCategories(); // Fetch categories
       emit(CategoryLoaded(categories));
     } catch (e) {
       emit(CategoryError("Failed to load categories"));
@@ -32,7 +32,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       final save = serviceLocator<SaveCategory>();
 
       final selectedCategory = event.category;
-      
+
       await save.call(selectedCategory);
 
       emit(CategorySelected());

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -67,7 +69,7 @@ class AuthRemoteDataSource implements AuthDataSource {
         name: user.name,
         password: user.password,
         role: user.role ?? role,
-        createdAt: DateTime.now(),
+        creationTime: DateTime.now(),
         photoUrl: user.photoUrl,
       );
       // Add user to Firestore with email and role
@@ -111,7 +113,7 @@ class AuthRemoteDataSource implements AuthDataSource {
         'password': user.password,
         'categoryName': user.categoryName,
         'categories': user.categorys,
-        'time': user.createdAt?.toIso8601String(),
+        'time': user.creationTime?.toIso8601String(),
         'googleSignIn': user.googleSignIn ?? false,
       },
     );
@@ -195,19 +197,29 @@ class AuthRemoteDataSource implements AuthDataSource {
           alert: 'Google sign-in was cancelled.',
         );
       }
+      // log(googleUser.toString());
 
       final googleAuth = await googleUser.authentication;
+
+      // log(googleAuth.toString());
+
+      // Create Firebase credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+      // log(credential.toString());
+
+      // Login to Firebase
       final userCredential =
           await firebaseAuth.signInWithCredential(credential);
+
+      // log(userCredential.toString());
 
       final user = userCredential.user;
 
       if (user != null) {
-        final UserModel userModel = UserModel(
+        final userModel = UserModel(
           id: user.uid,
           email: user.email ?? googleUser.email,
           name: user.displayName ?? googleUser.displayName ?? 'Anonymous',
@@ -216,7 +228,8 @@ class AuthRemoteDataSource implements AuthDataSource {
           categoryName: null,
           categorys: null,
           googleSignIn: true,
-          createdAt: DateTime.now(),
+          creationTime: user.metadata.creationTime,
+          lastSignInTime: user.metadata.lastSignInTime,
           role: role,
         );
         await _addUserToFirestore(userModel);
@@ -258,6 +271,7 @@ class AuthRemoteDataSource implements AuthDataSource {
       await firebaseAuth.signOut(); // Sign out from Firebase
       await googleSignIn.signOut(); // Sign out from Google
       await pref.removeUserId(); // Remove user ID from preferences
+      await pref.removeCategoryName(); // Current cateogry Name removed
       await pref.removeHasSeenHome(); // Remove home preference
       await pref.removeCategoryScreen(); // Remove category preference
     } catch (e) {

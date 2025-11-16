@@ -11,6 +11,7 @@ import 'package:serve_mate/features/authentication/data/repositories/data_auth_r
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_email_password.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_google.dart';
+import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_up_with_email_password.dart';
 import 'package:serve_mate/features/category/data/data_source/data_source_category.dart';
 import 'package:serve_mate/features/category/data/repositories/category_repository_impl.dart';
@@ -108,6 +109,11 @@ Future<void> init() async {
   //--------------------Authentication---------------------------------------
   serviceLocator.registerLazySingleton<AuthDataSource>(
     () => AuthRemoteDataSource(),
+  );
+
+  //--------------------SignOut-------------------------------------------------
+  serviceLocator.registerLazySingleton<SignOut>(
+    () => SignOut(serviceLocator<AuthRepository>()),
   );
 
   // Auth Repositories

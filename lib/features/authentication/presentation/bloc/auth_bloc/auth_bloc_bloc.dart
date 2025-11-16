@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:serve_mate/features/authentication/domain/entities/user_entity.d
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_email_password.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_google.dart';
+import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_up_with_email_password.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_event.dart';
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_state.dart';
@@ -39,7 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
               email: email,
               photoUrl: photoUrl,
               googleSignIn: googleSignIn,
-              createdAt: DateTime.now(),
+              creationTime: DateTime.now(),
               role: 'User',
             );
             emit(Authenticated(authUserModel.toEntity()));
@@ -131,7 +134,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
     //----------------------GoogleSignInEvent-----------------------------------
     on<GoogleSignInEvent>((event, emit) async {
-      emit(AuthInitial());
+      emit(AuthLoading());
       final googleSignIn = serviceLocator<SignInWithGoogle>();
       final pref = serviceLocator<PreferencesRepository>();
       final String category = await pref.getCategoryName();
@@ -157,10 +160,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
 
     //----------------------Sign-Out--------------------------------------------
     on<SignOutEvent>((event, emit) async {
-      emit(AuthInitial());
+      emit(AuthLoading());
       try {
-        final repo = serviceLocator<AuthRepository>();
-        await repo.signOut(); // Call sign out method from use case
+        final repo = serviceLocator<SignOut>();
+        await repo.call(); // Call sign out method from use case
         emit(SignOutSuccessState()); // Emit Unauthenticated state
       } catch (e) {
         emit(AuthError(e.toString())); // Emit error state if sign-out fails
