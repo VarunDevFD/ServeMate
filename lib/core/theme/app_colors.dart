@@ -73,8 +73,6 @@ class AppColors {
   static const Color gradient2 = Color.fromRGBO(228, 131, 70, 1);
   static const Color gradient3 = Color.fromRGBO(255, 153, 116, 1);
 
-  static Color geryOp5 = Colors.grey.withOpacity(0.5);
-
   // Gradiant Colors
   static final blackWithAlpha = Colors.black.withAlpha(18);
 }

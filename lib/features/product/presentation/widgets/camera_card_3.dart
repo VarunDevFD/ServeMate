@@ -4,17 +4,16 @@ import 'package:serve_mate/core/utils/card_constant.dart';
 import 'package:serve_mate/core/utils/constants.dart';
 import 'package:serve_mate/features/product/presentation/widgets/widget_location.dart';
 
-class SectionThreeCameraCard extends StatelessWidget { 
+class SectionThreeCameraCard extends StatelessWidget {
   final TextEditingController phone;
 
   const SectionThreeCameraCard({
-    super.key, 
+    super.key,
     required this.phone,
   });
 
   @override
   Widget build(BuildContext context) {
-    
     final paddingEdges = AppPadding.paddingEdgesAll;
     return Card(
       shape: CardProperties.cardShape,
@@ -29,10 +28,10 @@ class SectionThreeCameraCard extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
             // Location
-             LocationTextField(),
+            const LocationTextField(),
             SizedBox(height: 10.h),
             // Phone value),
-            TextFormField( 
+            TextFormField(
               controller: phone,
               maxLength: 10,
               textInputAction: TextInputAction.next,

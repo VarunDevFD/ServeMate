@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,9 +17,10 @@ abstract class AuthDataSource {
 class AuthRemoteDataSource implements AuthDataSource {
   final firebaseAuth = serviceLocator<FirebaseAuth>();
   final googleSignIn = serviceLocator<GoogleSignIn>();
-  final firestore = serviceLocator<FirebaseFirestore>();
+  final firestore = FirebaseFirestore.instance;
   final pref = serviceLocator<PreferencesRepository>();
 
+  AuthRemoteDataSource();
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
   @override

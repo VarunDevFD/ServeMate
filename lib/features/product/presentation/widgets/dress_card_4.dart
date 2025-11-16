@@ -28,10 +28,10 @@ class SectionFourDressCard extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             // Location
-            LocationTextField(),
+            const LocationTextField(),
             SizedBox(height: 16.h),
             // Phone
-            TextFormField( 
+            TextFormField(
               controller: phone,
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.phone,

@@ -80,7 +80,7 @@ class JewelryPage extends StatelessWidget {
     }
 
     final imagePickerBloc = context.read<ImagePickerBloc>();
-    final locationBloc = context.read<LocationBloc>(); 
+    final locationBloc = context.read<LocationBloc>();
     final availableSwitchCubit = context.read<AvailableSwitchCubit>();
     final privacyPolicyCubit = context.read<CheckBoxCubit>();
 
@@ -196,7 +196,7 @@ class JewelryPage extends StatelessWidget {
                     labelText: 'Category*',
                     items: DropdownItems.jewelryCategorys,
                     onFieldSubmitted: (value) {
-                      cateogry.text = value!;
+                      cateogry.text = value;
                     },
                   ),
                 ),
@@ -206,7 +206,7 @@ class JewelryPage extends StatelessWidget {
                     labelText: 'Type*',
                     items: DropdownItems.jewelryTypes,
                     onFieldSubmitted: (value) {
-                      type.text = value!;
+                      type.text = value;
                       moveFocus(context, _brandFocusNode);
                     },
                   ),
@@ -329,16 +329,14 @@ class JewelryPage extends StatelessWidget {
                     items: DropdownItems.condition,
                     labelText: 'Condition *',
                     onFieldSubmitted: (value) {
-                      if (value != null) {
-                        condition.text = value;
-                        moveFocus(context, _locationFocusNode);
-                      }
+                      condition.text = value;
+                      moveFocus(context, _locationFocusNode);
                     },
                   ),
                 ),
                 buildSection(
                   title: 'Location',
-                  child: LocationTextField(),
+                  child: const LocationTextField(),
                 ),
                 buildSection(
                   title: 'Contact Number',

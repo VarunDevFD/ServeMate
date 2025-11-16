@@ -37,7 +37,7 @@ class CustomDemoCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.grey.withOpacity(0.3),
+                  color: AppColors.grey.withValues(alpha: 0.3),
                   spreadRadius: 2.r,
                   blurRadius: 8.r,
                   offset: Offset(0, 4.h),
@@ -60,7 +60,7 @@ class CustomDemoCard extends StatelessWidget {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        AppColors.black.withOpacity(0.7),
+                        AppColors.black.withValues(alpha: 0.7),
                         AppColors.transparent,
                       ],
                     ),

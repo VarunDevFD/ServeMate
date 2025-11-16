@@ -270,7 +270,7 @@ class SoundDJPage extends StatelessWidget {
                 ),
                 buildSection(
                   title: 'Location',
-                  child: LocationTextField(),
+                  child: const LocationTextField(),
                 ),
                 buildSection(
                   title: 'Contact Number',

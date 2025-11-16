@@ -12,7 +12,7 @@ import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/category_list/data/datasources/category_remote_data_source.dart';
 
 class H2CategoryRemoteDataSourceImpl implements H2CategoryRemoteDataSource {
-  final _firebaseFirestore = serviceLocator<FirebaseFirestore>();
+  final _firebaseFirestore = FirebaseFirestore.instance;
   final pref = serviceLocator<PreferencesRepository>();
 
   // Current user ID

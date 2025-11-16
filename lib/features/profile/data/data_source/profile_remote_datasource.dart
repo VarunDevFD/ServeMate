@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:serve_mate/core/di/injector.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:serve_mate/features/profile/data/model/user_model.dart';
 
 abstract class ProfileRemoteDataSource {
@@ -11,7 +10,7 @@ abstract class ProfileRemoteDataSource {
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
-  final firestore = serviceLocator<FirebaseFirestore>();
+  final firestore =  FirebaseFirestore.instance;
 
   @override
   Future<void> updateUser(UserModel data) async {

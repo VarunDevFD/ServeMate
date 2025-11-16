@@ -22,7 +22,7 @@ abstract class ProductRemoteDataSource {
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
-  final _firebaseFirestore = serviceLocator<FirebaseFirestore>();
+  final _firebaseFirestore = FirebaseFirestore.instance;
   final pref = serviceLocator<PreferencesRepository>();
 
   // Current user ID

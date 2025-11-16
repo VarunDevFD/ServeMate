@@ -23,7 +23,7 @@ import 'package:serve_mate/core/utils/constants.dart';
 import 'datasource_home.dart';
 
 class DatasourceHomeImpl implements DatasourceHome {
-  final _firebaseFirestore = serviceLocator<FirebaseFirestore>();
+  final _firebaseFirestore =  FirebaseFirestore.instance;
   final pref = serviceLocator<PreferencesRepository>();
 
   // Current user ID

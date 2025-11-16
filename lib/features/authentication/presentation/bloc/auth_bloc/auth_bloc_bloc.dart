@@ -1,13 +1,10 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/features/authentication/data/models/user_model.dart';
-import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart';
-import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
+import 'package:serve_mate/features/authentication/domain/entities/user_entity.dart'; 
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_email_password.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_in_with_google.dart';
 import 'package:serve_mate/features/authentication/domain/usecases/sign_out.dart';

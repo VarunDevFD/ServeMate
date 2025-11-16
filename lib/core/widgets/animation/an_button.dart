@@ -57,7 +57,7 @@ class _AnimatedAddButtonState extends State<AnimatedAddButton>
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.purple.withOpacity(0.3),
+                color: AppColors.purple.withValues(alpha: 0.3),
                 blurRadius: 8,
                 spreadRadius: 2,
                 offset: const Offset(0, 3),
