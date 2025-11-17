@@ -13,7 +13,7 @@ import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/a
 import 'package:serve_mate/features/authentication/presentation/bloc/auth_bloc/auth_bloc_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
-  final PreferencesRepository pref = serviceLocator<PreferencesRepository>();
+  final  pref = serviceLocator<PreferencesRepository>();
 
   AuthBloc() : super(AuthInitial()) {
     // Initialize the Data All

@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/error/failure.dart';
 import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/features/authentication/data/datasources/auth_remote_data_source.dart';
@@ -8,7 +7,9 @@ import 'package:serve_mate/features/authentication/domain/entities/user_entity.d
 import 'package:serve_mate/features/authentication/domain/repositories/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final remoteDataSource = serviceLocator<AuthDataSource>();
+  final AuthDataSource dataSource;
+
+  AuthRepositoryImpl({required this.dataSource});
 
   //-------Sign-Up--------------------------------------------------------------
   @override
@@ -18,7 +19,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      final userModel = await remoteDataSource.signUpWithEmailPassword(
+      final userModel = await dataSource.signUpWithEmailPassword(
         UserModel(
           id: '',
           email: email,
@@ -43,7 +44,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       final userModel =
-          await remoteDataSource.signInWithEmailPassword(email, password);
+          await dataSource.signInWithEmailPassword(email, password);
       return Right(userModel.toEntity());
     } on AppException catch (e) {
       return Left(e.alert);
@@ -57,7 +58,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<String, AuthUser>> signInWithGoogle() async {
     try {
-      final user = await remoteDataSource.signInWithGoogle();
+      final user = await dataSource.signInWithGoogle();
       return Right(user.toEntity());
     } on AppException catch (e) {
       return Left(e.alert);
@@ -71,7 +72,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> signOut() async {
     try {
-      await remoteDataSource.signOut();
+      await dataSource.signOut();
       return const Right(null);
     } catch (e) {
       return Left(ServerFailure()); // Replace with your custom failure

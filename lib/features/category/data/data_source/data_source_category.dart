@@ -1,9 +1,10 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/core/utils/constants.dart';
+import 'package:serve_mate/core/utils/images/app_images.dart';
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 abstract class DataSourceCategory {
@@ -13,11 +14,11 @@ abstract class DataSourceCategory {
 }
 
 class DataSourceRemoteCategory implements DataSourceCategory {
-  final firestore = FirebaseFirestore.instance;
-  final pref = PreferencesRepository();
+  final FirebaseFirestore firestore;
+  final PreferencesRepository pref;
   final role = 'ServiceProvider';
 
-  DataSourceRemoteCategory();
+  DataSourceRemoteCategory({required this.firestore,required this.pref});
 
   @override
   Future<List<Category>> fetchCategories() async {
@@ -25,50 +26,42 @@ class DataSourceRemoteCategory implements DataSourceCategory {
       return [
         const Category(
           name: Names.camera,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/cameras.jpg',
+          imageUrl: VImages.cameraImg,
           userId: null,
         ),
         const Category(
           name: Names.decoration,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/decoration.jpg',
+          imageUrl: VImages.decorationImg,
           userId: null,
         ),
         const Category(
           name: Names.dress,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/dresses.jpg',
+          imageUrl: VImages.dressImg,
           userId: null,
         ),
         const Category(
           name: Names.footwear,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/footwear.jpg',
+          imageUrl: VImages.footwearImg,
           userId: null,
         ),
         const Category(
           name: Names.jewelry,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/jewelry.jpg',
+          imageUrl: VImages.jewelryImg,
           userId: null,
         ),
         const Category(
           name: Names.sound,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/sound&dj.jpg',
+          imageUrl: VImages.soundImg,
           userId: null,
         ),
         const Category(
           name: Names.vehicle,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/vehicles.jpg',
+          imageUrl: VImages.vehiclesImg,
           userId: null,
         ),
         const Category(
           name: Names.venue,
-          imageUrl:
-              'https://raw.githubusercontent.com/VarunDevFD/ProjectImages/main/assets/images/category/venues.jpg',
+          imageUrl: VImages.venuesImg,
           userId: null,
         ),
       ];
@@ -89,14 +82,28 @@ class DataSourceRemoteCategory implements DataSourceCategory {
         );
       }
       await pref.setCategoryName(categoryName);
-      // Category Field updated on firebase
-      await firestore
-          .collection('users')
-          .doc(role)
-          .collection(role)
-          .doc(uid)
-          .update({
+      // Category Field updated
+      final userRef =
+          firestore.collection('users').doc(role).collection(role).doc(uid);
+
+      final doc = await userRef.get();
+
+      if (!doc.exists) {
+        throw Exception("User does not exist.");
+      }
+
+      List<dynamic> categories = doc.data()?['categories'] ?? [];
+
+      /// Already exists
+      if (categories.contains(categoryName)) {
+        log("Category already exists. No update needed.");
+        return;
+      }
+
+      /// Add category
+      await userRef.update({
         'categoryName': categoryName,
+        'categories': FieldValue.arrayUnion([categoryName]),
       });
     } catch (e) {
       throw AppException(

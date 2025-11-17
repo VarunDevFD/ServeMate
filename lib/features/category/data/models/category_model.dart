@@ -1,33 +1,24 @@
 import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
 
 class CategoryModel extends Category {
-  final String? description; // Add unique fields to the model if needed.
-
-  CategoryModel({
-    required String name,
-    String? imageUrl,
-    String? userId,
+  final String? description;
+  const CategoryModel({
+    required super.name,
+    required super.imageUrl,
+    super.userId,
     this.description,
-  }) : super(
-          name: name,
-          imageUrl: imageUrl,
-          userId: userId,
-        );
+  });
 
-  factory CategoryModel.fromMap(Map<String, dynamic> data) {
-    if (!data.containsKey('name') || !data.containsKey('imageUrl')) {
-      throw Exception('Missing required fields in Firestore data.');
-    }
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      name: data['name'] as String,
-      imageUrl: data['imageUrl'] as String,
-      userId: data['userId'] as String?,
-      description: data['description'] as String?,
+      name: json['name'],
+      imageUrl: json['imageUrl'],
+      userId: json['userId'],
+      description: json['description'],
     );
   }
 
-  /// Converts `CategoryModel` to a Firestore-compatible map
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'imageUrl': imageUrl,

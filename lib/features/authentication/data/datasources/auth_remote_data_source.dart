@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/core/repositories/preferences_repository.dart';
 import 'package:serve_mate/core/utils/app_exception.dart';
 import 'package:serve_mate/core/utils/helper/helper_auth_fn.dart';
@@ -15,12 +14,16 @@ abstract class AuthDataSource {
 }
 
 class AuthRemoteDataSource implements AuthDataSource {
-  final firebaseAuth = serviceLocator<FirebaseAuth>();
-  final googleSignIn = serviceLocator<GoogleSignIn>();
-  final firestore = FirebaseFirestore.instance;
-  final pref = serviceLocator<PreferencesRepository>();
+  final FirebaseAuth firebaseAuth;
+  final GoogleSignIn googleSignIn;
+  final FirebaseFirestore firestore;
+  final PreferencesRepository pref;
 
-  AuthRemoteDataSource();
+  AuthRemoteDataSource(
+      {required this.firebaseAuth,
+      required this.googleSignIn,
+      required this.firestore,
+      required this.pref});
   //--------------------------Sin-Up-Email-&-Password---------------------------
 
   @override

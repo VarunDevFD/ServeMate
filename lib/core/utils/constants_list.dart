@@ -1,3 +1,7 @@
+import 'package:serve_mate/core/utils/constants.dart';
+import 'package:serve_mate/core/utils/images/app_images.dart';
+import 'package:serve_mate/features/category/domain/entities/category_entities.dart';
+
 final List<String> appBarTitles = [
   "SERVEMATE",
   "Category List",
@@ -161,3 +165,17 @@ const List<String> sizeOfFootwear = [
   "11",
   "Above 11"
 ];
+
+class VList {
+  static const categoryList = [
+    Category(name: Names.camera, imageUrl: VImages.cameraImg, userId: null),
+    Category(
+        name: Names.decoration, imageUrl: VImages.decorationImg, userId: null),
+    Category(name: Names.dress, imageUrl: VImages.dressImg, userId: null),
+    Category(name: Names.footwear, imageUrl: VImages.footwearImg, userId: null),
+    Category(name: Names.jewelry, imageUrl: VImages.jewelryImg, userId: null),
+    Category(name: Names.sound, imageUrl: VImages.soundImg, userId: null),
+    Category(name: Names.vehicle, imageUrl: VImages.vehiclesImg, userId: null),
+    Category(name: Names.venue, imageUrl: VImages.venuesImg, userId: null),
+  ];
+}
