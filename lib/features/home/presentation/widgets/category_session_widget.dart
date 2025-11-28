@@ -37,10 +37,10 @@ class SessionCategorys extends StatelessWidget {
             ],
           );
         }
-        if (state is SessionBlocLoaded) { 
+        if (state is SessionBlocLoaded) {
           return ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: state.minHeight ?? 280.h,
+              minHeight: state.minHeight ?? 300.h,
               maxHeight: state.maxHeight ?? 1560.h,
             ),
             child: Padding(
@@ -74,7 +74,6 @@ class SessionCategorys extends StatelessWidget {
             ),
           );
         }
-        log(state.toString());
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

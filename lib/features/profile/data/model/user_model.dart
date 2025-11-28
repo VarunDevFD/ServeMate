@@ -7,6 +7,7 @@ class UserModel {
   final String? location;
   final String? profileImageUrl;
   final String? quote;
+  final List<String>? categoryList;
 
   UserModel({
     required this.id,
@@ -17,6 +18,7 @@ class UserModel {
     this.location,
     this.profileImageUrl,
     this.quote,
+    this.categoryList,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class UserModel {
       location: json['location'] as String?,
       profileImageUrl: json['profileImageUrl'] as String?,
       quote: json['quote'] as String?,
+      categoryList: json['categoryList'] as List<String>?,
     );
   }
 
@@ -42,6 +45,7 @@ class UserModel {
       'location': location,
       'profileImageUrl': profileImageUrl,
       'quote': quote,
+      'categoryList': categoryList,
     };
   }
 }

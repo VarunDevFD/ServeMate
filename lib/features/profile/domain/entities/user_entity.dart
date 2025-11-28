@@ -9,6 +9,7 @@ class UserEntity {
   final String? location;
   final String? profileImageUrl;
   final String? quote;
+  final List<String>? categoryList;
 
   UserEntity({
     this.id,
@@ -19,6 +20,7 @@ class UserEntity {
     this.location,
     this.profileImageUrl,
     this.quote,
+    this.categoryList,
   });
 
   UserEntity copyWith({
@@ -30,6 +32,7 @@ class UserEntity {
     String? location,
     String? profileImageUrl,
     String? quote,
+    List<String>? categoryList,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -40,6 +43,7 @@ class UserEntity {
       location: location ?? this.location,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       quote: quote ?? this.quote,
+      categoryList: categoryList ?? this.categoryList,
     );
   }
 
@@ -53,6 +57,7 @@ class UserEntity {
       location: 'Kerala, India',
       profileImageUrl: null,
       quote: 'Best luck for your future',
+      categoryList: null,
     );
   }
 
@@ -66,6 +71,7 @@ class UserEntity {
       location: user.location,
       profileImageUrl: user.profileImageUrl,
       quote: user.quote,
+      categoryList: user.categoryList,
     );
   }
 }

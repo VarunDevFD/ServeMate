@@ -13,4 +13,8 @@ class GetUserDetails {
   Future<UserEntity> call(String userId) async {
     return await repository.getUserDetails(userId);
   }
+
+  Future<List<String>> list(String userId) async {
+    return await repository.getCategoryList(userId);
+  }
 }

@@ -40,7 +40,7 @@ class ProfilePage extends StatelessWidget {
               const Divider(),
               const ProfileSignOutWidget(),
               const Divider(),
-              const ProfileDeleteAccountWidget(),
+              ProfileDeleteAccountWidget(),
               const Divider(),
               const ProfileSettingsWidget(),
               const Divider(),

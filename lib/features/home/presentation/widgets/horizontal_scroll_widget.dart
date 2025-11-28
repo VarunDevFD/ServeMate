@@ -56,7 +56,7 @@ class CustomHorizontalListWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 150.h,
+                          height: 130.h,
                           width: 200.w,
                           child: Image.network(
                             imageUrl[0],
@@ -66,7 +66,7 @@ class CustomHorizontalListWidget extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(
-                                left: 8.w, top: 8.w, right: 8.w),
+                                left: 8.w, top: 8.w, right: 10.w),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

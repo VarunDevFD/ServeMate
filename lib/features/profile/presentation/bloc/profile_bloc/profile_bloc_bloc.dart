@@ -1,4 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; 
 import 'package:serve_mate/features/profile/domain/entities/user_entity.dart';
 import 'package:serve_mate/features/profile/domain/usecase/get_user_details.dart';
 import 'package:serve_mate/features/profile/presentation/bloc/profile_bloc/profile_bloc_event.dart';
@@ -11,6 +11,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       : super(ProfileInitial(user: UserEntity.empty())) {
     on<FetchUserDetails>(_onFetchUserDetails);
     on<UpdateProfileImage>(_onUpdateUser);
+    on<ShareData>(_onShareData);
+    on<DeleteCategory>(_onDeletecategory);
   }
 
   Future<void> _onFetchUserDetails(
@@ -31,6 +33,26 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       final data = type.copyWith(
         profileImageUrl: type.profileImageUrl,
+      );
+      getUserDetails.update(data);
+      emit(ProfileSuccess('Profile updated successfully'));
+    } catch (e) {
+      emit(ProfileError('Failed to update user: $e'));
+    }
+  }
+
+  Future<void> _onShareData(ShareData event, Emitter<ProfileState> emit) async {
+
+
+  }
+
+  Future<void> _onDeletecategory(
+      DeleteCategory event, Emitter<ProfileState> emit) async {
+    final type = UserEntity();
+
+    try {
+      final data = type.copyWith(
+        categoryList: type.categoryList,
       );
       getUserDetails.update(data);
       emit(ProfileSuccess('Profile updated successfully'));

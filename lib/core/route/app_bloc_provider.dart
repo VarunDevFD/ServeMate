@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:serve_mate/core/common/bloc/switch_button_bloc/check_box_selection/category_selection.dart';
 import 'package:serve_mate/core/di/injector.dart';
 import 'package:serve_mate/features/category_list/presentation/bloc/category_home_two/h2_category_bloc.dart';
 import 'package:serve_mate/features/home/presentation/bloc/bloc_home/home_session_bloc_bloc.dart';
@@ -55,6 +56,7 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(create: (_) => H2CategoryBloc()),
         BlocProvider(create: (_) => SessionCategoryBloc()),
         BlocProvider(create: (_) => SearchBloc()),
+        BlocProvider(create: (_) => CategorySelectionBloc()),
       ],
       child: child,
     );
